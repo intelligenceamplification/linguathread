@@ -13,17 +13,17 @@ async function render() {
   );
 }
 
-test("server-renders the first PolyFlow lesson", async () => {
+test("server-renders the PolyFlow language setup", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
   assert.match(html, /<title>PolyFlow · Language, made yours<\/title>/i);
-  assert.match(html, /Spanish foundation/);
-  assert.match(html, /Foundations · 01/);
-  assert.match(html, /mình \/ tôi/);
-  assert.match(html, /Native anchor/);
-  assert.match(html, /Spanish target · English anchor · Vietnamese bridge/);
+  assert.match(html, /Your language stack/);
+  assert.match(html, /What language shaped your first thoughts/);
+  assert.match(html, /Search or type a language/);
+  assert.match(html, /native anchor/i);
+  assert.match(html, /Language begins from what you already know/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
