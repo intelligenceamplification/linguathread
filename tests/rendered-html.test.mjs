@@ -20,9 +20,10 @@ test("server-renders the first PolyFlow lesson", async () => {
 
   const html = await response.text();
   assert.match(html, /<title>PolyFlow · Language, made yours<\/title>/i);
-  assert.match(html, /New vocabulary/);
-  assert.match(html, /notar/);
-  assert.match(html, /to notice/);
-  assert.match(html, /A language practice for a more attentive life/);
+  assert.match(html, /Spanish foundation/);
+  assert.match(html, /Foundations · 01/);
+  assert.match(html, /mình \/ tôi/);
+  assert.match(html, /Native anchor/);
+  assert.match(html, /Spanish target · English anchor · Vietnamese bridge/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });

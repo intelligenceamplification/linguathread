@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
+type FeedbackState = "idle" | "correct" | "gentle";
 
 const vocabulary = [
-  { word: "notar", meaning: "to notice", note: "Attention beginning to make contact." },
-  { word: "respirar", meaning: "to breathe", note: "An action, and a way to return." },
-  { word: "despacio", meaning: "slowly", note: "With less speed and more awareness." },
-  { word: "presente", meaning: "present", note: "Here, available to this moment." },
-  { word: "elegir", meaning: "to choose", note: "To respond deliberately rather than automatically." },
+  { word: "yo", english: "I", vietnamese: "mình / tôi", note: "Spanish has one neutral first-person singular. Vietnamese chooses a pronoun through relationship and context." },
+  { word: "tú", english: "you", vietnamese: "bạn", note: "Tú is informal singular. Like Vietnamese pronouns, it already says something about the relationship." },
+  { word: "soy", english: "I am", vietnamese: "mình là / tôi là", note: "Soy is ser shaped for yo. Spanish can omit yo because the verb already carries it." },
+  { word: "eres", english: "you are", vietnamese: "bạn là", note: "Eres is ser shaped for tú. Vietnamese là does not change with the person." },
+  { word: "de", english: "from / of", vietnamese: "từ / của", note: "A small word that connects origin, belonging, material, and relationship." },
 ];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
@@ -18,9 +19,10 @@ export default function Home() {
   const [stage, setStage] = useState<Stage>("vocabulary");
   const [wordIndex, setWordIndex] = useState(0);
   const [answer, setAnswer] = useState("");
-  const [feedback, setFeedback] = useState<"idle" | "correct" | "gentle">("idle");
-  const [mastery, setMastery] = useState(0);
+  const [feedback, setFeedback] = useState<FeedbackState>("idle");
+  const [mastery, setMastery] = useState(false);
   const [hasHistory, setHasHistory] = useState(false);
+  const [accelerated, setAccelerated] = useState(false);
 
   useEffect(() => {
     setHasHistory(window.localStorage.getItem("polyflow.completed") === "true");
@@ -29,32 +31,29 @@ export default function Home() {
   const stageIndex = Math.max(0, stages.indexOf(stage));
   const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / vocabulary.length : 0)) / (stages.length - 1)) * 100;
   const currentWord = vocabulary[wordIndex];
-  const prompt = useMemo(() => {
-    if (stage === "recall") return { eyebrow: "Active recall", title: "What does notar mean?", hint: "Answer in English." };
-    if (stage === "sentence") return { eyebrow: "Put it to use", title: "Cuando respiro despacio, noto más.", hint: "When I breathe slowly, I notice more." };
-    if (stage === "mastery") return { eyebrow: "Mastery", title: "Translate: I choose to breathe slowly.", hint: "Use elegir, respirar, and despacio." };
-    return null;
-  }, [stage]);
 
   function advanceVocabulary() {
     if (wordIndex < vocabulary.length - 1) setWordIndex((value) => value + 1);
     else setStage("recall");
   }
 
+  function checkLevel() {
+    setAccelerated(true);
+    setAnswer("");
+    setFeedback("idle");
+    setStage("mastery");
+  }
+
   function checkRecall() {
-    const normalized = answer.trim().toLowerCase();
-    if (normalized === "to notice" || normalized === "notice") {
-      setFeedback("correct");
-    } else {
-      setFeedback("gentle");
-    }
+    const normalized = answer.trim().toLowerCase().replace(/[.!]/g, "");
+    setFeedback(["i am", "i'm", "am"].includes(normalized) ? "correct" : "gentle");
   }
 
   function checkMastery() {
-    const normalized = answer.trim().toLowerCase().replace(/[.!]/g, "");
-    const passed = normalized.includes("elijo") && normalized.includes("respirar") && normalized.includes("despacio");
+    const normalized = answer.trim().toLowerCase().replace(/[.!]/g, "").replace(/\s+/g, " ");
+    const passed = normalized === "soy de indiana" || normalized === "yo soy de indiana";
     setFeedback(passed ? "correct" : "gentle");
-    if (passed) setMastery(1);
+    setMastery(passed);
   }
 
   function resetAnswer(nextStage?: Stage) {
@@ -63,8 +62,15 @@ export default function Home() {
     if (nextStage) setStage(nextStage);
   }
 
+  function learnFoundation() {
+    setAccelerated(false);
+    setWordIndex(0);
+    resetAnswer("vocabulary");
+  }
+
   function finishLesson() {
     window.localStorage.setItem("polyflow.completed", "true");
+    window.localStorage.setItem("polyflow.spanish.foundation", accelerated ? "familiar" : "forming");
     setHasHistory(true);
     setStage("complete");
   }
@@ -74,7 +80,8 @@ export default function Home() {
     setWordIndex(0);
     setAnswer("");
     setFeedback("idle");
-    setMastery(0);
+    setMastery(false);
+    setAccelerated(false);
   }
 
   return (
@@ -83,7 +90,7 @@ export default function Home() {
         <button className="wordmark" onClick={restart} aria-label="Restart lesson">PolyFlow</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
-          <span>Presencia · 08</span>
+          <span>Foundations · 01</span>
         </div>
         {hasHistory && stage !== "review" ? (
           <button className="quiet-action" onClick={() => setStage("review")}>Review</button>
@@ -99,99 +106,88 @@ export default function Home() {
       <section className="lesson-stage" aria-live="polite">
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
-            <p className="eyebrow">New vocabulary · {wordIndex + 1} of {vocabulary.length}</p>
+            <p className="eyebrow">Spanish foundation · {wordIndex + 1} of {vocabulary.length}</p>
             <h1>{currentWord.word}</h1>
-            <p className="definition">{currentWord.meaning}</p>
+            <div className="language-stack compact-stack">
+              <StackLine role="Native anchor" language="English" value={currentWord.english} />
+              <StackLine role="Fluent bridge" language="Vietnamese" value={currentWord.vietnamese} />
+            </div>
             <p className="contemplative-note">{currentWord.note}</p>
             <button className="primary-action" onClick={advanceVocabulary}>
-              {wordIndex === vocabulary.length - 1 ? "Practice these words" : "Continue"}
+              {wordIndex === vocabulary.length - 1 ? "Practice the foundation" : "Continue"}
               <span aria-hidden="true">→</span>
             </button>
+            {wordIndex === 0 && <button className="text-action calibration-action" onClick={checkLevel}>Already familiar? Check my level</button>}
           </div>
         )}
 
-        {stage === "recall" && prompt && (
+        {stage === "recall" && (
           <div className="focus-content exercise-content">
-            <p className="eyebrow">{prompt.eyebrow}</p>
-            <h1 className="exercise-title">{prompt.title}</h1>
-            <p className="instruction">{prompt.hint}</p>
-            <input
-              className="answer-field"
-              autoFocus
-              value={answer}
-              onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }}
-              onKeyDown={(event) => event.key === "Enter" && checkRecall()}
-              placeholder="Type your answer"
-              aria-label="Your answer"
-            />
+            <p className="eyebrow">Active recall</p>
+            <h1 className="exercise-title">What does <em>soy</em> carry?</h1>
+            <p className="instruction">Answer in English. Include the person as well as the verb.</p>
+            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkRecall} placeholder="Type your answer" label="Your answer" />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkRecall}>Check</button>}
-            {feedback === "correct" && <Feedback kind="correct" title="Yes. Notar means to notice." action="See it in a sentence" onClick={() => resetAnswer("sentence")} />}
-            {feedback === "gentle" && <Feedback kind="gentle" title="Think of becoming aware of something." detail="Notar means to notice." action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "correct" && <Feedback kind="correct" title="Yes. Soy carries “I am.”" detail="The Spanish verb ending holds information English places in two words." action="See the stack" onClick={() => resetAnswer("sentence")} />}
+            {feedback === "gentle" && <Feedback kind="gentle" title="The verb is carrying both identity and person." detail="soy = I am" action="Try again" onClick={() => resetAnswer()} />}
           </div>
         )}
 
-        {stage === "sentence" && prompt && (
+        {stage === "sentence" && (
           <div className="focus-content sentence-content">
-            <p className="eyebrow">{prompt.eyebrow}</p>
-            <h1 className="sentence">Cuando respiro <button className="inline-word" onClick={() => setFeedback(feedback === "idle" ? "correct" : "idle")}>despacio</button>, noto más.</h1>
-            <p className="translation">{prompt.hint}</p>
-            {feedback === "correct" && <p className="word-reveal"><strong>despacio</strong><span>slowly · describes how the breathing happens</span></p>}
-            <p className="contemplative-note wide">Slowing down does not diminish perception. It often lets perception become more precise.</p>
-            <button className="primary-action" onClick={() => resetAnswer("grammar")}>Understand the structure <span aria-hidden="true">→</span></button>
+            <p className="eyebrow">One meaning · three structures</p>
+            <h1 className="sentence">Soy de Indiana.</h1>
+            <div className="language-stack sentence-stack">
+              <StackLine role="Native anchor" language="English" value="I am from Indiana." />
+              <StackLine role="Fluent bridge" language="Vietnamese" value="Mình đến từ Indiana." />
+            </div>
+            <p className="contemplative-note wide">The meaning stays stable. Each language reveals a different way of organizing identity and origin.</p>
+            <button className="primary-action" onClick={() => resetAnswer("grammar")}>See what changes <span aria-hidden="true">→</span></button>
           </div>
         )}
 
         {stage === "grammar" && (
           <div className="focus-content grammar-content">
-            <p className="eyebrow">How Spanish carries the thought</p>
-            <h1 className="grammar-line"><span>Cuando</span> respiro despacio, <span>noto</span> más.</h1>
-            <div className="grammar-grid">
-              <article><strong>Cuando</strong><p>Like “when” in English, it introduces the condition or moment.</p></article>
-              <article><strong>respiro / noto</strong><p>Spanish builds the subject into the verb. The <em>-o</em> ending already tells us “I.”</p></article>
-              <article><strong>más</strong><p>“More” stays open here. Context supplies what becomes more noticeable.</p></article>
+            <p className="eyebrow">The stack beneath the sentence</p>
+            <h1 className="grammar-line"><span>Soy</span> de Indiana.</h1>
+            <div className="grammar-grid language-grammar-grid">
+              <article><span className="grammar-language">Spanish · target</span><strong>soy + de</strong><p><em>Ser</em> changes into <em>soy</em> for “I.” The pronoun <em>yo</em> is optional because the verb already identifies the speaker.</p></article>
+              <article><span className="grammar-language">English · anchor</span><strong>I + am + from</strong><p>English requires the subject and changes <em>be</em> to <em>am</em>. This familiar pattern helps make Spanish conjugation intelligible.</p></article>
+              <article><span className="grammar-language">Vietnamese · bridge</span><strong>mình + đến từ</strong><p>The verb phrase does not conjugate. <em>Đến từ</em> literally carries “come from,” while the pronoun reflects relationship and context.</p></article>
             </div>
-            <p className="insight">English repeats “I.” Spanish lets the verb endings keep the sentence lighter.</p>
-            <button className="primary-action" onClick={() => setStage("transform")}>Transform it <span aria-hidden="true">→</span></button>
+            <p className="insight">Spanish and English change the verb. Vietnamese keeps the verb stable. Spanish alone can let the conjugated verb stand without the pronoun.</p>
+            <button className="primary-action" onClick={() => setStage("transform")}>Build the Spanish <span aria-hidden="true">→</span></button>
           </div>
         )}
 
-        {stage === "transform" && (
-          <TransformExercise onComplete={() => resetAnswer("mastery")} />
-        )}
+        {stage === "transform" && <TransformExercise onComplete={() => resetAnswer("mastery")} />}
 
-        {stage === "mastery" && prompt && (
+        {stage === "mastery" && (
           <div className="focus-content exercise-content">
-            <p className="eyebrow">{prompt.eyebrow}</p>
-            <h1 className="exercise-title">{prompt.title}</h1>
-            <p className="instruction">{prompt.hint}</p>
-            <input
-              className="answer-field"
-              autoFocus
-              value={answer}
-              onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }}
-              onKeyDown={(event) => event.key === "Enter" && checkMastery()}
-              placeholder="Escribe en español"
-              aria-label="Spanish answer"
-            />
-            {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check mastery</button>}
-            {feedback === "gentle" && <Feedback kind="gentle" title="Almost. Let the verbs carry “I.”" detail="Elijo respirar despacio." action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && <Feedback kind="correct" title="Elijo respirar despacio." detail="You produced the vocabulary and the first-person verb without prompting." action="Complete lesson" onClick={finishLesson} />}
+            <p className="eyebrow">{accelerated ? "Fluency check" : "Foundation check"}</p>
+            <h1 className="exercise-title">Translate: I am from Indiana.</h1>
+            <p className="instruction">Write the natural Spanish. The subject pronoun may be omitted.</p>
+            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder="Escribe en español" label="Spanish answer" />
+            {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
+            {feedback === "gentle" && accelerated && <Feedback kind="gentle" title="This foundation is worth making explicit." detail="Soy de Indiana. Spanish lets soy carry the subject." action="Learn the foundation" onClick={learnFoundation} />}
+            {feedback === "gentle" && !accelerated && <Feedback kind="gentle" title="Let soy carry “I am.”" detail="Soy de Indiana." action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "correct" && <Feedback kind="correct" title="Soy de Indiana." detail={accelerated ? "PolyFlow will move you through the foundations quickly and raise the level as your answers stay precise." : "You connected Spanish conjugation to both English and Vietnamese structure."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
 
         {stage === "complete" && (
           <div className="focus-content completion-content">
             <div className="completion-mark" aria-hidden="true">✓</div>
-            <p className="eyebrow">Lesson complete</p>
-            <h1>You made attention speakable.</h1>
-            <p className="completion-copy">Five words are now connected to meaning, grammar, and use. PolyFlow noticed strong recall and one emerging pattern.</p>
+            <p className="eyebrow">Foundation mapped</p>
+            <h1>{accelerated ? "This is already familiar." : "The first structure is in place."}</h1>
+            <p className="completion-copy">{accelerated ? "PolyFlow recorded this foundation as fluent and will accelerate until the work becomes effortful enough to reveal your actual edge." : "PolyFlow recorded how you handled person, identity, and origin across Spanish, English, and Vietnamese."}</p>
             <div className="learning-signal">
-              <span>Becoming stable</span>
-              <strong>First-person verbs</strong>
-              <p>respiro · noto · elijo</p>
+              <span>{accelerated ? "Advance quickly" : "Becoming stable"}</span>
+              <strong>Spanish · subject + ser</strong>
+              <p>yo · soy · tú · eres · de</p>
             </div>
-            <button className="primary-action" onClick={() => setStage("review")}>Review what stayed <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={restart}>Preview next lesson · Vietnamese</button>
+            <button className="primary-action" onClick={() => setStage("review")}>Review the stack <span aria-hidden="true">→</span></button>
+            <button className="text-action" onClick={restart}>Preview next foundation</button>
           </div>
         )}
 
@@ -199,13 +195,13 @@ export default function Home() {
           <div className="focus-content review-content">
             <button className="back-action" onClick={() => setStage(hasHistory ? "complete" : "vocabulary")} aria-label="Back">←</button>
             <p className="eyebrow">Quiet review</p>
-            <h1>What is becoming yours</h1>
+            <h1>Your first Spanish stack</h1>
             <div className="review-list">
               {vocabulary.map((item, index) => (
-                <div className="review-row" key={item.word}>
+                <div className="review-row stacked-review-row" key={item.word}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{item.word}</strong>
-                  <p>{item.meaning}</p>
+                  <p>{item.english} · {item.vietnamese}</p>
                   <em>{index < 3 ? "Stable" : "Forming"}</em>
                 </div>
               ))}
@@ -216,24 +212,27 @@ export default function Home() {
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? "Next · Vietnamese" : "A language practice for a more attentive life"}</span>
-        <span>{mastery ? "Mastery recorded" : "Text-first · No streaks, no scores"}</span>
+        <span>{stage === "complete" ? "Next · Spanish foundations" : "Spanish target · English anchor · Vietnamese bridge"}</span>
+        <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>
   );
 }
 
+function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
+  return <div className="stack-line"><span>{role}<small>{language}</small></span><strong>{value}</strong></div>;
+}
+
+function AnswerField({ value, onChange, onEnter, placeholder, label }: { value: string; onChange: (value: string) => void; onEnter: () => void; placeholder: string; label: string }) {
+  return <input className="answer-field" autoFocus value={value} onChange={(event) => onChange(event.target.value)} onKeyDown={(event) => event.key === "Enter" && onEnter()} placeholder={placeholder} aria-label={label} />;
+}
+
 function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | "gentle"; title: string; detail?: string; action: string; onClick: () => void }) {
-  return (
-    <div className={`feedback ${kind}`}>
-      <div><strong>{title}</strong>{detail && <p>{detail}</p>}</div>
-      <button onClick={onClick}>{action} <span aria-hidden="true">→</span></button>
-    </div>
-  );
+  return <div className={`feedback ${kind}`}><div><strong>{title}</strong>{detail && <p>{detail}</p>}</div><button onClick={onClick}>{action} <span aria-hidden="true">→</span></button></div>;
 }
 
 function TransformExercise({ onComplete }: { onComplete: () => void }) {
-  const words = ["Cuando", "respiro", "despacio,", "noto", "más."];
+  const words = ["Soy", "de", "Indiana."];
   const [chosen, setChosen] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
 
@@ -243,19 +242,18 @@ function TransformExercise({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div className="focus-content transform-content">
-      <p className="eyebrow">Build the thought</p>
-      <h1 className="exercise-title">When I breathe slowly, I notice more.</h1>
+      <p className="eyebrow">Build the target</p>
+      <h1 className="exercise-title">I am from Indiana.</h1>
+      <p className="bridge-reminder">English: I + am + from · Vietnamese: mình + đến từ</p>
       <div className="sentence-builder" aria-label="Your sentence">
-        {chosen.length ? chosen.map((word) => <button key={word} onClick={() => setChosen(chosen.filter((item) => item !== word))}>{word}</button>) : <span>Choose each part in order</span>}
+        {chosen.length ? chosen.map((word) => <button key={word} onClick={() => { setChosen(chosen.filter((item) => item !== word)); setChecked(false); }}>{word}</button>) : <span>Build the natural Spanish</span>}
       </div>
       <div className="word-bank">
-        {["noto", "despacio,", "Cuando", "más.", "respiro"].map((word) => (
-          <button key={word} disabled={chosen.includes(word)} onClick={() => choose(word)}>{word}</button>
-        ))}
+        {["Indiana.", "de", "Soy"].map((word) => <button key={word} disabled={chosen.includes(word)} onClick={() => choose(word)}>{word}</button>)}
       </div>
       {!checked && <button className="primary-action" disabled={chosen.length !== words.length} onClick={() => setChecked(true)}>Check structure</button>}
-      {checked && chosen.join(" ") === words.join(" ") && <Feedback kind="correct" title="The structure is yours." action="Final check" onClick={onComplete} />}
-      {checked && chosen.join(" ") !== words.join(" ") && <Feedback kind="gentle" title="Start with the moment: Cuando..." action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
+      {checked && chosen.join(" ") === words.join(" ") && <Feedback kind="correct" title="Natural and complete." detail="Soy already carries the speaker, so yo is not required." action="Final check" onClick={onComplete} />}
+      {checked && chosen.join(" ") !== words.join(" ") && <Feedback kind="gentle" title="Let the conjugated verb lead." detail="Start with Soy..." action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
     </div>
   );
 }

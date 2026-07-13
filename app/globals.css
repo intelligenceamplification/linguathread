@@ -76,6 +76,13 @@ button { color: inherit; }
 .eyebrow { margin: 0 0 28px; color: var(--moss); font-size: .72rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; }
 .focus-content h1 { margin: 0; font-size: clamp(3.5rem, 10vw, 7.5rem); line-height: .95; font-weight: 520; letter-spacing: 0; }
 .definition { margin: 26px 0 0; font-size: clamp(1.25rem, 2.2vw, 1.7rem); color: var(--muted); }
+.language-stack { width: min(570px, 100%); margin: 34px auto 0; border-top: 1px solid var(--line); }
+.stack-line { min-height: 62px; display: grid; grid-template-columns: 1fr 1.5fr; align-items: center; gap: 24px; border-bottom: 1px solid var(--line); text-align: left; }
+.stack-line > span { color: var(--muted); font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.stack-line small { display: block; margin-top: 4px; color: #9aa39f; font-size: .68rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.stack-line strong { font-size: 1.05rem; font-weight: 610; }
+.compact-stack { margin-top: 38px; }
+.calibration-action { color: var(--moss-dark); }
 .contemplative-note { max-width: 430px; margin: 44px auto 0; color: var(--muted); font-family: Georgia, serif; font-size: 1.05rem; line-height: 1.7; font-style: italic; }
 .contemplative-note.wide { max-width: 570px; }
 
@@ -116,6 +123,7 @@ button { color: inherit; }
 .sentence-content { width: min(900px, 100%); }
 .sentence { font-family: Georgia, serif; font-size: clamp(2.6rem, 6.2vw, 5.8rem) !important; line-height: 1.08 !important; }
 .translation { margin: 28px 0 0; color: var(--muted); font-size: 1.05rem; }
+.sentence-stack { margin-top: 40px; }
 .inline-word { border: 0; border-bottom: 2px solid var(--gold); padding: 0; background: transparent; font: inherit; cursor: pointer; }
 .word-reveal { display: flex; width: fit-content; margin: 28px auto 0; gap: 14px; align-items: baseline; padding: 12px 16px; background: var(--soft-gold); color: var(--ink); font-size: .88rem; }
 .word-reveal span { color: var(--muted); }
@@ -128,6 +136,8 @@ button { color: inherit; }
 .grammar-grid article + article { padding-left: 24px; border-left: 1px solid var(--line); }
 .grammar-grid strong { color: var(--moss-dark); }
 .grammar-grid p { color: var(--muted); line-height: 1.55; font-size: .92rem; }
+.grammar-language { display: block; margin-bottom: 10px; color: #929b97; font-size: .66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.language-grammar-grid article { min-width: 0; }
 .insight { width: fit-content; margin: 42px auto 0; padding: 12px 18px; background: var(--sage); color: var(--moss-dark); }
 
 .sentence-builder { min-height: 86px; margin: 42px 0 24px; padding: 18px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #aeb7b2; }
@@ -135,6 +145,7 @@ button { color: inherit; }
 .sentence-builder button, .word-bank button { padding: 12px 15px; border: 1px solid var(--line); border-radius: 5px; background: white; cursor: pointer; }
 .word-bank { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .word-bank button:disabled { opacity: .18; cursor: default; }
+.bridge-reminder { margin: 22px 0 0; color: var(--muted); font-size: .85rem; }
 
 .completion-content h1, .review-content h1 { font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: 1.02; }
 .completion-mark { margin: 0 auto 24px; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--sage); color: var(--moss-dark); font-size: 1.4rem; }
