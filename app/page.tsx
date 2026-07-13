@@ -25,6 +25,7 @@ const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transfo
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
+  const [editingProfile, setEditingProfile] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -43,10 +44,12 @@ export default function Home() {
   function saveProfile(nextProfile: LanguageProfile) {
     window.localStorage.setItem("polyflow.language-profile.v1", JSON.stringify(nextProfile));
     setProfile(nextProfile);
+    setEditingProfile(false);
   }
 
   if (!loaded || !profile) return <LanguageSetup onComplete={saveProfile} />;
-  return <Lesson profile={profile} onEditLanguages={() => setProfile(null)} />;
+  if (editingProfile) return <LanguageSetup initialProfile={profile} onComplete={saveProfile} />;
+  return <Lesson profile={profile} onEditLanguages={() => setEditingProfile(true)} />;
 }
 
 function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEditLanguages: () => void }) {
@@ -273,12 +276,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   );
 }
 
-function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) => void }) {
+function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: LanguageProfile; onComplete: (profile: LanguageProfile) => void }) {
   const [step, setStep] = useState(0);
-  const [native, setNative] = useState("English");
-  const [second, setSecond] = useState<string | null>("Vietnamese");
-  const [secondConfidence, setSecondConfidence] = useState<Confidence>("developing");
-  const [additional, setAdditional] = useState<string[]>(["Spanish"]);
+  const [native, setNative] = useState(initialProfile?.native ?? "English");
+  const [second, setSecond] = useState<string | null>(initialProfile?.second ?? "Vietnamese");
+  const [secondConfidence, setSecondConfidence] = useState<Confidence>(initialProfile?.secondConfidence ?? "developing");
+  const [additional, setAdditional] = useState<string[]>(initialProfile?.additional ?? ["Spanish"]);
 
   const target = additional[additional.length - 1] || second || "a new language";
   const totalSteps = 4;
@@ -332,7 +335,7 @@ function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) 
               {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 ? "Growing edge" : "Additional bridge"} language={language} />)}
             </div>
             <p className="setup-description ready-description">PolyFlow will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
-            <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>Begin with foundations <span aria-hidden="true">→</span></button>
+            <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => setStep(0)}>Edit my languages</button>
           </div>
         )}
