@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
 type FeedbackState = "idle" | "correct" | "gentle";
-type LanguageProfile = { native: string; second: string | null; additional: string[] };
+type Confidence = "developing" | "comfortable" | "strong";
+type LanguageProfile = { native: string; second: string | null; secondConfidence: Confidence | null; additional: string[] };
 
 const commonLanguages = [
   "English", "Spanish", "Vietnamese", "French", "Portuguese", "German",
@@ -29,7 +30,12 @@ export default function Home() {
   useEffect(() => {
     const saved = window.localStorage.getItem("polyflow.language-profile.v1");
     if (saved) {
-      try { setProfile(JSON.parse(saved)); } catch { window.localStorage.removeItem("polyflow.language-profile.v1"); }
+      try {
+        const parsed = JSON.parse(saved) as Partial<LanguageProfile>;
+        if (parsed.native && Array.isArray(parsed.additional)) {
+          setProfile({ native: parsed.native, second: parsed.second || null, secondConfidence: parsed.second ? (parsed.secondConfidence || "developing") : null, additional: parsed.additional });
+        }
+      } catch { window.localStorage.removeItem("polyflow.language-profile.v1"); }
     }
     setLoaded(true);
   }, []);
@@ -140,7 +146,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <h1>{currentWord.word}</h1>
             <div className="language-stack compact-stack">
               <StackLine role="Native anchor" language="English" value={currentWord.english} />
-              <StackLine role="Fluent bridge" language="Vietnamese" value={currentWord.vietnamese} />
+              <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />
             </div>
             <p className="contemplative-note">{currentWord.note}</p>
             <button className="primary-action" onClick={advanceVocabulary}>
@@ -169,7 +175,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <h1 className="sentence">Soy de Indiana.</h1>
             <div className="language-stack sentence-stack">
               <StackLine role="Native anchor" language="English" value="I am from Indiana." />
-              <StackLine role="Fluent bridge" language="Vietnamese" value="Mình đến từ Indiana." />
+              <StackLine role="Supporting bridge" language="Vietnamese" value="Mình đến từ Indiana." />
             </div>
             <p className="contemplative-note wide">The meaning stays stable. Each language reveals a different way of organizing identity and origin.</p>
             <button className="primary-action" onClick={() => resetAnswer("grammar")}>See what changes <span aria-hidden="true">→</span></button>
@@ -185,7 +191,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
                 <div className="grammar-grid language-grammar-grid">
                   <article><span className="grammar-language">Spanish · target</span><strong>soy + de</strong><p><em>Ser</em> changes into <em>soy</em> for “I.” The pronoun <em>yo</em> is optional because the verb already identifies the speaker.</p></article>
                   <article><span className="grammar-language">English · anchor</span><strong>I + am + from</strong><p>English requires the subject and changes <em>be</em> to <em>am</em>. This familiar pattern helps make Spanish conjugation intelligible.</p></article>
-                  <article><span className="grammar-language">Vietnamese · bridge</span><strong>mình + đến từ</strong><p>The verb phrase does not conjugate. <em>Đến từ</em> literally carries “come from,” while the pronoun reflects relationship and context.</p></article>
+                  <article><span className="grammar-language">Vietnamese · supporting bridge</span><strong>mình + đến từ</strong><p>The verb phrase does not conjugate. <em>Đến từ</em> literally carries “come from,” while the pronoun reflects relationship and context.</p></article>
                 </div>
                 <p className="insight">Spanish and English change the verb. Vietnamese keeps the verb stable. Spanish alone can let the conjugated verb stand without the pronoun.</p>
                 <button className="text-action grammar-depth-action" onClick={() => setDeepGrammar(true)}>Go deeper into the grammar</button>
@@ -260,7 +266,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? "Next · Spanish foundations" : `Spanish target · ${profile.native} anchor · ${profile.second || "No bridge yet"}`}</span>
+        <span>{stage === "complete" ? "Next · Spanish foundations" : `Spanish target · ${profile.native} anchor · ${profile.second ? `${profile.second} bridge (${profile.secondConfidence})` : "native anchor only"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>
@@ -271,6 +277,7 @@ function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) 
   const [step, setStep] = useState(0);
   const [native, setNative] = useState("English");
   const [second, setSecond] = useState<string | null>("Vietnamese");
+  const [secondConfidence, setSecondConfidence] = useState<Confidence>("developing");
   const [additional, setAdditional] = useState<string[]>(["Spanish"]);
 
   const target = additional[additional.length - 1] || second || "a new language";
@@ -294,10 +301,11 @@ function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) 
         )}
 
         {step === 1 && (
-          <SetupFrame eyebrow="Your next strongest language" title="What language became yours next?" description="A language you already know can become a bridge into the one you are learning.">
+          <SetupFrame eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. PolyFlow will use it only when it makes the new language clearer.">
             <LanguagePicker selected={second ? [second] : []} excluded={[native]} onSelect={(language) => setSecond(language)} />
+            {second && <ConfidencePicker value={secondConfidence} onChange={setSecondConfidence} />}
             <button className="primary-action" onClick={() => setStep(2)}>Continue <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => { setSecond(null); setStep(2); }}>I do not have a second language yet</button>
+            <button className="text-action" onClick={() => { setSecond(null); setStep(2); }}>I do not have another language yet</button>
           </SetupFrame>
         )}
 
@@ -320,11 +328,11 @@ function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) 
             <h1>Your languages can help one another.</h1>
             <div className="profile-stack">
               <ProfileLanguage index="01" role="Native anchor" language={native} />
-              {second && <ProfileLanguage index="02" role="Fluent bridge" language={second} />}
+              {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
               {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 ? "Growing edge" : "Additional bridge"} language={language} />)}
             </div>
-            <p className="setup-description ready-description">PolyFlow will begin with essential {target} vocabulary, place it into daily conversation, and use your stronger languages to explain what changes beneath the sentence.</p>
-            <button className="primary-action" onClick={() => onComplete({ native, second, additional })}>Begin with foundations <span aria-hidden="true">→</span></button>
+            <p className="setup-description ready-description">PolyFlow will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
+            <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>Begin with foundations <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => setStep(0)}>Edit my languages</button>
           </div>
         )}
@@ -337,6 +345,19 @@ function LanguageSetup({ onComplete }: { onComplete: (profile: LanguageProfile) 
 
 function SetupFrame({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: React.ReactNode }) {
   return <div className="focus-content setup-content"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p className="setup-description">{description}</p>{children}</div>;
+}
+
+const confidenceLabels: Record<Confidence, string> = { developing: "Developing", comfortable: "Comfortable", strong: "Strong" };
+
+function ConfidencePicker({ value, onChange }: { value: Confidence; onChange: (confidence: Confidence) => void }) {
+  return (
+    <div className="confidence-field">
+      <span>How available does this language feel?</span>
+      <div className="confidence-options" role="radiogroup" aria-label="Language confidence">
+        {(Object.keys(confidenceLabels) as Confidence[]).map((confidence) => <button key={confidence} className={value === confidence ? "selected" : ""} role="radio" aria-checked={value === confidence} onClick={() => onChange(confidence)}>{confidenceLabels[confidence]}</button>)}
+      </div>
+    </div>
+  );
 }
 
 function LanguagePicker({ selected, excluded, multiple = false, onSelect }: { selected: string[]; excluded: string[]; multiple?: boolean; onSelect: (language: string) => void }) {
@@ -356,8 +377,8 @@ function LanguagePicker({ selected, excluded, multiple = false, onSelect }: { se
   );
 }
 
-function ProfileLanguage({ index, role, language }: { index: string; role: string; language: string }) {
-  return <div className="profile-language"><span>{index}</span><div><small>{role}</small><strong>{language}</strong></div></div>;
+function ProfileLanguage({ index, role, language, detail }: { index: string; role: string; language: string; detail?: string }) {
+  return <div className="profile-language"><span>{index}</span><div><small>{role}{detail && <em> · {detail}</em>}</small><strong>{language}</strong></div></div>;
 }
 
 function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
