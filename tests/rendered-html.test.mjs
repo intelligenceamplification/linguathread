@@ -27,3 +27,13 @@ test("server-renders the PolyFlow language setup", async () => {
   assert.match(html, /Language begins from what you already know/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
 });
+
+test("ships a sequential A1 curriculum rather than one repeating foundation", async () => {
+  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/curriculum.ts", import.meta.url), "utf8"));
+  const lessonIds = [...source.matchAll(/id: "(es-u\d-l\d-[^"]+)"/g)].map((match) => match[1]);
+  assert.equal(lessonIds.length, 8);
+  assert.equal(new Set(lessonIds).size, 8);
+  assert.match(source, /Names and introductions/);
+  assert.match(source, /Attention and presence/);
+  assert.match(source, /Human connection/);
+});

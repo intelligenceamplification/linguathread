@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
 
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
 type FeedbackState = "idle" | "correct" | "gentle";
@@ -11,14 +12,6 @@ const commonLanguages = [
   "English", "Spanish", "Vietnamese", "French", "Portuguese", "German",
   "Italian", "Mandarin Chinese", "Cantonese", "Japanese", "Korean", "Arabic",
   "Hindi", "Russian", "Dutch", "Turkish", "Indonesian", "Thai", "Tagalog", "Swahili",
-];
-
-const vocabulary = [
-  { word: "yo", english: "I", vietnamese: "mình / tôi", note: "Spanish has one neutral first-person singular. Vietnamese chooses a pronoun through relationship and context." },
-  { word: "tú", english: "you", vietnamese: "bạn", note: "Tú is informal singular. Like Vietnamese pronouns, it already says something about the relationship." },
-  { word: "soy", english: "I am", vietnamese: "mình là / tôi là", note: "Soy is ser shaped for yo. Spanish can omit yo because the verb already carries it." },
-  { word: "eres", english: "you are", vietnamese: "bạn là", note: "Eres is ser shaped for tú. Vietnamese là does not change with the person." },
-  { word: "de", english: "from / of", vietnamese: "từ / của", note: "A small word that connects origin, belonging, material, and relationship." },
 ];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
@@ -55,23 +48,40 @@ export default function Home() {
 function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEditLanguages: () => void }) {
   const [stage, setStage] = useState<Stage>("vocabulary");
   const [wordIndex, setWordIndex] = useState(0);
+  const [lessonIndex, setLessonIndex] = useState(0);
+  const [completedIds, setCompletedIds] = useState<string[]>([]);
+  const [reviewDueIds, setReviewDueIds] = useState<string[]>([]);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [mastery, setMastery] = useState(false);
-  const [hasHistory, setHasHistory] = useState(false);
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
 
   useEffect(() => {
-    setHasHistory(window.localStorage.getItem("polyflow.completed") === "true");
+    const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
+    setCompletedIds(localCompleted);
+    setLessonIndex(Math.min(localCompleted.length, curriculum.length - 1));
+    fetch("/api/progress")
+      .then((response) => response.ok ? response.json() : Promise.reject())
+      .then((data: { completedLessonIds?: string[]; reviewDueLessonIds?: string[] }) => {
+        setReviewDueIds(data.reviewDueLessonIds || []);
+        if (!data.completedLessonIds?.length) return;
+        setCompletedIds(data.completedLessonIds);
+        setLessonIndex(Math.min(data.completedLessonIds.length, curriculum.length - 1));
+        window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
+      })
+      .catch(() => undefined);
   }, []);
 
+  const lesson = curriculum[lessonIndex];
+  const hasHistory = completedIds.length > 0;
+  const bridgeEnabled = profile.second === "Vietnamese";
   const stageIndex = Math.max(0, stages.indexOf(stage));
-  const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / vocabulary.length : 0)) / (stages.length - 1)) * 100;
-  const currentWord = vocabulary[wordIndex];
+  const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
+  const currentWord = lesson.vocabulary[wordIndex];
 
   function advanceVocabulary() {
-    if (wordIndex < vocabulary.length - 1) setWordIndex((value) => value + 1);
+    if (wordIndex < lesson.vocabulary.length - 1) setWordIndex((value) => value + 1);
     else setStage("recall");
   }
 
@@ -83,15 +93,20 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function checkRecall() {
-    const normalized = answer.trim().toLowerCase().replace(/[.!]/g, "");
-    setFeedback(["i am", "i'm", "am"].includes(normalized) ? "correct" : "gentle");
+    const passed = lesson.recall.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
+    setFeedback(passed ? "correct" : "gentle");
+    recordAttempt("recall", passed);
   }
 
   function checkMastery() {
-    const normalized = answer.trim().toLowerCase().replace(/[.!]/g, "").replace(/\s+/g, " ");
-    const passed = normalized === "soy de indiana" || normalized === "yo soy de indiana";
+    const passed = lesson.mastery.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
     setFeedback(passed ? "correct" : "gentle");
     setMastery(passed);
+    recordAttempt("mastery", passed);
+  }
+
+  function recordAttempt(kind: string, correct: boolean) {
+    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, correct }), keepalive: true }).catch(() => undefined);
   }
 
   function resetAnswer(nextStage?: Stage) {
@@ -107,13 +122,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function finishLesson() {
-    window.localStorage.setItem("polyflow.completed", "true");
-    window.localStorage.setItem("polyflow.spanish.foundation", accelerated ? "familiar" : "forming");
-    setHasHistory(true);
+    const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
+    setCompletedIds(nextCompleted);
+    window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(nextCompleted));
+    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
     setStage("complete");
   }
 
-  function restart() {
+  function resetLesson(nextIndex = lessonIndex) {
+    setLessonIndex(nextIndex);
     setStage("vocabulary");
     setWordIndex(0);
     setAnswer("");
@@ -123,13 +140,18 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setDeepGrammar(false);
   }
 
+  function continueLearning() {
+    if (lessonIndex < curriculum.length - 1) resetLesson(lessonIndex + 1);
+    else setStage("review");
+  }
+
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
-        <button className="wordmark" onClick={restart} aria-label="Restart lesson">PolyFlow</button>
+        <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">PolyFlow</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
-          <span>Foundations · 01</span>
+          <span>A1 · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")}</span>
         </div>
         {hasHistory && stage !== "review" ? (
           <button className="quiet-action" onClick={() => setStage("review")}>Review</button>
@@ -145,15 +167,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       <section className="lesson-stage" aria-live="polite">
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
-            <p className="eyebrow">Spanish foundation · {wordIndex + 1} of {vocabulary.length}</p>
+            <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
             <h1>{currentWord.word}</h1>
             <div className="language-stack compact-stack">
-              <StackLine role="Native anchor" language="English" value={currentWord.english} />
-              <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />
+              <StackLine role="Native anchor" language={profile.native} value={currentWord.english} />
+              {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />}
             </div>
             <p className="contemplative-note">{currentWord.note}</p>
             <button className="primary-action" onClick={advanceVocabulary}>
-              {wordIndex === vocabulary.length - 1 ? "Practice the foundation" : "Continue"}
+              {wordIndex === lesson.vocabulary.length - 1 ? "Practice the foundation" : "Continue"}
               <span aria-hidden="true">→</span>
             </button>
             {wordIndex === 0 && <button className="text-action calibration-action" onClick={checkLevel}>Already familiar? Check my level</button>}
@@ -163,24 +185,24 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         {stage === "recall" && (
           <div className="focus-content exercise-content">
             <p className="eyebrow">Active recall</p>
-            <h1 className="exercise-title">What does <em>soy</em> carry?</h1>
-            <p className="instruction">Answer in English. Include the person as well as the verb.</p>
+            <h1 className="exercise-title">{lesson.recall.prompt}</h1>
+            <p className="instruction">{lesson.recall.instruction}</p>
             <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkRecall} placeholder="Type your answer" label="Your answer" />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkRecall}>Check</button>}
-            {feedback === "correct" && <Feedback kind="correct" title="Yes. Soy carries “I am.”" detail="The Spanish verb ending holds information English places in two words." action="See the stack" onClick={() => resetAnswer("sentence")} />}
-            {feedback === "gentle" && <Feedback kind="gentle" title="The verb is carrying both identity and person." detail="soy = I am" action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "correct" && <Feedback kind="correct" title={lesson.recall.correct} detail="The answer is now connected to the structure beneath it." action="See the stack" onClick={() => resetAnswer("sentence")} />}
+            {feedback === "gentle" && <Feedback kind="gentle" title="Make the meaning explicit." detail={lesson.recall.hint} action="Try again" onClick={() => resetAnswer()} />}
           </div>
         )}
 
         {stage === "sentence" && (
           <div className="focus-content sentence-content">
             <p className="eyebrow">One meaning · three structures</p>
-            <h1 className="sentence">Soy de Indiana.</h1>
+            <h1 className="sentence">{lesson.sentence.target}</h1>
             <div className="language-stack sentence-stack">
-              <StackLine role="Native anchor" language="English" value="I am from Indiana." />
-              <StackLine role="Supporting bridge" language="Vietnamese" value="Mình đến từ Indiana." />
+              <StackLine role="Native anchor" language={profile.native} value={lesson.sentence.anchor} />
+              {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={lesson.sentence.bridge} />}
             </div>
-            <p className="contemplative-note wide">The meaning stays stable. Each language reveals a different way of organizing identity and origin.</p>
+            <p className="contemplative-note wide">{lesson.sentence.note}</p>
             <button className="primary-action" onClick={() => resetAnswer("grammar")}>See what changes <span aria-hidden="true">→</span></button>
           </div>
         )}
@@ -188,27 +210,24 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         {stage === "grammar" && (
           <div className="focus-content grammar-content">
             <p className="eyebrow">{deepGrammar ? "Grammar studio" : "The stack beneath the sentence"}</p>
-            <h1 className="grammar-line"><span>Soy</span> de Indiana.</h1>
+            <h1 className="grammar-line"><span>{lesson.grammar.focus}</span></h1>
             {!deepGrammar ? (
               <>
-                <div className="grammar-grid language-grammar-grid">
-                  <article><span className="grammar-language">Spanish · target</span><strong>soy + de</strong><p><em>Ser</em> changes into <em>soy</em> for “I.” The pronoun <em>yo</em> is optional because the verb already identifies the speaker.</p></article>
-                  <article><span className="grammar-language">English · anchor</span><strong>I + am + from</strong><p>English requires the subject and changes <em>be</em> to <em>am</em>. This familiar pattern helps make Spanish conjugation intelligible.</p></article>
-                  <article><span className="grammar-language">Vietnamese · supporting bridge</span><strong>mình + đến từ</strong><p>The verb phrase does not conjugate. <em>Đến từ</em> literally carries “come from,” while the pronoun reflects relationship and context.</p></article>
+                <div className={`grammar-grid language-grammar-grid ${bridgeEnabled ? "" : "two-layers"}`}>
+                  <article><span className="grammar-language">Spanish · target</span><strong>{lesson.grammar.target.pattern}</strong><p>{lesson.grammar.target.explanation}</p></article>
+                  <article><span className="grammar-language">{profile.native} · anchor</span><strong>{lesson.grammar.anchor.pattern}</strong><p>{lesson.grammar.anchor.explanation}</p></article>
+                  {bridgeEnabled && <article><span className="grammar-language">Vietnamese · supporting bridge</span><strong>{lesson.grammar.bridge.pattern}</strong><p>{lesson.grammar.bridge.explanation}</p></article>}
                 </div>
-                <p className="insight">Spanish and English change the verb. Vietnamese keeps the verb stable. Spanish alone can let the conjugated verb stand without the pronoun.</p>
+                <p className="insight">{lesson.grammar.insight}</p>
                 <button className="text-action grammar-depth-action" onClick={() => setDeepGrammar(true)}>Go deeper into the grammar</button>
                 <button className="primary-action" onClick={() => setStage("transform")}>Build the Spanish <span aria-hidden="true">→</span></button>
               </>
             ) : (
               <>
                 <div className="deep-grammar-grid">
-                  <article><span>01 · Conjugation</span><strong>ser changes with the person</strong><p><em>Yo soy</em>, <em>tú eres</em>, and <em>él / ella / usted es</em> are forms of one verb. The change is grammatical information, not new vocabulary.</p></article>
-                  <article><span>02 · Subject omission</span><strong>soy already contains “I”</strong><p>Spanish pronouns are often omitted when the verb ending makes the subject clear. Use <em>yo</em> when contrast or emphasis matters: <em>Yo soy de Indiana; ella es de Madrid.</em></p></article>
-                  <article><span>03 · Ser, not estar</span><strong>origin is treated as identity</strong><p>Spanish uses <em>ser de</em> for where someone is from. <em>Estar</em> describes location or state, but <em>estoy de Indiana</em> does not express origin.</p></article>
-                  <article><span>04 · The range of de</span><strong>origin, possession, material</strong><p><em>De</em> can mean “from” or “of”: <em>soy de Indiana</em>, <em>el libro de Ana</em>, <em>una mesa de madera</em>. The relationship is resolved through context.</p></article>
+                  {lesson.grammar.deep.map((item, index) => <article key={item.title}><span>{String(index + 1).padStart(2, "0")} · {item.title}</span><strong>{item.principle}</strong><p>{item.explanation}</p></article>)}
                 </div>
-                <p className="deep-grammar-summary">English helps you recognize the changing form of “be.” Vietnamese makes the contrast clearer: <em>là</em> stays stable, while Spanish places person directly inside <em>ser</em>.</p>
+                <p className="deep-grammar-summary">{lesson.grammar.summary}</p>
                 <button className="text-action grammar-depth-action" onClick={() => setDeepGrammar(false)}>Return to the lesson view</button>
                 <button className="primary-action" onClick={() => { setDeepGrammar(false); setStage("transform"); }}>Build the Spanish <span aria-hidden="true">→</span></button>
               </>
@@ -216,34 +235,34 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "transform" && <TransformExercise onComplete={() => resetAnswer("mastery")} />}
+        {stage === "transform" && <TransformExercise lesson={lesson} onComplete={() => resetAnswer("mastery")} />}
 
         {stage === "mastery" && (
           <div className="focus-content exercise-content">
             <p className="eyebrow">{accelerated ? "Fluency check" : "Foundation check"}</p>
-            <h1 className="exercise-title">Translate: I am from Indiana.</h1>
-            <p className="instruction">Write the natural Spanish. The subject pronoun may be omitted.</p>
+            <h1 className="exercise-title">{lesson.mastery.prompt}</h1>
+            <p className="instruction">{lesson.mastery.instruction}</p>
             <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder="Escribe en español" label="Spanish answer" />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
-            {feedback === "gentle" && accelerated && <Feedback kind="gentle" title="This foundation is worth making explicit." detail="Soy de Indiana. Spanish lets soy carry the subject." action="Learn the foundation" onClick={learnFoundation} />}
-            {feedback === "gentle" && !accelerated && <Feedback kind="gentle" title="Let soy carry “I am.”" detail="Soy de Indiana." action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && <Feedback kind="correct" title="Soy de Indiana." detail={accelerated ? "PolyFlow will move you through the foundations quickly and raise the level as your answers stay precise." : "You connected Spanish conjugation to both English and Vietnamese structure."} action="Complete lesson" onClick={finishLesson} />}
+            {feedback === "gentle" && accelerated && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
+            {feedback === "gentle" && !accelerated && <Feedback kind="gentle" title={lesson.mastery.hint} detail={lesson.mastery.answer} action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "correct" && <Feedback kind="correct" title={lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You connected vocabulary, structure, and personal expression."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
 
         {stage === "complete" && (
           <div className="focus-content completion-content">
             <div className="completion-mark" aria-hidden="true">✓</div>
-            <p className="eyebrow">Foundation mapped</p>
-            <h1>{accelerated ? "This is already familiar." : "The first structure is in place."}</h1>
-            <p className="completion-copy">{accelerated ? "PolyFlow recorded this foundation as fluent and will accelerate until the work becomes effortful enough to reveal your actual edge." : "PolyFlow recorded how you handled person, identity, and origin across Spanish, English, and Vietnamese."}</p>
+            <p className="eyebrow">Lesson {lesson.lesson} mapped</p>
+            <h1>{accelerated ? "This is already familiar." : lesson.title}</h1>
+            <p className="completion-copy">{accelerated ? "PolyFlow recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
             <div className="learning-signal">
               <span>{accelerated ? "Advance quickly" : "Becoming stable"}</span>
-              <strong>Spanish · subject + ser</strong>
-              <p>yo · soy · tú · eres · de</p>
+              <strong>Spanish · {lesson.skill}</strong>
+              <p>{lesson.vocabulary.map((item) => item.word).join(" · ")}</p>
             </div>
-            <button className="primary-action" onClick={() => setStage("review")}>Review the stack <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={restart}>Preview next foundation</button>
+            <button className="primary-action" onClick={continueLearning}>{lessonIndex < curriculum.length - 1 ? "Continue to the next lesson" : "Review what is becoming yours"} <span aria-hidden="true">→</span></button>
+            <button className="text-action" onClick={() => setStage("review")}>Review the stack</button>
             <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
           </div>
         )}
@@ -252,24 +271,24 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <div className="focus-content review-content">
             <button className="back-action" onClick={() => setStage(hasHistory ? "complete" : "vocabulary")} aria-label="Back">←</button>
             <p className="eyebrow">Quiet review</p>
-            <h1>Your first Spanish stack</h1>
+            <h1>Your Spanish foundations</h1>
             <div className="review-list">
-              {vocabulary.map((item, index) => (
-                <div className="review-row stacked-review-row" key={item.word}>
+              {curriculum.map((item, index) => (
+                <div className="review-row stacked-review-row" key={item.id}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{item.word}</strong>
-                  <p>{item.english} · {item.vietnamese}</p>
-                  <em>{index < 3 ? "Stable" : "Forming"}</em>
+                  <strong>{item.title}</strong>
+                  <p>A1 · {item.unitTitle} · {item.skill}</p>
+                  <em>{reviewDueIds.includes(item.id) ? "Due" : completedIds.includes(item.id) ? "Stable" : index === lessonIndex ? "Next" : "Waiting"}</em>
                 </div>
               ))}
             </div>
-            <button className="primary-action" onClick={restart}>Return to lesson</button>
+            <button className="primary-action" onClick={() => resetLesson()}>Return to lesson</button>
           </div>
         )}
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? "Next · Spanish foundations" : `Spanish target · ${profile.native} anchor · ${profile.second ? `${profile.second} bridge (${profile.secondConfidence})` : "native anchor only"}`}</span>
+        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} A1 lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? `Vietnamese bridge (${profile.secondConfidence})` : "native anchor"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>
@@ -396,8 +415,8 @@ function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | 
   return <div className={`feedback ${kind}`}><div><strong>{title}</strong>{detail && <p>{detail}</p>}</div><button onClick={onClick}>{action} <span aria-hidden="true">→</span></button></div>;
 }
 
-function TransformExercise({ onComplete }: { onComplete: () => void }) {
-  const words = ["Soy", "de", "Indiana."];
+function TransformExercise({ lesson, onComplete }: { lesson: LessonDefinition; onComplete: () => void }) {
+  const words = lesson.transform.words;
   const [chosen, setChosen] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
 
@@ -408,17 +427,17 @@ function TransformExercise({ onComplete }: { onComplete: () => void }) {
   return (
     <div className="focus-content transform-content">
       <p className="eyebrow">Build the target</p>
-      <h1 className="exercise-title">I am from Indiana.</h1>
-      <p className="bridge-reminder">English: I + am + from · Vietnamese: mình + đến từ</p>
+      <h1 className="exercise-title">{lesson.transform.prompt}</h1>
+      <p className="bridge-reminder">{lesson.transform.bridgeReminder}</p>
       <div className="sentence-builder" aria-label="Your sentence">
         {chosen.length ? chosen.map((word) => <button key={word} onClick={() => { setChosen(chosen.filter((item) => item !== word)); setChecked(false); }}>{word}</button>) : <span>Build the natural Spanish</span>}
       </div>
       <div className="word-bank">
-        {["Indiana.", "de", "Soy"].map((word) => <button key={word} disabled={chosen.includes(word)} onClick={() => choose(word)}>{word}</button>)}
+        {lesson.transform.bank.map((word) => <button key={word} disabled={chosen.includes(word)} onClick={() => choose(word)}>{word}</button>)}
       </div>
       {!checked && <button className="primary-action" disabled={chosen.length !== words.length} onClick={() => setChecked(true)}>Check structure</button>}
-      {checked && chosen.join(" ") === words.join(" ") && <Feedback kind="correct" title="Natural and complete." detail="Soy already carries the speaker, so yo is not required." action="Final check" onClick={onComplete} />}
-      {checked && chosen.join(" ") !== words.join(" ") && <Feedback kind="gentle" title="Let the conjugated verb lead." detail="Start with Soy..." action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
+      {checked && chosen.join(" ") === words.join(" ") && <Feedback kind="correct" title="Natural and complete." detail="The structure now carries the intended meaning." action="Final check" onClick={onComplete} />}
+      {checked && chosen.join(" ") !== words.join(" ") && <Feedback kind="gentle" title={lesson.transform.hint} detail={`Build toward: ${words.join(" ")}`} action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
     </div>
   );
 }
