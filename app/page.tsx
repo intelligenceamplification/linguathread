@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect -- browser storage is loaded after hydration */
+
 import { useEffect, useState } from "react";
 import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
 
@@ -16,6 +18,16 @@ const commonLanguages = [
 ];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
+const learnerIdKey = "polyflow.learner-id.v1";
+
+function learnerHeaders(json = false) {
+  let learnerId = window.localStorage.getItem(learnerIdKey);
+  if (!learnerId) {
+    learnerId = crypto.randomUUID();
+    window.localStorage.setItem(learnerIdKey, learnerId);
+  }
+  return { ...(json ? { "content-type": "application/json" } : {}), "x-polyflow-learner-id": learnerId };
+}
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
@@ -64,7 +76,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
     setCompletedIds(localCompleted);
     setLessonIndex(Math.min(localCompleted.length, curriculum.length - 1));
-    fetch("/api/progress")
+    fetch("/api/progress", { headers: learnerHeaders() })
       .then((response) => response.ok ? response.json() : Promise.reject())
       .then((data: { completedLessonIds?: string[]; reviewDueLessonIds?: string[] }) => {
         setReviewDueIds(data.reviewDueLessonIds || []);
@@ -120,7 +132,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
-    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, language, correct }), keepalive: true }).catch(() => undefined);
+    fetch("/api/progress", { method: "POST", headers: learnerHeaders(true), body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, language, correct }), keepalive: true }).catch(() => undefined);
   }
 
   function resetAnswer(nextStage?: Stage) {
@@ -139,7 +151,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
     window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(nextCompleted));
-    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
+    fetch("/api/progress", { method: "POST", headers: learnerHeaders(true), body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
     setStage("complete");
   }
 

@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "polyflow.vercel.app"}`),
   title: "PolyFlow · Language, made yours",
   description: "A contemplative language practice built on vocabulary, structure, and meaningful use.",
   openGraph: {

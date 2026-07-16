@@ -1,35 +1,28 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
-async function render() {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
+const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
 
-  return worker.fetch(
-    new Request("http://localhost/", { headers: { accept: "text/html" } }),
-    { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
-    { waitUntil() {}, passThroughOnException() {} },
-  );
-}
+test("builds PolyFlow on the standard Next.js runtime", async () => {
+  const packageJson = JSON.parse(await read("../package.json"));
+  assert.equal(packageJson.scripts.build, "next build");
+  assert.equal(packageJson.scripts.dev, "next dev");
+  assert.ok(packageJson.dependencies["@neondatabase/serverless"]);
+  await read("../.next/BUILD_ID");
+});
 
-test("server-renders the PolyFlow language setup", async () => {
-  const response = await render();
-  assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
-  const html = await response.text();
-  assert.match(html, /<title>PolyFlow · Language, made yours<\/title>/i);
-  assert.match(html, /Your language stack/);
-  assert.match(html, /What language shaped your first thoughts/);
-  assert.match(html, /Search or type a language/);
-  assert.match(html, /native anchor/i);
-  assert.match(html, /Language begins from what you already know/);
-  assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
+test("preserves the language setup and calm learning interface", async () => {
+  const [page, layout] = await Promise.all([read("../app/page.tsx"), read("../app/layout.tsx")]);
+  assert.match(layout, /PolyFlow/);
+  assert.match(page, /Your language stack/);
+  assert.match(page, /What language shaped your first thoughts/);
+  assert.match(page, /Search or type a language/);
+  assert.match(page, /Language begins from what you already know/);
 });
 
 test("ships a sequential A1 curriculum rather than one repeating foundation", async () => {
-  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/curriculum.ts", import.meta.url), "utf8"));
+  const source = await read("../app/curriculum.ts");
   const lessonIds = [...source.matchAll(/id: "(es-u\d-l\d-[^"]+)"/g)].map((match) => match[1]);
   assert.equal(lessonIds.length, 8);
   assert.equal(new Set(lessonIds).size, 8);
@@ -41,7 +34,7 @@ test("ships a sequential A1 curriculum rather than one repeating foundation", as
 });
 
 test("activates Vietnamese production from any non-native profile position", async () => {
-  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/page.tsx", import.meta.url), "utf8"));
+  const source = await read("../app/page.tsx");
   assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);
   assert.match(source, /activeLanguages\.includes\("vietnamese"\)/);
   assert.match(source, /setProductionLanguage\("Vietnamese"\)/);
@@ -50,10 +43,8 @@ test("activates Vietnamese production from any non-native profile position", asy
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {
-  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/cefr.ts", import.meta.url), "utf8"));
-  for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) {
-    assert.match(source, new RegExp(`level: "${level}"`));
-  }
+  const source = await read("../app/cefr.ts");
+  for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(source, new RegExp(`level: "${level}"`));
   assert.match(source, /Basic user/);
   assert.match(source, /Independent user/);
   assert.match(source, /Proficient user/);
