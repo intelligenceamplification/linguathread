@@ -109,6 +109,11 @@ button { color: inherit; }
 
 .exercise-title { font-size: clamp(2.4rem, 6vw, 5.2rem) !important; line-height: 1.05 !important; }
 .instruction { margin: 22px 0 40px; color: var(--muted); }
+.production-path { margin: -20px 0 34px; display: flex; justify-content: center; align-items: center; gap: 10px; color: #9aa39f; font-size: .72rem; }
+.production-path span { padding-bottom: 4px; border-bottom: 1px solid transparent; }
+.production-path span.active { color: var(--moss-dark); border-color: var(--moss); font-weight: 700; }
+.production-path span.complete { color: var(--moss); }
+.production-path i { color: #b2bab6; font-style: normal; }
 .answer-field { width: min(560px, 100%); height: 64px; border: 0; border-bottom: 1px solid #9ca7a2; background: transparent; text-align: center; font-size: clamp(1.25rem, 3vw, 2rem); outline: none; border-radius: 0; }
 .answer-field:focus { border-color: var(--moss-dark); }
 .answer-field::placeholder { color: #a9b1ad; }

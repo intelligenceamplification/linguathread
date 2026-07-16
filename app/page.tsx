@@ -77,7 +77,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
   const lesson = curriculum[lessonIndex];
   const hasHistory = completedIds.length > 0;
-  const bridgeEnabled = profile.second === "Vietnamese";
+  const activeLanguages = [profile.second, ...profile.additional]
+    .filter((language): language is string => Boolean(language))
+    .map((language) => language.trim().toLocaleLowerCase());
+  const bridgeEnabled = activeLanguages.includes("vietnamese");
   const stageIndex = Math.max(0, stages.indexOf(stage));
   const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
   const currentWord = lesson.vocabulary[wordIndex];
@@ -251,6 +254,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <p className="eyebrow">{accelerated ? "Fluency check" : "Foundation check"} · {productionLanguage}</p>
             <h1 className="exercise-title">{productionLanguage === "Spanish" ? lesson.mastery.prompt : lesson.bridgeMastery.prompt}</h1>
             <p className="instruction">{productionLanguage === "Spanish" ? lesson.mastery.instruction : lesson.bridgeMastery.instruction}</p>
+            {bridgeEnabled && <p className="production-path"><span className={productionLanguage === "Spanish" ? "active" : "complete"}>English meaning</span><i>→</i><span className={productionLanguage === "Spanish" ? "active" : "complete"}>Spanish</span><i>→</i><span className={productionLanguage === "Vietnamese" ? "active" : ""}>Vietnamese</span></p>}
             <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder={productionLanguage === "Spanish" ? "Escribe en español" : "Viết bằng tiếng Việt"} label={`${productionLanguage} answer`} />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
             {feedback === "gentle" && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
@@ -298,7 +302,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} A1 lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? `Vietnamese bridge (${profile.secondConfidence})` : "native anchor"}`}</span>
+        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} A1 lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>

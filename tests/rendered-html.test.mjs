@@ -39,3 +39,11 @@ test("ships a sequential A1 curriculum rather than one repeating foundation", as
   assert.equal((source.match(/bridgeMastery:/g) || []).length, 9);
   assert.match(source, /Now say it in Vietnamese/);
 });
+
+test("activates Vietnamese production from any non-native profile position", async () => {
+  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/page.tsx", import.meta.url), "utf8"));
+  assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);
+  assert.match(source, /activeLanguages\.includes\("vietnamese"\)/);
+  assert.match(source, /Continue in Vietnamese/);
+  assert.match(source, /English meaning/);
+});
