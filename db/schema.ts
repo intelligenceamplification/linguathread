@@ -25,6 +25,7 @@ export const answerAttempts = sqliteTable("answer_attempts", {
   lessonId: text("lesson_id").notNull(),
   skill: text("skill").notNull(),
   kind: text("kind").notNull(),
+  language: text("language").notNull().default("Spanish"),
   correct: integer("correct", { mode: "boolean" }).notNull(),
   createdAt: integer("created_at").notNull(),
 });

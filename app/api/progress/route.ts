@@ -43,6 +43,7 @@ export async function POST(request: Request) {
     lessonId?: string;
     skill?: string;
     kind?: string;
+    language?: string;
     correct?: boolean;
     accelerated?: boolean;
     profile?: unknown;
@@ -55,8 +56,8 @@ export async function POST(request: Request) {
   if (body.type === "attempt") {
     const attemptId = crypto.randomUUID();
     await db.batch([
-      db.prepare("INSERT INTO answer_attempts (id, learner_email, lesson_id, skill, kind, correct, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)")
-        .bind(attemptId, email, body.lessonId, body.skill, body.kind || "unknown", body.correct ? 1 : 0, now),
+      db.prepare("INSERT INTO answer_attempts (id, learner_email, lesson_id, skill, kind, language, correct, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
+        .bind(attemptId, email, body.lessonId, body.skill, body.kind || "unknown", body.language || "Spanish", body.correct ? 1 : 0, now),
       db.prepare(`INSERT INTO lesson_progress (id, learner_email, lesson_id, skill, status, mastery, attempts, updated_at)
         VALUES (?, ?, ?, ?, 'forming', ?, 1, ?)
         ON CONFLICT(id) DO UPDATE SET attempts = attempts + 1, mastery = MAX(mastery, excluded.mastery), updated_at = excluded.updated_at`)

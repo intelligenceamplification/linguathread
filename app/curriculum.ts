@@ -31,6 +31,7 @@ export type LessonDefinition = {
   };
   transform: { prompt: string; bridgeReminder: string; words: string[]; bank: string[]; hint: string };
   mastery: { prompt: string; instruction: string; accepted: string[]; answer: string; hint: string };
+  bridgeMastery: { prompt: string; instruction: string; accepted: string[]; answer: string; hint: string };
   completion: string;
 };
 
@@ -61,6 +62,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "I am from Indiana.", bridgeReminder: "English: I + am + from · Vietnamese: mình + đến từ", words: ["Soy", "de", "Indiana."], bank: ["Indiana.", "de", "Soy"], hint: "Let the conjugated verb lead." },
     mastery: { prompt: "Translate: I am from Indiana.", instruction: "Write the natural Spanish. The subject pronoun may be omitted.", accepted: ["soy de indiana", "yo soy de indiana"], answer: "Soy de Indiana.", hint: "Let soy carry “I am.”" },
+    bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I am from Indiana” naturally.", accepted: ["mình đến từ indiana", "tôi đến từ indiana"], answer: "Mình đến từ Indiana.", hint: "Use mình or tôi, followed by đến từ." },
     completion: "You mapped person, identity, and origin across Spanish, English, and Vietnamese.",
   },
   {
@@ -89,6 +91,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "My name is Desmond.", bridgeReminder: "English: my name is · Vietnamese: mình tên là", words: ["Me", "llamo", "Desmond."], bank: ["Desmond.", "llamo", "Me"], hint: "Begin with the reflexive word me." },
     mastery: { prompt: "Introduce yourself as Desmond.", instruction: "Write the natural Spanish introduction.", accepted: ["me llamo desmond", "yo me llamo desmond"], answer: "Me llamo Desmond.", hint: "Use me llamo, not a word-for-word copy of English." },
+    bridgeMastery: { prompt: "Now introduce yourself in Vietnamese.", instruction: "Translate “My name is Desmond” naturally.", accepted: ["mình tên là desmond", "tôi tên là desmond", "mình tên desmond", "tôi tên desmond"], answer: "Mình tên là Desmond.", hint: "Use mình or tôi + tên là + Desmond." },
     completion: "You can now offer your name naturally and recognize how each language frames identity.",
   },
   {
@@ -117,6 +120,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "I would like water, please.", bridgeReminder: "English: I would like · Vietnamese: tôi muốn", words: ["Quiero", "agua,", "por", "favor."], bank: ["favor.", "agua,", "Quiero", "por"], hint: "State the desire first, then add courtesy." },
     mastery: { prompt: "Ask naturally for water, politely.", instruction: "Write the Spanish request.", accepted: ["quiero agua por favor", "yo quiero agua por favor"], answer: "Quiero agua, por favor.", hint: "Quiero + agua + por favor." },
+    bridgeMastery: { prompt: "Now ask in Vietnamese.", instruction: "Translate “I would like water, please” naturally.", accepted: ["tôi muốn nước làm ơn", "mình muốn nước làm ơn", "cho tôi nước với", "cho mình nước với"], answer: "Tôi muốn nước, làm ơn.", hint: "Use tôi muốn nước, then add courtesy." },
     completion: "You can now express a basic need clearly, naturally, and courteously.",
   },
   {
@@ -145,6 +149,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "I am here.", bridgeReminder: "English: I am here · Vietnamese: tôi ở đây", words: ["Estoy", "aquí."], bank: ["aquí.", "Estoy"], hint: "Use estar because this is location." },
     mastery: { prompt: "Translate: Where is the bathroom?", instruction: "Include Spanish question punctuation if convenient.", accepted: ["dónde está el baño", "¿dónde está el baño?"], answer: "¿Dónde está el baño?", hint: "Dónde + está + el baño." },
+    bridgeMastery: { prompt: "Now ask in Vietnamese.", instruction: "Translate “Where is the bathroom?” naturally.", accepted: ["nhà vệ sinh ở đâu", "phòng vệ sinh ở đâu"], answer: "Nhà vệ sinh ở đâu?", hint: "Place nhà vệ sinh before ở đâu." },
     completion: "You can locate yourself and ask for essential orientation without confusing identity with place.",
   },
   {
@@ -173,6 +178,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "Afterward I rest at home.", bridgeReminder: "English: afterward I rest · Vietnamese: sau đó tôi nghỉ ngơi", words: ["Después", "descanso", "en", "casa."], bank: ["casa.", "Después", "en", "descanso"], hint: "Let después establish the sequence." },
     mastery: { prompt: "Translate: Today I work.", instruction: "Write the concise natural Spanish.", accepted: ["hoy trabajo", "yo trabajo hoy", "trabajo hoy"], answer: "Hoy trabajo.", hint: "Hoy can lead; trabajo already contains “I.”" },
+    bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “Today I work” naturally.", accepted: ["hôm nay tôi làm việc", "hôm nay mình làm việc", "tôi làm việc hôm nay", "mình làm việc hôm nay"], answer: "Hôm nay tôi làm việc.", hint: "Use hôm nay + tôi or mình + làm việc." },
     completion: "You can now describe a simple daily rhythm with sequence, work, and restoration.",
   },
   {
@@ -201,6 +207,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "Now I am listening attentively.", bridgeReminder: "English: am listening · Vietnamese: đang lắng nghe", words: ["Ahora", "estoy", "escuchando", "con", "atención."], bank: ["atención.", "escuchando", "Ahora", "con", "estoy"], hint: "Frame the moment, then build estar + gerund." },
     mastery: { prompt: "Say: I am listening now.", instruction: "Write the natural Spanish sentence.", accepted: ["estoy escuchando ahora", "ahora estoy escuchando", "yo estoy escuchando ahora"], answer: "Ahora estoy escuchando.", hint: "Use estoy + escuchando." },
+    bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I am listening now” naturally.", accepted: ["bây giờ tôi đang lắng nghe", "bây giờ mình đang lắng nghe", "tôi đang lắng nghe bây giờ", "mình đang lắng nghe bây giờ"], answer: "Bây giờ tôi đang lắng nghe.", hint: "Use bây giờ and place đang before lắng nghe." },
     completion: "You can describe an action unfolding now while connecting grammar to deliberate attention.",
   },
   {
@@ -229,6 +236,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "I feel tired.", bridgeReminder: "English: I feel · Vietnamese: tôi cảm thấy", words: ["Me", "siento", "cansado."], bank: ["cansado.", "Me", "siento"], hint: "Use the reflexive opening me siento." },
     mastery: { prompt: "Translate: I need to rest.", instruction: "Write the concise Spanish statement.", accepted: ["necesito descansar", "yo necesito descansar"], answer: "Necesito descansar.", hint: "Necesito is followed directly by the infinitive descansar." },
+    bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I need to rest” naturally.", accepted: ["tôi cần nghỉ ngơi", "mình cần nghỉ ngơi", "tôi cần nghỉ", "mình cần nghỉ"], answer: "Tôi cần nghỉ ngơi.", hint: "Use tôi or mình + cần + nghỉ ngơi." },
     completion: "You can name an internal state, give its cause, and express the need that follows.",
   },
   {
@@ -257,6 +265,7 @@ export const curriculum: LessonDefinition[] = [
     },
     transform: { prompt: "How are you?", bridgeReminder: "English: how are you · Vietnamese: bạn thế nào", words: ["¿Cómo", "estás?"], bank: ["estás?", "¿Cómo"], hint: "Use the familiar tú form estás." },
     mastery: { prompt: "Say: I’m glad to see you.", instruction: "Write the natural Spanish expression.", accepted: ["me alegra verte", "me da gusto verte"], answer: "Me alegra verte.", hint: "Me alegra + verte." },
+    bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I’m glad to see you” naturally.", accepted: ["mình rất vui được gặp bạn", "tôi rất vui được gặp bạn", "mình vui khi gặp bạn", "tôi vui khi gặp bạn"], answer: "Mình rất vui được gặp bạn.", hint: "Use mình or tôi + rất vui + được gặp bạn." },
     completion: "You can ask after someone and express genuine gladness at seeing them.",
   },
 ];

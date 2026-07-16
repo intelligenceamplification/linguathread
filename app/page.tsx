@@ -6,6 +6,7 @@ import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
+type ProductionLanguage = "Spanish" | "Vietnamese";
 type LanguageProfile = { native: string; second: string | null; secondConfidence: Confidence | null; additional: string[] };
 
 const commonLanguages = [
@@ -54,6 +55,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [mastery, setMastery] = useState(false);
+  const [productionLanguage, setProductionLanguage] = useState<ProductionLanguage>("Spanish");
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
 
@@ -99,14 +101,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function checkMastery() {
-    const passed = lesson.mastery.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
+    const production = productionLanguage === "Spanish" ? lesson.mastery : lesson.bridgeMastery;
+    const passed = production.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
     setFeedback(passed ? "correct" : "gentle");
-    setMastery(passed);
-    recordAttempt("mastery", passed);
+    setMastery(passed && (productionLanguage === "Vietnamese" || !bridgeEnabled));
+    recordAttempt("mastery", passed, productionLanguage);
   }
 
-  function recordAttempt(kind: string, correct: boolean) {
-    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, correct }), keepalive: true }).catch(() => undefined);
+  function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
+    fetch("/api/progress", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, language, correct }), keepalive: true }).catch(() => undefined);
   }
 
   function resetAnswer(nextStage?: Stage) {
@@ -136,6 +139,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setAnswer("");
     setFeedback("idle");
     setMastery(false);
+    setProductionLanguage("Spanish");
     setAccelerated(false);
     setDeepGrammar(false);
   }
@@ -143,6 +147,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function continueLearning() {
     if (lessonIndex < curriculum.length - 1) resetLesson(lessonIndex + 1);
     else setStage("review");
+  }
+
+  function continueInVietnamese() {
+    setProductionLanguage("Vietnamese");
+    resetAnswer();
   }
 
   return (
@@ -239,14 +248,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
         {stage === "mastery" && (
           <div className="focus-content exercise-content">
-            <p className="eyebrow">{accelerated ? "Fluency check" : "Foundation check"}</p>
-            <h1 className="exercise-title">{lesson.mastery.prompt}</h1>
-            <p className="instruction">{lesson.mastery.instruction}</p>
-            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder="Escribe en español" label="Spanish answer" />
+            <p className="eyebrow">{accelerated ? "Fluency check" : "Foundation check"} · {productionLanguage}</p>
+            <h1 className="exercise-title">{productionLanguage === "Spanish" ? lesson.mastery.prompt : lesson.bridgeMastery.prompt}</h1>
+            <p className="instruction">{productionLanguage === "Spanish" ? lesson.mastery.instruction : lesson.bridgeMastery.instruction}</p>
+            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder={productionLanguage === "Spanish" ? "Escribe en español" : "Viết bằng tiếng Việt"} label={`${productionLanguage} answer`} />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
-            {feedback === "gentle" && accelerated && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
-            {feedback === "gentle" && !accelerated && <Feedback kind="gentle" title={lesson.mastery.hint} detail={lesson.mastery.answer} action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && <Feedback kind="correct" title={lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You connected vocabulary, structure, and personal expression."} action="Complete lesson" onClick={finishLesson} />}
+            {feedback === "gentle" && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
+            {feedback === "gentle" && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer} action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "correct" && productionLanguage === "Spanish" && bridgeEnabled && <Feedback kind="correct" title={lesson.mastery.answer} detail="Spanish is secure. Now carry the same meaning through Vietnamese." action="Continue in Vietnamese" onClick={continueInVietnamese} />}
+            {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
 

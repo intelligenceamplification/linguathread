@@ -1,0 +1,1 @@
+ALTER TABLE `answer_attempts` ADD `language` text DEFAULT 'Spanish' NOT NULL;

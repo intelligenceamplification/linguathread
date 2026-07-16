@@ -36,4 +36,6 @@ test("ships a sequential A1 curriculum rather than one repeating foundation", as
   assert.match(source, /Names and introductions/);
   assert.match(source, /Attention and presence/);
   assert.match(source, /Human connection/);
+  assert.equal((source.match(/bridgeMastery:/g) || []).length, 9);
+  assert.match(source, /Now say it in Vietnamese/);
 });
