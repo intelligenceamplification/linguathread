@@ -1,3 +1,5 @@
+import type { CEFRLevel } from "./cefr";
+
 export type VocabularyItem = {
   word: string;
   english: string;
@@ -12,6 +14,7 @@ export type GrammarLayer = {
 
 export type LessonDefinition = {
   id: string;
+  level: CEFRLevel;
   unit: number;
   lesson: number;
   unitTitle: string;
@@ -37,7 +40,7 @@ export type LessonDefinition = {
 
 export const curriculum: LessonDefinition[] = [
   {
-    id: "es-u1-l1-identity-origin", unit: 1, lesson: 1, unitTitle: "Foundations", title: "Identity and origin", skill: "subject + ser + de",
+    id: "es-u1-l1-identity-origin", level: "A1", unit: 1, lesson: 1, unitTitle: "Foundations", title: "Identity and origin", skill: "subject + ser + de",
     vocabulary: [
       { word: "yo", english: "I", vietnamese: "mình / tôi", note: "Spanish has one neutral first-person singular. Vietnamese chooses a pronoun through relationship and context." },
       { word: "tú", english: "you", vietnamese: "bạn", note: "Tú is informal singular. Like Vietnamese pronouns, it already says something about the relationship." },
@@ -66,7 +69,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You mapped person, identity, and origin across Spanish, English, and Vietnamese.",
   },
   {
-    id: "es-u1-l2-names", unit: 1, lesson: 2, unitTitle: "Foundations", title: "Names and introductions", skill: "llamarse + introductions",
+    id: "es-u1-l2-names", level: "A1", unit: 1, lesson: 2, unitTitle: "Foundations", title: "Names and introductions", skill: "llamarse + introductions",
     vocabulary: [
       { word: "me", english: "myself / to me", vietnamese: "mình / tôi", note: "Me is a small reflexive word. Spanish uses it because the name is understood as something you call yourself." },
       { word: "llamo", english: "I call", vietnamese: "gọi", note: "Llamo carries the first person, just as soy does." },
@@ -95,7 +98,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can now offer your name naturally and recognize how each language frames identity.",
   },
   {
-    id: "es-u1-l3-needs", unit: 1, lesson: 3, unitTitle: "Foundations", title: "Needs and courtesy", skill: "querer + polite requests",
+    id: "es-u1-l3-needs", level: "A1", unit: 1, lesson: 3, unitTitle: "Foundations", title: "Needs and courtesy", skill: "querer + polite requests",
     vocabulary: [
       { word: "quiero", english: "I want", vietnamese: "tôi muốn", note: "Quiero is direct. Tone and por favor can make the same grammar feel gracious." },
       { word: "agua", english: "water", vietnamese: "nước", note: "Essential words become memorable when attached to an immediate human need." },
@@ -124,7 +127,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can now express a basic need clearly, naturally, and courteously.",
   },
   {
-    id: "es-u1-l4-location", unit: 1, lesson: 4, unitTitle: "Foundations", title: "Location and orientation", skill: "estar + location",
+    id: "es-u1-l4-location", level: "A1", unit: 1, lesson: 4, unitTitle: "Foundations", title: "Location and orientation", skill: "estar + location",
     vocabulary: [
       { word: "estoy", english: "I am", vietnamese: "tôi đang / tôi ở", note: "Estoy describes state or location, while soy describes identity and origin." },
       { word: "aquí", english: "here", vietnamese: "ở đây", note: "A small location word can become an anchor in unfamiliar places." },
@@ -153,7 +156,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can locate yourself and ask for essential orientation without confusing identity with place.",
   },
   {
-    id: "es-u2-l1-routines", unit: 2, lesson: 1, unitTitle: "Daily life", title: "Daily rhythms", skill: "present tense routines",
+    id: "es-u2-l1-routines", level: "A1", unit: 2, lesson: 1, unitTitle: "Daily life", title: "Daily rhythms", skill: "present tense routines",
     vocabulary: [
       { word: "hoy", english: "today", vietnamese: "hôm nay", note: "Time words give ordinary statements a living context." },
       { word: "trabajo", english: "I work / work", vietnamese: "tôi làm việc", note: "Trabajo can be a verb or a noun. Position and context reveal its role." },
@@ -182,7 +185,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can now describe a simple daily rhythm with sequence, work, and restoration.",
   },
   {
-    id: "es-u2-l2-attention", unit: 2, lesson: 2, unitTitle: "Daily life", title: "Attention and presence", skill: "present progressive",
+    id: "es-u2-l2-attention", level: "A1", unit: 2, lesson: 2, unitTitle: "Daily life", title: "Attention and presence", skill: "present progressive",
     vocabulary: [
       { word: "ahora", english: "now", vietnamese: "bây giờ", note: "Ahora brings attention back to the present moment." },
       { word: "estoy", english: "I am", vietnamese: "tôi đang", note: "With a gerund, estoy helps describe an action in progress." },
@@ -211,7 +214,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can describe an action unfolding now while connecting grammar to deliberate attention.",
   },
   {
-    id: "es-u2-l3-feelings", unit: 2, lesson: 3, unitTitle: "Daily life", title: "Emotional nuance", skill: "feeling + cause",
+    id: "es-u2-l3-feelings", level: "A1", unit: 2, lesson: 3, unitTitle: "Daily life", title: "Emotional nuance", skill: "feeling + cause",
     vocabulary: [
       { word: "me siento", english: "I feel", vietnamese: "tôi cảm thấy", note: "Spanish uses the reflexive sentirse for internal states." },
       { word: "tranquilo", english: "calm", vietnamese: "bình tĩnh", note: "Adjectives agree with the speaker’s grammatical gender when relevant." },
@@ -240,7 +243,7 @@ export const curriculum: LessonDefinition[] = [
     completion: "You can name an internal state, give its cause, and express the need that follows.",
   },
   {
-    id: "es-u2-l4-connection", unit: 2, lesson: 4, unitTitle: "Daily life", title: "Human connection", skill: "questions + reciprocal care",
+    id: "es-u2-l4-connection", level: "A1", unit: 2, lesson: 4, unitTitle: "Daily life", title: "Human connection", skill: "questions + reciprocal care",
     vocabulary: [
       { word: "cómo", english: "how", vietnamese: "thế nào", note: "The accent marks cómo when it carries an interrogative or exclamatory force." },
       { word: "estás", english: "you are", vietnamese: "bạn đang / bạn thế nào", note: "Estás is the familiar singular form of estar." },

@@ -56,6 +56,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [mastery, setMastery] = useState(false);
   const [productionLanguage, setProductionLanguage] = useState<ProductionLanguage>("Spanish");
+  const [spanishConfirmed, setSpanishConfirmed] = useState(false);
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
 
@@ -106,9 +107,16 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function checkMastery() {
     const production = productionLanguage === "Spanish" ? lesson.mastery : lesson.bridgeMastery;
     const passed = production.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
-    setFeedback(passed ? "correct" : "gentle");
-    setMastery(passed && (productionLanguage === "Vietnamese" || !bridgeEnabled));
     recordAttempt("mastery", passed, productionLanguage);
+    if (passed && productionLanguage === "Spanish" && bridgeEnabled) {
+      setSpanishConfirmed(true);
+      setProductionLanguage("Vietnamese");
+      setAnswer("");
+      setFeedback("idle");
+      return;
+    }
+    setFeedback(passed ? "correct" : "gentle");
+    setMastery(passed);
   }
 
   function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
@@ -143,6 +151,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setFeedback("idle");
     setMastery(false);
     setProductionLanguage("Spanish");
+    setSpanishConfirmed(false);
     setAccelerated(false);
     setDeepGrammar(false);
   }
@@ -152,18 +161,13 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     else setStage("review");
   }
 
-  function continueInVietnamese() {
-    setProductionLanguage("Vietnamese");
-    resetAnswer();
-  }
-
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
         <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">PolyFlow</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
-          <span>A1 · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")}</span>
+          <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")}</span>
         </div>
         {hasHistory && stage !== "review" ? (
           <button className="quiet-action" onClick={() => setStage("review")}>Review</button>
@@ -255,11 +259,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <h1 className="exercise-title">{productionLanguage === "Spanish" ? lesson.mastery.prompt : lesson.bridgeMastery.prompt}</h1>
             <p className="instruction">{productionLanguage === "Spanish" ? lesson.mastery.instruction : lesson.bridgeMastery.instruction}</p>
             {bridgeEnabled && <p className="production-path"><span className={productionLanguage === "Spanish" ? "active" : "complete"}>English meaning</span><i>→</i><span className={productionLanguage === "Spanish" ? "active" : "complete"}>Spanish</span><i>→</i><span className={productionLanguage === "Vietnamese" ? "active" : ""}>Vietnamese</span></p>}
+            {spanishConfirmed && productionLanguage === "Vietnamese" && <p className="production-confirmation">Spanish secured · {lesson.mastery.answer}</p>}
             <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder={productionLanguage === "Spanish" ? "Escribe en español" : "Viết bằng tiếng Việt"} label={`${productionLanguage} answer`} />
             {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
             {feedback === "gentle" && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
             {feedback === "gentle" && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer} action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && productionLanguage === "Spanish" && bridgeEnabled && <Feedback kind="correct" title={lesson.mastery.answer} detail="Spanish is secure. Now carry the same meaning through Vietnamese." action="Continue in Vietnamese" onClick={continueInVietnamese} />}
             {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
@@ -291,7 +295,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
                 <div className="review-row stacked-review-row" key={item.id}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{item.title}</strong>
-                  <p>A1 · {item.unitTitle} · {item.skill}</p>
+                  <p>{item.level} · {item.unitTitle} · {item.skill}</p>
                   <em>{reviewDueIds.includes(item.id) ? "Due" : completedIds.includes(item.id) ? "Stable" : index === lessonIndex ? "Next" : "Waiting"}</em>
                 </div>
               ))}
@@ -302,7 +306,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} A1 lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
+        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} ${lesson.level} lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>

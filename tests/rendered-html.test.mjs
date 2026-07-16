@@ -44,6 +44,17 @@ test("activates Vietnamese production from any non-native profile position", asy
   const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/page.tsx", import.meta.url), "utf8"));
   assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);
   assert.match(source, /activeLanguages\.includes\("vietnamese"\)/);
-  assert.match(source, /Continue in Vietnamese/);
+  assert.match(source, /setProductionLanguage\("Vietnamese"\)/);
+  assert.match(source, /Spanish secured/);
   assert.match(source, /English meaning/);
+});
+
+test("defines the complete CEFR progression from A1 through C2", async () => {
+  const source = await import("node:fs/promises").then((fs) => fs.readFile(new URL("../app/cefr.ts", import.meta.url), "utf8"));
+  for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) {
+    assert.match(source, new RegExp(`level: "${level}"`));
+  }
+  assert.match(source, /Basic user/);
+  assert.match(source, /Independent user/);
+  assert.match(source, /Proficient user/);
 });
