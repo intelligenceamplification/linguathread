@@ -55,6 +55,7 @@ test("loads independently published curriculum packs with a bundled fallback", a
   ]);
   assert.match(page, /fetch\("\/api\/curriculum"\)/);
   assert.match(route, /raw\.githubusercontent\.com/);
+  assert.match(route, /curriculum-data/);
   assert.match(route, /source: "bundled"/);
   assert.match(packs, /validateManifest/);
   assert.match(packs, /validatePack/);

@@ -15,12 +15,12 @@ PolyFlow works without a database by keeping the language profile and completed 
 
 ## Curriculum publishing
 
-The app ships with an offline foundation and loads additional versioned curriculum packs from `curriculum/manifest.json` at runtime. Published packs are data, so adding a validated pack does not require an application-code release.
+The app ships with an offline foundation and loads additional versioned curriculum packs from the repository's `curriculum-data` branch at runtime. Vercel deploys application code from `main`; publishing to `curriculum-data` does not rebuild the app.
 
 1. Add a versioned JSON file under `curriculum/packs/`.
 2. Add its descriptor to `curriculum/manifest.json` and increment the manifest revision.
 3. Run `npm run curriculum:validate`.
-4. Publish the data commit.
+4. Publish the data commit to the `curriculum-data` branch.
 
 PolyFlow validates the manifest and every pack before merging lessons. Invalid or unreachable remote content is never shown; the bundled course remains available.
 
