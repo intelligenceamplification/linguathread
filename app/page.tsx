@@ -66,6 +66,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [reviewDueIds, setReviewDueIds] = useState<string[]>([]);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
+  const [failedAttempts, setFailedAttempts] = useState(0);
   const [mastery, setMastery] = useState(false);
   const [productionLanguage, setProductionLanguage] = useState<ProductionLanguage>("Spanish");
   const [spanishConfirmed, setSpanishConfirmed] = useState(false);
@@ -113,6 +114,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function checkRecall() {
     const passed = lesson.recall.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
     setFeedback(passed ? "correct" : "gentle");
+    if (!passed) setFailedAttempts((value) => value + 1);
     recordAttempt("recall", passed);
   }
 
@@ -125,8 +127,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       setProductionLanguage("Vietnamese");
       setAnswer("");
       setFeedback("idle");
+      setFailedAttempts(0);
       return;
     }
+    if (!passed) setFailedAttempts((value) => value + 1);
     setFeedback(passed ? "correct" : "gentle");
     setMastery(passed);
   }
@@ -138,7 +142,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function resetAnswer(nextStage?: Stage) {
     setAnswer("");
     setFeedback("idle");
-    if (nextStage) setStage(nextStage);
+    if (nextStage) {
+      setFailedAttempts(0);
+      setStage(nextStage);
+    }
   }
 
   function learnFoundation() {
@@ -161,6 +168,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setWordIndex(0);
     setAnswer("");
     setFeedback("idle");
+    setFailedAttempts(0);
     setMastery(false);
     setProductionLanguage("Spanish");
     setSpanishConfirmed(false);
@@ -171,6 +179,26 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function continueLearning() {
     if (lessonIndex < curriculum.length - 1) resetLesson(lessonIndex + 1);
     else setStage("review");
+  }
+
+  function completeSupportedRecall() {
+    recordAttempt("supported-reconstruction", true);
+    setFailedAttempts(0);
+    resetAnswer("sentence");
+  }
+
+  function completeSupportedMastery() {
+    recordAttempt("supported-reconstruction", true, productionLanguage);
+    setFailedAttempts(0);
+    if (productionLanguage === "Spanish" && bridgeEnabled) {
+      setSpanishConfirmed(true);
+      setProductionLanguage("Vietnamese");
+      setAnswer("");
+      setFeedback("idle");
+      return;
+    }
+    setFeedback("correct");
+    setMastery(true);
   }
 
   return (
@@ -215,10 +243,20 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <p className="eyebrow">Active recall</p>
             <h1 className="exercise-title">{lesson.recall.prompt}</h1>
             <p className="instruction">{lesson.recall.instruction}</p>
-            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkRecall} placeholder="Type your answer" label="Your answer" />
-            {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkRecall}>Check</button>}
+            {failedAttempts < 3 ? (
+              <>
+                <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkRecall} placeholder="Type your answer" label="Your answer" />
+                {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkRecall}>Check</button>}
+              </>
+            ) : (
+              <RecoveryBuilder
+                answer={lesson.recall.rescue.answer}
+                bank={lesson.recall.rescue.bank}
+                onComplete={completeSupportedRecall}
+              />
+            )}
             {feedback === "correct" && <Feedback kind="correct" title={lesson.recall.correct} detail="The answer is now connected to the structure beneath it." action="See the stack" onClick={() => resetAnswer("sentence")} />}
-            {feedback === "gentle" && <Feedback kind="gentle" title="Make the meaning explicit." detail={lesson.recall.hint} action="Try again" onClick={() => resetAnswer()} />}
+            {feedback === "gentle" && failedAttempts < 3 && <Feedback kind="gentle" title="Make the meaning explicit." detail={`${lesson.recall.hint} · ${failedAttempts} of 3 attempts`} action="Try again" onClick={() => resetAnswer()} />}
           </div>
         )}
 
@@ -272,10 +310,19 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <p className="instruction">{productionLanguage === "Spanish" ? lesson.mastery.instruction : lesson.bridgeMastery.instruction}</p>
             {bridgeEnabled && <p className="production-path"><span className={productionLanguage === "Spanish" ? "active" : "complete"}>English meaning</span><i>→</i><span className={productionLanguage === "Spanish" ? "active" : "complete"}>Spanish</span><i>→</i><span className={productionLanguage === "Vietnamese" ? "active" : ""}>Vietnamese</span></p>}
             {spanishConfirmed && productionLanguage === "Vietnamese" && <p className="production-confirmation">Spanish secured · {lesson.mastery.answer}</p>}
-            <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder={productionLanguage === "Spanish" ? "Escribe en español" : "Viết bằng tiếng Việt"} label={`${productionLanguage} answer`} />
-            {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
-            {feedback === "gentle" && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
-            {feedback === "gentle" && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer} action="Try again" onClick={() => resetAnswer()} />}
+            {failedAttempts < 3 ? (
+              <>
+                <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkMastery} placeholder={productionLanguage === "Spanish" ? "Escribe en español" : "Viết bằng tiếng Việt"} label={`${productionLanguage} answer`} />
+                {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkMastery}>Check understanding</button>}
+              </>
+            ) : (
+              <RecoveryBuilder
+                answer={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer}
+                onComplete={completeSupportedMastery}
+              />
+            )}
+            {feedback === "gentle" && failedAttempts < 3 && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
+            {feedback === "gentle" && failedAttempts < 3 && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={`${failedAttempts} of 3 attempts · Try once more from memory.`} action="Try again" onClick={() => resetAnswer()} />}
             {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
@@ -443,6 +490,39 @@ function AnswerField({ value, onChange, onEnter, placeholder, label }: { value: 
 
 function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | "gentle"; title: string; detail?: string; action: string; onClick: () => void }) {
   return <div className={`feedback ${kind}`}><div><strong>{title}</strong>{detail && <p>{detail}</p>}</div><button onClick={onClick}>{action} <span aria-hidden="true">→</span></button></div>;
+}
+
+function RecoveryBuilder({ answer, bank, onComplete }: { answer: string; bank?: string[]; onComplete: () => void }) {
+  const target = answer.replace(/[¿?.,!¡]/g, "").split(/\s+/).filter(Boolean);
+  const options = (bank || target).map((word, index) => ({ id: `${word}-${index}`, word }));
+  const [chosen, setChosen] = useState<typeof options>([]);
+  const [checked, setChecked] = useState(false);
+  const isComplete = chosen.length === target.length;
+  const isCorrect = isComplete && normalizeAnswer(chosen.map((item) => item.word).join(" ")) === normalizeAnswer(target.join(" "));
+
+  function choose(option: (typeof options)[number]) {
+    if (!chosen.some((item) => item.id === option.id)) {
+      setChosen((current) => [...current, option]);
+      setChecked(false);
+    }
+  }
+
+  return (
+    <div className="recovery-builder">
+      <p className="recovery-intro"><strong>Build it from what you now know.</strong><span>Choose the words in the correct order.</span></p>
+      <div className="sentence-builder" aria-label="Your reconstructed answer">
+        {chosen.length ? chosen.map((item) => (
+          <button key={item.id} onClick={() => { setChosen((current) => current.filter((chosenItem) => chosenItem.id !== item.id)); setChecked(false); }}>{item.word}</button>
+        )) : <span>Select the first word</span>}
+      </div>
+      <div className="word-bank" aria-label="Available words">
+        {options.map((option) => <button key={option.id} disabled={chosen.some((item) => item.id === option.id)} onClick={() => choose(option)}>{option.word}</button>)}
+      </div>
+      {!checked && <button className="primary-action" disabled={!isComplete} onClick={() => setChecked(true)}>Check reconstruction</button>}
+      {checked && isCorrect && <Feedback kind="correct" title="You rebuilt the meaning." detail="This will return in review so it can become available without support." action="Continue" onClick={onComplete} />}
+      {checked && !isCorrect && <Feedback kind="gentle" title="The pieces are here." detail="Clear the line and try a different order." action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
+    </div>
+  );
 }
 
 function TransformExercise({ lesson, onComplete }: { lesson: LessonDefinition; onComplete: () => void }) {

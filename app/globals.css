@@ -160,6 +160,11 @@ button { color: inherit; }
 .sentence-builder button, .word-bank button { padding: 12px 15px; border: 1px solid var(--line); border-radius: 5px; background: white; cursor: pointer; }
 .word-bank { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 .word-bank button:disabled { opacity: .18; cursor: default; }
+.recovery-builder { width: min(680px, 100%); margin: 28px auto 0; }
+.recovery-intro { margin: 0 auto; display: grid; gap: 6px; color: var(--muted); font-size: .92rem; }
+.recovery-intro strong { color: var(--ink); font-size: 1rem; }
+.recovery-builder .sentence-builder { margin-top: 22px; }
+.recovery-builder .primary-action { margin-top: 28px; }
 .bridge-reminder { margin: 22px 0 0; color: var(--muted); font-size: .85rem; }
 
 .completion-content h1, .review-content h1 { font-size: clamp(2.8rem, 6vw, 5.4rem); line-height: 1.02; }

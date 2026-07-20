@@ -42,6 +42,16 @@ test("activates Vietnamese production from any non-native profile position", asy
   assert.match(source, /English meaning/);
 });
 
+test("offers structured reconstruction after three failed typed attempts", async () => {
+  const [page, curriculum] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts")]);
+  assert.match(page, /failedAttempts < 3/);
+  assert.match(page, /setFailedAttempts\(\(value\) => value \+ 1\)/);
+  assert.match(page, /function RecoveryBuilder/);
+  assert.match(page, /Build it from what you now know/);
+  assert.match(page, /supported-reconstruction/);
+  assert.match(curriculum, /Who does estás address[\s\S]*rescue: \{ answer: "you", bank: \["I", "you", "we", "they"\]/);
+});
+
 test("defines the complete CEFR progression from A1 through C2", async () => {
   const source = await read("../app/cefr.ts");
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(source, new RegExp(`level: "${level}"`));
