@@ -1,0 +1,62 @@
+{
+  "schemaVersion": 1,
+  "courseId": "english-spanish-vietnamese",
+  "method": "PolyFlow language stacking",
+  "levels": [
+    {
+      "level": "A1",
+      "outcome": "Handle essential personal, daily, and travel exchanges using memorized and recombinable language.",
+      "units": [
+        "Foundations", "Daily life", "People and home", "Food and exchange",
+        "Time and intention", "Travel and community", "Personal expression",
+        "Health and care", "Weather and clothing", "Work and study",
+        "Experience and obligation", "Integrated A1 expression"
+      ]
+    },
+    {
+      "level": "A2",
+      "outcome": "Participate in routine exchanges, narrate simple experiences, and describe needs, plans, and relationships with growing independence.",
+      "units": [
+        "Life stories", "Past routines", "Travel experiences", "Workplace exchanges",
+        "Learning and growth", "Relationships and repair", "Health decisions", "Home and community",
+        "Media and leisure", "Comparison and choice", "Future arrangements", "Integrated A2 expression"
+      ]
+    },
+    {
+      "level": "B1",
+      "outcome": "Sustain connected conversation and writing about familiar, professional, cultural, and personally meaningful subjects.",
+      "units": [
+        "Narrative control", "Opinions and reasons", "Professional communication", "Conflict and resolution",
+        "Culture and identity", "Travel independence", "Well-being and habit", "News and society",
+        "Creativity and humor", "Possibility and condition", "Purpose and change", "Integrated B1 expression"
+      ]
+    },
+    {
+      "level": "B2",
+      "outcome": "Interact fluently, develop arguments, understand nuance, and adapt expression across social and professional contexts.",
+      "units": [
+        "Complex narratives", "Argument and evidence", "Meetings and negotiation", "Emotional precision",
+        "Ethics and responsibility", "Culture and interpretation", "Systems and society", "Science and technology",
+        "Rhetoric and humor", "Hypothesis and consequence", "Register and diplomacy", "Integrated B2 expression"
+      ]
+    },
+    {
+      "level": "C1",
+      "outcome": "Use language flexibly and precisely for demanding academic, professional, relational, and creative purposes.",
+      "units": [
+        "Precision and implication", "Advanced discourse", "Leadership communication", "Research and synthesis",
+        "Philosophy and meaning", "Intercultural mediation", "Literary expression", "Public reasoning",
+        "Professional nuance", "Idiomatic control", "Voice and style", "Integrated C1 expression"
+      ]
+    },
+    {
+      "level": "C2",
+      "outcome": "Understand and express virtually any meaning with spontaneous precision, stylistic control, and cultural sensitivity.",
+      "units": [
+        "Fine semantic distinctions", "Masterful reformulation", "Expert dialogue", "Complex mediation",
+        "Literary and rhetorical mastery", "Humor and wordplay", "Cultural subtext", "Specialized discourse",
+        "Spontaneous synthesis", "Personal voice", "Plurilingual transfer", "Lifelong maintenance"
+      ]
+    }
+  ]
+}

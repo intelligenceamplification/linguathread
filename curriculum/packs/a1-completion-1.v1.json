@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 1,
+  "id": "a1-completion-1",
+  "version": 1,
+  "level": "A1",
+  "lessons": [
+    {
+      "id": "a1-u8-l1-body", "objectiveId": "a1-health-body", "prerequisites": ["a1-expression-boundaries"],
+      "unit": 8, "lesson": 1, "unitTitle": "Health and care", "title": "The body and discomfort", "skill": "doler + body parts",
+      "words": [["cabeza", "head", "đầu"], ["duele", "hurts", "đau"], ["estómago", "stomach", "dạ dày"], ["desde", "since", "từ"]],
+      "spanish": "Me duele la cabeza.", "english": "My head hurts.", "vietnamese": "Tôi bị đau đầu.",
+      "focus": "Me duele", "pattern": "indirect object + doler + body part", "bridgePattern": "pronoun + bị đau + body part"
+    },
+    {
+      "id": "a1-u8-l2-symptoms", "objectiveId": "a1-health-symptoms", "prerequisites": ["a1-health-body"],
+      "unit": 8, "lesson": 2, "unitTitle": "Health and care", "title": "Describing a symptom", "skill": "tener + symptoms",
+      "words": [["fiebre", "fever", "sốt"], ["tos", "cough", "ho"], ["desde ayer", "since yesterday", "từ hôm qua"], ["tengo", "I have", "tôi bị"]],
+      "spanish": "Tengo fiebre desde ayer.", "english": "I have had a fever since yesterday.", "vietnamese": "Tôi bị sốt từ hôm qua.",
+      "focus": "Tengo fiebre", "pattern": "tener + symptom + desde", "bridgePattern": "pronoun + bị + symptom + từ"
+    },
+    {
+      "id": "a1-u8-l3-care", "objectiveId": "a1-health-care", "prerequisites": ["a1-health-symptoms"],
+      "unit": 8, "lesson": 3, "unitTitle": "Health and care", "title": "Seeking care", "skill": "necesitar + medical help",
+      "words": [["médico", "doctor", "bác sĩ"], ["farmacia", "pharmacy", "nhà thuốc"], ["ayuda", "help", "sự giúp đỡ"], ["necesito", "I need", "tôi cần"]],
+      "spanish": "Necesito hablar con un médico.", "english": "I need to speak with a doctor.", "vietnamese": "Tôi cần nói chuyện với bác sĩ.",
+      "focus": "Necesito hablar", "pattern": "necesitar + infinitive + con", "bridgePattern": "cần + verb + với"
+    },
+    {
+      "id": "a1-u8-l4-wellbeing", "objectiveId": "a1-health-wellbeing", "prerequisites": ["a1-health-care"],
+      "unit": 8, "lesson": 4, "unitTitle": "Health and care", "title": "Caring for yourself", "skill": "deber + healthy action",
+      "words": [["descansar", "to rest", "nghỉ ngơi"], ["dormir", "to sleep", "ngủ"], ["agua", "water", "nước"], ["debo", "I should", "tôi nên"]],
+      "spanish": "Debo descansar y beber agua.", "english": "I should rest and drink water.", "vietnamese": "Tôi nên nghỉ ngơi và uống nước.",
+      "focus": "Debo", "pattern": "deber + coordinated infinitives", "bridgePattern": "nên + coordinated verbs"
+    },
+    {
+      "id": "a1-u9-l1-weather", "objectiveId": "a1-weather-conditions", "prerequisites": ["a1-health-wellbeing"],
+      "unit": 9, "lesson": 1, "unitTitle": "Weather and clothing", "title": "Weather now", "skill": "weather expressions",
+      "words": [["hace frío", "it is cold", "trời lạnh"], ["llueve", "it rains", "trời mưa"], ["sol", "sun", "nắng"], ["hoy", "today", "hôm nay"]],
+      "spanish": "Hoy hace frío y llueve.", "english": "Today it is cold and raining.", "vietnamese": "Hôm nay trời lạnh và có mưa.",
+      "focus": "Hace frío", "pattern": "hacer + weather noun", "bridgePattern": "trời + weather adjective"
+    },
+    {
+      "id": "a1-u9-l2-clothing", "objectiveId": "a1-weather-clothing", "prerequisites": ["a1-weather-conditions"],
+      "unit": 9, "lesson": 2, "unitTitle": "Weather and clothing", "title": "Choosing clothing", "skill": "llevar + clothing",
+      "words": [["chaqueta", "jacket", "áo khoác"], ["zapatos", "shoes", "giày"], ["llevo", "I wear", "tôi mặc"], ["cómodo", "comfortable", "thoải mái"]],
+      "spanish": "Llevo una chaqueta porque hace frío.", "english": "I am wearing a jacket because it is cold.", "vietnamese": "Tôi mặc áo khoác vì trời lạnh.",
+      "focus": "Llevo", "pattern": "llevar + clothing + porque", "bridgePattern": "mặc + clothing + vì"
+    },
+    {
+      "id": "a1-u9-l3-seasons", "objectiveId": "a1-weather-seasons", "prerequisites": ["a1-weather-clothing"],
+      "unit": 9, "lesson": 3, "unitTitle": "Weather and clothing", "title": "Seasons and preference", "skill": "preferir + season",
+      "words": [["primavera", "spring", "mùa xuân"], ["verano", "summer", "mùa hè"], ["prefiero", "I prefer", "tôi thích hơn"], ["fresco", "cool", "mát mẻ"]],
+      "spanish": "Prefiero la primavera porque hace fresco.", "english": "I prefer spring because it is cool.", "vietnamese": "Tôi thích mùa xuân hơn vì trời mát.",
+      "focus": "Prefiero", "pattern": "preferir + noun + porque", "bridgePattern": "thích + noun + hơn + vì"
+    },
+    {
+      "id": "a1-u9-l4-preparation", "objectiveId": "a1-weather-preparation", "prerequisites": ["a1-weather-seasons"],
+      "unit": 9, "lesson": 4, "unitTitle": "Weather and clothing", "title": "Preparing to leave", "skill": "future preparation",
+      "words": [["paraguas", "umbrella", "ô"], ["llevar", "to take", "mang theo"], ["parece", "it seems", "có vẻ"], ["llover", "to rain", "mưa"]],
+      "spanish": "Voy a llevar un paraguas.", "english": "I am going to take an umbrella.", "vietnamese": "Tôi sẽ mang theo một cái ô.",
+      "focus": "Voy a llevar", "pattern": "ir a + infinitive + object", "bridgePattern": "sẽ + verb + object"
+    },
+    {
+      "id": "a1-u10-l1-work", "objectiveId": "a1-work-role", "prerequisites": ["a1-weather-preparation"],
+      "unit": 10, "lesson": 1, "unitTitle": "Work and study", "title": "Your work", "skill": "work roles + location",
+      "words": [["trabajo", "I work", "tôi làm việc"], ["oficina", "office", "văn phòng"], ["equipo", "team", "nhóm"], ["proyecto", "project", "dự án"]],
+      "spanish": "Trabajo con un equipo pequeño.", "english": "I work with a small team.", "vietnamese": "Tôi làm việc với một nhóm nhỏ.",
+      "focus": "Trabajo con", "pattern": "conjugated verb + con + team", "bridgePattern": "làm việc + với + team"
+    },
+    {
+      "id": "a1-u10-l2-tasks", "objectiveId": "a1-work-tasks", "prerequisites": ["a1-work-role"],
+      "unit": 10, "lesson": 2, "unitTitle": "Work and study", "title": "A task in progress", "skill": "present progressive + task",
+      "words": [["escribiendo", "writing", "đang viết"], ["correo", "email", "email"], ["reunión", "meeting", "cuộc họp"], ["ahora", "now", "bây giờ"]],
+      "spanish": "Ahora estoy escribiendo un correo.", "english": "I am writing an email now.", "vietnamese": "Bây giờ tôi đang viết email.",
+      "focus": "Estoy escribiendo", "pattern": "estar + gerund + object", "bridgePattern": "đang + verb + object"
+    },
+    {
+      "id": "a1-u10-l3-study", "objectiveId": "a1-study-purpose", "prerequisites": ["a1-work-tasks"],
+      "unit": 10, "lesson": 3, "unitTitle": "Work and study", "title": "Why you study", "skill": "para + purpose",
+      "words": [["estudio", "I study", "tôi học"], ["aprender", "to learn", "học"], ["comunicarme", "to communicate", "giao tiếp"], ["mejor", "better", "tốt hơn"]],
+      "spanish": "Estudio para comunicarme mejor.", "english": "I study to communicate better.", "vietnamese": "Tôi học để giao tiếp tốt hơn.",
+      "focus": "Estudio para", "pattern": "conjugated verb + para + infinitive", "bridgePattern": "verb + để + purpose"
+    },
+    {
+      "id": "a1-u10-l4-clarification", "objectiveId": "a1-study-clarification", "prerequisites": ["a1-study-purpose"],
+      "unit": 10, "lesson": 4, "unitTitle": "Work and study", "title": "Asking for clarity", "skill": "clarification requests",
+      "words": [["repetir", "to repeat", "lặp lại"], ["explicar", "to explain", "giải thích"], ["entiendo", "I understand", "tôi hiểu"], ["ejemplo", "example", "ví dụ"]],
+      "spanish": "¿Puede explicarlo con un ejemplo?", "english": "Can you explain it with an example?", "vietnamese": "Bạn có thể giải thích bằng một ví dụ không?",
+      "focus": "Puede explicarlo", "pattern": "modal + infinitive + object pronoun", "bridgePattern": "có thể + verb + bằng + không"
+    },
+    {
+      "id": "a1-u11-l1-recent-past", "objectiveId": "a1-experience-recent", "prerequisites": ["a1-study-clarification"],
+      "unit": 11, "lesson": 1, "unitTitle": "Experience and obligation", "title": "A completed moment", "skill": "simple past recognition",
+      "words": [["ayer", "yesterday", "hôm qua"], ["hablé", "I spoke", "tôi đã nói"], ["amigo", "friend", "bạn"], ["mucho", "a lot", "nhiều"]],
+      "spanish": "Ayer hablé con un amigo.", "english": "Yesterday I spoke with a friend.", "vietnamese": "Hôm qua tôi đã nói chuyện với một người bạn.",
+      "focus": "Hablé", "pattern": "past time + preterite", "bridgePattern": "past time + đã + verb"
+    },
+    {
+      "id": "a1-u11-l2-activity", "objectiveId": "a1-experience-activity", "prerequisites": ["a1-experience-recent"],
+      "unit": 11, "lesson": 2, "unitTitle": "Experience and obligation", "title": "What you did", "skill": "preterite + sequence",
+      "words": [["fui", "I went", "tôi đã đi"], ["mercado", "market", "chợ"], ["compré", "I bought", "tôi đã mua"], ["después", "afterward", "sau đó"]],
+      "spanish": "Fui al mercado y compré fruta.", "english": "I went to the market and bought fruit.", "vietnamese": "Tôi đã đi chợ và mua trái cây.",
+      "focus": "Fui y compré", "pattern": "coordinated preterite actions", "bridgePattern": "đã + coordinated verbs"
+    },
+    {
+      "id": "a1-u11-l3-obligation", "objectiveId": "a1-obligation-daily", "prerequisites": ["a1-experience-activity"],
+      "unit": 11, "lesson": 3, "unitTitle": "Experience and obligation", "title": "What must be done", "skill": "tener que + infinitive",
+      "words": [["tengo que", "I have to", "tôi phải"], ["terminar", "to finish", "hoàn thành"], ["antes", "before", "trước"], ["salir", "to leave", "rời đi"]],
+      "spanish": "Tengo que terminar antes de salir.", "english": "I have to finish before leaving.", "vietnamese": "Tôi phải hoàn thành trước khi rời đi.",
+      "focus": "Tengo que", "pattern": "tener que + infinitive + antes de", "bridgePattern": "phải + verb + trước khi"
+    },
+    {
+      "id": "a1-u11-l4-ability", "objectiveId": "a1-ability-limits", "prerequisites": ["a1-obligation-daily"],
+      "unit": 11, "lesson": 4, "unitTitle": "Experience and obligation", "title": "Ability and limits", "skill": "poder + present ability",
+      "words": [["puedo", "I can", "tôi có thể"], ["todavía", "yet", "vẫn"], ["necesito", "I need", "tôi cần"], ["práctica", "practice", "luyện tập"]],
+      "spanish": "Puedo entender, pero necesito más práctica.", "english": "I can understand, but I need more practice.", "vietnamese": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "focus": "Puedo", "pattern": "poder + infinitive + pero", "bridgePattern": "có thể + verb + nhưng"
+    },
+    {
+      "id": "a1-u12-l1-introduction", "objectiveId": "a1-integrated-introduction", "prerequisites": ["a1-ability-limits"],
+      "unit": 12, "lesson": 1, "unitTitle": "Integrated A1 expression", "title": "A fuller introduction", "skill": "identity + work + interests",
+      "words": [["vivo", "I live", "tôi sống"], ["trabajo", "I work", "tôi làm việc"], ["gusta", "I like", "tôi thích"], ["aprender", "to learn", "học"]],
+      "spanish": "Vivo en Indiana y me gusta aprender idiomas.", "english": "I live in Indiana and I like learning languages.", "vietnamese": "Tôi sống ở Indiana và tôi thích học ngôn ngữ.",
+      "focus": "Vivo y me gusta", "pattern": "coordinated personal statements", "bridgePattern": "pronoun + coordinated statements"
+    },
+    {
+      "id": "a1-u12-l2-day", "objectiveId": "a1-integrated-day", "prerequisites": ["a1-integrated-introduction"],
+      "unit": 12, "lesson": 2, "unitTitle": "Integrated A1 expression", "title": "A connected day", "skill": "routine + sequence + reason",
+      "words": [["primero", "first", "đầu tiên"], ["luego", "then", "sau đó"], ["porque", "because", "bởi vì"], ["descanso", "I rest", "tôi nghỉ ngơi"]],
+      "spanish": "Primero trabajo y luego descanso en casa.", "english": "First I work and then I rest at home.", "vietnamese": "Đầu tiên tôi làm việc, sau đó tôi nghỉ ngơi ở nhà.",
+      "focus": "Primero... luego", "pattern": "sequence connectors + present actions", "bridgePattern": "đầu tiên... sau đó"
+    },
+    {
+      "id": "a1-u12-l3-social", "objectiveId": "a1-integrated-social", "prerequisites": ["a1-integrated-day"],
+      "unit": 12, "lesson": 3, "unitTitle": "Integrated A1 expression", "title": "Making a simple plan", "skill": "invitation + time + response",
+      "words": [["quieres", "do you want", "bạn có muốn"], ["tomar", "to have", "uống"], ["mañana", "tomorrow", "ngày mai"], ["claro", "of course", "tất nhiên"]],
+      "spanish": "¿Quieres tomar un café mañana?", "english": "Would you like to have coffee tomorrow?", "vietnamese": "Ngày mai bạn có muốn uống cà phê không?",
+      "focus": "Quieres tomar", "pattern": "querer + infinitive + time", "bridgePattern": "time + có muốn + verb + không"
+    },
+    {
+      "id": "a1-u12-l4-reflection", "objectiveId": "a1-integrated-reflection", "prerequisites": ["a1-integrated-social"],
+      "unit": 12, "lesson": 4, "unitTitle": "Integrated A1 expression", "title": "Reflecting on progress", "skill": "learning reflection",
+      "words": [["ahora", "now", "bây giờ"], ["antes", "before", "trước đây"], ["expresarme", "to express myself", "diễn đạt bản thân"], ["confianza", "confidence", "sự tự tin"]],
+      "spanish": "Ahora puedo expresarme con más confianza.", "english": "Now I can express myself with more confidence.", "vietnamese": "Bây giờ tôi có thể diễn đạt tự tin hơn.",
+      "focus": "Puedo expresarme", "pattern": "poder + reflexive infinitive + con", "bridgePattern": "có thể + verb + hơn"
+    }
+  ]
+}
