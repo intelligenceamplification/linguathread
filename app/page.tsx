@@ -79,32 +79,41 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [deepGrammar, setDeepGrammar] = useState(false);
   const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
   const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen">("new");
+  const [course, setCourse] = useState<LessonDefinition[]>(curriculum);
 
   useEffect(() => {
     const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
     const savedModel = window.localStorage.getItem(learnerModelKey);
-    const localModel = savedModel ? JSON.parse(savedModel) as LearnerModel : migrateCompletedLessons(localCompleted, curriculum);
-    setLearnerModel(localModel);
-    window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
-    setCompletedIds(localCompleted);
-    const localSelection = selectNextLesson(curriculum, localModel, localCompleted);
-    setLessonIndex(curriculum.findIndex((item) => item.id === localSelection.lesson.id));
-    setSessionMode(localSelection.mode);
-    fetch("/api/progress", { headers: learnerHeaders() })
-      .then((response) => response.ok ? response.json() : Promise.reject())
-      .then((data: { completedLessonIds?: string[]; reviewDueLessonIds?: string[] }) => {
+    Promise.all([
+      fetch("/api/curriculum")
+        .then((response) => response.ok ? response.json() : Promise.reject())
+        .then((data: { lessons?: LessonDefinition[] }) => data.lessons?.length ? data.lessons : curriculum)
+        .catch(() => curriculum),
+      fetch("/api/progress", { headers: learnerHeaders() })
+        .then((response) => response.ok ? response.json() : Promise.reject())
+        .catch(() => ({ completedLessonIds: [], reviewDueLessonIds: [] })),
+    ]).then(([loadedCourse, data]: [
+      LessonDefinition[],
+      { completedLessonIds?: string[]; reviewDueLessonIds?: string[] },
+    ]) => {
+        const completed = data.completedLessonIds?.length ? data.completedLessonIds : localCompleted;
+        const localModel = savedModel ? JSON.parse(savedModel) as LearnerModel : migrateCompletedLessons(completed, loadedCourse);
+        setCourse(loadedCourse);
+        setLearnerModel(localModel);
+        window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
+        setCompletedIds(completed);
         setReviewDueIds(data.reviewDueLessonIds || []);
-        if (!data.completedLessonIds?.length) return;
-        setCompletedIds(data.completedLessonIds);
-        const serverSelection = selectNextLesson(curriculum, localModel, data.completedLessonIds);
-        setLessonIndex(curriculum.findIndex((item) => item.id === serverSelection.lesson.id));
-        setSessionMode(serverSelection.mode);
-        window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
+        const selection = selectNextLesson(loadedCourse, localModel, completed);
+        setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
+        setSessionMode(selection.mode);
+        if (data.completedLessonIds?.length) {
+          window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
+        }
       })
       .catch(() => undefined);
   }, []);
 
-  const lesson = curriculum[lessonIndex];
+  const lesson = course[lessonIndex] || course[0];
   const hasHistory = completedIds.length > 0;
   const activeLanguages = [profile.second, ...profile.additional]
     .filter((language): language is string => Boolean(language))
@@ -223,8 +232,8 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function continueLearning() {
-    const selection = selectNextLesson(curriculum, learnerModel, completedIds);
-    const nextIndex = curriculum.findIndex((item) => item.id === selection.lesson.id);
+    const selection = selectNextLesson(course, learnerModel, completedIds);
+    const nextIndex = course.findIndex((item) => item.id === selection.lesson.id);
     setSessionMode(selection.mode);
     resetLesson(nextIndex);
   }
@@ -398,7 +407,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <p className="eyebrow">Quiet review</p>
             <h1>Your Spanish foundations</h1>
             <div className="review-list">
-              {curriculum.map((item, index) => (
+              {course.map((item, index) => (
                 <div className="review-row stacked-review-row" key={item.id}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{item.title}</strong>
@@ -417,7 +426,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       </section>
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? `${completedIds.length} of ${curriculum.length} ${lesson.level} lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
+        <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>

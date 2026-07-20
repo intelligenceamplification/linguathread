@@ -282,7 +282,7 @@ const foundationalCurriculum: LessonDefinition[] = [
   },
 ];
 
-type CompactLesson = {
+export type CompactLesson = {
   id: string; objectiveId: string; prerequisites: string[]; unit: number; lesson: number;
   unitTitle: string; title: string; skill: string;
   words: Array<[string, string, string]>;
@@ -290,7 +290,7 @@ type CompactLesson = {
   focus: string; pattern: string; bridgePattern: string;
 };
 
-function expandLesson(item: CompactLesson): LessonDefinition {
+export function expandLesson(item: CompactLesson): LessonDefinition {
   const targetWords = item.spanish.split(" ");
   return {
     id: item.id,

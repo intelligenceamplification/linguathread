@@ -13,6 +13,17 @@ npm run dev
 
 PolyFlow works without a database by keeping the language profile and completed lessons in the browser. To sync progress through the API, create a Neon or Vercel Postgres database, run `drizzle/0002_vercel_postgres.sql`, and set `DATABASE_URL` from `.env.example`.
 
+## Curriculum publishing
+
+The app ships with an offline foundation and loads additional versioned curriculum packs from `curriculum/manifest.json` at runtime. Published packs are data, so adding a validated pack does not require an application-code release.
+
+1. Add a versioned JSON file under `curriculum/packs/`.
+2. Add its descriptor to `curriculum/manifest.json` and increment the manifest revision.
+3. Run `npm run curriculum:validate`.
+4. Publish the data commit.
+
+PolyFlow validates the manifest and every pack before merging lessons. Invalid or unreachable remote content is never shown; the bundled course remains available.
+
 ## Vercel
 
 Import the GitHub repository into Vercel. The project uses standard Next.js defaults and needs no custom build settings. Add `DATABASE_URL` to Vercel only when hosted progress sync is desired.

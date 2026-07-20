@@ -46,6 +46,22 @@ test("uses a durable learner model and adaptive curriculum router", async () => 
   assert.match(engine, /sessionsCompleted % 4/);
 });
 
+test("loads independently published curriculum packs with a bundled fallback", async () => {
+  const [page, route, packs, manifest] = await Promise.all([
+    read("../app/page.tsx"),
+    read("../app/api/curriculum/route.ts"),
+    read("../app/curriculum-packs.ts"),
+    read("../curriculum/manifest.json"),
+  ]);
+  assert.match(page, /fetch\("\/api\/curriculum"\)/);
+  assert.match(route, /raw\.githubusercontent\.com/);
+  assert.match(route, /source: "bundled"/);
+  assert.match(packs, /validateManifest/);
+  assert.match(packs, /validatePack/);
+  assert.match(packs, /Published lesson id already exists/);
+  assert.equal(JSON.parse(manifest).revision, 1);
+});
+
 test("activates Vietnamese production from any non-native profile position", async () => {
   const source = await read("../app/page.tsx");
   assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);

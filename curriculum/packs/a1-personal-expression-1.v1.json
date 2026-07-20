@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "id": "a1-personal-expression-1",
+  "version": 1,
+  "level": "A1",
+  "lessons": [
+    {
+      "id": "a1-u7-l1-opinions",
+      "objectiveId": "a1-expression-opinions",
+      "prerequisites": ["a1-community-reflection"],
+      "unit": 7,
+      "lesson": 1,
+      "unitTitle": "Personal expression",
+      "title": "A simple opinion",
+      "skill": "creer que + opinion",
+      "words": [
+        ["creo", "I believe", "tôi nghĩ"],
+        ["importante", "important", "quan trọng"],
+        ["tiempo", "time", "thời gian"],
+        ["juntos", "together", "cùng nhau"]
+      ],
+      "spanish": "Creo que el tiempo juntos es importante.",
+      "english": "I believe that time together is important.",
+      "vietnamese": "Tôi nghĩ thời gian bên nhau rất quan trọng.",
+      "focus": "Creo que",
+      "pattern": "creer que + complete statement",
+      "bridgePattern": "pronoun + nghĩ + complete statement"
+    },
+    {
+      "id": "a1-u7-l2-agreement",
+      "objectiveId": "a1-expression-agreement",
+      "prerequisites": ["a1-expression-opinions"],
+      "unit": 7,
+      "lesson": 2,
+      "unitTitle": "Personal expression",
+      "title": "Agreement with nuance",
+      "skill": "agreement + qualification",
+      "words": [
+        ["estoy de acuerdo", "I agree", "tôi đồng ý"],
+        ["pero", "but", "nhưng"],
+        ["también", "also", "cũng"],
+        ["depende", "it depends", "còn tùy"]
+      ],
+      "spanish": "Estoy de acuerdo, pero también depende.",
+      "english": "I agree, but it also depends.",
+      "vietnamese": "Tôi đồng ý, nhưng điều đó cũng còn tùy.",
+      "focus": "Estoy de acuerdo",
+      "pattern": "agreement + pero + qualification",
+      "bridgePattern": "đồng ý + nhưng + qualification"
+    },
+    {
+      "id": "a1-u7-l3-values",
+      "objectiveId": "a1-expression-values",
+      "prerequisites": ["a1-expression-agreement"],
+      "unit": 7,
+      "lesson": 3,
+      "unitTitle": "Personal expression",
+      "title": "What matters",
+      "skill": "value statements",
+      "words": [
+        ["para mí", "for me", "đối với tôi"],
+        ["honestidad", "honesty", "sự trung thực"],
+        ["importa", "matters", "quan trọng"],
+        ["mucho", "a lot", "rất nhiều"]
+      ],
+      "spanish": "Para mí, la honestidad importa mucho.",
+      "english": "For me, honesty matters greatly.",
+      "vietnamese": "Đối với tôi, sự trung thực rất quan trọng.",
+      "focus": "Para mí",
+      "pattern": "personal frame + subject + importar",
+      "bridgePattern": "đối với + pronoun + subject + quan trọng"
+    },
+    {
+      "id": "a1-u7-l4-boundaries",
+      "objectiveId": "a1-expression-boundaries",
+      "prerequisites": ["a1-expression-values"],
+      "unit": 7,
+      "lesson": 4,
+      "unitTitle": "Personal expression",
+      "title": "A respectful boundary",
+      "skill": "necesitar + space",
+      "words": [
+        ["necesito", "I need", "tôi cần"],
+        ["momento", "moment", "một lúc"],
+        ["pensar", "to think", "suy nghĩ"],
+        ["hablamos", "we talk", "chúng ta nói chuyện"]
+      ],
+      "spanish": "Necesito un momento para pensar.",
+      "english": "I need a moment to think.",
+      "vietnamese": "Tôi cần một lúc để suy nghĩ.",
+      "focus": "Necesito",
+      "pattern": "necesitar + noun + para + infinitive",
+      "bridgePattern": "cần + duration + để + verb"
+    }
+  ]
+}
