@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "courseId": "english-spanish-vietnamese",
-  "revision": 2,
+  "revision": 3,
   "packs": [
     {
       "id": "a1-personal-expression-1",
@@ -14,6 +14,12 @@
       "version": 1,
       "level": "A1",
       "url": "https://raw.githubusercontent.com/intelligenceamplification/polyflow/curriculum-data/curriculum/packs/a1-completion-1.v1.json"
+    },
+    {
+      "id": "a2-life-stories-1",
+      "version": 1,
+      "level": "A2",
+      "url": "https://raw.githubusercontent.com/intelligenceamplification/polyflow/curriculum-data/curriculum/packs/a2-life-stories-1.v1.json"
     }
   ]
 }

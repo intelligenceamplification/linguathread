@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "a2-life-stories-1",
+  "version": 1,
+  "level": "A2",
+  "lessons": [
+    {
+      "id": "a2-u13-l1-childhood", "objectiveId": "a2-story-childhood", "prerequisites": ["a1-integrated-reflection"],
+      "unit": 13, "lesson": 1, "unitTitle": "Life stories", "title": "Where you grew up", "skill": "imperfect + childhood setting",
+      "words": [["cuando", "when", "khi"], ["era", "I was", "tôi còn"], ["vivía", "I lived", "tôi sống"], ["pequeño", "young", "nhỏ"]],
+      "spanish": "Cuando era pequeño, vivía cerca del río.", "english": "When I was young, I lived near the river.", "vietnamese": "Khi còn nhỏ, tôi sống gần con sông.",
+      "focus": "Cuando era", "pattern": "cuando + imperfect setting", "bridgePattern": "khi còn + age + past context"
+    },
+    {
+      "id": "a2-u13-l2-change", "objectiveId": "a2-story-change", "prerequisites": ["a2-story-childhood"],
+      "unit": 13, "lesson": 2, "unitTitle": "Life stories", "title": "A life change", "skill": "preterite + age",
+      "words": [["mudé", "I moved", "tôi chuyển"], ["ciudad", "city", "thành phố"], ["tenía", "I was", "tôi"], ["años", "years old", "tuổi"]],
+      "spanish": "Me mudé de ciudad cuando tenía veinte años.", "english": "I moved to another city when I was twenty.", "vietnamese": "Tôi chuyển đến thành phố khác khi hai mươi tuổi.",
+      "focus": "Me mudé", "pattern": "preterite event + cuando + imperfect age", "bridgePattern": "past event + khi + age"
+    },
+    {
+      "id": "a2-u13-l3-first-time", "objectiveId": "a2-story-first-experience", "prerequisites": ["a2-story-change"],
+      "unit": 13, "lesson": 3, "unitTitle": "Life stories", "title": "A first experience", "skill": "first time + preterite",
+      "words": [["primera vez", "first time", "lần đầu tiên"], ["viajé", "I traveled", "tôi đi du lịch"], ["solo", "alone", "một mình"], ["aprendí", "I learned", "tôi học được"]],
+      "spanish": "La primera vez que viajé solo, aprendí mucho.", "english": "The first time I traveled alone, I learned a lot.", "vietnamese": "Lần đầu tiên đi du lịch một mình, tôi học được rất nhiều.",
+      "focus": "La primera vez que", "pattern": "first-time frame + preterite events", "bridgePattern": "lần đầu tiên + event + result"
+    },
+    {
+      "id": "a2-u13-l4-continuity", "objectiveId": "a2-story-continuity", "prerequisites": ["a2-story-first-experience"],
+      "unit": 13, "lesson": 4, "unitTitle": "Life stories", "title": "Then and now", "skill": "antes + ahora contrast",
+      "words": [["antes", "before", "trước đây"], ["ahora", "now", "bây giờ"], ["solía", "I used to", "tôi thường"], ["sigo", "I continue", "tôi vẫn"]],
+      "spanish": "Antes viajaba poco, pero ahora viajo más.", "english": "I used to travel little, but now I travel more.", "vietnamese": "Trước đây tôi ít đi du lịch, nhưng bây giờ tôi đi nhiều hơn.",
+      "focus": "Antes... ahora", "pattern": "imperfect habit + present contrast", "bridgePattern": "trước đây... nhưng bây giờ"
+    }
+  ]
+}
