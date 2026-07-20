@@ -21,16 +21,29 @@ test("preserves the language setup and calm learning interface", async () => {
   assert.match(page, /Language begins from what you already know/);
 });
 
-test("ships a sequential A1 curriculum rather than one repeating foundation", async () => {
+test("ships an expanded A1 curriculum rather than one repeating foundation", async () => {
   const source = await read("../app/curriculum.ts");
   const lessonIds = [...source.matchAll(/id: "(es-u\d-l\d-[^"]+)"/g)].map((match) => match[1]);
-  assert.equal(lessonIds.length, 8);
-  assert.equal(new Set(lessonIds).size, 8);
+  assert.equal(lessonIds.length, 24);
+  assert.equal(new Set(lessonIds).size, 24);
   assert.match(source, /Names and introductions/);
   assert.match(source, /Attention and presence/);
   assert.match(source, /Human connection/);
-  assert.equal((source.match(/bridgeMastery:/g) || []).length, 9);
+  assert.ok((source.match(/bridgeMastery:/g) || []).length >= 9);
   assert.match(source, /Now say it in Vietnamese/);
+});
+
+test("uses a durable learner model and adaptive curriculum router", async () => {
+  const [page, engine] = await Promise.all([read("../app/page.tsx"), read("../app/learning-engine.ts")]);
+  assert.match(page, /polyflow\.learner-model\.v1/);
+  assert.match(page, /selectNextLesson/);
+  assert.match(page, /recordEvidence/);
+  assert.match(engine, /introduced/);
+  assert.match(engine, /forming/);
+  assert.match(engine, /usable/);
+  assert.match(engine, /stable/);
+  assert.match(engine, /maintenance/);
+  assert.match(engine, /sessionsCompleted % 4/);
 });
 
 test("activates Vietnamese production from any non-native profile position", async () => {

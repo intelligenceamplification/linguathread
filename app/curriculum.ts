@@ -14,6 +14,8 @@ export type GrammarLayer = {
 
 export type LessonDefinition = {
   id: string;
+  objectiveId?: string;
+  prerequisites?: string[];
   level: CEFRLevel;
   unit: number;
   lesson: number;
@@ -45,7 +47,7 @@ export type LessonDefinition = {
   completion: string;
 };
 
-export const curriculum: LessonDefinition[] = [
+const foundationalCurriculum: LessonDefinition[] = [
   {
     id: "es-u1-l1-identity-origin", level: "A1", unit: 1, lesson: 1, unitTitle: "Foundations", title: "Identity and origin", skill: "subject + ser + de",
     vocabulary: [
@@ -278,6 +280,109 @@ export const curriculum: LessonDefinition[] = [
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I’m glad to see you” naturally.", accepted: ["mình rất vui được gặp bạn", "tôi rất vui được gặp bạn", "mình vui khi gặp bạn", "tôi vui khi gặp bạn"], answer: "Mình rất vui được gặp bạn.", hint: "Use mình or tôi + rất vui + được gặp bạn." },
     completion: "You can ask after someone and express genuine gladness at seeing them.",
   },
+];
+
+type CompactLesson = {
+  id: string; objectiveId: string; prerequisites: string[]; unit: number; lesson: number;
+  unitTitle: string; title: string; skill: string;
+  words: Array<[string, string, string]>;
+  spanish: string; english: string; vietnamese: string;
+  focus: string; pattern: string; bridgePattern: string;
+};
+
+function expandLesson(item: CompactLesson): LessonDefinition {
+  const targetWords = item.spanish.split(" ");
+  return {
+    id: item.id,
+    objectiveId: item.objectiveId,
+    prerequisites: item.prerequisites,
+    level: "A1",
+    unit: item.unit,
+    lesson: item.lesson,
+    unitTitle: item.unitTitle,
+    title: item.title,
+    skill: item.skill,
+    vocabulary: item.words.map(([word, english, vietnamese]) => ({
+      word, english, vietnamese,
+      note: `${word} belongs to this practical pattern. Notice its role before trying to memorize it alone.`,
+    })),
+    recall: {
+      prompt: `What does ${item.words[0][0]} mean here?`,
+      instruction: "Answer naturally in English.",
+      accepted: [item.words[0][1]],
+      correct: `Yes. ${item.words[0][0]} carries “${item.words[0][1]}.”`,
+      hint: `${item.words[0][0]} = ${item.words[0][1]}`,
+      rescue: { answer: item.words[0][1], bank: item.words[0][1].split(" ").reverse() },
+    },
+    sentence: {
+      target: item.spanish, anchor: item.english, bridge: item.vietnamese,
+      note: "The sentence is useful in ordinary life while preserving attention to the person and situation before you.",
+    },
+    grammar: {
+      focus: item.focus,
+      target: { pattern: item.pattern, explanation: `Spanish organizes this meaning through ${item.pattern}. The form carries information that English may state separately.` },
+      anchor: { pattern: item.english, explanation: "English anchors the intended meaning before the structures diverge." },
+      bridge: { pattern: item.bridgePattern, explanation: `Vietnamese uses ${item.bridgePattern}, keeping the comparison active rather than merely displaying a translation.` },
+      insight: "One intention travels through three structures. The differences are the lesson, not obstacles around it.",
+      deep: [
+        { title: "Form", principle: item.pattern, explanation: "Learn the reusable pattern, then vary the people, objects, places, and time around it." },
+        { title: "Meaning", principle: "translate the intention", explanation: "Natural language preserves what the speaker means rather than copying every word mechanically." },
+        { title: "Contrast", principle: item.bridgePattern, explanation: "The Vietnamese bridge reveals which features Spanish marks through conjugation, agreement, or word order." },
+        { title: "Transfer", principle: "build a family of sentences", explanation: "A stable structure should support new personal statements, not only the model sentence." },
+      ],
+      summary: "English secures meaning, Spanish develops the target structure, and Vietnamese receives active production practice of its own.",
+    },
+    transform: {
+      prompt: item.english,
+      bridgeReminder: `Vietnamese: ${item.vietnamese}`,
+      words: targetWords,
+      bank: [...targetWords].reverse(),
+      hint: `Build around ${item.focus}.`,
+    },
+    mastery: {
+      prompt: `Translate: ${item.english}`,
+      instruction: "Write the natural Spanish.",
+      accepted: [item.spanish],
+      answer: item.spanish,
+      hint: `Use the pattern ${item.pattern}.`,
+    },
+    bridgeMastery: {
+      prompt: "Now express the same meaning in Vietnamese.",
+      instruction: `Translate “${item.english}” naturally.`,
+      accepted: [item.vietnamese],
+      answer: item.vietnamese,
+      hint: `Use the pattern ${item.bridgePattern}.`,
+    },
+    completion: `You can now use ${item.skill} across the complete language stack.`,
+  };
+}
+
+const expandedA1: CompactLesson[] = [
+  { id: "es-u3-l1-family", objectiveId: "a1-people-family", prerequisites: [], unit: 3, lesson: 1, unitTitle: "People and home", title: "Family and belonging", skill: "possessives + family", words: [["mi", "my", "của tôi"], ["familia", "family", "gia đình"], ["vive", "lives", "sống"], ["cerca", "nearby", "gần"]], spanish: "Mi familia vive cerca.", english: "My family lives nearby.", vietnamese: "Gia đình tôi sống gần đây.", focus: "Mi familia", pattern: "possessive + noun + verb", bridgePattern: "noun + possessive + verb" },
+  { id: "es-u3-l2-description", objectiveId: "a1-people-description", prerequisites: ["a1-people-family"], unit: 3, lesson: 2, unitTitle: "People and home", title: "Describing people", skill: "adjective agreement", words: [["amable", "kind", "tử tế"], ["paciente", "patient", "kiên nhẫn"], ["persona", "person", "người"], ["muy", "very", "rất"]], spanish: "Es una persona muy amable.", english: "They are a very kind person.", vietnamese: "Đó là một người rất tử tế.", focus: "persona amable", pattern: "noun + agreeing adjective", bridgePattern: "noun + degree + adjective" },
+  { id: "es-u3-l3-home", objectiveId: "a1-home-objects", prerequisites: ["a1-people-family"], unit: 3, lesson: 3, unitTitle: "People and home", title: "The space around you", skill: "hay + household objects", words: [["hay", "there is", "có"], ["mesa", "table", "bàn"], ["ventana", "window", "cửa sổ"], ["habitación", "room", "phòng"]], spanish: "Hay una mesa junto a la ventana.", english: "There is a table beside the window.", vietnamese: "Có một cái bàn bên cạnh cửa sổ.", focus: "Hay", pattern: "hay + indefinite noun", bridgePattern: "có + classifier + noun" },
+  { id: "es-u3-l4-people-review", objectiveId: "a1-people-exchange", prerequisites: ["a1-people-description", "a1-home-objects"], unit: 3, lesson: 4, unitTitle: "People and home", title: "Welcoming someone", skill: "invitations + imperatives", words: [["pasa", "come in", "mời vào"], ["casa", "home", "nhà"], ["bienvenido", "welcome", "chào mừng"], ["siéntate", "sit down", "ngồi xuống"]], spanish: "Bienvenido a casa. Pasa y siéntate.", english: "Welcome home. Come in and sit down.", vietnamese: "Chào mừng về nhà. Mời vào và ngồi xuống.", focus: "Pasa", pattern: "informal affirmative command", bridgePattern: "invitation marker + verb" },
+  { id: "es-u4-l1-food", objectiveId: "a1-food-preferences", prerequisites: ["a1-people-exchange"], unit: 4, lesson: 1, unitTitle: "Food and exchange", title: "Food and preference", skill: "gustar + nouns", words: [["gusta", "is pleasing", "thích"], ["comida", "food", "đồ ăn"], ["arroz", "rice", "cơm"], ["verduras", "vegetables", "rau"]], spanish: "Me gusta la comida sencilla.", english: "I like simple food.", vietnamese: "Tôi thích đồ ăn đơn giản.", focus: "Me gusta", pattern: "indirect object + gusta + noun", bridgePattern: "pronoun + thích + noun" },
+  { id: "es-u4-l2-restaurant", objectiveId: "a1-food-ordering", prerequisites: ["a1-food-preferences"], unit: 4, lesson: 2, unitTitle: "Food and exchange", title: "Ordering with clarity", skill: "quisiera + request", words: [["quisiera", "I would like", "tôi muốn"], ["pedir", "to order", "gọi"], ["cuenta", "check", "hóa đơn"], ["algo", "something", "một thứ gì đó"]], spanish: "Quisiera pedir algo sencillo.", english: "I would like to order something simple.", vietnamese: "Tôi muốn gọi một món đơn giản.", focus: "Quisiera", pattern: "courteous conditional + infinitive", bridgePattern: "pronoun + muốn + verb" },
+  { id: "es-u4-l3-shopping", objectiveId: "a1-shopping-price", prerequisites: ["a1-food-ordering"], unit: 4, lesson: 3, unitTitle: "Food and exchange", title: "Price and quantity", skill: "numbers + demonstratives", words: [["cuánto", "how much", "bao nhiêu"], ["cuesta", "costs", "giá"], ["esto", "this", "cái này"], ["dos", "two", "hai"]], spanish: "¿Cuánto cuesta esto?", english: "How much does this cost?", vietnamese: "Cái này giá bao nhiêu?", focus: "Cuánto cuesta", pattern: "question word + verb + demonstrative", bridgePattern: "demonstrative + price + how much" },
+  { id: "es-u4-l4-exchange", objectiveId: "a1-shopping-transaction", prerequisites: ["a1-shopping-price"], unit: 4, lesson: 4, unitTitle: "Food and exchange", title: "Completing an exchange", skill: "payment + gratitude", words: [["pagar", "to pay", "trả tiền"], ["tarjeta", "card", "thẻ"], ["efectivo", "cash", "tiền mặt"], ["recibo", "receipt", "biên lai"]], spanish: "Voy a pagar con tarjeta.", english: "I am going to pay by card.", vietnamese: "Tôi sẽ trả bằng thẻ.", focus: "Voy a pagar", pattern: "ir a + infinitive", bridgePattern: "sẽ + verb + bằng" },
+  { id: "es-u5-l1-time", objectiveId: "a1-time-clock", prerequisites: ["a1-shopping-transaction"], unit: 5, lesson: 1, unitTitle: "Time and intention", title: "Clock time", skill: "telling time", words: [["hora", "time", "giờ"], ["media", "half", "rưỡi"], ["mañana", "morning", "buổi sáng"], ["tarde", "afternoon", "buổi chiều"]], spanish: "Son las ocho y media.", english: "It is eight thirty.", vietnamese: "Bây giờ là tám giờ rưỡi.", focus: "Son las", pattern: "ser + article + hour", bridgePattern: "là + number + giờ" },
+  { id: "es-u5-l2-frequency", objectiveId: "a1-time-frequency", prerequisites: ["a1-time-clock"], unit: 5, lesson: 2, unitTitle: "Time and intention", title: "Frequency and habit", skill: "frequency adverbs", words: [["siempre", "always", "luôn luôn"], ["a veces", "sometimes", "đôi khi"], ["nunca", "never", "không bao giờ"], ["temprano", "early", "sớm"]], spanish: "A veces camino por la mañana.", english: "Sometimes I walk in the morning.", vietnamese: "Đôi khi tôi đi bộ vào buổi sáng.", focus: "A veces", pattern: "frequency + conjugated verb", bridgePattern: "frequency + pronoun + verb" },
+  { id: "es-u5-l3-plans", objectiveId: "a1-time-plans", prerequisites: ["a1-time-frequency"], unit: 5, lesson: 3, unitTitle: "Time and intention", title: "Near-future plans", skill: "ir a + infinitive", words: [["voy", "I am going", "tôi sẽ"], ["visitar", "to visit", "thăm"], ["mañana", "tomorrow", "ngày mai"], ["tiempo", "time", "thời gian"]], spanish: "Mañana voy a visitar a un amigo.", english: "Tomorrow I am going to visit a friend.", vietnamese: "Ngày mai tôi sẽ đi thăm một người bạn.", focus: "Voy a visitar", pattern: "ir a + infinitive", bridgePattern: "time + sẽ + verb" },
+  { id: "es-u5-l4-availability", objectiveId: "a1-time-availability", prerequisites: ["a1-time-plans"], unit: 5, lesson: 4, unitTitle: "Time and intention", title: "Making arrangements", skill: "availability questions", words: [["puedes", "can you", "bạn có thể"], ["venir", "to come", "đến"], ["sábado", "Saturday", "thứ Bảy"], ["libre", "free", "rảnh"]], spanish: "¿Puedes venir el sábado?", english: "Can you come on Saturday?", vietnamese: "Bạn có thể đến vào thứ Bảy không?", focus: "Puedes venir", pattern: "conjugated modal + infinitive", bridgePattern: "có thể + verb + không" },
+  { id: "es-u6-l1-directions", objectiveId: "a1-travel-directions", prerequisites: ["a1-time-availability"], unit: 6, lesson: 1, unitTitle: "Travel and community", title: "Following directions", skill: "direction commands", words: [["derecho", "straight", "thẳng"], ["izquierda", "left", "trái"], ["gira", "turn", "rẽ"], ["esquina", "corner", "góc đường"]], spanish: "Sigue derecho y gira a la izquierda.", english: "Continue straight and turn left.", vietnamese: "Đi thẳng rồi rẽ trái.", focus: "Sigue y gira", pattern: "imperative + direction", bridgePattern: "verb + direction" },
+  { id: "es-u6-l2-transport", objectiveId: "a1-travel-transport", prerequisites: ["a1-travel-directions"], unit: 6, lesson: 2, unitTitle: "Travel and community", title: "Public transportation", skill: "destination + transport", words: [["autobús", "bus", "xe buýt"], ["estación", "station", "nhà ga"], ["lleva", "takes", "đưa"], ["centro", "downtown", "trung tâm"]], spanish: "¿Este autobús lleva al centro?", english: "Does this bus go downtown?", vietnamese: "Xe buýt này có đi đến trung tâm không?", focus: "Este autobús", pattern: "demonstrative + transport + destination", bridgePattern: "transport + này + có...không" },
+  { id: "es-u6-l3-help", objectiveId: "a1-community-help", prerequisites: ["a1-travel-transport"], unit: 6, lesson: 3, unitTitle: "Travel and community", title: "Asking for help", skill: "poder + assistance", words: [["ayudar", "to help", "giúp"], ["problema", "problem", "vấn đề"], ["entiendo", "I understand", "tôi hiểu"], ["despacio", "slowly", "chậm"]], spanish: "¿Puede hablar más despacio?", english: "Can you speak more slowly?", vietnamese: "Bạn có thể nói chậm hơn không?", focus: "Puede hablar", pattern: "formal modal + infinitive + comparative", bridgePattern: "có thể + verb + hơn + không" },
+  { id: "es-u6-l4-reflection", objectiveId: "a1-community-reflection", prerequisites: ["a1-community-help"], unit: 6, lesson: 4, unitTitle: "Travel and community", title: "What you are learning", skill: "present progress + purpose", words: [["aprendo", "I learn", "tôi học"], ["cada", "each", "mỗi"], ["día", "day", "ngày"], ["mejor", "better", "tốt hơn"]], spanish: "Cada día aprendo a expresarme mejor.", english: "Each day I learn to express myself better.", vietnamese: "Mỗi ngày tôi học cách diễn đạt tốt hơn.", focus: "Aprendo a", pattern: "verb + a + reflexive infinitive", bridgePattern: "học cách + verb + hơn" },
+];
+
+export const curriculum: LessonDefinition[] = [
+  ...foundationalCurriculum.map((lesson, index) => ({
+    ...lesson,
+    objectiveId: lesson.id,
+    prerequisites: index === 0 ? [] : [foundationalCurriculum[index - 1].id],
+  })),
+  ...expandedA1.map(expandLesson),
 ];
 
 export function normalizeAnswer(value: string) {

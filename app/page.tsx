@@ -4,6 +4,10 @@
 
 import { useEffect, useState } from "react";
 import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
+import {
+  completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
+  migrateCompletedLessons, recordEvidence, selectNextLesson,
+} from "./learning-engine";
 
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
 type FeedbackState = "idle" | "correct" | "gentle";
@@ -19,6 +23,7 @@ const commonLanguages = [
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
 const learnerIdKey = "polyflow.learner-id.v1";
+const learnerModelKey = "polyflow.learner-model.v1";
 
 function learnerHeaders(json = false) {
   let learnerId = window.localStorage.getItem(learnerIdKey);
@@ -72,18 +77,28 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [spanishConfirmed, setSpanishConfirmed] = useState(false);
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
+  const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
+  const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen">("new");
 
   useEffect(() => {
     const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
+    const savedModel = window.localStorage.getItem(learnerModelKey);
+    const localModel = savedModel ? JSON.parse(savedModel) as LearnerModel : migrateCompletedLessons(localCompleted, curriculum);
+    setLearnerModel(localModel);
+    window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
     setCompletedIds(localCompleted);
-    setLessonIndex(Math.min(localCompleted.length, curriculum.length - 1));
+    const localSelection = selectNextLesson(curriculum, localModel, localCompleted);
+    setLessonIndex(curriculum.findIndex((item) => item.id === localSelection.lesson.id));
+    setSessionMode(localSelection.mode);
     fetch("/api/progress", { headers: learnerHeaders() })
       .then((response) => response.ok ? response.json() : Promise.reject())
       .then((data: { completedLessonIds?: string[]; reviewDueLessonIds?: string[] }) => {
         setReviewDueIds(data.reviewDueLessonIds || []);
         if (!data.completedLessonIds?.length) return;
         setCompletedIds(data.completedLessonIds);
-        setLessonIndex(Math.min(data.completedLessonIds.length, curriculum.length - 1));
+        const serverSelection = selectNextLesson(curriculum, localModel, data.completedLessonIds);
+        setLessonIndex(curriculum.findIndex((item) => item.id === serverSelection.lesson.id));
+        setSessionMode(serverSelection.mode);
         window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
       })
       .catch(() => undefined);
@@ -136,7 +151,33 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
-    fetch("/api/progress", { method: "POST", headers: learnerHeaders(true), body: JSON.stringify({ type: "attempt", lessonId: lesson.id, skill: lesson.skill, kind, language, correct }), keepalive: true }).catch(() => undefined);
+    const learningLanguage = language === "Vietnamese" ? "Vietnamese" : "Spanish";
+    setLearnerModel((current) => {
+      const next = recordEvidence(
+        current,
+        lesson.objectiveId || lesson.id,
+        learningLanguage,
+        correct,
+        kind === "supported-reconstruction",
+      );
+      window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
+      return next;
+    });
+    fetch("/api/progress", {
+      method: "POST",
+      headers: learnerHeaders(true),
+      body: JSON.stringify({
+        type: "attempt",
+        lessonId: lesson.id,
+        objectiveId: lesson.objectiveId || lesson.id,
+        skill: lesson.skill,
+        kind,
+        language,
+        correct,
+        supported: kind === "supported-reconstruction",
+      }),
+      keepalive: true,
+    }).catch(() => undefined);
   }
 
   function resetAnswer(nextStage?: Stage) {
@@ -158,6 +199,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
     window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(nextCompleted));
+    setLearnerModel((current) => {
+      const next = completeSession(current);
+      window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
+      return next;
+    });
     fetch("/api/progress", { method: "POST", headers: learnerHeaders(true), body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
     setStage("complete");
   }
@@ -177,8 +223,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function continueLearning() {
-    if (lessonIndex < curriculum.length - 1) resetLesson(lessonIndex + 1);
-    else setStage("review");
+    const selection = selectNextLesson(curriculum, learnerModel, completedIds);
+    const nextIndex = curriculum.findIndex((item) => item.id === selection.lesson.id);
+    setSessionMode(selection.mode);
+    resetLesson(nextIndex);
   }
 
   function completeSupportedRecall() {
@@ -207,7 +255,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">PolyFlow</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
-          <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")}</span>
+          <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
         </div>
         {hasHistory && stage !== "review" ? (
           <button className="quiet-action" onClick={() => setStage("review")}>Review</button>
@@ -338,7 +386,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <strong>Spanish · {lesson.skill}</strong>
               <p>{lesson.vocabulary.map((item) => item.word).join(" · ")}</p>
             </div>
-            <button className="primary-action" onClick={continueLearning}>{lessonIndex < curriculum.length - 1 ? "Continue to the next lesson" : "Review what is becoming yours"} <span aria-hidden="true">→</span></button>
+            <button className="primary-action" onClick={continueLearning}>Continue learning <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => setStage("review")}>Review the stack</button>
             <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
           </div>
@@ -355,7 +403,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{item.title}</strong>
                   <p>{item.level} · {item.unitTitle} · {item.skill}</p>
-                  <em>{reviewDueIds.includes(item.id) ? "Due" : completedIds.includes(item.id) ? "Stable" : index === lessonIndex ? "Next" : "Waiting"}</em>
+                  <em>{reviewDueIds.includes(item.id)
+                    ? "Due"
+                    : completedIds.includes(item.id)
+                      ? masteryState(learnerModel.evidence[evidenceKey(item.objectiveId || item.id, "Spanish")])
+                      : index === lessonIndex ? "Next" : "Waiting"}</em>
                 </div>
               ))}
             </div>

@@ -29,3 +29,18 @@ export const answerAttempts = pgTable("answer_attempts", {
   correct: boolean("correct").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
 });
+
+export const objectiveMastery = pgTable("objective_mastery", {
+  id: text("id").primaryKey(),
+  learnerId: text("learner_id").notNull(),
+  objectiveId: text("objective_id").notNull(),
+  language: text("language").notNull(),
+  status: text("status").notNull().default("introduced"),
+  score: integer("score").notNull().default(0),
+  attempts: integer("attempts").notNull().default(0),
+  independentSuccesses: integer("independent_successes").notNull().default(0),
+  supportedSuccesses: integer("supported_successes").notNull().default(0),
+  lastPracticedAt: timestamp("last_practiced_at", { withTimezone: true }).notNull(),
+  nextReviewAt: timestamp("next_review_at", { withTimezone: true }).notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
+});
