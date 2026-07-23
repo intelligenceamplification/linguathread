@@ -21,6 +21,16 @@ test("preserves the language setup and calm learning interface", async () => {
   assert.match(page, /Language begins from what you already know/);
 });
 
+test("follows the device light and dark appearance automatically", async () => {
+  const [styles, layout] = await Promise.all([read("../app/globals.css"), read("../app/layout.tsx")]);
+  assert.match(styles, /color-scheme: light dark/);
+  assert.match(styles, /@media \(prefers-color-scheme: dark\)/);
+  assert.match(styles, /--paper: #0f1412/);
+  assert.match(styles, /--primary-text: #101512/);
+  assert.match(layout, /prefers-color-scheme: light/);
+  assert.match(layout, /prefers-color-scheme: dark/);
+});
+
 test("ships an expanded A1 curriculum rather than one repeating foundation", async () => {
   const source = await read("../app/curriculum.ts");
   const lessonIds = [...source.matchAll(/id: "(es-u\d-l\d-[^"]+)"/g)].map((match) => match[1]);
