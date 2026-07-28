@@ -29,7 +29,7 @@ export type LessonDefinition = {
     accepted: string[];
     correct: string;
     hint: string;
-    rescue: { answer: string; bank: string[] };
+    rescue: { answer: string };
   };
   sentence: { target: string; anchor: string; bridge: string; note: string };
   grammar: {
@@ -41,7 +41,7 @@ export type LessonDefinition = {
     deep: Array<{ title: string; principle: string; explanation: string }>;
     summary: string;
   };
-  transform: { prompt: string; bridgeReminder: string; accepted: string[]; answer: string; hint: string };
+  transform: { language: string; prompt: string; bridgeReminder: string; accepted: string[]; answer: string; hint: string };
   mastery: { prompt: string; instruction: string; accepted: string[]; answer: string; hint: string };
   bridgeMastery: { prompt: string; instruction: string; accepted: string[]; answer: string; hint: string };
   completion: string;
@@ -57,7 +57,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "eres", english: "you are", vietnamese: "bạn là", note: "Eres is ser shaped for tú. Vietnamese là does not change with the person." },
       { word: "de", english: "from / of", vietnamese: "từ / của", note: "A small word that connects origin, belonging, material, and relationship." },
     ],
-    recall: { prompt: "What does soy carry?", instruction: "Answer in English. Include the person as well as the verb.", accepted: ["i am", "i'm", "am"], correct: "Yes. Soy carries “I am.”", hint: "soy = I am", rescue: { answer: "I am", bank: ["am", "I"] } },
+    recall: { prompt: "What does soy carry?", instruction: "Answer in English. Include the person as well as the verb.", accepted: ["i am", "i'm", "am"], correct: "Yes. Soy carries “I am.”", hint: "soy = I am", rescue: { answer: "I am" } },
     sentence: { target: "Soy de Indiana.", anchor: "I am from Indiana.", bridge: "Mình đến từ Indiana.", note: "The meaning stays stable. Each language reveals a different way of organizing identity and origin." },
     grammar: {
       focus: "Soy", target: { pattern: "soy + de", explanation: "Ser changes into soy for “I.” The pronoun yo is optional because the verb already identifies the speaker." },
@@ -72,7 +72,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "English helps you recognize the changing form of “be.” Vietnamese makes the contrast clearer: là stays stable, while Spanish places person directly inside ser.",
     },
-    transform: { prompt: "I am from Indiana.", bridgeReminder: "English: I + am + from · Vietnamese: mình + đến từ", accepted: ["Soy de Indiana."], answer: "Soy de Indiana.", hint: "Let the conjugated verb lead." },
+    transform: { language: "Spanish", prompt: "I am from Indiana.", bridgeReminder: "English: I + am + from · Vietnamese: mình + đến từ", accepted: ["Soy de Indiana."], answer: "Soy de Indiana.", hint: "Let the conjugated verb lead." },
     mastery: { prompt: "Translate: I am from Indiana.", instruction: "Write the natural Spanish. The subject pronoun may be omitted.", accepted: ["soy de indiana", "yo soy de indiana"], answer: "Soy de Indiana.", hint: "Let soy carry “I am.”" },
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I am from Indiana” naturally.", accepted: ["mình đến từ indiana", "tôi đến từ indiana"], answer: "Mình đến từ Indiana.", hint: "Use mình or tôi, followed by đến từ." },
     completion: "You mapped person, identity, and origin across Spanish, English, and Vietnamese.",
@@ -86,7 +86,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "mucho", english: "much / very", vietnamese: "rất / nhiều", note: "In mucho gusto, the phrase expresses abundant pleasure rather than a literal English structure." },
       { word: "gusto", english: "pleasure", vietnamese: "hân hạnh", note: "A greeting can carry warmth without becoming elaborate." },
     ],
-    recall: { prompt: "What does me llamo express?", instruction: "Answer naturally in English.", accepted: ["my name is", "i am called", "i call myself"], correct: "Yes. Me llamo introduces your name.", hint: "It means “my name is” or, literally, “I call myself.”", rescue: { answer: "My name is", bank: ["is", "My", "name"] } },
+    recall: { prompt: "What does me llamo express?", instruction: "Answer naturally in English.", accepted: ["my name is", "i am called", "i call myself"], correct: "Yes. Me llamo introduces your name.", hint: "It means “my name is” or, literally, “I call myself.”", rescue: { answer: "My name is" } },
     sentence: { target: "Me llamo Desmond. Mucho gusto.", anchor: "My name is Desmond. Nice to meet you.", bridge: "Mình tên là Desmond. Rất vui được gặp bạn.", note: "An introduction is practical, but it is also an offering of presence: this is who I am, and I am glad to meet you." },
     grammar: {
       focus: "Me llamo", target: { pattern: "me + llamo", explanation: "The reflexive pronoun me points the action back to the speaker; llamo already marks the first person." },
@@ -101,7 +101,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "English remains the anchor for meaning. Vietnamese helps show that natural introductions do not need to share the same literal machinery.",
     },
-    transform: { prompt: "My name is Desmond.", bridgeReminder: "English: my name is · Vietnamese: mình tên là", accepted: ["Me llamo Desmond.", "Yo me llamo Desmond."], answer: "Me llamo Desmond.", hint: "Begin with the reflexive word me." },
+    transform: { language: "Spanish", prompt: "My name is Desmond.", bridgeReminder: "English: my name is · Vietnamese: mình tên là", accepted: ["Me llamo Desmond.", "Yo me llamo Desmond."], answer: "Me llamo Desmond.", hint: "Begin with the reflexive word me." },
     mastery: { prompt: "Introduce yourself as Desmond.", instruction: "Write the natural Spanish introduction.", accepted: ["me llamo desmond", "yo me llamo desmond"], answer: "Me llamo Desmond.", hint: "Use me llamo, not a word-for-word copy of English." },
     bridgeMastery: { prompt: "Now introduce yourself in Vietnamese.", instruction: "Translate “My name is Desmond” naturally.", accepted: ["mình tên là desmond", "tôi tên là desmond", "mình tên desmond", "tôi tên desmond"], answer: "Mình tên là Desmond.", hint: "Use mình or tôi + tên là + Desmond." },
     completion: "You can now offer your name naturally and recognize how each language frames identity.",
@@ -115,7 +115,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "por favor", english: "please", vietnamese: "làm ơn", note: "Courtesy is not ornamental; it changes how a request lands." },
       { word: "gracias", english: "thank you", vietnamese: "cảm ơn", note: "Gratitude completes the exchange rather than merely decorating it." },
     ],
-    recall: { prompt: "What does quiero carry?", instruction: "Answer in English, including the speaker.", accepted: ["i want", "i would like"], correct: "Yes. Quiero carries “I want.”", hint: "The -o ending marks the speaker: I want.", rescue: { answer: "I want", bank: ["want", "I"] } },
+    recall: { prompt: "What does quiero carry?", instruction: "Answer in English, including the speaker.", accepted: ["i want", "i would like"], correct: "Yes. Quiero carries “I want.”", hint: "The -o ending marks the speaker: I want.", rescue: { answer: "I want" } },
     sentence: { target: "Quiero agua, por favor.", anchor: "I would like water, please.", bridge: "Tôi muốn nước, làm ơn.", note: "A clear need can be expressed without aggression. Precision and courtesy can coexist." },
     grammar: {
       focus: "Quiero", target: { pattern: "quiero + noun", explanation: "Quiero is the yo form of querer. Spanish often omits yo because the verb ending identifies the speaker." },
@@ -130,7 +130,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "English clarifies the courteous intention. Vietnamese highlights the stable verb pattern that Spanish contrasts through conjugation.",
     },
-    transform: { prompt: "I would like water, please.", bridgeReminder: "English: I would like · Vietnamese: tôi muốn", accepted: ["Quiero agua, por favor.", "Yo quiero agua, por favor."], answer: "Quiero agua, por favor.", hint: "State the desire first, then add courtesy." },
+    transform: { language: "Spanish", prompt: "I would like water, please.", bridgeReminder: "English: I would like · Vietnamese: tôi muốn", accepted: ["Quiero agua, por favor.", "Yo quiero agua, por favor."], answer: "Quiero agua, por favor.", hint: "State the desire first, then add courtesy." },
     mastery: { prompt: "Ask naturally for water, politely.", instruction: "Write the Spanish request.", accepted: ["quiero agua por favor", "yo quiero agua por favor"], answer: "Quiero agua, por favor.", hint: "Quiero + agua + por favor." },
     bridgeMastery: { prompt: "Now ask in Vietnamese.", instruction: "Translate “I would like water, please” naturally.", accepted: ["tôi muốn nước làm ơn", "mình muốn nước làm ơn", "cho tôi nước với", "cho mình nước với"], answer: "Tôi muốn nước, làm ơn.", hint: "Use tôi muốn nước, then add courtesy." },
     completion: "You can now express a basic need clearly, naturally, and courteously.",
@@ -144,7 +144,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "está", english: "is / you are", vietnamese: "ở / đang", note: "Está serves él, ella, and formal usted in the present tense." },
       { word: "baño", english: "bathroom", vietnamese: "nhà vệ sinh", note: "Practical language deserves an early place in the curriculum." },
     ],
-    recall: { prompt: "What kind of “I am” is estoy?", instruction: "Name the kind of meaning it usually carries.", accepted: ["location", "state", "location or state", "state or location"], correct: "Yes. Estoy usually carries location or state.", hint: "Think location or temporary condition, not identity.", rescue: { answer: "location or state", bank: ["identity", "state", "or", "location", "possession"] } },
+    recall: { prompt: "What kind of “I am” is estoy?", instruction: "Name the kind of meaning it usually carries.", accepted: ["location", "state", "location or state", "state or location"], correct: "Yes. Estoy usually carries location or state.", hint: "Think location or temporary condition, not identity.", rescue: { answer: "location or state" } },
     sentence: { target: "Estoy aquí. ¿Dónde está el baño?", anchor: "I am here. Where is the bathroom?", bridge: "Tôi ở đây. Nhà vệ sinh ở đâu?", note: "Orientation begins by locating yourself calmly, then asking one clear question." },
     grammar: {
       focus: "Estoy", target: { pattern: "estar + location", explanation: "Spanish uses estar for physical location. Estoy marks the first person; está marks a third person or formal you." },
@@ -159,7 +159,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "English anchors the meaning; Vietnamese offers a stable location marker; Spanish trains the deeper choice between identity and state.",
     },
-    transform: { prompt: "I am here.", bridgeReminder: "English: I am here · Vietnamese: tôi ở đây", accepted: ["Estoy aquí.", "Yo estoy aquí."], answer: "Estoy aquí.", hint: "Use estar because this is location." },
+    transform: { language: "Spanish", prompt: "I am here.", bridgeReminder: "English: I am here · Vietnamese: tôi ở đây", accepted: ["Estoy aquí.", "Yo estoy aquí."], answer: "Estoy aquí.", hint: "Use estar because this is location." },
     mastery: { prompt: "Translate: Where is the bathroom?", instruction: "Include Spanish question punctuation if convenient.", accepted: ["dónde está el baño", "¿dónde está el baño?"], answer: "¿Dónde está el baño?", hint: "Dónde + está + el baño." },
     bridgeMastery: { prompt: "Now ask in Vietnamese.", instruction: "Translate “Where is the bathroom?” naturally.", accepted: ["nhà vệ sinh ở đâu", "phòng vệ sinh ở đâu"], answer: "Nhà vệ sinh ở đâu?", hint: "Place nhà vệ sinh before ở đâu." },
     completion: "You can locate yourself and ask for essential orientation without confusing identity with place.",
@@ -173,7 +173,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "después", english: "afterward", vietnamese: "sau đó", note: "Sequence words turn isolated vocabulary into a coherent day." },
       { word: "casa", english: "home / house", vietnamese: "nhà", note: "Casa names a place; en casa often carries the warmer sense of being at home." },
     ],
-    recall: { prompt: "What can trabajo mean?", instruction: "Give either of its common roles.", accepted: ["i work", "work", "job", "i work or work"], correct: "Yes. Trabajo can mean “I work” or “work/job.”", hint: "It can be a conjugated verb or a noun.", rescue: { answer: "I work", bank: ["work", "I"] } },
+    recall: { prompt: "What can trabajo mean?", instruction: "Give either of its common roles.", accepted: ["i work", "work", "job", "i work or work"], correct: "Yes. Trabajo can mean “I work” or “work/job.”", hint: "It can be a conjugated verb or a noun.", rescue: { answer: "I work" } },
     sentence: { target: "Hoy trabajo. Después descanso en casa.", anchor: "Today I work. Afterward I rest at home.", bridge: "Hôm nay tôi làm việc. Sau đó tôi nghỉ ngơi ở nhà.", note: "A day can hold effort and restoration without treating either as an interruption." },
     grammar: {
       focus: "Trabajo", target: { pattern: "time + verb", explanation: "Spanish does not require yo when the -o ending identifies the speaker. Hoy can move for emphasis." },
@@ -188,7 +188,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "The stack makes Spanish conjugation visible while preserving the practical rhythm of the statement across all three languages.",
     },
-    transform: { prompt: "Afterward I rest at home.", bridgeReminder: "English: afterward I rest · Vietnamese: sau đó tôi nghỉ ngơi", accepted: ["Después descanso en casa.", "Yo descanso en casa después."], answer: "Después descanso en casa.", hint: "Let después establish the sequence." },
+    transform: { language: "Spanish", prompt: "Afterward I rest at home.", bridgeReminder: "English: afterward I rest · Vietnamese: sau đó tôi nghỉ ngơi", accepted: ["Después descanso en casa.", "Yo descanso en casa después."], answer: "Después descanso en casa.", hint: "Let después establish the sequence." },
     mastery: { prompt: "Translate: Today I work.", instruction: "Write the concise natural Spanish.", accepted: ["hoy trabajo", "yo trabajo hoy", "trabajo hoy"], answer: "Hoy trabajo.", hint: "Hoy can lead; trabajo already contains “I.”" },
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “Today I work” naturally.", accepted: ["hôm nay tôi làm việc", "hôm nay mình làm việc", "tôi làm việc hôm nay", "mình làm việc hôm nay"], answer: "Hôm nay tôi làm việc.", hint: "Use hôm nay + tôi or mình + làm việc." },
     completion: "You can now describe a simple daily rhythm with sequence, work, and restoration.",
@@ -202,7 +202,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "con", english: "with", vietnamese: "với", note: "Con connects people, tools, and accompaniment." },
       { word: "atención", english: "attention", vietnamese: "sự chú ý", note: "Cognates can lower the burden while a new structure takes focus." },
     ],
-    recall: { prompt: "What does estoy escuchando express?", instruction: "Answer naturally in English.", accepted: ["i am listening", "i'm listening", "listening now"], correct: "Yes. It expresses listening in progress.", hint: "Estoy + -ando corresponds to “I am listening.”", rescue: { answer: "I am listening", bank: ["listening", "I", "am"] } },
+    recall: { prompt: "What does estoy escuchando express?", instruction: "Answer naturally in English.", accepted: ["i am listening", "i'm listening", "listening now"], correct: "Yes. It expresses listening in progress.", hint: "Estoy + -ando corresponds to “I am listening.”", rescue: { answer: "I am listening" } },
     sentence: { target: "Ahora estoy escuchando con atención.", anchor: "Now I am listening attentively.", bridge: "Bây giờ tôi đang lắng nghe một cách chú ý.", note: "Listening is not merely waiting for one’s turn to speak. It is a deliberate form of presence." },
     grammar: {
       focus: "estoy escuchando", target: { pattern: "estar + gerund", explanation: "Estoy marks the speaker and escuchando presents the action as unfolding now." },
@@ -217,7 +217,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "English offers a close structural anchor; Vietnamese contributes a clean aspect contrast through đang.",
     },
-    transform: { prompt: "Now I am listening attentively.", bridgeReminder: "English: am listening · Vietnamese: đang lắng nghe", accepted: ["Ahora estoy escuchando con atención.", "Estoy escuchando con atención ahora."], answer: "Ahora estoy escuchando con atención.", hint: "Frame the moment, then build estar + gerund." },
+    transform: { language: "Spanish", prompt: "Now I am listening attentively.", bridgeReminder: "English: am listening · Vietnamese: đang lắng nghe", accepted: ["Ahora estoy escuchando con atención.", "Estoy escuchando con atención ahora."], answer: "Ahora estoy escuchando con atención.", hint: "Frame the moment, then build estar + gerund." },
     mastery: { prompt: "Say: I am listening now.", instruction: "Write the natural Spanish sentence.", accepted: ["estoy escuchando ahora", "ahora estoy escuchando", "yo estoy escuchando ahora"], answer: "Ahora estoy escuchando.", hint: "Use estoy + escuchando." },
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I am listening now” naturally.", accepted: ["bây giờ tôi đang lắng nghe", "bây giờ mình đang lắng nghe", "tôi đang lắng nghe bây giờ", "mình đang lắng nghe bây giờ"], answer: "Bây giờ tôi đang lắng nghe.", hint: "Use bây giờ and place đang before lắng nghe." },
     completion: "You can describe an action unfolding now while connecting grammar to deliberate attention.",
@@ -231,7 +231,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "porque", english: "because", vietnamese: "bởi vì", note: "Porque gives a feeling context rather than leaving it isolated." },
       { word: "necesito", english: "I need", vietnamese: "tôi cần", note: "Necesito transforms awareness into a clear practical statement." },
     ],
-    recall: { prompt: "What does me siento express?", instruction: "Answer with its natural English meaning.", accepted: ["i feel", "i am feeling", "i feel myself"], correct: "Yes. Me siento means “I feel.”", hint: "It introduces an internal state: I feel...", rescue: { answer: "I feel", bank: ["feel", "I"] } },
+    recall: { prompt: "What does me siento express?", instruction: "Answer with its natural English meaning.", accepted: ["i feel", "i am feeling", "i feel myself"], correct: "Yes. Me siento means “I feel.”", hint: "It introduces an internal state: I feel...", rescue: { answer: "I feel" } },
     sentence: { target: "Me siento cansado porque necesito descansar.", anchor: "I feel tired because I need to rest.", bridge: "Tôi cảm thấy mệt vì tôi cần nghỉ ngơi.", note: "Emotional precision is not indulgence. It helps us respond to reality rather than merely react." },
     grammar: {
       focus: "Me siento", target: { pattern: "sentirse + adjective", explanation: "Me marks the reflexive first person; siento is the changed stem form of sentir." },
@@ -246,7 +246,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "The native anchor secures the emotional meaning; Vietnamese makes the stable analytic structure visible; Spanish adds reflexivity and agreement.",
     },
-    transform: { prompt: "I feel tired.", bridgeReminder: "English: I feel · Vietnamese: tôi cảm thấy", accepted: ["Me siento cansado."], answer: "Me siento cansado.", hint: "Use the reflexive opening me siento." },
+    transform: { language: "Spanish", prompt: "I feel tired.", bridgeReminder: "English: I feel · Vietnamese: tôi cảm thấy", accepted: ["Me siento cansado."], answer: "Me siento cansado.", hint: "Use the reflexive opening me siento." },
     mastery: { prompt: "Translate: I need to rest.", instruction: "Write the concise Spanish statement.", accepted: ["necesito descansar", "yo necesito descansar"], answer: "Necesito descansar.", hint: "Necesito is followed directly by the infinitive descansar." },
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I need to rest” naturally.", accepted: ["tôi cần nghỉ ngơi", "mình cần nghỉ ngơi", "tôi cần nghỉ", "mình cần nghỉ"], answer: "Tôi cần nghỉ ngơi.", hint: "Use tôi or mình + cần + nghỉ ngơi." },
     completion: "You can name an internal state, give its cause, and express the need that follows.",
@@ -260,7 +260,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       { word: "también", english: "also", vietnamese: "cũng", note: "También creates reciprocity: the experience belongs to more than one person." },
       { word: "alegra", english: "makes glad", vietnamese: "làm vui", note: "Me alegra expresses that something brings gladness to the speaker." },
     ],
-    recall: { prompt: "Who does estás address?", instruction: "Answer in English.", accepted: ["you", "informal you", "one familiar person", "you informal"], correct: "Yes. Estás addresses one familiar person.", hint: "It is the tú form: you are.", rescue: { answer: "you", bank: ["I", "you", "we", "they"] } },
+    recall: { prompt: "Who does estás address?", instruction: "Answer in English.", accepted: ["you", "informal you", "one familiar person", "you informal"], correct: "Yes. Estás addresses one familiar person.", hint: "It is the tú form: you are.", rescue: { answer: "you" } },
     sentence: { target: "¿Cómo estás? Me alegra verte.", anchor: "How are you? I’m glad to see you.", bridge: "Bạn thế nào? Mình rất vui được gặp bạn.", note: "A familiar question becomes meaningful when we are willing to receive the real answer." },
     grammar: {
       focus: "Cómo estás", target: { pattern: "question word + estar", explanation: "Cómo asks about manner or condition; estás identifies familiar singular you." },
@@ -275,7 +275,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       ],
       summary: "The stack keeps the social intention stable while revealing conjugation, question structure, and an elegant Spanish expression of gladness.",
     },
-    transform: { prompt: "How are you?", bridgeReminder: "English: how are you · Vietnamese: bạn thế nào", accepted: ["¿Cómo estás?"], answer: "¿Cómo estás?", hint: "Use the familiar tú form estás." },
+    transform: { language: "Spanish", prompt: "How are you?", bridgeReminder: "English: how are you · Vietnamese: bạn thế nào", accepted: ["¿Cómo estás?"], answer: "¿Cómo estás?", hint: "Use the familiar tú form estás." },
     mastery: { prompt: "Say: I’m glad to see you.", instruction: "Write the natural Spanish expression.", accepted: ["me alegra verte", "me da gusto verte"], answer: "Me alegra verte.", hint: "Me alegra + verte." },
     bridgeMastery: { prompt: "Now say it in Vietnamese.", instruction: "Translate “I’m glad to see you” naturally.", accepted: ["mình rất vui được gặp bạn", "tôi rất vui được gặp bạn", "mình vui khi gặp bạn", "tôi vui khi gặp bạn"], answer: "Mình rất vui được gặp bạn.", hint: "Use mình or tôi + rất vui + được gặp bạn." },
     completion: "You can ask after someone and express genuine gladness at seeing them.",
@@ -311,7 +311,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
       accepted: [item.words[0][1]],
       correct: `Yes. ${item.words[0][0]} carries “${item.words[0][1]}.”`,
       hint: `${item.words[0][0]} = ${item.words[0][1]}`,
-      rescue: { answer: item.words[0][1], bank: item.words[0][1].split(" ").reverse() },
+      rescue: { answer: item.words[0][1] },
     },
     sentence: {
       target: item.spanish, anchor: item.english, bridge: item.vietnamese,
@@ -332,6 +332,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
       summary: "English secures meaning, Spanish develops the target structure, and Vietnamese receives active production practice of its own.",
     },
     transform: {
+      language: "Spanish",
       prompt: item.english,
       bridgeReminder: `Vietnamese: ${item.vietnamese}`,
       accepted: [item.spanish],

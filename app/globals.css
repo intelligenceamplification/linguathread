@@ -167,15 +167,9 @@ button { color: inherit; }
 .deep-grammar-grid p { margin-bottom: 0; color: var(--muted); line-height: 1.58; font-size: .9rem; }
 .deep-grammar-summary { max-width: 700px; margin: 30px auto 0; color: var(--muted); line-height: 1.6; }
 
-.sentence-builder { min-height: 86px; margin: 42px 0 24px; padding: 18px; display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid var(--faint); }
-.sentence-builder span { color: var(--subtle); }
-.sentence-builder button, .word-bank button { padding: 12px 15px; border: 1px solid var(--line); border-radius: 5px; background: var(--control); color: var(--ink); cursor: pointer; }
-.word-bank { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-.word-bank button:disabled { opacity: .18; cursor: default; }
 .recovery-builder { width: min(680px, 100%); margin: 28px auto 0; }
 .recovery-intro { margin: 0 auto; display: grid; gap: 6px; color: var(--muted); font-size: .92rem; }
 .recovery-intro strong { color: var(--ink); font-size: 1rem; }
-.recovery-builder .sentence-builder { margin-top: 22px; }
 .target-model { width: min(560px, 100%); margin: 28px auto 0; padding: 18px 20px; border: 1px solid var(--gold); background: var(--soft-gold); text-align: left; }
 .target-model span { display: block; color: var(--moss-dark); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .target-model strong { display: block; margin-top: 8px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 32px); font-weight: 500; }

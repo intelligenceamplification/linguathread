@@ -82,26 +82,31 @@ test("activates Vietnamese production from any non-native profile position", asy
   assert.match(source, /English meaning/);
 });
 
-test("offers structured reconstruction after three failed typed attempts", async () => {
+test("offers typed model recovery after three failed attempts in every language", async () => {
   const [page, curriculum] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts")]);
   assert.match(page, /failedAttempts < 3/);
   assert.match(page, /setFailedAttempts\(\(value\) => value \+ 1\)/);
   assert.match(page, /function RecoveryBuilder/);
-  assert.match(page, /Build it from what you now know/);
+  assert.match(page, /Here is the model/);
+  assert.match(page, /Type the model/);
+  assert.match(page, /Continue with model/);
   assert.match(page, /supported-reconstruction/);
-  assert.match(curriculum, /Who does estás address[\s\S]*rescue: \{ answer: "you", bank: \["I", "you", "we", "they"\]/);
+  assert.doesNotMatch(page, /sentence-builder/);
+  assert.doesNotMatch(page, /word-bank/);
+  assert.match(curriculum, /Who does estás address[\s\S]*rescue: \{ answer: "you" \}/);
+  assert.doesNotMatch(curriculum, /bank:/);
 });
 
 test("uses typed target production with a three-attempt model and a guaranteed continuation", async () => {
   const [page, curriculum] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts")]);
   assert.match(page, /function TransformExercise/);
-  assert.match(page, /label="Spanish target answer"/);
+  assert.match(page, /label=\{`\$\{targetLanguage\} target answer`\}/);
   assert.match(page, /failedAttempts >= 3/);
   assert.match(page, /Target model/);
   assert.match(page, /Continue with model/);
   assert.doesNotMatch(page, /lesson\.transform\.words/);
   assert.doesNotMatch(page, /lesson\.transform\.bank/);
-  assert.match(curriculum, /transform: \{ prompt: string; bridgeReminder: string; accepted: string\[\]; answer: string; hint: string \}/);
+  assert.match(curriculum, /transform: \{ language: string; prompt: string; bridgeReminder: string; accepted: string\[\]; answer: string; hint: string \}/);
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {
