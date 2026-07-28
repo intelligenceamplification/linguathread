@@ -10,6 +10,8 @@
   --moss: #426d5a;
   --moss-dark: #254638;
   --sage: #dce8df;
+  --model-bg: #eef3f0;
+  --model-border: #9bafa3;
   --gold: #d9a94f;
   --soft-gold: #f5ecd8;
   --error: #9d5548;
@@ -170,7 +172,8 @@ button { color: inherit; }
 .recovery-builder { width: min(680px, 100%); margin: 28px auto 0; }
 .recovery-intro { margin: 0 auto; display: grid; gap: 6px; color: var(--muted); font-size: .92rem; }
 .recovery-intro strong { color: var(--ink); font-size: 1rem; }
-.target-model { width: min(560px, 100%); margin: 28px auto 0; padding: 18px 20px; border: 1px solid var(--gold); background: var(--soft-gold); text-align: left; }
+/* The target model is a calm eucalyptus reference sheet, never a warning state. */
+.target-model { width: min(560px, 100%); margin: 28px auto 0; padding: 18px 20px; border: 1px solid var(--model-border); background: var(--model-bg); text-align: left; }
 .target-model span { display: block; color: var(--moss-dark); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .target-model strong { display: block; margin-top: 8px; color: var(--ink); font-family: Georgia, "Times New Roman", serif; font-size: clamp(24px, 4vw, 32px); font-weight: 500; }
 .target-model p { margin: 10px 0 0; color: var(--subtle); line-height: 1.5; }
@@ -239,6 +242,8 @@ button { color: inherit; }
     --moss: #8fbea6;
     --moss-dark: #b7dbc8;
     --sage: #263b31;
+    --model-bg: #19251f;
+    --model-border: #5d7b6c;
     --gold: #e0b768;
     --soft-gold: #302a1e;
     --error: #d18b7d;
