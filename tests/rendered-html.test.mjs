@@ -92,6 +92,18 @@ test("offers structured reconstruction after three failed typed attempts", async
   assert.match(curriculum, /Who does estás address[\s\S]*rescue: \{ answer: "you", bank: \["I", "you", "we", "they"\]/);
 });
 
+test("uses typed target production with a three-attempt model and a guaranteed continuation", async () => {
+  const [page, curriculum] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts")]);
+  assert.match(page, /function TransformExercise/);
+  assert.match(page, /label="Spanish target answer"/);
+  assert.match(page, /failedAttempts >= 3/);
+  assert.match(page, /Target model/);
+  assert.match(page, /Continue with model/);
+  assert.doesNotMatch(page, /lesson\.transform\.words/);
+  assert.doesNotMatch(page, /lesson\.transform\.bank/);
+  assert.match(curriculum, /transform: \{ prompt: string; bridgeReminder: string; accepted: string\[\]; answer: string; hint: string \}/);
+});
+
 test("defines the complete CEFR progression from A1 through C2", async () => {
   const source = await read("../app/cefr.ts");
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(source, new RegExp(`level: "${level}"`));

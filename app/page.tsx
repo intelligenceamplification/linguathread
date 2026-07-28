@@ -167,7 +167,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         lesson.objectiveId || lesson.id,
         learningLanguage,
         correct,
-        kind === "supported-reconstruction",
+        kind === "supported-reconstruction" || kind === "transform-model",
       );
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
@@ -183,7 +183,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         kind,
         language,
         correct,
-        supported: kind === "supported-reconstruction",
+        supported: kind === "supported-reconstruction" || kind === "transform-model",
       }),
       keepalive: true,
     }).catch(() => undefined);
@@ -358,7 +358,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "transform" && <TransformExercise lesson={lesson} onComplete={() => resetAnswer("mastery")} />}
+        {stage === "transform" && <TransformExercise lesson={lesson} onAttempt={(correct, supported) => recordAttempt(supported ? "transform-model" : "transform", correct)} onComplete={() => resetAnswer("mastery")} />}
 
         {stage === "mastery" && (
           <div className="focus-content exercise-content">
@@ -586,13 +586,17 @@ function RecoveryBuilder({ answer, bank, onComplete }: { answer: string; bank?: 
   );
 }
 
-function TransformExercise({ lesson, onComplete }: { lesson: LessonDefinition; onComplete: () => void }) {
-  const words = lesson.transform.words;
-  const [chosen, setChosen] = useState<string[]>([]);
-  const [checked, setChecked] = useState(false);
+function TransformExercise({ lesson, onAttempt, onComplete }: { lesson: LessonDefinition; onAttempt: (correct: boolean, supported?: boolean) => void; onComplete: () => void }) {
+  const [answer, setAnswer] = useState("");
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [feedback, setFeedback] = useState<"idle" | "correct" | "gentle">("idle");
+  const modelVisible = failedAttempts >= 3;
 
-  function choose(word: string) {
-    if (!chosen.includes(word)) { setChosen([...chosen, word]); setChecked(false); }
+  function checkAnswer() {
+    const passed = lesson.transform.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
+    onAttempt(passed);
+    if (!passed) setFailedAttempts((value) => value + 1);
+    setFeedback(passed ? "correct" : "gentle");
   }
 
   return (
@@ -600,15 +604,12 @@ function TransformExercise({ lesson, onComplete }: { lesson: LessonDefinition; o
       <p className="eyebrow">Build the target</p>
       <h1 className="exercise-title">{lesson.transform.prompt}</h1>
       <p className="bridge-reminder">{lesson.transform.bridgeReminder}</p>
-      <div className="sentence-builder" aria-label="Your sentence">
-        {chosen.length ? chosen.map((word) => <button key={word} onClick={() => { setChosen(chosen.filter((item) => item !== word)); setChecked(false); }}>{word}</button>) : <span>Build the natural Spanish</span>}
-      </div>
-      <div className="word-bank">
-        {lesson.transform.bank.map((word) => <button key={word} disabled={chosen.includes(word)} onClick={() => choose(word)}>{word}</button>)}
-      </div>
-      {!checked && <button className="primary-action" disabled={chosen.length !== words.length} onClick={() => setChecked(true)}>Check structure</button>}
-      {checked && chosen.join(" ") === words.join(" ") && <Feedback kind="correct" title="Natural and complete." detail="The structure now carries the intended meaning." action="Final check" onClick={onComplete} />}
-      {checked && chosen.join(" ") !== words.join(" ") && <Feedback kind="gentle" title={lesson.transform.hint} detail={`Build toward: ${words.join(" ")}`} action="Rebuild" onClick={() => { setChosen([]); setChecked(false); }} />}
+      <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder="Escribe en español" label="Spanish target answer" />
+      {feedback === "idle" && <button className="primary-action" onClick={checkAnswer}>Check structure</button>}
+      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern, or continue with the model.</p></div>}
+      {feedback === "gentle" && !modelVisible && <Feedback kind="gentle" title={lesson.transform.hint} detail={`${failedAttempts} of 3 attempts. Try again from the structure.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
+      {feedback === "gentle" && modelVisible && <Feedback kind="gentle" title="Here is the model." detail="Read it, type it, and let the sentence settle into the stack." action="Continue with model" onClick={() => { onAttempt(true, true); onComplete(); }} />}
+      {feedback === "correct" && <Feedback kind="correct" title="Natural and complete." detail="You produced the target sentence from the structure." action="Final check" onClick={onComplete} />}
     </div>
   );
 }
