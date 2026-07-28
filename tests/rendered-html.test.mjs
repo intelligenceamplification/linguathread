@@ -99,7 +99,7 @@ test("offers typed model recovery after three failed attempts in every language"
 });
 
 test("uses typed target production with a three-attempt model that must be typed", async () => {
-  const [page, curriculum] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts")]);
+  const [page, curriculum, engine] = await Promise.all([read("../app/page.tsx"), read("../app/curriculum.ts"), read("../app/learning-engine.ts")]);
   assert.match(page, /function TransformExercise/);
   assert.match(page, /label=\{`\$\{targetLanguage\} target answer`\}/);
   assert.match(page, /failedAttempts >= 3/);
@@ -109,6 +109,7 @@ test("uses typed target production with a three-attempt model that must be typed
   assert.doesNotMatch(page, /lesson\.transform\.words/);
   assert.doesNotMatch(page, /lesson\.transform\.bank/);
   assert.match(curriculum, /transform: \{ language: string; prompt: string; bridgeReminder: string; accepted: string\[\]; answer: string; hint: string \}/);
+  assert.match(engine, /export type LearningLanguage = string/);
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {

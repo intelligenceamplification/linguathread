@@ -160,7 +160,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
-    const learningLanguage = language === "Vietnamese" ? "Vietnamese" : "Spanish";
+    const learningLanguage = language;
     setLearnerModel((current) => {
       const next = recordEvidence(
         current,

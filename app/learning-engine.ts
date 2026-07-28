@@ -1,6 +1,6 @@
 import type { LessonDefinition } from "./curriculum";
 
-export type LearningLanguage = "Spanish" | "Vietnamese";
+export type LearningLanguage = string;
 export type ActivityKind = "recall" | "production" | "reconstruction";
 export type MasteryState = "introduced" | "forming" | "usable" | "stable" | "maintenance";
 
