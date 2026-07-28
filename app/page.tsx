@@ -217,6 +217,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setStage("complete");
   }
 
+  function skipLesson(language: string) {
+    recordAttempt("skipped", false, language);
+    finishLesson();
+  }
+
   function resetLesson(nextIndex = lessonIndex) {
     setLessonIndex(nextIndex);
     setStage("vocabulary");
@@ -309,6 +314,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <RecoveryBuilder
                 answer={lesson.recall.rescue.answer}
                 onComplete={completeSupportedRecall}
+                onSkip={() => skipLesson("English")}
               />
             )}
             {feedback === "correct" && <Feedback kind="correct" title={lesson.recall.correct} detail="The answer is now connected to the structure beneath it." action="See the stack" onClick={() => resetAnswer("sentence")} />}
@@ -357,7 +363,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "transform" && <TransformExercise lesson={lesson} onAttempt={(correct, supported, language) => recordAttempt(supported ? "transform-model" : "transform", correct, language)} onComplete={() => resetAnswer("mastery")} />}
+        {stage === "transform" && <TransformExercise lesson={lesson} onAttempt={(correct, supported, language) => recordAttempt(supported ? "transform-model" : "transform", correct, language)} onComplete={() => resetAnswer("mastery")} onSkip={() => skipLesson(lesson.transform.language)} />}
 
         {stage === "mastery" && (
           <div className="focus-content exercise-content">
@@ -375,6 +381,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <RecoveryBuilder
                 answer={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer}
                 onComplete={completeSupportedMastery}
+                onSkip={() => skipLesson(productionLanguage)}
               />
             )}
             {feedback === "gentle" && failedAttempts < 3 && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
@@ -552,24 +559,25 @@ function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | 
   return <div className={`feedback ${kind}`}><div><strong>{title}</strong>{detail && <p>{detail}</p>}</div><button onClick={onClick}>{action} <span aria-hidden="true">→</span></button></div>;
 }
 
-function RecoveryBuilder({ answer, onComplete }: { answer: string; onComplete: () => void }) {
+function RecoveryBuilder({ answer, onComplete, onSkip }: { answer: string; onComplete: () => void; onSkip: () => void }) {
   const [typedAnswer, setTypedAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const isCorrect = normalizeAnswer(typedAnswer) === normalizeAnswer(answer);
 
   return (
     <div className="recovery-builder">
-      <p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the pattern before you continue.</span></p>
+      <p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the pattern, or skip this lesson for now.</span></p>
       <div className="target-model"><span>Target model</span><strong>{answer}</strong></div>
       <AnswerField value={typedAnswer} onChange={(value) => { setTypedAnswer(value); setChecked(false); }} onEnter={() => setChecked(true)} placeholder="Type the model" label="Supported answer" />
       {!checked && <button className="primary-action" onClick={() => setChecked(true)}>Check model</button>}
       {checked && isCorrect && <Feedback kind="correct" title="You rebuilt the meaning." detail="This will return in review so it can become available without support." action="Continue" onClick={onComplete} />}
       {checked && !isCorrect && <Feedback kind="gentle" title="Keep the model in view." detail="Type the model exactly, then continue." action="Try again" onClick={() => { setTypedAnswer(""); setChecked(false); }} />}
+      <button className="text-action" onClick={onSkip}>Skip this lesson for now</button>
     </div>
   );
 }
 
-function TransformExercise({ lesson, onAttempt, onComplete }: { lesson: LessonDefinition; onAttempt: (correct: boolean, supported: boolean, language: string) => void; onComplete: () => void }) {
+function TransformExercise({ lesson, onAttempt, onComplete, onSkip }: { lesson: LessonDefinition; onAttempt: (correct: boolean, supported: boolean, language: string) => void; onComplete: () => void; onSkip: () => void }) {
   const [answer, setAnswer] = useState("");
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [feedback, setFeedback] = useState<"idle" | "correct" | "gentle">("idle");
@@ -591,10 +599,11 @@ function TransformExercise({ lesson, onAttempt, onComplete }: { lesson: LessonDe
       <p className="bridge-reminder">{lesson.transform.bridgeReminder}</p>
       <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder={placeholder} label={`${targetLanguage} target answer`} />
       {feedback === "idle" && <button className="primary-action" onClick={checkAnswer}>Check structure</button>}
-      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern before you continue.</p></div>}
+      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern, or skip this lesson for now.</p></div>}
       {feedback === "gentle" && !modelVisible && <Feedback kind="gentle" title={lesson.transform.hint} detail={`${failedAttempts} of 3 attempts. Try again from the structure.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
       {feedback === "gentle" && modelVisible && <Feedback kind="gentle" title="Here is the model." detail="Read it, type it, and let the sentence settle into the stack." action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
       {feedback === "correct" && <Feedback kind="correct" title="Natural and complete." detail="You produced the target sentence from the structure." action="Final check" onClick={onComplete} />}
+      {modelVisible && <button className="text-action" onClick={onSkip}>Skip this lesson for now</button>}
     </div>
   );
 }
