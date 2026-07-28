@@ -559,12 +559,12 @@ function RecoveryBuilder({ answer, onComplete }: { answer: string; onComplete: (
 
   return (
     <div className="recovery-builder">
-      <p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the pattern, or continue with the model.</span></p>
+      <p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the pattern before you continue.</span></p>
       <div className="target-model"><span>Target model</span><strong>{answer}</strong></div>
       <AnswerField value={typedAnswer} onChange={(value) => { setTypedAnswer(value); setChecked(false); }} onEnter={() => setChecked(true)} placeholder="Type the model" label="Supported answer" />
       {!checked && <button className="primary-action" onClick={() => setChecked(true)}>Check model</button>}
       {checked && isCorrect && <Feedback kind="correct" title="You rebuilt the meaning." detail="This will return in review so it can become available without support." action="Continue" onClick={onComplete} />}
-      {checked && !isCorrect && <Feedback kind="gentle" title="Keep the model in view." detail="Try typing it once more, or continue with the model." action="Continue with model" onClick={onComplete} />}
+      {checked && !isCorrect && <Feedback kind="gentle" title="Keep the model in view." detail="Type the model exactly, then continue." action="Try again" onClick={() => { setTypedAnswer(""); setChecked(false); }} />}
     </div>
   );
 }
@@ -591,9 +591,9 @@ function TransformExercise({ lesson, onAttempt, onComplete }: { lesson: LessonDe
       <p className="bridge-reminder">{lesson.transform.bridgeReminder}</p>
       <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder={placeholder} label={`${targetLanguage} target answer`} />
       {feedback === "idle" && <button className="primary-action" onClick={checkAnswer}>Check structure</button>}
-      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern, or continue with the model.</p></div>}
+      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern before you continue.</p></div>}
       {feedback === "gentle" && !modelVisible && <Feedback kind="gentle" title={lesson.transform.hint} detail={`${failedAttempts} of 3 attempts. Try again from the structure.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
-      {feedback === "gentle" && modelVisible && <Feedback kind="gentle" title="Here is the model." detail="Read it, type it, and let the sentence settle into the stack." action="Continue with model" onClick={() => { onAttempt(true, true, targetLanguage); onComplete(); }} />}
+      {feedback === "gentle" && modelVisible && <Feedback kind="gentle" title="Here is the model." detail="Read it, type it, and let the sentence settle into the stack." action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
       {feedback === "correct" && <Feedback kind="correct" title="Natural and complete." detail="You produced the target sentence from the structure." action="Final check" onClick={onComplete} />}
     </div>
   );
