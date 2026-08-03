@@ -155,7 +155,7 @@ const foundationalCurriculum: LessonDefinition[] = [
       insight: "English says “am” in both identity and location. Spanish requires a choice between soy and estoy; Vietnamese makes location explicit with ở.",
       deep: [
         { title: "Ser and estar", principle: "meaning chooses the verb", explanation: "Ser identifies and classifies. Estar locates and describes current states. The distinction is conceptual, not simply permanent versus temporary." },
-        { title: "Question order", principle: "¿dónde está...?”,", explanation: "Spanish can form this location question without an auxiliary verb such as English “does.”" },
+        { title: "Question order", principle: "¿Dónde está...?", explanation: "Spanish can form this location question without an auxiliary verb such as English “does.”" },
         { title: "Written questions", principle: "Spanish marks both boundaries", explanation: "The inverted opening mark tells the reader from the start that the sentence is a question." },
         { title: "Formal address", principle: "usted uses está", explanation: "The same form used for él and ella also serves formal singular you." },
       ],
