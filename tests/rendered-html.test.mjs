@@ -113,6 +113,34 @@ test("uses typed target production with a three-attempt model that must be typed
   assert.match(engine, /export type LearningLanguage = string/);
 });
 
+test("treats the target model as a eucalyptus reference sheet", async () => {
+  const styles = await read("../app/globals.css");
+  assert.match(styles, /--model-bg: #eef3f0/);
+  assert.match(styles, /--model-border: #9bafa3/);
+  assert.match(styles, /--model-bg: #19251f/);
+  assert.match(styles, /--model-border: #5d7b6c/);
+  assert.match(styles, /\.target-model \{[^}]*border: 1px solid var\(--model-border\); background: var\(--model-bg\)/);
+});
+
+test("defines the family sentence as structured interactive anatomy", async () => {
+  const [data, component, page] = await Promise.all([
+    read("../app/interactive-sentence.ts"),
+    read("../app/sentence-anatomy.tsx"),
+    read("../app/page.tsx"),
+  ]);
+  assert.match(data, /familySentenceAnatomy/);
+  assert.match(data, /Mi familia vive cerca\./);
+  assert.match(data, /Gia đình tôi sống gần đây\./);
+  assert.match(data, /kind: "reordered"/);
+  assert.match(data, /unitIds: \["es-mi", "es-familia"\]/);
+  assert.match(data, /relationships:/);
+  assert.match(component, /Language X-Ray/);
+  assert.match(component, /See what changes/);
+  assert.match(component, /event\.key === "Escape"/);
+  assert.match(component, /aria-pressed/);
+  assert.match(page, /lesson\.anatomy/);
+});
+
 test("defines the complete CEFR progression from A1 through C2", async () => {
   const source = await read("../app/cefr.ts");
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(source, new RegExp(`level: "${level}"`));
