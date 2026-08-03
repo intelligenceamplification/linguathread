@@ -160,7 +160,8 @@ button { color: inherit; }
 .sentence-reading { min-width: 0; padding: clamp(26px, 4vw, 46px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .anatomy-language-label { margin: 0 0 16px; color: var(--moss); font-size: .68rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
 .anatomy-sentence { margin: 0; font-family: Georgia, serif; font-size: clamp(2.4rem, 5vw, 4.8rem); line-height: 1.12; }
-.sentence-unit { display: inline; padding: 0; border: 0; border-bottom: 1px solid transparent; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.sentence-unit { display: inline; padding: 0; border: 0; border-bottom: 1px solid transparent; background: transparent; color: inherit; font: inherit; white-space: nowrap; cursor: pointer; }
+.sentence-unit[data-follows-word="true"] { margin-inline-end: .2em; }
 .sentence-unit:hover, .sentence-unit:focus-visible, .sentence-unit.selected { border-bottom-color: var(--moss); outline: none; }
 .sentence-unit:focus-visible { outline: 2px solid var(--moss); outline-offset: 4px; }
 .interactive-sentence[data-mode="xray"] .sentence-unit { border-bottom-color: var(--model-border); }
