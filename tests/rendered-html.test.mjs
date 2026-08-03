@@ -1,8 +1,18 @@
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import vm from "node:vm";
+import ts from "typescript";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
+
+async function loadInteractiveSentenceModule() {
+  const source = await read("../app/interactive-sentence.ts");
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const cjsModule = { exports: {} };
+  vm.runInNewContext(compiled, { module: cjsModule, exports: cjsModule.exports, Map, Array, String });
+  return cjsModule.exports;
+}
 
 test("builds PolyFlow on the standard Next.js runtime", async () => {
   const packageJson = JSON.parse(await read("../package.json"));
@@ -138,7 +148,36 @@ test("defines the family sentence as structured interactive anatomy", async () =
   assert.match(component, /See what changes/);
   assert.match(component, /event\.key === "Escape"/);
   assert.match(component, /aria-pressed/);
-  assert.match(page, /lesson\.anatomy/);
+  assert.match(page, /sentenceAnatomyForLesson/);
+});
+
+test("uses sentence anatomy for every shipped curriculum lesson", async () => {
+  const [curriculum, page] = await Promise.all([read("../app/curriculum.ts"), read("../app/page.tsx")]);
+  assert.match(curriculum, /createInteractiveSentenceModel\(item\)/);
+  assert.match(curriculum, /export function sentenceAnatomyForLesson/);
+  assert.match(page, /sentenceAnatomyForLesson\(lesson\)/);
+  assert.doesNotMatch(page, /stage === "sentence" && !lesson\.anatomy/);
+});
+
+test("creates structured anatomy, relationships, and non-one-to-one mappings for any curriculum sentence", async () => {
+  const { createInteractiveSentenceModel } = await loadInteractiveSentenceModule();
+  const model = createInteractiveSentenceModel({
+    id: "test-request",
+    spanish: "Quiero agua, por favor.",
+    english: "I would like water, please.",
+    vietnamese: "Tôi muốn nước, làm ơn.",
+    focus: "Quiero",
+    pattern: "quiero + noun",
+    bridgePattern: "tôi + muốn + noun",
+    words: [["quiero", "I would like", "tôi muốn"], ["agua", "water", "nước"], ["por favor", "please", "làm ơn"], ["gracias", "thank you", "cảm ơn"]],
+  });
+  assert.equal(model.realizations.length, 3);
+  assert.ok(model.realizations.every((realization) => realization.units.length > 0));
+  assert.equal(model.relationships.length, 3);
+  assert.equal(model.mappings.length, 2);
+  assert.ok(model.mappings.every((mapping) => mapping.from.unitIds.length > 1 && mapping.to.unitIds.length > 1));
+  assert.match(model.mappings[1].explanation, /tôi \+ muốn \+ noun/);
+  assert.equal(model.realizations[0].units[0].meaning, "I would like");
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {
