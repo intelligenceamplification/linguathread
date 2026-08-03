@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react";
 import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
+import { InteractiveSentence } from "./sentence-anatomy";
 import {
   completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
   migrateCompletedLessons, recordEvidence, selectNextLesson,
@@ -322,7 +323,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "sentence" && (
+        {stage === "sentence" && lesson.anatomy && (
+          <InteractiveSentence model={lesson.anatomy} showBridge={bridgeEnabled} onContinue={() => resetAnswer("grammar")} />
+        )}
+
+        {stage === "sentence" && !lesson.anatomy && (
           <div className="focus-content sentence-content">
             <p className="eyebrow">One meaning · three structures</p>
             <h1 className="sentence">{lesson.sentence.target}</h1>
