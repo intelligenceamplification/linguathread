@@ -1,5 +1,5 @@
 import type { CEFRLevel } from "./cefr";
-import { familySentenceAnatomy, type InteractiveSentenceModel } from "./interactive-sentence";
+import { createInteractiveSentenceModel, familySentenceAnatomy, type InteractiveSentenceModel } from "./interactive-sentence";
 
 export type VocabularyItem = {
   word: string;
@@ -320,7 +320,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
       target: item.spanish, anchor: item.english, bridge: item.vietnamese,
       note: "The sentence is useful in ordinary life while preserving attention to the person and situation before you.",
     },
-    anatomy: item.anatomy,
+    anatomy: item.anatomy || createInteractiveSentenceModel(item),
     grammar: {
       focus: item.focus,
       target: { pattern: item.pattern, explanation: `Spanish organizes this meaning through ${item.pattern}. The form carries information that English may state separately.` },
@@ -361,6 +361,19 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
   };
 }
 
+export function sentenceAnatomyForLesson(lesson: LessonDefinition): InteractiveSentenceModel {
+  return lesson.anatomy || createInteractiveSentenceModel({
+    id: lesson.id,
+    spanish: lesson.sentence.target,
+    english: lesson.sentence.anchor,
+    vietnamese: lesson.sentence.bridge,
+    focus: lesson.grammar.focus,
+    pattern: lesson.grammar.target.pattern,
+    bridgePattern: lesson.grammar.bridge.pattern,
+    words: lesson.vocabulary.map((item) => [item.word, item.english, item.vietnamese]),
+  });
+}
+
 const expandedA1: CompactLesson[] = [
   { id: "es-u3-l1-family", objectiveId: "a1-people-family", prerequisites: [], unit: 3, lesson: 1, unitTitle: "People and home", title: "Family and belonging", skill: "possessives + family", words: [["mi", "my", "của tôi"], ["familia", "family", "gia đình"], ["vive", "lives", "sống"], ["cerca", "nearby", "gần"]], spanish: "Mi familia vive cerca.", english: "My family lives nearby.", vietnamese: "Gia đình tôi sống gần đây.", focus: "Mi familia", pattern: "possessive + noun + verb", bridgePattern: "noun + possessive + verb", anatomy: familySentenceAnatomy },
   { id: "es-u3-l2-description", objectiveId: "a1-people-description", prerequisites: ["a1-people-family"], unit: 3, lesson: 2, unitTitle: "People and home", title: "Describing people", skill: "adjective agreement", words: [["amable", "kind", "tử tế"], ["paciente", "patient", "kiên nhẫn"], ["persona", "person", "người"], ["muy", "very", "rất"]], spanish: "Es una persona muy amable.", english: "They are a very kind person.", vietnamese: "Đó là một người rất tử tế.", focus: "persona amable", pattern: "noun + agreeing adjective", bridgePattern: "noun + degree + adjective" },
@@ -385,6 +398,7 @@ export const curriculum: LessonDefinition[] = [
     ...lesson,
     objectiveId: lesson.id,
     prerequisites: index === 0 ? [] : [foundationalCurriculum[index - 1].id],
+    anatomy: sentenceAnatomyForLesson(lesson),
   })),
   ...expandedA1.map(expandLesson),
 ];
