@@ -3,7 +3,7 @@
 /* eslint-disable react-hooks/set-state-in-effect -- browser storage is loaded after hydration */
 
 import { useEffect, useState } from "react";
-import { curriculum, LessonDefinition, normalizeAnswer } from "./curriculum";
+import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
 import {
   completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
@@ -323,21 +323,8 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "sentence" && lesson.anatomy && (
-          <InteractiveSentence model={lesson.anatomy} showBridge={bridgeEnabled} onContinue={() => resetAnswer("grammar")} />
-        )}
-
-        {stage === "sentence" && !lesson.anatomy && (
-          <div className="focus-content sentence-content">
-            <p className="eyebrow">One meaning · three structures</p>
-            <h1 className="sentence">{lesson.sentence.target}</h1>
-            <div className="language-stack sentence-stack">
-              <StackLine role="Native anchor" language={profile.native} value={lesson.sentence.anchor} />
-              {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={lesson.sentence.bridge} />}
-            </div>
-            <p className="contemplative-note wide">{lesson.sentence.note}</p>
-            <button className="primary-action" onClick={() => resetAnswer("grammar")}>See what changes <span aria-hidden="true">→</span></button>
-          </div>
+        {stage === "sentence" && (
+          <InteractiveSentence model={sentenceAnatomyForLesson(lesson)} showBridge={bridgeEnabled} onContinue={() => resetAnswer("grammar")} />
         )}
 
         {stage === "grammar" && (
