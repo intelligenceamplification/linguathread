@@ -1,4 +1,5 @@
 import type { CEFRLevel } from "./cefr";
+import { familySentenceAnatomy, type InteractiveSentenceModel } from "./interactive-sentence";
 
 export type VocabularyItem = {
   word: string;
@@ -32,6 +33,7 @@ export type LessonDefinition = {
     rescue: { answer: string };
   };
   sentence: { target: string; anchor: string; bridge: string; note: string };
+  anatomy?: InteractiveSentenceModel;
   grammar: {
     focus: string;
     target: GrammarLayer;
@@ -288,6 +290,7 @@ export type CompactLesson = {
   words: Array<[string, string, string]>;
   spanish: string; english: string; vietnamese: string;
   focus: string; pattern: string; bridgePattern: string;
+  anatomy?: InteractiveSentenceModel;
 };
 
 export function expandLesson(item: CompactLesson): LessonDefinition {
@@ -317,6 +320,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
       target: item.spanish, anchor: item.english, bridge: item.vietnamese,
       note: "The sentence is useful in ordinary life while preserving attention to the person and situation before you.",
     },
+    anatomy: item.anatomy,
     grammar: {
       focus: item.focus,
       target: { pattern: item.pattern, explanation: `Spanish organizes this meaning through ${item.pattern}. The form carries information that English may state separately.` },
@@ -358,7 +362,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
 }
 
 const expandedA1: CompactLesson[] = [
-  { id: "es-u3-l1-family", objectiveId: "a1-people-family", prerequisites: [], unit: 3, lesson: 1, unitTitle: "People and home", title: "Family and belonging", skill: "possessives + family", words: [["mi", "my", "của tôi"], ["familia", "family", "gia đình"], ["vive", "lives", "sống"], ["cerca", "nearby", "gần"]], spanish: "Mi familia vive cerca.", english: "My family lives nearby.", vietnamese: "Gia đình tôi sống gần đây.", focus: "Mi familia", pattern: "possessive + noun + verb", bridgePattern: "noun + possessive + verb" },
+  { id: "es-u3-l1-family", objectiveId: "a1-people-family", prerequisites: [], unit: 3, lesson: 1, unitTitle: "People and home", title: "Family and belonging", skill: "possessives + family", words: [["mi", "my", "của tôi"], ["familia", "family", "gia đình"], ["vive", "lives", "sống"], ["cerca", "nearby", "gần"]], spanish: "Mi familia vive cerca.", english: "My family lives nearby.", vietnamese: "Gia đình tôi sống gần đây.", focus: "Mi familia", pattern: "possessive + noun + verb", bridgePattern: "noun + possessive + verb", anatomy: familySentenceAnatomy },
   { id: "es-u3-l2-description", objectiveId: "a1-people-description", prerequisites: ["a1-people-family"], unit: 3, lesson: 2, unitTitle: "People and home", title: "Describing people", skill: "adjective agreement", words: [["amable", "kind", "tử tế"], ["paciente", "patient", "kiên nhẫn"], ["persona", "person", "người"], ["muy", "very", "rất"]], spanish: "Es una persona muy amable.", english: "They are a very kind person.", vietnamese: "Đó là một người rất tử tế.", focus: "persona amable", pattern: "noun + agreeing adjective", bridgePattern: "noun + degree + adjective" },
   { id: "es-u3-l3-home", objectiveId: "a1-home-objects", prerequisites: ["a1-people-family"], unit: 3, lesson: 3, unitTitle: "People and home", title: "The space around you", skill: "hay + household objects", words: [["hay", "there is", "có"], ["mesa", "table", "bàn"], ["ventana", "window", "cửa sổ"], ["habitación", "room", "phòng"]], spanish: "Hay una mesa junto a la ventana.", english: "There is a table beside the window.", vietnamese: "Có một cái bàn bên cạnh cửa sổ.", focus: "Hay", pattern: "hay + indefinite noun", bridgePattern: "có + classifier + noun" },
   { id: "es-u3-l4-people-review", objectiveId: "a1-people-exchange", prerequisites: ["a1-people-description", "a1-home-objects"], unit: 3, lesson: 4, unitTitle: "People and home", title: "Welcoming someone", skill: "invitations + imperatives", words: [["pasa", "come in", "mời vào"], ["casa", "home", "nhà"], ["bienvenido", "welcome", "chào mừng"], ["siéntate", "sit down", "ngồi xuống"]], spanish: "Bienvenido a casa. Pasa y siéntate.", english: "Welcome home. Come in and sit down.", vietnamese: "Chào mừng về nhà. Mời vào và ngồi xuống.", focus: "Pasa", pattern: "informal affirmative command", bridgePattern: "invitation marker + verb" },
