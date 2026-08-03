@@ -185,6 +185,14 @@ test("creates structured anatomy, relationships, and non-one-to-one mappings for
   assert.ok(model.mappings.every((mapping) => mapping.from.unitIds.length > 1 && mapping.to.unitIds.length > 1));
   assert.match(model.mappings[1].explanation, /tôi \+ muốn \+ noun/);
   assert.equal(model.realizations[0].units[0].meaning, "I would like");
+  assert.ok(model.realizations.every((realization) => realization.units.every((unit) => unit.label === undefined && unit.structural === undefined && unit.grammar.length === 0)));
+});
+
+test("keeps universal X-Ray quiet until lesson-specific structure is authored", async () => {
+  const [component, data] = await Promise.all([read("../app/sentence-anatomy.tsx"), read("../app/interactive-sentence.ts")]);
+  assert.match(component, /const xrayLabels = realization/);
+  assert.match(component, /mode === "xray" && xrayLabels\.length > 0/);
+  assert.doesNotMatch(data, /Target element|Anchor element|Bridge element|Sentence element/);
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {
