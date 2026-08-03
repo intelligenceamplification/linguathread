@@ -10,7 +10,6 @@
   --moss: #426d5a;
   --moss-dark: #254638;
   --sage: #dce8df;
-  /* Eucalyptus model sheet: a calm reference state, not a warning. */
   --model-bg: #eef3f0;
   --model-border: #9bafa3;
   --gold: #d9a94f;
@@ -150,6 +149,52 @@ button { color: inherit; }
 .word-reveal { display: flex; width: fit-content; margin: 28px auto 0; gap: 14px; align-items: baseline; padding: 12px 16px; background: var(--soft-gold); color: var(--ink); font-size: .88rem; }
 .word-reveal span { color: var(--muted); }
 
+/* Sentence anatomy preserves natural reading; structure appears only when invited. */
+.interactive-sentence { width: min(1080px, 100%); text-align: center; }
+.sentence-meaning { max-width: 540px; margin: -10px auto 28px; color: var(--muted); line-height: 1.55; }
+.sentence-controls, .language-switcher { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; }
+.sentence-controls { margin-bottom: 22px; }
+.sentence-controls button, .language-switcher button { min-height: 38px; padding: 8px 12px; border: 1px solid transparent; border-radius: 4px; background: transparent; color: var(--muted); cursor: pointer; font-size: .76rem; }
+.sentence-controls button.selected, .language-switcher button.selected { border-color: var(--line); background: var(--white); color: var(--moss-dark); font-weight: 700; }
+.anatomy-layout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: clamp(28px, 5vw, 64px); align-items: start; margin-top: 30px; text-align: left; }
+.sentence-reading { min-width: 0; padding: clamp(26px, 4vw, 46px); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.anatomy-language-label { margin: 0 0 16px; color: var(--moss); font-size: .68rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
+.anatomy-sentence { margin: 0; font-family: Georgia, serif; font-size: clamp(2.4rem, 5vw, 4.8rem); line-height: 1.12; }
+.sentence-unit { display: inline; padding: 0; border: 0; border-bottom: 1px solid transparent; background: transparent; color: inherit; font: inherit; cursor: pointer; }
+.sentence-unit:hover, .sentence-unit:focus-visible, .sentence-unit.selected { border-bottom-color: var(--moss); outline: none; }
+.sentence-unit:focus-visible { outline: 2px solid var(--moss); outline-offset: 4px; }
+.interactive-sentence[data-mode="xray"] .sentence-unit { border-bottom-color: var(--model-border); }
+.interactive-sentence[data-mode="xray"] .sentence-unit:hover, .interactive-sentence[data-mode="xray"] .sentence-unit:focus-visible, .interactive-sentence[data-mode="xray"] .sentence-unit.selected { border-bottom: 3px solid var(--moss); }
+.xray-key { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.xray-key span, .mapping-list button span, .relationship-list button span { color: var(--moss-dark); font-size: .62rem; font-weight: 720; letter-spacing: .08em; text-transform: uppercase; }
+.xray-key span { padding: 5px 7px; border: 1px solid var(--line); }
+.mapping-list, .relationship-list { display: grid; gap: 8px; margin-top: 28px; }
+.mapping-list button, .relationship-list button { padding: 12px 0; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; text-align: left; }
+.mapping-list button:last-child, .relationship-list button:last-child { border-bottom: 1px solid var(--line); }
+.mapping-list button span, .relationship-list button span { display: block; margin-bottom: 5px; }
+.mapping-list button.selected { color: var(--moss-dark); }
+.sentence-inspector { position: sticky; top: 24px; padding: 24px; border: 1px solid var(--line); background: var(--white); text-align: left; animation: settle .24s ease both; }
+.inspector-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; color: var(--moss); font-size: .66rem; font-weight: 760; letter-spacing: .09em; text-transform: uppercase; }
+.inspector-heading button { width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; font-size: 1.3rem; line-height: 1; }
+.sentence-inspector h2 { margin: 18px 0 24px; font-family: Georgia, serif; font-size: 2rem; font-weight: 500; }
+.inspector-section { padding: 18px 0; border-top: 1px solid var(--line); }
+.inspector-section h3 { margin: 0 0 10px; color: var(--moss-dark); font-size: .7rem; font-weight: 760; letter-spacing: .09em; text-transform: uppercase; }
+.inspector-section p { margin: 8px 0; color: var(--muted); line-height: 1.55; font-size: .92rem; }
+.inspector-section p span { display: block; color: var(--subtle); font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.inspector-section dl { margin: 0; }
+.inspector-section dl div { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; padding: 7px 0; border-top: 1px solid var(--line); font-size: .82rem; }
+.inspector-section dt { color: var(--subtle); }
+.inspector-section dd { margin: 0; color: var(--ink); }
+.inspector-section ul { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.inspector-section li { display: grid; gap: 4px; }
+.inspector-section li strong { color: var(--ink); font-family: Georgia, serif; font-weight: 500; }
+.inspector-section li span { color: var(--muted); font-size: .82rem; line-height: 1.45; }
+.inspector-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.inspector-actions button { min-height: 34px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--moss-dark); cursor: pointer; font-size: .75rem; }
+.anatomy-stack { width: min(740px, 100%); margin: 30px auto 0; border-top: 1px solid var(--line); text-align: left; }
+.anatomy-stack p { min-height: 48px; display: grid; grid-template-columns: minmax(130px, .6fr) 1.4fr; align-items: center; gap: 18px; margin: 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+.anatomy-stack span { color: var(--subtle); font-size: .67rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+
 .grammar-content { width: min(900px, 100%); }
 .grammar-line { font-family: Georgia, serif; font-size: clamp(2.2rem, 5vw, 4.6rem) !important; line-height: 1.12 !important; }
 .grammar-line span { color: var(--moss); }
@@ -282,6 +327,12 @@ button { color: inherit; }
   .language-options { grid-template-columns: repeat(2, 1fr); }
   .setup-content h1 { font-size: clamp(2.4rem, 12vw, 4.2rem); }
   .profile-language div { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .anatomy-layout { grid-template-columns: 1fr; gap: 0; }
+  .sentence-reading { padding: 26px 0; }
+  .sentence-inspector { position: fixed; z-index: 5; right: 0; bottom: 0; left: 0; max-height: min(70svh, 620px); overflow-y: auto; padding: 24px 22px calc(24px + env(safe-area-inset-bottom)); border-right: 0; border-bottom: 0; border-left: 0; box-shadow: 0 -18px 45px rgba(23, 33, 30, .14); }
+  .sentence-inspector::before { content: ""; display: block; width: 36px; height: 4px; margin: -10px auto 18px; border-radius: 99px; background: var(--faint); }
+  .anatomy-stack p { grid-template-columns: 1fr; gap: 2px; padding: 12px 0; }
+  .sentence-controls button, .language-switcher button { min-height: 44px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
