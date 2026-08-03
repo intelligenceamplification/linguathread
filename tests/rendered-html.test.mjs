@@ -148,6 +148,7 @@ test("defines the family sentence as structured interactive anatomy", async () =
   assert.match(component, /See what changes/);
   assert.match(component, /event\.key === "Escape"/);
   assert.match(component, /aria-pressed/);
+  assert.match(component, /data-follows-word/);
   assert.match(page, /sentenceAnatomyForLesson/);
 });
 
@@ -157,6 +158,12 @@ test("uses sentence anatomy for every shipped curriculum lesson", async () => {
   assert.match(curriculum, /export function sentenceAnatomyForLesson/);
   assert.match(page, /sentenceAnatomyForLesson\(lesson\)/);
   assert.doesNotMatch(page, /stage === "sentence" && !lesson\.anatomy/);
+});
+
+test("keeps visible curriculum copy free of the known question-punctuation typo", async () => {
+  const curriculum = await read("../app/curriculum.ts");
+  assert.match(curriculum, /principle: "¿Dónde está\.\.\.\?"/);
+  assert.doesNotMatch(curriculum, /¿dónde está\.\.\.?”,/);
 });
 
 test("creates structured anatomy, relationships, and non-one-to-one mappings for any curriculum sentence", async () => {
