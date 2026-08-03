@@ -26,7 +26,7 @@ PolyFlow validates the manifest and every pack before merging lessons. Invalid o
 
 ## Interactive sentence anatomy
 
-An optional `anatomy` object on a lesson turns its sentence stage into PolyFlow's Interactive Sentence Model. Author these objects in `app/interactive-sentence.ts` (or a future versioned curriculum pack) rather than embedding explanations in presentation components.
+Every shipped lesson now enters PolyFlow's Interactive Sentence Model at its sentence stage. The curriculum baseline is derived from the lesson's reviewed target, anchor, bridge, vocabulary, and pattern data; a lesson can supply a richer `anatomy` object when a particular construction deserves deeper editorial treatment. Author those objects in `app/interactive-sentence.ts` (or a future versioned curriculum pack) rather than embedding explanations in presentation components.
 
 The model keeps realizations, sentence units, relationships, cross-language mappings, and related patterns separate. Units may include multiple visible segments or be marked implied or omitted; mappings can be one-to-one, reordered, structural, expanded, or implicit. The interface only shows concepts that have authored data.
 
