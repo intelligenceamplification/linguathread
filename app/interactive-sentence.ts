@@ -63,6 +63,88 @@ export type InteractiveSentenceModel = {
   relatedPatterns: RelatedPattern[];
 };
 
+export type CurriculumSentenceSource = {
+  id: string;
+  spanish: string;
+  english: string;
+  vietnamese: string;
+  focus: string;
+  pattern: string;
+  bridgePattern: string;
+  words: Array<[string, string, string]>;
+};
+
+function normalizeToken(value: string) {
+  return value
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, "");
+}
+
+function sentenceUnits(language: SentenceLanguage, sentence: string, vocabulary: Array<[string, string, string]>) {
+  const meanings = new Map(vocabulary.map(([spanish, english, vietnamese]) => [
+    normalizeToken(language === "spanish" ? spanish : language === "english" ? english : vietnamese),
+    english,
+  ]));
+
+  return Array.from(sentence.matchAll(/(\S+)(\s*)/gu)).map((match, index) => {
+    const token = match[1];
+    const word = normalizeToken(token);
+    const knownMeaning = meanings.get(word);
+    const role = language === "spanish" ? "Target element" : language === "english" ? "Anchor element" : "Bridge element";
+    return {
+      id: `${language}-${index + 1}`,
+      text: token,
+      after: match[2],
+      label: knownMeaning ? role : "Sentence element",
+      meaning: knownMeaning || "A meaningful part of this complete thought.",
+      literal: knownMeaning,
+      structural: role.toLocaleLowerCase(),
+      natural: sentence,
+      why: language === "spanish"
+        ? "Its role becomes clear inside the target pattern for this lesson."
+        : language === "vietnamese"
+          ? "Vietnamese expresses the same meaning through its own word order and stable verb forms."
+          : "The anchor makes the intended meaning immediately available for comparison.",
+      grammar: [{ label: "Role", value: role }],
+    } satisfies SentenceUnit;
+  });
+}
+
+/**
+ * The default authored curriculum structure. Individual lessons can replace this
+ * with a richer model when a particular construction warrants deeper treatment.
+ */
+export function createInteractiveSentenceModel(source: CurriculumSentenceSource): InteractiveSentenceModel {
+  const spanish = sentenceUnits("spanish", source.spanish, source.words);
+  const english = sentenceUnits("english", source.english, source.words);
+  const vietnamese = sentenceUnits("vietnamese", source.vietnamese, source.words);
+  const all = (units: SentenceUnit[]) => units.map((unit) => unit.id);
+
+  return {
+    meaning: source.english,
+    realizations: [
+      { language: "spanish", role: "target", label: "Spanish target", sentence: source.spanish, units: spanish },
+      { language: "english", role: "anchor", label: "English native anchor", sentence: source.english, units: english },
+      { language: "vietnamese", role: "bridge", label: "Vietnamese supporting bridge", sentence: source.vietnamese, units: vietnamese },
+    ],
+    relationships: [
+      { id: `${source.id}-target-pattern`, languages: ["spanish"], unitIds: all(spanish), label: "Target pattern", explanation: `This Spanish thought is organized through ${source.pattern}. The elements work together as one expression rather than a word-for-word copy.` },
+      { id: `${source.id}-anchor-pattern`, languages: ["english"], unitIds: all(english), label: "Anchor structure", explanation: "The English sentence keeps the intended meaning available while the target language takes its own shape." },
+      { id: `${source.id}-bridge-pattern`, languages: ["vietnamese"], unitIds: all(vietnamese), label: "Bridge structure", explanation: `Vietnamese organizes this thought through ${source.bridgePattern}, showing which information is carried by order rather than Spanish-style inflection.` },
+    ],
+    mappings: [
+      { id: `${source.id}-anchor-map`, from: { language: "spanish", unitIds: all(spanish) }, to: { language: "english", unitIds: all(english) }, kind: "structural", label: "Meaning is retained, structure changes", explanation: `Spanish uses ${source.pattern}; English uses its own sentence order to express the same thought. This is a sentence-level correspondence, not a forced word-by-word equation.`, reusablePattern: source.pattern },
+      { id: `${source.id}-bridge-map`, from: { language: "spanish", unitIds: all(spanish) }, to: { language: "vietnamese", unitIds: all(vietnamese) }, kind: "structural", label: "The bridge carries it differently", explanation: `Vietnamese uses ${source.bridgePattern}. The shared meaning stays intact even where the languages group, omit, or order information differently.`, reusablePattern: source.bridgePattern },
+    ],
+    relatedPatterns: [
+      { sentence: source.focus, explanation: `This is the reusable center of the lesson: ${source.pattern}.` },
+      { sentence: source.spanish, explanation: "Return to the full sentence and vary its people, objects, places, or time as the pattern becomes available." },
+    ],
+  };
+}
+
 export const familySentenceAnatomy: InteractiveSentenceModel = {
   meaning: "A speaker says that their family lives nearby.",
   realizations: [
