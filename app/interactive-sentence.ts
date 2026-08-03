@@ -15,7 +15,8 @@ export type SentenceUnit = {
   visibility?: "visible" | "implied" | "omitted";
   /** Reserved authored metadata; no pronunciation UI is rendered yet. */
   pronunciation?: { transliteration?: string; notes?: string };
-  label: string;
+  /** A concise, authored structural label for Language X-Ray when available. */
+  label?: string;
   meaning: string;
   literal?: string;
   structural?: string;
@@ -92,22 +93,21 @@ function sentenceUnits(language: SentenceLanguage, sentence: string, vocabulary:
     const token = match[1];
     const word = normalizeToken(token);
     const knownMeaning = meanings.get(word);
-    const role = language === "spanish" ? "Target element" : language === "english" ? "Anchor element" : "Bridge element";
     return {
       id: `${language}-${index + 1}`,
       text: token,
       after: match[2],
-      label: knownMeaning ? role : "Sentence element",
       meaning: knownMeaning || "A meaningful part of this complete thought.",
       literal: knownMeaning,
-      structural: role.toLocaleLowerCase(),
       natural: sentence,
       why: language === "spanish"
         ? "Its role becomes clear inside the target pattern for this lesson."
         : language === "vietnamese"
           ? "Vietnamese expresses the same meaning through its own word order and stable verb forms."
           : "The anchor makes the intended meaning immediately available for comparison.",
-      grammar: [{ label: "Role", value: role }],
+      // Do not invent a grammatical category merely to populate X-Ray. Rich
+      // labels and grammar arrive with reviewed lesson anatomy.
+      grammar: [],
     } satisfies SentenceUnit;
   });
 }
