@@ -15,6 +15,7 @@ export function InteractiveSentence({ model, onContinue, showBridge }: { model: 
   const activeLanguage = !showBridge && model.realizations.find((item) => item.language === language)?.role === "bridge" ? availableRealizations[0]?.language || language : language;
   const realization = availableRealizations.find((item) => item.language === activeLanguage) || availableRealizations[0];
   const availableMappings = model.mappings.filter((mapping) => showBridge || (model.realizations.find((item) => item.language === mapping.from.language)?.role !== "bridge" && model.realizations.find((item) => item.language === mapping.to.language)?.role !== "bridge"));
+  const xrayLabels = realization ? [...new Set(realization.units.map((unit) => unit.label).filter((label): label is string => Boolean(label)))] : [];
 
   function selectUnit(unit: SentenceUnit, trigger: HTMLButtonElement) {
     triggerRef.current = trigger;
@@ -62,7 +63,7 @@ export function InteractiveSentence({ model, onContinue, showBridge }: { model: 
           <p className="anatomy-sentence">
             {realization.units.map((unit, index) => <button key={unit.id} className={`sentence-unit ${selection?.kind === "unit" && selection.unit.id === unit.id ? "selected" : ""}`} aria-pressed={selection?.kind === "unit" && selection.unit.id === unit.id} data-follows-word={index < realization.units.length - 1} onClick={(event) => selectUnit(unit, event.currentTarget)}>{unit.text}</button>)}
           </p>
-          {mode === "xray" && <div className="xray-key" aria-label="Language X-Ray categories">{realization.units.map((unit) => <span key={unit.id}>{unit.label}</span>)}</div>}
+          {mode === "xray" && xrayLabels.length > 0 && <div className="xray-key" aria-label="Language X-Ray categories">{xrayLabels.map((label) => <span key={label}>{label}</span>)}</div>}
           {mode === "changes" && <div className="mapping-list" aria-label="Cross-language transformations">{availableMappings.length > 0 ? availableMappings.map((mapping) => <button key={mapping.id} className={selection?.kind === "mapping" && selection.mapping.id === mapping.id ? "selected" : ""} onClick={(event) => { triggerRef.current = event.currentTarget; setSelection({ kind: "mapping", mapping }); }}><span>{mapping.kind}</span>{mapping.label}</button>) : <p className="instruction">This comparison has not been authored yet.</p>}</div>}
           {mode !== "changes" && <div className="relationship-list" aria-label="Sentence relationships">{model.relationships.filter((relationship) => relationship.languages.includes(activeLanguage)).map((relationship) => <button key={relationship.id} onClick={(event) => { triggerRef.current = event.currentTarget; setSelection({ kind: "relationship", relationship }); }}><span>Relationship</span>{relationship.label}</button>)}</div>}
           </>}
