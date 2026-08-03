@@ -24,6 +24,18 @@ The app ships with an offline foundation and loads additional versioned curricul
 
 PolyFlow validates the manifest and every pack before merging lessons. Invalid or unreachable remote content is never shown; the bundled course remains available.
 
+## Interactive sentence anatomy
+
+An optional `anatomy` object on a lesson turns its sentence stage into PolyFlow's Interactive Sentence Model. Author these objects in `app/interactive-sentence.ts` (or a future versioned curriculum pack) rather than embedding explanations in presentation components.
+
+The model keeps realizations, sentence units, relationships, cross-language mappings, and related patterns separate. Units may include multiple visible segments or be marked implied or omitted; mappings can be one-to-one, reordered, structural, expanded, or implicit. The interface only shows concepts that have authored data.
+
+To add another interactive lesson, create a reviewed `InteractiveSentenceModel`, attach it to the matching `CompactLesson`, then add coverage to `tests/rendered-html.test.mjs`. The same data drives normal reading, Language X-Ray, the inspector, and See What Changes. Current remote-pack validation preserves optional anatomy data; a future curriculum schema revision should validate it field by field before accepting externally published anatomy lessons.
+
+No pronunciation metadata is rendered. The type has a reserved authoring field only, so audio can be reviewed as a separate product decision later.
+
+Editorial note: the existing Vietnamese course wording `Gia đình tôi sống gần đây.` is preserved in the first vertical slice. Its location phrasing should receive native-editor review before it is used as a broadly reusable Vietnamese pattern.
+
 ## Vercel
 
 Import the GitHub repository into Vercel. The project uses standard Next.js defaults and needs no custom build settings. Add `DATABASE_URL` to Vercel only when hosted progress sync is desired.
