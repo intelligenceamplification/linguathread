@@ -14,7 +14,7 @@ async function loadInteractiveSentenceModule() {
   return cjsModule.exports;
 }
 
-test("builds PolyFlow on the standard Next.js runtime", async () => {
+test("builds LinguaThread on the standard Next.js runtime", async () => {
   const packageJson = JSON.parse(await read("../package.json"));
   assert.equal(packageJson.scripts.build, "next build");
   assert.equal(packageJson.scripts.dev, "next dev");
@@ -24,7 +24,7 @@ test("builds PolyFlow on the standard Next.js runtime", async () => {
 
 test("preserves the language setup and calm learning interface", async () => {
   const [page, layout] = await Promise.all([read("../app/page.tsx"), read("../app/layout.tsx")]);
-  assert.match(layout, /PolyFlow/);
+  assert.match(layout, /LinguaThread/);
   assert.match(page, /Your language stack/);
   assert.match(page, /What language shaped your first thoughts/);
   assert.match(page, /Search or type a language/);

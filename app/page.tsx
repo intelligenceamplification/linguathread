@@ -267,7 +267,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
-        <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">PolyFlow</button>
+        <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">LinguaThread</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
           <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
@@ -378,7 +378,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             )}
             {feedback === "gentle" && failedAttempts < 3 && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
             {feedback === "gentle" && failedAttempts < 3 && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={`${failedAttempts} of 3 attempts · Try once more from memory.`} action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "PolyFlow will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
+            {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "LinguaThread will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
           </div>
         )}
 
@@ -387,7 +387,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <div className="completion-mark" aria-hidden="true">✓</div>
             <p className="eyebrow">Lesson {lesson.lesson} mapped</p>
             <h1>{accelerated ? "This is already familiar." : lesson.title}</h1>
-            <p className="completion-copy">{accelerated ? "PolyFlow recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
+            <p className="completion-copy">{accelerated ? "LinguaThread recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
             <div className="learning-signal">
               <span>{accelerated ? "Advance quickly" : "Becoming stable"}</span>
               <strong>Spanish · {lesson.skill}</strong>
@@ -444,7 +444,7 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
   return (
     <main className="app-shell setup-shell">
       <header className="topline setup-topline">
-        <span className="wordmark static-wordmark">PolyFlow</span>
+        <span className="wordmark static-wordmark">LinguaThread</span>
         <div className="lesson-context"><span>Your language stack</span></div>
         <span className="setup-step-count">{step + 1} of {totalSteps}</span>
       </header>
@@ -452,14 +452,14 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
 
       <section className="lesson-stage setup-stage">
         {step === 0 && (
-          <SetupFrame eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="PolyFlow uses your native language to make unfamiliar grammar immediately intelligible.">
+          <SetupFrame eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="LinguaThread uses your native language to make unfamiliar grammar immediately intelligible.">
             <LanguagePicker selected={[native]} excluded={[]} onSelect={(language) => setNative(language)} />
             <button className="primary-action" onClick={() => { if (second === native) setSecond(null); setStep(1); }}>Continue <span aria-hidden="true">→</span></button>
           </SetupFrame>
         )}
 
         {step === 1 && (
-          <SetupFrame eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. PolyFlow will use it only when it makes the new language clearer.">
+          <SetupFrame eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. LinguaThread will use it only when it makes the new language clearer.">
             <LanguagePicker selected={second ? [second] : []} excluded={[native]} onSelect={(language) => setSecond(language)} />
             {second && <ConfidencePicker value={secondConfidence} onChange={setSecondConfidence} />}
             <button className="primary-action" onClick={() => setStep(2)}>Continue <span aria-hidden="true">→</span></button>
@@ -489,14 +489,14 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
               {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
               {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 ? "Growing edge" : "Additional bridge"} language={language} />)}
             </div>
-            <p className="setup-description ready-description">PolyFlow will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
+            <p className="setup-description ready-description">LinguaThread will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
             <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => setStep(0)}>Edit my languages</button>
           </div>
         )}
       </section>
 
-      <footer className="lesson-footer"><span>Language begins from what you already know</span><span>No placement paperwork · PolyFlow learns as you learn</span></footer>
+      <footer className="lesson-footer"><span>Language begins from what you already know</span><span>How Language Is Built · Language stacking</span></footer>
     </main>
   );
 }

@@ -13,18 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "polyflow.vercel.app"}`),
-  title: "PolyFlow · Language, made yours",
-  description: "A contemplative language practice built on vocabulary, structure, and meaningful use.",
+  metadataBase: new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "polyflow-language.vercel.app"}`),
+  title: "LinguaThread · How Language Is Built",
+  description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
   openGraph: {
-    title: "PolyFlow · Language, made yours",
-    description: "A contemplative language practice built on vocabulary, structure, and meaningful use.",
-    images: [{ url: "/og.png", width: 1672, height: 941, alt: "PolyFlow · Language, made yours" }],
+    title: "LinguaThread · How Language Is Built",
+    description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
+    images: [{ url: "/og.png", width: 1672, height: 941, alt: "LinguaThread · How Language Is Built" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PolyFlow · Language, made yours",
-    description: "A contemplative language practice built on vocabulary, structure, and meaningful use.",
+    title: "LinguaThread · How Language Is Built",
+    description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
     images: ["/og.png"],
   },
   icons: {
