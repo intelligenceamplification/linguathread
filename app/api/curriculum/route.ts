@@ -4,7 +4,7 @@ import { mergeCurriculum, validateManifest, validatePack } from "../../curriculu
 export const dynamic = "force-dynamic";
 
 const manifestUrl = process.env.CURRICULUM_MANIFEST_URL ||
-  "https://raw.githubusercontent.com/intelligenceamplification/polyflow/curriculum-data/curriculum/manifest.json";
+  "https://raw.githubusercontent.com/intelligenceamplification/linguathread/curriculum-data/curriculum/manifest.json";
 
 export async function GET() {
   try {

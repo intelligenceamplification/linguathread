@@ -63,7 +63,7 @@ test("ships an expanded A1 curriculum rather than one repeating foundation", asy
 
 test("uses a durable learner model and adaptive curriculum router", async () => {
   const [page, engine] = await Promise.all([read("../app/page.tsx"), read("../app/learning-engine.ts")]);
-  assert.match(page, /polyflow\.learner-model\.v1/);
+  assert.match(page, /linguathread\.learner-model\.v1/);
   assert.match(page, /selectNextLesson/);
   assert.match(page, /recordEvidence/);
   assert.match(engine, /introduced/);

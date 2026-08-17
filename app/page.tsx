@@ -25,8 +25,8 @@ const commonLanguages = [
 ];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
-const learnerIdKey = "polyflow.learner-id.v1";
-const learnerModelKey = "polyflow.learner-model.v1";
+const learnerIdKey = "linguathread.learner-id.v1";
+const learnerModelKey = "linguathread.learner-model.v1";
 
 function learnerHeaders(json = false) {
   let learnerId = window.localStorage.getItem(learnerIdKey);
@@ -34,7 +34,7 @@ function learnerHeaders(json = false) {
     learnerId = crypto.randomUUID();
     window.localStorage.setItem(learnerIdKey, learnerId);
   }
-  return { ...(json ? { "content-type": "application/json" } : {}), "x-polyflow-learner-id": learnerId };
+  return { ...(json ? { "content-type": "application/json" } : {}), "x-linguathread-learner-id": learnerId };
 }
 
 export default function Home() {
@@ -43,20 +43,20 @@ export default function Home() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("polyflow.language-profile.v1");
+    const saved = window.localStorage.getItem("linguathread.language-profile.v1");
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as Partial<LanguageProfile>;
         if (parsed.native && Array.isArray(parsed.additional)) {
           setProfile({ native: parsed.native, second: parsed.second || null, secondConfidence: parsed.second ? (parsed.secondConfidence || "developing") : null, additional: parsed.additional });
         }
-      } catch { window.localStorage.removeItem("polyflow.language-profile.v1"); }
+      } catch { window.localStorage.removeItem("linguathread.language-profile.v1"); }
     }
     setLoaded(true);
   }, []);
 
   function saveProfile(nextProfile: LanguageProfile) {
-    window.localStorage.setItem("polyflow.language-profile.v1", JSON.stringify(nextProfile));
+    window.localStorage.setItem("linguathread.language-profile.v1", JSON.stringify(nextProfile));
     setProfile(nextProfile);
     setEditingProfile(false);
   }
@@ -88,7 +88,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
+    const localCompleted = JSON.parse(window.localStorage.getItem("linguathread.completed-lessons.v1") || "[]") as string[];
     const savedModel = window.localStorage.getItem(learnerModelKey);
     Promise.all([
       fetch("/api/curriculum")
@@ -113,7 +113,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
         setSessionMode(selection.mode);
         if (data.completedLessonIds?.length) {
-          window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
+          window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
         }
       })
       .catch(() => undefined);
@@ -213,7 +213,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function finishLesson() {
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
-    window.localStorage.setItem("polyflow.completed-lessons.v1", JSON.stringify(nextCompleted));
+    window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
     setLearnerModel((current) => {
       const next = completeSession(current);
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));

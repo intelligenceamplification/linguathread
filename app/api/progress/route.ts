@@ -5,7 +5,7 @@ import { answerAttempts, learnerProfiles, lessonProgress, objectiveMastery } fro
 export const dynamic = "force-dynamic";
 
 function learnerId(request: Request) {
-  const id = request.headers.get("x-polyflow-learner-id")?.trim();
+  const id = request.headers.get("x-linguathread-learner-id")?.trim();
   return id && /^[a-zA-Z0-9-]{16,80}$/.test(id) ? id : null;
 }
 
