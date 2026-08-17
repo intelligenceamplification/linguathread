@@ -14,6 +14,14 @@ async function loadInteractiveSentenceModule() {
   return cjsModule.exports;
 }
 
+async function loadLessonToolsModule() {
+  const source = await read("../app/lesson-tools.ts");
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const cjsModule = { exports: {} };
+  vm.runInNewContext(compiled, { module: cjsModule, exports: cjsModule.exports, Map, Array, String, Date });
+  return cjsModule.exports;
+}
+
 test("builds LinguaThread on the standard Next.js runtime", async () => {
   const packageJson = JSON.parse(await read("../package.json"));
   assert.equal(packageJson.scripts.build, "next build");
@@ -193,6 +201,62 @@ test("keeps universal X-Ray quiet until lesson-specific structure is authored", 
   assert.match(component, /const xrayLabels = realization/);
   assert.match(component, /mode === "xray" && xrayLabels\.length > 0/);
   assert.doesNotMatch(data, /Target element|Anchor element|Bridge element|Sentence element/);
+});
+
+test("offers universal X-Ray scopes and a complete standalone analysis for voy", async () => {
+  const { analyzeXRayScope, xrayScopes } = await loadLessonToolsModule();
+  const lesson = {
+    id: "plans", title: "Near-future plans", skill: "ir a + infinitive",
+    vocabulary: [{ word: "voy", english: "I am going", vietnamese: "tôi sẽ" }, { word: "visitar", english: "to visit", vietnamese: "thăm" }],
+    sentence: { target: "Mañana voy a visitar a un amigo.", anchor: "Tomorrow I am going to visit a friend.", bridge: "Ngày mai tôi sẽ đi thăm một người bạn.", note: "A clear plan stays close to the present." },
+    grammar: { focus: "Voy a visitar", target: { pattern: "ir a + infinitive", explanation: "Voy is the first-person form of ir." }, anchor: { pattern: "be going to + infinitive", explanation: "English uses a future frame." }, bridge: { pattern: "time + sẽ + verb", explanation: "Vietnamese uses a stable aspect marker." }, insight: "The plan is shared while the structures differ." },
+  };
+  const scopes = xrayScopes(lesson, "Spanish");
+  assert.ok(scopes.some((scope) => scope.kind === "word" && scope.text === "voy"));
+  assert.ok(scopes.some((scope) => scope.kind === "phrase" && scope.text === "Voy a visitar"));
+  assert.ok(scopes.some((scope) => scope.kind === "sentence"));
+  const analysis = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "word" && scope.text === "voy"));
+  assert.match(analysis.baseForm, /ir/);
+  assert.match(analysis.morphology, /Present indicative/);
+  assert.match(analysis.syntacticRole, /near future/);
+  assert.match(analysis.contrast, /Iré/);
+  assert.match(analysis.relationship, /visitar/);
+
+  const singleWordFocus = { ...lesson, grammar: { ...lesson.grammar, focus: "Voy" } };
+  assert.ok(xrayScopes(singleWordFocus, "Spanish").some((scope) => scope.kind === "phrase" && scope.text === "Mañana voy"));
+});
+
+test("composes a finite Daily Lesson with review, vocabulary, application, rotation, and quiet completion", async () => {
+  const { createDailyLessonPlan } = await loadLessonToolsModule();
+  const makeLesson = (id, word, spanish, english, vietnamese) => ({
+    id, title: id, skill: "practical pattern", vocabulary: [{ word, english: word === "voy" ? "I am going" : "I want", vietnamese: word === "voy" ? "tôi sẽ" : "tôi muốn" }],
+    sentence: { target: spanish, anchor: english, bridge: vietnamese, note: "A practical thought in context." },
+    grammar: { focus: spanish.split(" ").slice(0, 2).join(" "), target: { pattern: "target pattern", explanation: "Target explanation." }, anchor: { pattern: "anchor pattern", explanation: "Anchor explanation." }, bridge: { pattern: "bridge pattern", explanation: "Bridge explanation." }, insight: "The same meaning travels." },
+  });
+  const review = makeLesson("review", "quiero", "Quiero agua.", "I want water.", "Tôi muốn nước.");
+  const current = makeLesson("current", "voy", "Voy a pagar.", "I am going to pay.", "Tôi sẽ trả tiền.");
+  const plan = createDailyLessonPlan([review, current], current, ["review"], [], 4);
+  assert.equal(plan.review.id, "review");
+  assert.equal(plan.newVocabulary.length, 1);
+  assert.equal(plan.application.target, "Voy a pagar.");
+  assert.deepEqual(Array.from(plan.exercises, (item) => item.scope), ["sentence", "word", "sentence", "phrase"]);
+  assert.ok(plan.exercises.some((item) => item.from === "Spanish" && item.to === "English"));
+  assert.ok(plan.exercises.some((item) => item.from === "Spanish" && item.to === "Vietnamese"));
+  const directions = new Set(Array.from({ length: 6 }, (_, day) => createDailyLessonPlan([review, current], current, [], ["review"], day).exercises.map((item) => `${item.from}->${item.to}`)).flat());
+  for (const direction of ["English->Spanish", "Spanish->English", "English->Vietnamese", "Vietnamese->English", "Spanish->Vietnamese", "Vietnamese->Spanish"]) assert.ok(directions.has(direction));
+});
+
+test("keeps Today and universal X-Ray optional, recoverable, and separate from the existing lesson path", async () => {
+  const [page, daily, xray] = await Promise.all([read("../app/page.tsx"), read("../app/daily-lesson.tsx"), read("../app/universal-xray.tsx")]);
+  assert.match(page, /<DailyLesson/);
+  assert.match(page, /<UniversalXRay/);
+  assert.match(page, />Today</);
+  assert.match(page, />X-Ray</);
+  assert.match(daily, /Skip this part for now/);
+  assert.match(daily, /The thread is in motion/);
+  assert.match(daily, /Return to self-directed learning/);
+  assert.match(xray, /Choose one word, one phrase, or the whole sentence/);
+  assert.match(xray, /aria-modal/);
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {

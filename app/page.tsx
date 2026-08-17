@@ -2,9 +2,11 @@
 
 /* eslint-disable react-hooks/set-state-in-effect -- browser storage is loaded after hydration */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
+import { DailyLesson } from "./daily-lesson";
+import { UniversalXRay } from "./universal-xray";
 import {
   completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
   migrateCompletedLessons, recordEvidence, selectNextLesson,
@@ -81,6 +83,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
   const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen">("new");
   const [course, setCourse] = useState<LessonDefinition[]>(curriculum);
+  const [dailyOpen, setDailyOpen] = useState(false);
+  const [xrayOpen, setXrayOpen] = useState(false);
+  const xrayTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const localCompleted = JSON.parse(window.localStorage.getItem("polyflow.completed-lessons.v1") || "[]") as string[];
@@ -160,12 +165,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setMastery(passed);
   }
 
-  function recordAttempt(kind: string, correct: boolean, language = "Spanish") {
+  function recordAttempt(kind: string, correct: boolean, language = "Spanish", evidenceLesson = lesson) {
     const learningLanguage = language;
     setLearnerModel((current) => {
       const next = recordEvidence(
         current,
-        lesson.objectiveId || lesson.id,
+        evidenceLesson.objectiveId || evidenceLesson.id,
         learningLanguage,
         correct,
         kind === "supported-reconstruction" || kind === "transform-model",
@@ -178,9 +183,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       headers: learnerHeaders(true),
       body: JSON.stringify({
         type: "attempt",
-        lessonId: lesson.id,
-        objectiveId: lesson.objectiveId || lesson.id,
-        skill: lesson.skill,
+        lessonId: evidenceLesson.id,
+        objectiveId: evidenceLesson.objectiveId || evidenceLesson.id,
+        skill: evidenceLesson.skill,
         kind,
         language,
         correct,
@@ -264,6 +269,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setMastery(true);
   }
 
+  function closeXRay() {
+    setXrayOpen(false);
+    requestAnimationFrame(() => xrayTriggerRef.current?.focus());
+  }
+
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
@@ -272,9 +282,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <span className="language-mark">ES</span>
           <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
         </div>
-        {hasHistory && stage !== "review" ? (
-          <button className="quiet-action" onClick={() => setStage("review")}>Review</button>
-        ) : <span className="header-balance" />}
+        <div className="header-actions">
+          <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today</button>
+          {hasHistory && stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Review</button>}
+          <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>X-Ray</button>
+        </div>
       </header>
 
       {stage !== "complete" && stage !== "review" && (
@@ -284,6 +296,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section className="lesson-stage" aria-live="polite">
+        {dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson)} /> : <>
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
@@ -421,7 +434,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <button className="primary-action" onClick={() => resetLesson()}>Return to lesson</button>
           </div>
         )}
+        </>}
       </section>
+
+      {xrayOpen && <UniversalXRay key={lesson.id} lesson={lesson} showBridge={bridgeEnabled} onClose={closeXRay} />}
 
       <footer className="lesson-footer">
         <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>

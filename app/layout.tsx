@@ -13,9 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL || "polyflow-language.vercel.app"}`),
+  metadataBase: new URL("https://linguathread.vercel.app"),
   title: "LinguaThread · How Language Is Built",
   description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
+  alternates: { canonical: "/" },
   openGraph: {
     title: "LinguaThread · How Language Is Built",
     description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
@@ -31,6 +32,7 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
   },
+  manifest: "/manifest.webmanifest",
 };
 
 export const viewport: Viewport = {
