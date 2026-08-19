@@ -20,6 +20,8 @@ const entry = (unit, language, counterpart, lesson) => ({
 const lessons = source.lessons.map((lesson) => {
   const spanishUnits = Object.fromEntries(lesson.units.map((unit) => [unit.spanish.toLocaleLowerCase("es"), entry(unit, "spanish", "vietnamese", lesson)]));
   const vietnameseUnits = Object.fromEntries(lesson.units.map((unit) => [unit.vietnamese.toLocaleLowerCase("vi"), entry(unit, "vietnamese", "spanish", lesson)]));
+  const words = lesson.units.slice(0, 4).map((unit) => [unit.spanish, unit.meaning, unit.vietnamese]);
+  while (words.length < 4) words.push([...words[words.length - 1]]);
   return {
     id: lesson.id,
     objectiveId: lesson.objectiveId,
@@ -29,7 +31,7 @@ const lessons = source.lessons.map((lesson) => {
     unitTitle: lesson.unitTitle,
     title: lesson.title,
     skill: lesson.skill,
-    words: lesson.units.slice(0, 4).map((unit) => [unit.spanish, unit.meaning, unit.vietnamese]),
+    words,
     spanish: lesson.spanish,
     english: lesson.english,
     vietnamese: lesson.vietnamese,
