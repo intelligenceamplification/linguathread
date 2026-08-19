@@ -44,6 +44,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Time and intention", "Tell time, express frequency, and make simple arrangements.", ["telling time", "scheduling", "planning"], ["clock time", "frequency adverbs", "ir a"], ["giờ and rưỡi", "frequency frames", "sẽ"], ["time", "relationships"]],
     ["Travel and community", "Follow directions, use transport, and ask for practical help.", ["directing", "asking assistance", "clarifying"], ["imperatives", "poder", "comparatives"], ["direction verbs", "có thể...không", "hơn"], ["travel", "community"]],
     ["Personal expression", "State simple opinions, values, boundaries, and agreement.", ["agreeing", "disagreeing", "setting boundaries"], ["creer que", "para mí", "necesitar"], ["tôi nghĩ", "đối với tôi", "cần"], ["values", "relationships"]],
+    ["Health and care", "Name common symptoms, ask for care, and describe basic wellbeing needs.", ["describing discomfort", "seeking care", "advising"], ["doler", "tener + symptom", "deber"], ["bị đau", "cần", "nên"], ["health", "services"]],
+    ["Weather and clothing", "Describe weather, seasons, clothing, and simple preparation.", ["describing conditions", "choosing", "preparing"], ["hacer + weather", "llevar", "preferir"], ["trời + condition", "mặc", "thích hơn"], ["weather", "daily life"]],
+    ["Work and study", "Describe familiar roles, tasks, study purposes, and requests for clarity.", ["describing work", "explaining purpose", "clarifying"], ["present progressive", "para + purpose", "poder"], ["đang", "để", "có thể"], ["work", "education"]],
+    ["Experience and obligation", "Refer simply to completed events, duties, ability, and limits.", ["reporting", "obligating", "describing ability"], ["preterite recognition", "tener que", "poder"], ["đã", "phải", "có thể"], ["personal", "work"]],
     ["A1 integration", "Combine foundational patterns in short, natural exchanges without relying on fixed scripts.", ["integrating", "repairing", "reformulating"], ["present-tense integration", "question sequences", "basic connectors"], ["topic chains", "question particles", "basic connectors"], ["daily life", "travel", "relationships"]],
   ].map(seed),
   A2: [
@@ -54,6 +58,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Home and neighborhood", "Compare places, explain housing needs, and handle local services.", ["comparing", "describing location", "requesting service"], ["comparatives", "relative location", "direct objects"], ["hơn", "location chains", "classifiers"], ["home", "community"]],
     ["Work and study", "Describe familiar responsibilities, learning, schedules, and abilities.", ["explaining duties", "describing ability", "reporting progress"], ["saber versus poder", "present perfect introduction", "purpose clauses"], ["biết versus có thể", "đã...rồi", "để"], ["work", "education"]],
     ["Travel with agency", "Manage reservations, changes, delays, and common travel problems.", ["booking", "changing plans", "problem solving"], ["object pronouns", "polite requests", "past reference"], ["đặt", "xin", "serial verbs"], ["travel", "services"]],
+    ["Relationships and repair", "Explain misunderstandings, apologize, and restore ordinary cooperation.", ["apologizing", "explaining", "repairing"], ["object pronouns", "sentir", "porque"], ["xin lỗi", "vì", "lại"], ["relationships", "emotions"]],
+    ["Media and leisure", "Discuss familiar entertainment, interests, recommendations, and reactions.", ["recommending", "reacting", "describing preference"], ["present perfect", "parecer", "relative que"], ["đã...rồi", "thấy", "mà"], ["media", "leisure"]],
+    ["Comparison and choice", "Compare practical alternatives and explain a straightforward choice.", ["comparing", "choosing", "justifying"], ["más and menos", "tan...como", "preferir"], ["hơn", "bằng", "thích hơn"], ["services", "daily life"]],
+    ["Future arrangements", "Confirm plans, conditions, responsibilities, and foreseeable changes.", ["arranging", "confirming", "conditioning"], ["future time", "ir a", "si + present"], ["sẽ", "định", "nếu...thì"], ["time", "relationships"]],
     ["A2 integration", "Sustain a routine exchange and tell a short connected personal story.", ["integrating", "narrating", "repairing"], ["past-present-future contrast", "pronoun integration", "connectors"], ["aspect integration", "topic continuity", "connectors"], ["personal", "community", "travel"]],
   ].map(seed),
   B1: [
@@ -64,6 +72,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Professional exchange", "Participate in meetings, explain work, and write clear routine messages.", ["reporting", "proposing", "summarizing"], ["formal register", "reported speech introduction", "se constructions"], ["formal pronouns", "rằng", "được and bị"], ["work", "professional"]],
     ["Culture and perspective", "Compare practices and explain how context shapes interpretation.", ["comparing cultures", "mediating", "contextualizing"], ["relative clauses", "lo que", "impersonal expressions"], ["mà clauses", "điều", "topic-comment"], ["culture", "community"]],
     ["Problems and decisions", "Explain a problem, evaluate alternatives, and negotiate a decision.", ["problem solving", "negotiating", "deciding"], ["conditional", "subjunctive requests", "pronoun sequences"], ["nếu...thì", "đề nghị", "serial predicates"], ["services", "work"]],
+    ["News and society", "Summarize reported events and distinguish fact, reaction, and interpretation.", ["summarizing", "attributing", "evaluating"], ["reported speech", "passive se", "evidential frames"], ["theo", "được and bị", "cho rằng"], ["news", "society"]],
+    ["Creativity and humor", "Describe creative choices and explain accessible humor or playful language.", ["describing creativity", "interpreting humor", "responding"], ["relative clauses", "double meanings", "discourse markers"], ["mà clauses", "chơi chữ", "particles"], ["creativity", "culture"]],
+    ["Purpose and change", "Explain sustained goals, changing habits, and the reasons behind them.", ["explaining purpose", "reflecting", "projecting"], ["para que", "subjunctive purpose", "llevar + time"], ["để", "nhằm", "đã...được"], ["personal", "work"]],
+    ["Independent mediation", "Relay practical information and make unfamiliar ideas accessible to another person.", ["mediating", "paraphrasing", "checking understanding"], ["indirect speech", "es decir", "lo que"], ["nói cách khác", "rằng", "điều"], ["plurilingual", "community"]],
     ["B1 integration", "Sustain connected independent interaction across personal, travel, and professional situations.", ["integrating", "mediating", "self-correcting"], ["tense integration", "subjunctive foundations", "connected discourse"], ["aspect integration", "stance particles", "connected discourse"], ["personal", "professional", "culture"]],
   ].map(seed),
   B2: [
@@ -74,6 +86,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Emotion with precision", "Express mixed feelings, boundaries, and relational nuance without flattening meaning.", ["qualifying emotion", "setting boundaries", "reconciling"], ["subjunctive nuance", "clitic choices", "modal past"], ["stance particles", "address terms", "đành and cứ"], ["emotions", "relationships"]],
     ["Ideas and interpretation", "Explain complex ideas and interpret texts or viewpoints for another person.", ["explaining", "interpreting", "mediating"], ["relative and noun clauses", "reported discourse", "cohesion"], ["rằng and là", "mà clauses", "cohesion chains"], ["education", "society"]],
     ["Spontaneous interaction", "Maintain fluid exchange, repair subtly, and adapt language while speaking or writing.", ["turn management", "repairing", "adapting"], ["discourse markers", "ellipsis", "register shifts"], ["discourse particles", "ellipsis", "address shifts"], ["social", "professional"]],
+    ["Ethics and responsibility", "Examine competing obligations and qualify moral or practical judgments.", ["evaluating", "qualifying", "challenging"], ["subjunctive evaluation", "debería", "concessive clauses"], ["nên", "có trách nhiệm", "dù...vẫn"], ["ethics", "society"]],
+    ["Systems and society", "Explain how institutions, incentives, and social systems affect people.", ["analyzing", "causing", "comparing systems"], ["causative frames", "passive se", "nominalization"], ["khiến", "được and bị", "nominal compounds"], ["society", "public life"]],
+    ["Science and technology", "Discuss technical developments, evidence, uncertainty, and practical consequences.", ["explaining evidence", "qualifying certainty", "projecting"], ["probability frames", "future perfect", "technical register"], ["có khả năng", "đã", "technical compounds"], ["science", "technology"]],
+    ["Register and diplomacy", "Disagree, negotiate, and preserve relationships through controlled register.", ["mitigating", "disagreeing", "negotiating"], ["conditional politeness", "impersonal forms", "register shifts"], ["xin phép", "có lẽ", "address shifts"], ["professional", "relationships"]],
     ["B2 integration", "Combine nuance, argument, narration, and mediation in sustained independent communication.", ["integrating", "synthesizing", "adapting"], ["advanced clause integration", "register control", "cohesion"], ["clause chaining", "register control", "cohesion"], ["society", "professional", "culture"]],
   ].map(seed),
   C1: [
@@ -84,6 +100,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Literary and cultural language", "Interpret stylistic choices, cultural references, and figurative language.", ["interpreting", "alluding", "evaluating style"], ["figurative idiom", "marked word order", "literary tense"], ["thành ngữ", "parallel structures", "literary vocabulary"], ["literature", "culture"]],
     ["Mediation across languages", "Reconstruct complex meaning for people with different linguistic and cultural frames.", ["mediating", "reformulating", "contextualizing"], ["reformulation frames", "metalinguistic language", "stance"], ["reformulation frames", "metalinguistic language", "stance"], ["plurilingual", "professional"]],
     ["Precision under pressure", "Respond flexibly in demanding situations while preserving tone and conceptual accuracy.", ["responding", "repairing", "calibrating"], ["modal nuance", "ellipsis", "rapid register shifts"], ["modal particles", "ellipsis", "address shifts"], ["professional", "social"]],
+    ["Research and synthesis", "Integrate sources, distinguish claims from evidence, and summarize complex findings.", ["synthesizing", "attributing", "evaluating evidence"], ["evidential stance", "nominalization", "source integration"], ["theo", "cho thấy", "nominal compounds"], ["academic", "research"]],
+    ["Philosophy and meaning", "Explore abstract questions while defining terms and preserving conceptual distinctions.", ["defining", "reasoning", "distinguishing"], ["abstract nominalization", "conditional argument", "definition frames"], ["khái niệm", "nếu...thì", "được hiểu là"], ["philosophy", "values"]],
+    ["Public reasoning", "Present and defend a complex position for a broad, critical audience.", ["presenting", "defending", "responding critically"], ["rhetorical connectors", "concession", "stance markers"], ["mặt khác", "tuy nhiên", "theo quan điểm"], ["public life", "society"]],
+    ["Idiomatic control", "Use idiom and collocation selectively while recognizing regional and contextual limits.", ["using idiom", "interpreting", "qualifying"], ["idiomatic frames", "collocation", "regional variation"], ["thành ngữ", "collocation", "regional variation"], ["culture", "relationships"]],
     ["C1 integration", "Sustain flexible, cohesive, and precise communication across complex domains.", ["integrating", "synthesizing", "self-editing"], ["high-level cohesion", "register integration", "rhetorical control"], ["high-level cohesion", "register integration", "rhetorical control"], ["academic", "professional", "culture"]],
   ].map(seed),
   C2: [
@@ -94,6 +114,10 @@ const seeds: Record<CEFRLevel, UnitSeed[]> = {
     ["Complex mediation", "Synthesize conflicting sources and make subtle conceptual relationships accessible.", ["synthesizing", "evaluating", "mediating"], ["evidential stance", "source integration", "conceptual metaphor"], ["evidential framing", "source integration", "conceptual metaphor"], ["academic", "professional"]],
     ["Cultural and interpersonal mastery", "Navigate humor, face, hierarchy, intimacy, and disagreement with mature judgment.", ["negotiating face", "using humor", "disagreeing delicately"], ["pragmatic register", "irony", "mitigation"], ["address hierarchy", "particles", "mitigation"], ["culture", "relationships"]],
     ["Specialized expression", "Adapt rapidly to unfamiliar expert domains by learning and deploying their discourse patterns.", ["specializing", "defining", "translating concepts"], ["technical nominalization", "definition frames", "genre control"], ["technical compounds", "definition frames", "genre control"], ["professional", "academic"]],
+    ["Expert dialogue", "Participate in demanding expert exchange while clarifying assumptions and revising positions instantly.", ["challenging", "clarifying assumptions", "revising"], ["compressed argument", "metadiscourse", "specialist register"], ["compressed clauses", "metadiscourse", "specialist register"], ["expert", "professional"]],
+    ["Humor and wordplay", "Interpret and create layered humor, ambiguity, and wordplay without losing social judgment.", ["playing with language", "interpreting ambiguity", "calibrating"], ["lexical ambiguity", "phonological play", "pragmatic timing"], ["chơi chữ", "đồng âm", "particles"], ["humor", "culture"]],
+    ["Cultural subtext", "Recognize historical, regional, and interpersonal subtext in compressed expression.", ["inferring", "contextualizing", "interpreting allusion"], ["allusion", "marked register", "ellipsis"], ["điển tích", "regional register", "ellipsis"], ["culture", "history"]],
+    ["Personal voice", "Express a distinctive, coherent voice across intimate, professional, and public contexts.", ["styling", "positioning", "self-editing"], ["voice control", "rhythm", "lexical signature"], ["voice control", "rhythm", "lexical signature"], ["personal", "literary"]],
     ["C2 integration and maintenance", "Maintain precise, natural, and personally authentic expression through lifelong review and new domains.", ["integrating", "maintaining", "extending"], ["stylistic integration", "self-editing", "adaptive repertoire"], ["stylistic integration", "self-editing", "adaptive repertoire"], ["personal", "professional", "culture"]],
   ].map(seed),
 };
@@ -109,18 +133,18 @@ export const courseMap: CourseLevel[] = levels.map((level, levelIndex) => ({
   level,
   outcome: levelOutcomes[level],
   units: seeds[level].map((unit, unitIndex) => {
-    const sequence = levelIndex * 8 + unitIndex + 1;
+    const sequence = levelIndex * 12 + unitIndex + 1;
     return {
       ...unit,
       id: `${level.toLocaleLowerCase()}-u${unitIndex + 1}`,
       level,
       sequence,
-      plannedLessons: 12,
+      plannedLessons: 8,
       outsidePractice: {
         purpose: "Move authored language into spontaneous human use without turning LinguaThread into an audio simulator.",
         prompt: `In a conversation with a person or GPT Live, try to ${unit.communicativeOutcome.charAt(0).toLocaleLowerCase()}${unit.communicativeOutcome.slice(1)} Notice what comes naturally and what you want to revisit here.`,
       },
-      prerequisiteUnitId: sequence === 1 ? undefined : `${levels[Math.floor((sequence - 2) / 8)].toLocaleLowerCase()}-u${((sequence - 2) % 8) + 1}`,
+      prerequisiteUnitId: sequence === 1 ? undefined : `${levels[Math.floor((sequence - 2) / 12)].toLocaleLowerCase()}-u${((sequence - 2) % 12) + 1}`,
     };
   }),
 }));

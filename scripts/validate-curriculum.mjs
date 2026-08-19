@@ -38,6 +38,16 @@ for (const descriptor of manifest.packs || []) {
       errors.push(`${lesson.id} must include Spanish, English, and Vietnamese.`);
     }
     if (!Array.isArray(lesson.prerequisites)) errors.push(`${lesson.id} prerequisites must be an array.`);
+    if (descriptor.quality === "xray-reviewed") {
+      for (const language of ["Spanish", "Vietnamese"]) {
+        const units = lesson.xray?.[language]?.units;
+        if (!units || !Object.keys(units).length) errors.push(`${lesson.id} needs authored ${language} X-Ray units.`);
+        for (const [unit, entry] of Object.entries(units || {})) {
+          const fields = ["meaning", "baseForm", "partOfSpeech", "syntacticRole", "morphology", "usage", "contrast"];
+          if (!fields.every((field) => typeof entry[field] === "string" && entry[field].trim())) errors.push(`${lesson.id} X-Ray unit ${unit} is incomplete.`);
+        }
+      }
+    }
   }
 }
 

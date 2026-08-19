@@ -14,14 +14,14 @@ const errors = [];
 const expectedLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 if (courseMap.length !== expectedLevels.length) errors.push("The map must contain A1 through C2.");
-if (courseUnits.length !== 48) errors.push(`Expected 48 course units; found ${courseUnits.length}.`);
+if (courseUnits.length !== 72) errors.push(`Expected 72 course units; found ${courseUnits.length}.`);
 if (plannedCourseLessonCount !== 576) errors.push(`Expected a 576-lesson authoring target; found ${plannedCourseLessonCount}.`);
 
 const ids = new Set();
 for (const [levelIndex, stage] of courseMap.entries()) {
   if (stage.level !== expectedLevels[levelIndex]) errors.push(`Level order is invalid at ${stage.level}.`);
   if (!stage.outcome?.trim()) errors.push(`${stage.level} needs a proficiency outcome.`);
-  if (stage.units.length !== 8) errors.push(`${stage.level} must contain eight sequenced units.`);
+  if (stage.units.length !== 12) errors.push(`${stage.level} must contain twelve sequenced units.`);
   for (const unit of stage.units) {
     if (ids.has(unit.id)) errors.push(`Duplicate unit id: ${unit.id}`);
     ids.add(unit.id);

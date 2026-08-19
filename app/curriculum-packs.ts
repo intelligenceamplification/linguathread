@@ -6,6 +6,7 @@ export type CurriculumPackDescriptor = {
   version: number;
   level: CEFRLevel;
   url: string;
+  quality?: "legacy" | "xray-reviewed";
 };
 
 export type CurriculumManifest = {
@@ -46,7 +47,7 @@ export function validateManifest(value: unknown): CurriculumManifest {
   return manifest as CurriculumManifest;
 }
 
-function validateCompactLesson(value: unknown, level: CEFRLevel): CompactLesson {
+function validateCompactLesson(value: unknown, level: CEFRLevel, requireXRay: boolean): CompactLesson {
   if (!value || typeof value !== "object") throw new Error("Lesson must be an object.");
   const lesson = value as Partial<CompactLesson>;
   const required = [
@@ -68,7 +69,27 @@ function validateCompactLesson(value: unknown, level: CEFRLevel): CompactLesson 
   if (!lessonId.startsWith(`${level.toLocaleLowerCase()}-`) && !lessonId.startsWith("es-u")) {
     throw new Error(`Lesson ${lessonId} does not match pack level ${level}.`);
   }
+  if (requireXRay && lesson.xray === undefined) throw new Error(`Lesson ${lessonId} needs reviewed X-Ray content before publication.`);
+  if (lesson.xray !== undefined) validateXRay(lesson.xray, lessonId);
   return lesson as CompactLesson;
+}
+
+function validateXRay(value: unknown, lessonId: string) {
+  if (!value || typeof value !== "object") throw new Error(`Lesson ${lessonId} has invalid X-Ray content.`);
+  for (const language of ["Spanish", "Vietnamese"]) {
+    const layer = (value as Record<string, unknown>)[language];
+    if (!layer || typeof layer !== "object") throw new Error(`Lesson ${lessonId} needs ${language} X-Ray content.`);
+    const units = (layer as { units?: unknown }).units;
+    if (!units || typeof units !== "object" || Object.keys(units).length === 0) {
+      throw new Error(`Lesson ${lessonId} needs authored ${language} X-Ray units.`);
+    }
+    for (const [unit, entry] of Object.entries(units as Record<string, unknown>)) {
+      if (!text(unit) || !entry || typeof entry !== "object") throw new Error(`Lesson ${lessonId} has an invalid ${language} X-Ray unit.`);
+      const authored = entry as Record<string, unknown>;
+      const fields = ["meaning", "baseForm", "partOfSpeech", "syntacticRole", "morphology", "usage", "contrast"];
+      if (!fields.every((field) => text(authored[field]))) throw new Error(`Lesson ${lessonId} X-Ray unit ${unit} is incomplete.`);
+    }
+  }
 }
 
 export function validatePack(value: unknown, descriptor: CurriculumPackDescriptor): LessonDefinition[] {
@@ -79,7 +100,7 @@ export function validatePack(value: unknown, descriptor: CurriculumPackDescripto
       !Array.isArray(pack.lessons) || pack.lessons.length === 0) {
     throw new Error(`Pack ${descriptor.id} does not match its manifest descriptor.`);
   }
-  const lessons = pack.lessons.map((lesson) => validateCompactLesson(lesson, descriptor.level));
+  const lessons = pack.lessons.map((lesson) => validateCompactLesson(lesson, descriptor.level, descriptor.quality === "xray-reviewed"));
   const ids = new Set<string>();
   const objectives = new Set<string>();
   for (const lesson of lessons) {

@@ -1,5 +1,6 @@
 import type { CEFRLevel } from "./cefr";
 import { createInteractiveSentenceModel, familySentenceAnatomy, type InteractiveSentenceModel } from "./interactive-sentence";
+import type { AuthoredXRayEntry } from "./lesson-tools";
 
 export type VocabularyItem = {
   word: string;
@@ -35,6 +36,7 @@ export type LessonDefinition = {
   };
   sentence: { target: string; anchor: string; bridge: string; note: string; translations?: Record<string, string> };
   anatomy?: InteractiveSentenceModel;
+  xray?: Record<string, { units: Record<string, AuthoredXRayEntry>; preferredPhrases?: string[] }>;
   grammar: {
     focus: string;
     target: GrammarLayer;
@@ -293,6 +295,7 @@ export type CompactLesson = {
   spanish: string; english: string; vietnamese: string;
   focus: string; pattern: string; bridgePattern: string;
   anatomy?: InteractiveSentenceModel;
+  xray?: Record<string, { units: Record<string, AuthoredXRayEntry>; preferredPhrases?: string[] }>;
 };
 
 export function expandLesson(item: CompactLesson): LessonDefinition {
@@ -323,6 +326,7 @@ export function expandLesson(item: CompactLesson): LessonDefinition {
       note: "The sentence is useful in ordinary life while preserving attention to the person and situation before you.",
     },
     anatomy: item.anatomy || createInteractiveSentenceModel(item),
+    xray: item.xray,
     grammar: {
       focus: item.focus,
       target: { pattern: item.pattern, explanation: `Spanish organizes this meaning through ${item.pattern}. The form carries information that English may state separately.` },

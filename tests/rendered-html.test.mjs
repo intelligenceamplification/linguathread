@@ -97,6 +97,8 @@ test("loads independently published curriculum packs with a bundled fallback", a
   assert.match(packs, /validateManifest/);
   assert.match(packs, /validatePack/);
   assert.match(packs, /Published lesson id already exists/);
+  assert.match(packs, /quality\?: "legacy" \| "xray-reviewed"/);
+  assert.match(packs, /needs reviewed X-Ray content before publication/);
   assert.equal(JSON.parse(manifest).revision, 1);
 });
 
@@ -108,7 +110,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
     read("../curriculum/README.md"),
   ]);
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(mapSource, new RegExp(`${level}: \\[`));
-  assert.match(mapSource, /plannedLessons: 12/);
+  assert.match(mapSource, /plannedLessons: 8/);
   assert.match(mapSource, /plannedCourseLessonCount/);
   assert.match(page, /Your language course/);
   assert.match(page, />Course<\/button>/);
