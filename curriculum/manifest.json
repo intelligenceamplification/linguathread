@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "courseId": "english-spanish-vietnamese",
-  "revision": 7,
+  "revision": 8,
   "packs": [
     {
       "id": "a1-personal-expression-1",
@@ -48,6 +48,13 @@
       "level": "C1",
       "quality": "xray-reviewed",
       "url": "https://raw.githubusercontent.com/intelligenceamplification/linguathread/curriculum-data/curriculum/packs/c1-core-1.v1.json"
+    },
+    {
+      "id": "c2-core-1",
+      "version": 1,
+      "level": "C2",
+      "quality": "xray-reviewed",
+      "url": "https://raw.githubusercontent.com/intelligenceamplification/linguathread/curriculum-data/curriculum/packs/c2-core-1.v1.json"
     }
   ]
 }
