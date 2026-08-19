@@ -268,6 +268,35 @@ test("keeps Vietnamese origin as both a phrase and two explainable terms", async
   assert.match(tu.syntacticRole, /source, origin/);
 });
 
+test("resolves the Vietnamese price question into meaningful X-Ray units", async () => {
+  const { analyzeXRayScope, resolveXRayTokenScope, xraySentenceBreakdown } = await loadLessonToolsModule();
+  const lesson = {
+    id: "price", title: "Price and quantity", skill: "numbers + demonstratives",
+    vocabulary: [
+      { word: "cuánto", english: "how much", vietnamese: "bao nhiêu" },
+      { word: "cuesta", english: "costs", vietnamese: "giá" },
+      { word: "esto", english: "this", vietnamese: "cái này" },
+    ],
+    sentence: { target: "¿Cuánto cuesta esto?", anchor: "How much does this cost?", bridge: "Cái này giá bao nhiêu?", note: "Ask the price of the object being indicated." },
+    grammar: { focus: "Cuánto cuesta", target: { pattern: "question word + verb + demonstrative", explanation: "Spanish leads with the quantity question." }, anchor: { pattern: "how much + does + this + cost", explanation: "English adds does to form the question." }, bridge: { pattern: "demonstrative + price + how much", explanation: "Vietnamese asks what amount the object's price is." }, insight: "The languages ask for the same price through different structures." },
+  };
+
+  for (const tokenIndex of [0, 1]) assert.equal(resolveXRayTokenScope(lesson, "Vietnamese", tokenIndex)?.text, "Cái này");
+  assert.equal(resolveXRayTokenScope(lesson, "Vietnamese", 2)?.text, "giá");
+  for (const tokenIndex of [3, 4]) assert.equal(resolveXRayTokenScope(lesson, "Vietnamese", tokenIndex)?.text, "bao nhiêu");
+
+  const breakdown = xraySentenceBreakdown(lesson, "Vietnamese");
+  assert.deepEqual(Array.from(breakdown, (scope) => scope.text), ["Cái này", "giá", "bao nhiêu"]);
+  const thisOne = analyzeXRayScope(lesson, breakdown[0]);
+  const price = analyzeXRayScope(lesson, breakdown[1]);
+  const howMuch = analyzeXRayScope(lesson, breakdown[2]);
+  assert.equal(thisOne.partOfSpeech, "Demonstrative noun phrase");
+  assert.match(thisOne.morphology, /Cái supplies a general object classifier/);
+  assert.equal(price.directMeaning, "price; in this sentence, cost");
+  assert.equal(howMuch.directMeaning, "how much; how many");
+  assert.match(howMuch.morphology, /meaning belongs to the phrase/);
+});
+
 test("derives X-Ray language tabs from authored language realizations", async () => {
   const { xrayLanguages, xrayScopes } = await loadLessonToolsModule();
   const lesson = {

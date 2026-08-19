@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { analyzeXRayScope, type LessonForTools, type TranslationLanguage, xrayLanguages, xrayScopes } from "./lesson-tools";
+import { analyzeXRayScope, type LessonForTools, type TranslationLanguage, resolveXRayTokenScope, xrayLanguages, xrayScopes, xraySentenceBreakdown } from "./lesson-tools";
 
 export function UniversalXRay({ lesson, showBridge, onClose }: { lesson: LessonForTools; showBridge: boolean; onClose: () => void }) {
   const [language, setLanguage] = useState<TranslationLanguage>("Spanish");
@@ -13,6 +13,7 @@ export function UniversalXRay({ lesson, showBridge, onClose }: { lesson: LessonF
   const selected = scopes.find((scope) => scope.id === scopeId) || scopes[0];
   const analysis = selected && analyzeXRayScope(lesson, selected);
   const words = scopes.filter((scope) => scope.kind === "word");
+  const sentenceBreakdown = selected?.kind === "sentence" ? xraySentenceBreakdown(lesson, activeLanguage) : [];
 
   function selectScope(scopeId: string) {
     setScopeId(scopeId);
@@ -36,7 +37,7 @@ export function UniversalXRay({ lesson, showBridge, onClose }: { lesson: LessonF
       {words.map((word) => {
         const isSelected = selected?.tokenStart === word.tokenStart && selected?.tokenEnd === word.tokenEnd;
         const isWithinSelectedPhrase = selected && selected.tokenStart <= word.tokenStart && selected.tokenEnd >= word.tokenEnd;
-        return <button key={word.id} className={isSelected ? "selected" : isWithinSelectedPhrase ? "in-scope" : ""} aria-pressed={isSelected} onClick={() => selectScope(word.id)}>{word.text}</button>;
+        return <button key={word.id} className={isSelected ? "selected" : isWithinSelectedPhrase ? "in-scope" : ""} aria-pressed={isSelected} onClick={() => selectScope(resolveXRayTokenScope(lesson, activeLanguage, word.tokenStart)?.id || word.id)}>{word.text}</button>;
       })}
     </div>
     <label className="xray-scope-field">
@@ -49,6 +50,10 @@ export function UniversalXRay({ lesson, showBridge, onClose }: { lesson: LessonF
       <h3>{analysis.title}</h3>
       <p className="xray-kind">{analysis.interpretation === "standalone" ? "Standalone term" : analysis.interpretation === "phrase" ? "Phrase-level expression" : analysis.interpretation === "component" ? "Component within a phrase" : "Context-dependent selection"} · {analysis.scope} analysis</p>
       <XRaySection title="Meaning"><p>{analysis.directMeaning}</p><p>{analysis.contextualMeaning}</p></XRaySection>
+      {sentenceBreakdown.length > 0 && <XRaySection title="Complete grammatical breakdown"><div className="xray-breakdown">{sentenceBreakdown.map((scope) => {
+        const item = analyzeXRayScope(lesson, scope);
+        return <button key={scope.id} onClick={() => selectScope(scope.id)}><strong>{scope.text}</strong><span>{item.partOfSpeech}</span><p>{item.directMeaning}</p></button>;
+      })}</div></XRaySection>}
       <XRaySection title="Form"><dl><div><dt>Base form</dt><dd>{analysis.baseForm}</dd></div><div><dt>Morphology</dt><dd>{analysis.morphology}</dd></div><div><dt>Part of speech</dt><dd>{analysis.partOfSpeech}</dd></div><div><dt>Role</dt><dd>{analysis.syntacticRole}</dd></div></dl></XRaySection>
       <XRaySection title="Structure"><p>{analysis.structure}</p></XRaySection>
       <XRaySection title="Use and nuance"><p>{analysis.usage}</p><p>{analysis.contrast}</p></XRaySection>

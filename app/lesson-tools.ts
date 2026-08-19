@@ -87,6 +87,10 @@ const vietnameseLexicon: Record<string, VietnameseLexicalEntry> = {
   "không": { meaning: "not; no", baseForm: "không", partOfSpeech: "Negation particle", syntacticRole: "Negates a verb or completes a yes/no question pattern.", morphology: "Invariant; it does not agree with the subject.", usage: "Its position changes the scope of what is negated or questioned.", contrast: "Spanish uses no before the verb. Vietnamese can use không at the end of a yes/no question pattern." },
   "một": { meaning: "one; a / an", baseForm: "một", partOfSpeech: "Number word", syntacticRole: "Counts one item and can support an indefinite reference.", morphology: "Invariant; classifiers and nouns make the phrase specific.", usage: "Often appears with a classifier before a countable noun.", contrast: "Spanish articles carry gender and number. Vietnamese uses number and classifier choices instead." },
   "cái": { meaning: "general classifier", baseForm: "cái", partOfSpeech: "Classifier", syntacticRole: "Classifies many ordinary objects before the noun.", morphology: "Invariant; it does not encode grammatical gender or plural agreement.", usage: "Use the appropriate classifier with a noun when the context calls for one.", contrast: "Spanish has articles such as un or una; Vietnamese classifiers organize noun phrases differently." },
+  "cái này": { meaning: "this; this one", baseForm: "cái này", partOfSpeech: "Demonstrative noun phrase", syntacticRole: "Identifies the nearby object whose price is being asked about.", morphology: "Cái supplies a general object classifier; này follows it and marks the object as near or currently indicated.", usage: "Vietnamese places the demonstrative after the classifier or noun: cái này, literally ‘object this.’", contrast: "English this comes before or replaces the noun. Spanish esto is a compact demonstrative pronoun." },
+  "này": { meaning: "this; this one here", baseForm: "này", partOfSpeech: "Demonstrative", syntacticRole: "Points to something near the speaker or active in the immediate context.", morphology: "Invariant; its position after a noun or classifier carries the demonstrative relationship.", usage: "In cái này, it specifies ‘this one.’", contrast: "English and Spanish usually place a demonstrative before a noun; Vietnamese commonly places này after it." },
+  "giá": { meaning: "price; in this sentence, cost", baseForm: "giá", partOfSpeech: "Noun used predicatively", syntacticRole: "Introduces the price being requested: the object’s price is how much?", morphology: "Invariant. Vietnamese can place the price noun directly before bao nhiêu without conjugating a verb equivalent to ‘cost.’", usage: "In Cái này giá bao nhiêu?, giá connects the indicated object to the requested amount.", contrast: "English and Spanish use verbs, cost and cuesta. Vietnamese can organize the same question around the noun giá, ‘price.’" },
+  "bao nhiêu": { meaning: "how much; how many", baseForm: "bao nhiêu", partOfSpeech: "Interrogative quantity phrase", syntacticRole: "Requests an unknown amount or quantity.", morphology: "A stable two-word question expression. Its meaning belongs to the phrase; bao is not ‘how much’ by itself here.", usage: "Keep bao nhiêu together. In Cái này giá bao nhiêu?, it asks for the price.", contrast: "English how much and Spanish cuánto package the same question differently. Vietnamese uses the two-word unit bao nhiêu." },
   "rất": { meaning: "very", baseForm: "rất", partOfSpeech: "Degree adverb", syntacticRole: "Intensifies an adjective or state.", morphology: "Invariant.", usage: "Place it before the quality being intensified.", contrast: "Spanish muy serves a similar intensifying role but participates in a different adjective structure." },
   "và": { meaning: "and", baseForm: "và", partOfSpeech: "Coordinating conjunction", syntacticRole: "Links parallel words, phrases, or clauses.", morphology: "Invariant.", usage: "Use it to coordinate two meaningful units without changing either form.", contrast: "Spanish y is similar in function but follows its own sound-based spelling convention before some words." },
   "bánh": { meaning: "cake, pastry, or a prepared flour- or rice-based food, depending on context", baseForm: "bánh", partOfSpeech: "Noun", syntacticRole: "Names the food item that a following modifier may specify.", morphology: "Invariant; classifiers and modifiers clarify quantity and type.", usage: "Vietnamese bánh is broad. The word after it usually tells you what kind of bánh is meant.", contrast: "English may require a more specific food word; do not assume bánh maps to cake in every context." },
@@ -95,6 +99,11 @@ const vietnameseLexicon: Record<string, VietnameseLexicalEntry> = {
   "làm ơn": { meaning: "please; do me a favor", baseForm: "làm ơn", partOfSpeech: "Courtesy phrase", syntacticRole: "Softens or frames a request politely.", morphology: "A fixed phrase; read it as one social action rather than as unrelated words.", usage: "Appropriate when asking for something with explicit courtesy.", contrast: "Spanish por favor is similarly courteous, though the natural placement and tone can differ." },
   "cảm ơn": { meaning: "thank you", baseForm: "cảm ơn", partOfSpeech: "Gratitude phrase", syntacticRole: "Completes an exchange by expressing thanks.", morphology: "A stable multiword expression.", usage: "Use as a whole phrase; an added pronoun can specify whom you thank when needed.", contrast: "Spanish gracias is one word, while Vietnamese expresses gratitude through a phrase." },
 };
+
+// These reviewed expressions should open as complete semantic units when any
+// of their visible words is tapped. Their components remain available through
+// the explicit scope selector when a learner wants the narrower analysis.
+const vietnamesePreferredPhraseSelections = new Set(["cái này", "bao nhiêu"]);
 
 const languageSentence = (lesson: LessonForTools, language: TranslationLanguage) => language === "Spanish"
   ? lesson.sentence.target
@@ -183,6 +192,61 @@ export function xrayScopes(lesson: LessonForTools, language: TranslationLanguage
     ...phraseScopes,
     { id: `${language}-sentence`, kind: "sentence" as const, language, text: sentence, tokenStart: 0, tokenEnd: words.length },
   ];
+}
+
+function isAuthoredPhrase(lesson: LessonForTools, scope: XRayScope) {
+  if (scope.kind !== "phrase") return false;
+  const normalized = strip(scope.text).toLocaleLowerCase();
+  if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
+  return lesson.vocabulary.some((word) => strip(languageValue(word, scope.language)).toLocaleLowerCase() === normalized);
+}
+
+function hasStandaloneMeaning(lesson: LessonForTools, scope: XRayScope) {
+  if (scope.kind !== "word") return false;
+  if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
+  const normalized = strip(scope.text).toLocaleLowerCase();
+  return lesson.vocabulary.some((word) => {
+    const value = strip(languageValue(word, scope.language));
+    return !value.includes(" ") && value.toLocaleLowerCase() === normalized;
+  });
+}
+
+export function resolveXRayTokenScope(lesson: LessonForTools, language: TranslationLanguage, tokenIndex: number) {
+  const scopes = xrayScopes(lesson, language);
+  const word = scopes.find((scope) => scope.kind === "word" && scope.tokenStart === tokenIndex);
+  if (!word) return word;
+  const meaningfulPhrases = scopes
+    .filter((scope) => scope.kind === "phrase" && scope.tokenStart <= tokenIndex && scope.tokenEnd > tokenIndex && isAuthoredPhrase(lesson, scope))
+    .sort((a, b) => (a.tokenEnd - a.tokenStart) - (b.tokenEnd - b.tokenStart));
+  const preferredPhrase = language === "Vietnamese"
+    ? meaningfulPhrases.find((scope) => vietnamesePreferredPhraseSelections.has(normalizeVietnamese(scope.text)))
+    : undefined;
+  if (preferredPhrase) return preferredPhrase;
+  if (hasStandaloneMeaning(lesson, word)) return word;
+  return meaningfulPhrases[0] || word;
+}
+
+export function xraySentenceBreakdown(lesson: LessonForTools, language: TranslationLanguage) {
+  const scopes = xrayScopes(lesson, language);
+  const words = scopes.filter((scope) => scope.kind === "word");
+  const phrases = scopes.filter((scope) => isAuthoredPhrase(lesson, scope));
+  const breakdown: XRayScope[] = [];
+  let index = 0;
+
+  while (index < words.length) {
+    const phrase = phrases
+      .filter((scope) => scope.tokenStart === index)
+      .sort((a, b) => (b.tokenEnd - b.tokenStart) - (a.tokenEnd - a.tokenStart))[0];
+    if (phrase) {
+      breakdown.push(phrase);
+      index = phrase.tokenEnd;
+    } else {
+      breakdown.push(words[index]);
+      index += 1;
+    }
+  }
+
+  return breakdown;
 }
 
 const voyAnalysis: XRayAnalysis = {
