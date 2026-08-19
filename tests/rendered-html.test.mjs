@@ -22,6 +22,15 @@ async function loadLessonToolsModule() {
   return cjsModule.exports;
 }
 
+async function loadCurriculumModule() {
+  const [source, interactiveSentence] = await Promise.all([read("../app/curriculum.ts"), loadInteractiveSentenceModule()]);
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const cjsModule = { exports: {} };
+  const localRequire = (specifier) => specifier === "./interactive-sentence" ? interactiveSentence : {};
+  vm.runInNewContext(compiled, { module: cjsModule, exports: cjsModule.exports, require: localRequire, Map, Set, Array, String, Object });
+  return cjsModule.exports;
+}
+
 test("builds LinguaThread on the standard Next.js runtime", async () => {
   const packageJson = JSON.parse(await read("../package.json"));
   assert.equal(packageJson.scripts.build, "next build");
@@ -223,7 +232,7 @@ test("offers universal X-Ray scopes and a complete standalone analysis for voy",
   assert.match(analysis.relationship, /visitar/);
 
   const singleWordFocus = { ...lesson, grammar: { ...lesson.grammar, focus: "Voy" } };
-  assert.ok(xrayScopes(singleWordFocus, "Spanish").some((scope) => scope.kind === "phrase" && scope.text === "Mañana voy"));
+  assert.ok(!xrayScopes(singleWordFocus, "Spanish").some((scope) => scope.kind === "phrase" && scope.text === "Mañana voy"));
 });
 
 test("makes every Vietnamese word, phrase, and whole sentence available to universal X-Ray", async () => {
@@ -236,14 +245,14 @@ test("makes every Vietnamese word, phrase, and whole sentence available to unive
   };
   const scopes = xrayScopes(lesson, "Vietnamese");
   for (const word of ["Ngày", "mai", "tôi", "sẽ", "đi", "thăm"]) assert.ok(scopes.some((scope) => scope.kind === "word" && scope.text === word));
-  assert.ok(scopes.some((scope) => scope.kind === "phrase" && scope.text === "tôi sẽ đi thăm"));
+  assert.ok(scopes.some((scope) => scope.kind === "phrase" && scope.text === "tôi sẽ"));
   const wholeSentence = scopes.find((scope) => scope.kind === "sentence");
   assert.equal(wholeSentence?.text, "Ngày mai tôi sẽ đi thăm.");
   const analysis = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "word" && scope.text === "sẽ"));
   assert.equal(analysis.partOfSpeech, "Aspect or time marker");
   assert.match(analysis.morphology, /stays stable/);
   assert.match(analysis.relationship, /Tomorrow I am going to visit/);
-  const phrase = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "phrase" && scope.text === "tôi sẽ đi thăm"));
+  const phrase = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "phrase" && scope.text === "tôi sẽ"));
   assert.match(phrase.contextualMeaning, /time \+ sẽ \+ verb/);
   assert.match(phrase.relationship, /Vietnamese realization/);
 });
@@ -308,16 +317,103 @@ test("uses the canonical X-Ray engine inside every displayed sentence language",
   assert.doesNotMatch(component, /mode === "xray"[\s\S]{0,500}selectUnit\(unit/);
 });
 
+test("authors every part of the Spanish clock sentence without generic X-Ray filler", async () => {
+  const { analyzeXRayScope, xrayScopes, xraySentenceBreakdown } = await loadLessonToolsModule();
+  const lesson = {
+    id: "clock", title: "Clock time", skill: "telling time",
+    vocabulary: [
+      { word: "hora", english: "time", vietnamese: "giờ" },
+      { word: "media", english: "half", vietnamese: "rưỡi" },
+      { word: "mañana", english: "morning", vietnamese: "buổi sáng" },
+      { word: "tarde", english: "afternoon", vietnamese: "buổi chiều" },
+    ],
+    sentence: { target: "Son las ocho y media.", anchor: "It is eight thirty.", bridge: "Bây giờ là tám giờ rưỡi.", note: "State the current clock time." },
+    grammar: { focus: "Son las", target: { pattern: "ser + article + hour", explanation: "Spanish uses a plural verb and article with hours other than one." }, anchor: { pattern: "it is + time", explanation: "English uses a singular frame." }, bridge: { pattern: "là + number + giờ", explanation: "Vietnamese keeps là stable." }, insight: "The same time is organized through three different frames." },
+  };
+  const scopes = xrayScopes(lesson, "Spanish");
+  for (const token of ["Son", "las", "ocho", "y", "media"]) {
+    const analysis = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "word" && scope.text === token));
+    assert.doesNotMatch(analysis.partOfSpeech, /Contextual sentence element/);
+    assert.doesNotMatch(analysis.directMeaning, /spanish element/i);
+    assert.ok(analysis.morphology.length > 25);
+    assert.ok(analysis.syntacticRole.length > 25);
+  }
+  const focus = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "phrase" && scope.text === "Son las"));
+  assert.equal(focus.directMeaning, "it is [the plural hour]");
+  assert.match(focus.morphology, /third-person plural present of ser/);
+  assert.deepEqual(Array.from(xraySentenceBreakdown(lesson, "Spanish"), (scope) => scope.text), ["Son las", "ocho", "y", "media"]);
+});
+
+test("avoids generic Spanish X-Ray cards across representative curriculum patterns", async () => {
+  const { analyzeXRayScope, xrayScopes } = await loadLessonToolsModule();
+  const lessons = [
+    { id: "request", title: "Request", skill: "querer + noun", vocabulary: [{ word: "quiero", english: "I want", vietnamese: "tôi muốn", note: "First-person present of querer." }, { word: "agua", english: "water", vietnamese: "nước" }, { word: "por favor", english: "please", vietnamese: "làm ơn" }], sentence: { target: "Quiero agua, por favor.", anchor: "I would like water, please.", bridge: "Tôi muốn nước, làm ơn.", note: "A courteous request." }, grammar: { focus: "Quiero", target: { pattern: "quiero + noun", explanation: "Quiero is the first-person form of querer." }, anchor: { pattern: "I would like + noun", explanation: "English softens the request." }, bridge: { pattern: "tôi + muốn + noun", explanation: "Vietnamese keeps muốn stable." }, insight: "Tone travels through different structures." } },
+    { id: "price", title: "Price", skill: "quantity question", vocabulary: [{ word: "cuánto", english: "how much", vietnamese: "bao nhiêu" }, { word: "cuesta", english: "costs", vietnamese: "giá" }, { word: "esto", english: "this", vietnamese: "cái này" }], sentence: { target: "¿Cuánto cuesta esto?", anchor: "How much does this cost?", bridge: "Cái này giá bao nhiêu?", note: "Ask a price." }, grammar: { focus: "Cuánto cuesta", target: { pattern: "question word + verb + demonstrative", explanation: "Spanish leads with the quantity question." }, anchor: { pattern: "how much + does", explanation: "English adds does." }, bridge: { pattern: "demonstrative + price + how much", explanation: "Vietnamese ends with the quantity phrase." }, insight: "Order changes while meaning remains." } },
+    { id: "plans", title: "Plans", skill: "ir a + infinitive", vocabulary: [{ word: "mañana", english: "tomorrow", vietnamese: "ngày mai" }, { word: "voy", english: "I am going", vietnamese: "tôi sẽ" }, { word: "visitar", english: "to visit", vietnamese: "thăm" }], sentence: { target: "Mañana voy a visitar a un amigo.", anchor: "Tomorrow I am going to visit a friend.", bridge: "Ngày mai tôi sẽ đi thăm một người bạn.", note: "A near-future plan." }, grammar: { focus: "Voy a visitar", target: { pattern: "ir a + infinitive", explanation: "Voy carries first person and present tense." }, anchor: { pattern: "be going to + infinitive", explanation: "English uses a future frame." }, bridge: { pattern: "time + sẽ + verb", explanation: "Vietnamese uses sẽ." }, insight: "The plan is shared." } },
+  ];
+  for (const lesson of lessons) {
+    for (const scope of xrayScopes(lesson, "Spanish").filter((item) => item.kind === "word")) {
+      const analysis = analyzeXRayScope(lesson, scope);
+      assert.doesNotMatch(analysis.partOfSpeech, /Contextual sentence element/);
+      assert.doesNotMatch(analysis.directMeaning, /spanish element/i);
+    }
+  }
+});
+
+test("ships no generic Spanish word analysis anywhere in the current curriculum", async () => {
+  const [{ curriculum }, { analyzeXRayScope, xrayScopes }] = await Promise.all([loadCurriculumModule(), loadLessonToolsModule()]);
+  const failures = [];
+  for (const lesson of curriculum) {
+    for (const scope of xrayScopes(lesson, "Spanish").filter((item) => item.kind === "word")) {
+      const analysis = analyzeXRayScope(lesson, scope);
+      if (/Contextual sentence element/.test(analysis.partOfSpeech) || /spanish element/i.test(analysis.directMeaning)) failures.push(`${lesson.id}:${scope.text}`);
+    }
+  }
+  assert.deepEqual(failures, []);
+});
+
+test("ships no generic Vietnamese word analysis anywhere in the current curriculum", async () => {
+  const [{ curriculum }, { analyzeXRayScope, resolveXRayTokenScope, xrayScopes }] = await Promise.all([loadCurriculumModule(), loadLessonToolsModule()]);
+  const failures = [];
+  for (const lesson of curriculum) {
+    for (const scope of xrayScopes(lesson, "Vietnamese").filter((item) => item.kind === "word")) {
+      const resolved = resolveXRayTokenScope(lesson, "Vietnamese", scope.tokenStart) || scope;
+      const analysis = analyzeXRayScope(lesson, resolved);
+      if (/Contextual Vietnamese word/.test(analysis.partOfSpeech) || /vietnamese element/i.test(analysis.directMeaning)) failures.push(`${lesson.id}:${scope.text}->${resolved.text}`);
+    }
+  }
+  assert.deepEqual(failures, []);
+});
+
+test("ships no generic English word analysis anywhere in the current curriculum", async () => {
+  const [{ curriculum }, { analyzeXRayScope, resolveXRayTokenScope, xrayScopes }] = await Promise.all([loadCurriculumModule(), loadLessonToolsModule()]);
+  const failures = [];
+  for (const lesson of curriculum) {
+    for (const scope of xrayScopes(lesson, "English").filter((item) => item.kind === "word")) {
+      const resolved = resolveXRayTokenScope(lesson, "English", scope.tokenStart) || scope;
+      const analysis = analyzeXRayScope(lesson, resolved);
+      if (/Contextual sentence element/.test(analysis.partOfSpeech) || /english element/i.test(analysis.directMeaning)) failures.push(`${lesson.id}:${scope.text}->${resolved.text}`);
+    }
+  }
+  assert.deepEqual(failures, []);
+});
+
 test("derives X-Ray language tabs from authored language realizations", async () => {
-  const { xrayLanguages, xrayScopes } = await loadLessonToolsModule();
+  const { analyzeXRayScope, xrayLanguages, xrayScopes } = await loadLessonToolsModule();
   const lesson = {
     id: "extended-stack", title: "Extended stack", skill: "practical pattern",
     vocabulary: [{ word: "soy", english: "I am", vietnamese: "tôi là", translations: { Italian: "io sono" } }],
     sentence: { target: "Soy de Indiana.", anchor: "I am from Indiana.", bridge: "Tôi đến từ Indiana.", translations: { Italian: "Vengo dall'Indiana." }, note: "A shared origin thought." },
     grammar: { focus: "Soy", target: { pattern: "soy + de", explanation: "Spanish pattern." }, anchor: { pattern: "I + am + from", explanation: "English pattern." }, bridge: { pattern: "tôi + đến từ", explanation: "Vietnamese pattern." }, additional: { Italian: { pattern: "venire da + place", explanation: "Italian pattern." } }, insight: "Meaning is shared." },
+    xray: { Italian: { units: { "vengo": { meaning: "I come; here, I am from", baseForm: "venire", partOfSpeech: "Finite verb", syntacticRole: "Carries first-person singular and introduces origin with da.", morphology: "Present indicative, first-person singular of the irregular verb venire.", usage: "Vengo da is a natural way to state origin in Italian.", contrast: "Spanish uses soy de; Vietnamese uses đến từ." }, "dall'indiana": { meaning: "from Indiana", baseForm: "da + l'Indiana", partOfSpeech: "Contracted origin phrase", syntacticRole: "Names the place of origin introduced by da.", morphology: "Da combines with the definite article before the place name.", usage: "The contraction belongs to the complete origin expression.", contrast: "English writes from Indiana without an article contraction." } }, preferredPhrases: ["dall'Indiana"] } },
   };
   assert.deepEqual(Array.from(xrayLanguages(lesson, true)), ["Spanish", "English", "Vietnamese", "Italian"]);
-  assert.ok(xrayScopes(lesson, "Italian").some((scope) => scope.kind === "sentence" && scope.text === "Vengo dall'Indiana."));
+  const scopes = xrayScopes(lesson, "Italian");
+  assert.ok(scopes.some((scope) => scope.kind === "sentence" && scope.text === "Vengo dall'Indiana."));
+  const vengo = analyzeXRayScope(lesson, scopes.find((scope) => scope.kind === "word" && scope.text === "Vengo"));
+  assert.equal(vengo.baseForm, "venire");
+  assert.equal(vengo.partOfSpeech, "Finite verb");
+  assert.doesNotMatch(vengo.directMeaning, /italian element/i);
 });
 
 test("composes a finite Daily Lesson with review, vocabulary, application, rotation, and quiet completion", async () => {

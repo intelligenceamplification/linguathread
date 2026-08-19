@@ -1,13 +1,24 @@
 export type TranslationLanguage = string;
 export type TranslationScope = "word" | "phrase" | "sentence";
 
+export type AuthoredXRayEntry = {
+  meaning: string;
+  baseForm: string;
+  partOfSpeech: string;
+  syntacticRole: string;
+  morphology: string;
+  usage: string;
+  contrast: string;
+};
+
 export type LessonForTools = {
   id: string;
   title: string;
   skill: string;
-  vocabulary: Array<{ word: string; english: string; vietnamese: string; translations?: Record<string, string> }>;
+  vocabulary: Array<{ word: string; english: string; vietnamese: string; note?: string; translations?: Record<string, string> }>;
   sentence: { target: string; anchor: string; bridge: string; note: string; translations?: Record<string, string> };
   grammar: { focus: string; target: { pattern: string; explanation: string }; anchor: { pattern: string; explanation: string }; bridge: { pattern: string; explanation: string }; additional?: Record<string, { pattern: string; explanation: string }>; insight: string };
+  xray?: Record<string, { units: Record<string, AuthoredXRayEntry>; preferredPhrases?: string[] }>;
 };
 
 export type XRayScope = {
@@ -57,14 +68,50 @@ export type DailyLessonPlan = {
   exercises: TranslationExercise[];
 };
 
-type VietnameseLexicalEntry = {
-  meaning: string;
-  baseForm: string;
-  partOfSpeech: string;
-  syntacticRole: string;
-  morphology: string;
-  usage: string;
-  contrast: string;
+type VietnameseLexicalEntry = AuthoredXRayEntry;
+
+type SpanishLexicalEntry = VietnameseLexicalEntry;
+
+const spanishLexicon: Record<string, SpanishLexicalEntry> = {
+  "son las": { meaning: "it is [the plural hour]", baseForm: "ser + las + hour", partOfSpeech: "Clock-time predicate frame", syntacticRole: "Establishes the time before the hour and any added minutes are named.", morphology: "Son is third-person plural present of ser; las is feminine plural because horas is understood. Together they form the standard frame for hours other than one.", usage: "Complete it with an hour: son las ocho. Add y media, y cuarto, or minutes when needed.", contrast: "English uses singular it is and no article. Vietnamese can use là with an unchanged form." },
+  "son": { meaning: "they are; here, it is", baseForm: "ser, ‘to be’", partOfSpeech: "Finite verb", syntacticRole: "Opens the clock-time expression and agrees with the plural hour phrase las ocho.", morphology: "Present indicative, third-person plural of ser. Spanish traditionally treats hours other than one o’clock as plural: son las ocho.", usage: "Use son las + hour for clock times from two through twelve. Use es la una for one o’clock.", contrast: "English uses singular it is. Vietnamese can use là without changing the verb for the hour." },
+  "las": { meaning: "the; here, the plural hour marker", baseForm: "la / las", partOfSpeech: "Feminine plural definite article", syntacticRole: "Introduces the understood feminine plural noun horas before ocho.", morphology: "Feminine plural article agreeing with the omitted noun horas. The plural article helps make son las ocho grammatical.", usage: "Clock time normally uses la with una and las with the other hours.", contrast: "English omits an article in eight thirty. Vietnamese also does not need an equivalent article." },
+  "ocho": { meaning: "eight", baseForm: "ocho", partOfSpeech: "Cardinal number", syntacticRole: "Names the hour in the time expression las ocho.", morphology: "Invariant cardinal number; it does not change for gender here.", usage: "After son las, it identifies the hour: son las ocho, ‘it is eight o’clock.’", contrast: "The number maps directly across the languages, but Spanish surrounds it with son las." },
+  "y": { meaning: "and; in clock time, plus", baseForm: "y", partOfSpeech: "Coordinating conjunction", syntacticRole: "Links the stated hour to the additional fraction media.", morphology: "Invariant conjunction. Before most words it remains y.", usage: "In time expressions, y adds minutes or a fraction after the hour: ocho y media.", contrast: "English says eight thirty without and. Vietnamese places giờ before rưỡi instead." },
+  "media": { meaning: "half; here, half past", baseForm: "medio / media", partOfSpeech: "Feminine singular adjective used as a time fraction", syntacticRole: "Adds half an hour to ocho; media agrees with the understood feminine noun hora.", morphology: "Feminine singular form of medio because the omitted unit is media hora, ‘half an hour.’", usage: "Use y media for half past the hour: son las ocho y media.", contrast: "English lexicalizes the result as eight thirty. Vietnamese uses rưỡi after the hour unit." },
+  "el": { meaning: "the", baseForm: "el", partOfSpeech: "Masculine singular definite article", syntacticRole: "Introduces a specific masculine singular noun.", morphology: "Agrees with its noun in masculine gender and singular number.", usage: "Use when the noun is identifiable in context.", contrast: "English the does not mark gender; Vietnamese often relies on context or classifiers." },
+  "la": { meaning: "the", baseForm: "la", partOfSpeech: "Feminine singular definite article", syntacticRole: "Introduces a specific feminine singular noun.", morphology: "Agrees with its noun in feminine gender and singular number.", usage: "Use when the noun is identifiable in context.", contrast: "English the does not mark gender; Vietnamese often relies on context or classifiers." },
+  "una": { meaning: "a; one", baseForm: "uno / una", partOfSpeech: "Feminine singular indefinite article or number", syntacticRole: "Introduces one nonspecific feminine singular noun.", morphology: "Feminine singular form agreeing with the noun that follows.", usage: "Context decides whether the emphasis is indefinite reference or the number one.", contrast: "Vietnamese may use một plus a classifier; English a does not mark gender." },
+  "un": { meaning: "a; one", baseForm: "uno / un", partOfSpeech: "Masculine singular indefinite article or number", syntacticRole: "Introduces one nonspecific masculine singular noun.", morphology: "Apocopated masculine form used before a singular noun.", usage: "Context decides whether the emphasis is indefinite reference or the number one.", contrast: "Vietnamese may use một plus a classifier; English a does not mark gender." },
+  "a": { meaning: "to; at; toward", baseForm: "a", partOfSpeech: "Preposition", syntacticRole: "Marks direction, destination, an infinitive link, or a personal object according to context.", morphology: "Invariant preposition; its function comes from the construction around it.", usage: "Read it as part of the authored sentence pattern rather than assigning one English word in every context.", contrast: "English and Vietnamese distribute these relationships differently and may omit a direct equivalent." },
+  "de": { meaning: "from; of", baseForm: "de", partOfSpeech: "Preposition", syntacticRole: "Introduces origin, possession, material, or another defining relationship.", morphology: "Invariant preposition. It contracts with el to form del.", usage: "In ser de, it expresses origin; elsewhere the surrounding nouns determine the relation.", contrast: "Vietnamese uses distinct constructions such as đến từ for origin and của for possession." },
+  "en": { meaning: "in; at; on", baseForm: "en", partOfSpeech: "Preposition", syntacticRole: "Locates an action or state within a place or setting.", morphology: "Invariant preposition.", usage: "Its natural English equivalent depends on the location expression.", contrast: "Vietnamese commonly uses ở for location, while English chooses among in, at, and on." },
+  "por": { meaning: "for; by; through", baseForm: "por", partOfSpeech: "Preposition", syntacticRole: "Introduces cause, means, movement through, exchange, or part of a fixed expression.", morphology: "Invariant preposition.", usage: "In por favor, read the complete courtesy phrase rather than translating por alone.", contrast: "Its range does not map to one English or Vietnamese preposition." },
+  "con": { meaning: "with", baseForm: "con", partOfSpeech: "Preposition", syntacticRole: "Introduces accompaniment, association, or means.", morphology: "Invariant preposition.", usage: "The following noun identifies who accompanies the action or what enables it.", contrast: "Vietnamese với and English with overlap, but idiomatic boundaries differ." },
+  "al": { meaning: "to the", baseForm: "a + el", partOfSpeech: "Preposition–article contraction", syntacticRole: "Combines direction or relation a with the masculine singular article el.", morphology: "Mandatory contraction of a + el in ordinary Spanish.", usage: "Keep the contraction unless el belongs to a proper name that conventionally retains it.", contrast: "English writes two words; Vietnamese does not use an article contraction." },
+  "mas": { meaning: "more", baseForm: "más", partOfSpeech: "Comparative degree adverb", syntacticRole: "Raises the degree of the adjective or adverb that follows.", morphology: "Invariant; the written accent distinguishes más, ‘more,’ from mas, a literary ‘but.’", usage: "Use más + adjective/adverb to form a comparison or intensified request.", contrast: "Vietnamese commonly places hơn after the quality being compared." },
+  "muy": { meaning: "very", baseForm: "muy", partOfSpeech: "Degree adverb", syntacticRole: "Intensifies the adjective that follows.", morphology: "Invariant adverb.", usage: "Use muy before an adjective or adverb; use mucho with nouns and many verbs.", contrast: "Vietnamese rất also precedes the quality in many common patterns." },
+  "cada": { meaning: "each; every", baseForm: "cada", partOfSpeech: "Distributive determiner", syntacticRole: "Distributes the statement across individual days or members of a set.", morphology: "Invariant and normally followed by a singular noun.", usage: "Cada día frames a repeated development one day at a time.", contrast: "English each/every and Vietnamese mỗi express a similar distribution with different syntax." },
+  "favor": { meaning: "favor; in por favor, please", baseForm: "favor", partOfSpeech: "Noun within a courtesy phrase", syntacticRole: "Completes por favor, the conventional expression that softens a request.", morphology: "Masculine singular noun; in this fixed phrase it appears without an article.", usage: "Read por favor as one courtesy expression. Favor alone remains the noun ‘favor.’", contrast: "English please is one word; Vietnamese commonly uses a phrase such as làm ơn." },
+  "amigo": { meaning: "friend; a male or unspecified friend", baseForm: "amigo", partOfSpeech: "Masculine singular noun", syntacticRole: "Names the person who receives the planned visit.", morphology: "Masculine singular form; amiga names a female friend, and plural forms add -s.", usage: "The indefinite phrase un amigo introduces one friend not otherwise specified.", contrast: "English friend does not mark gender. Vietnamese người bạn is also structured differently." },
+  "indiana": { meaning: "Indiana", baseForm: "Indiana", partOfSpeech: "Proper place name", syntacticRole: "Names the place of origin introduced by de.", morphology: "Proper noun; its form is retained in this Spanish sentence.", usage: "Place names are capitalized and normally appear without an article here.", contrast: "The place name remains stable across this language stack." },
+  "desmond": { meaning: "Desmond", baseForm: "Desmond", partOfSpeech: "Personal proper name", syntacticRole: "Supplies the speaker’s name after me llamo.", morphology: "Proper noun; it does not take Spanish gender or number inflection here.", usage: "Personal names retain their identity inside the Spanish introduction frame.", contrast: "The name remains stable while each language builds the introduction differently." },
+  "me": { meaning: "me; to me; myself, according to the construction", baseForm: "me", partOfSpeech: "First-person singular clitic pronoun", syntacticRole: "Marks the speaker as reflexive participant, indirect object, or experiencer.", morphology: "Unstressed clitic form; its exact function comes from the verb construction.", usage: "Read me together with its verb: me llamo, me siento, or me gusta.", contrast: "English and Vietnamese often express the same relationship with a subject pronoun or different word order." },
+  "siento": { meaning: "I feel", baseForm: "sentirse / sentir", partOfSpeech: "Finite reflexive verb form", syntacticRole: "Forms the predicate with me and introduces the speaker’s internal state.", morphology: "Present indicative, first-person singular; sentir changes e to ie, and sentirse adds the reflexive clitic me.", usage: "Me siento + adjective describes how the speaker feels.", contrast: "English uses I feel; Vietnamese commonly uses tôi cảm thấy with an unchanged verb phrase." },
+  "descansar": { meaning: "to rest", baseForm: "descansar", partOfSpeech: "Infinitive verb", syntacticRole: "Names the needed action after necesito.", morphology: "Regular -ar infinitive; it is not conjugated because necesito already carries person and tense.", usage: "Necesito descansar means ‘I need to rest.’", contrast: "English also uses an infinitive; Vietnamese places nghỉ ngơi after cần without conjugation." },
+  "verte": { meaning: "to see you", baseForm: "ver + te", partOfSpeech: "Infinitive with attached object pronoun", syntacticRole: "Names the action that causes gladness and identifies the person seen.", morphology: "Ver remains infinitive; the unstressed pronoun te attaches to its end.", usage: "Me alegra verte naturally means ‘I’m glad to see you.’", contrast: "English separates to see and you; Vietnamese uses a separate pronoun after gặp." },
+  "es": { meaning: "is; they are, according to the subject", baseForm: "ser", partOfSpeech: "Finite verb", syntacticRole: "Links the subject to an identity, description, or classification.", morphology: "Present indicative, third-person singular of the irregular verb ser.", usage: "Spanish can omit an understood subject because context and the verb form identify it.", contrast: "English chooses is or are from its own subject agreement; Vietnamese là remains unchanged." },
+  "junto": { meaning: "next to; beside, in junto a", baseForm: "junto a", partOfSpeech: "Relational adverb within a prepositional expression", syntacticRole: "Begins the location expression that places the table beside the window.", morphology: "In junto a, the form works as part of a fixed relational phrase.", usage: "Keep junto a together before the reference object.", contrast: "English uses beside; Vietnamese uses the multiword relation bên cạnh." },
+  "sencilla": { meaning: "simple", baseForm: "sencillo", partOfSpeech: "Feminine singular adjective", syntacticRole: "Describes comida and agrees with that feminine singular noun.", morphology: "Feminine singular form, marked by -a.", usage: "Spanish commonly places this descriptive adjective after the noun.", contrast: "English places simple before food; Vietnamese places đơn giản after the noun phrase." },
+  "sencillo": { meaning: "simple", baseForm: "sencillo", partOfSpeech: "Masculine singular adjective", syntacticRole: "Describes the masculine singular indefinite object algo.", morphology: "Masculine singular citation form, marked by -o.", usage: "The adjective follows algo in this natural request.", contrast: "English places simple before the noun-like something; Vietnamese places đơn giản after món." },
+  "veces": { meaning: "times; in a veces, sometimes", baseForm: "vez", partOfSpeech: "Feminine plural noun within an adverbial phrase", syntacticRole: "Completes a veces, the frequency expression that frames the routine.", morphology: "Irregular-looking plural of vez: z changes to c before -es.", usage: "Read a veces as the complete adverbial expression ‘sometimes.’", contrast: "English sometimes is one word; Vietnamese đôi khi is a two-word expression." },
+  "camino": { meaning: "I walk", baseForm: "caminar", partOfSpeech: "Finite verb", syntacticRole: "States the speaker’s habitual action after the frequency phrase.", morphology: "Present indicative, first-person singular of regular -ar verb caminar.", usage: "The -o ending makes an explicit yo unnecessary.", contrast: "English requires I; Vietnamese commonly states tôi and leaves đi bộ unchanged." },
+  "manana": { meaning: "tomorrow; morning, according to context", baseForm: "mañana", partOfSpeech: "Time noun or adverb", syntacticRole: "Locates an action in the next day or names the morning within a time phrase.", morphology: "Invariant lexical form; syntax distinguishes mañana, ‘tomorrow,’ from la mañana, ‘the morning.’", usage: "Sentence position and the article reveal which time meaning is active.", contrast: "Vietnamese distinguishes ngày mai from buổi sáng with separate expressions." },
+  "sigue": { meaning: "continue; go on", baseForm: "seguir", partOfSpeech: "Informal singular affirmative command", syntacticRole: "Directs the listener to continue in the stated direction.", morphology: "Tú affirmative imperative of stem-changing seguir; e changes to i.", usage: "Sigue derecho is a common direction: continue straight.", contrast: "English uses the base-form command; Vietnamese uses an unchanged direction verb." },
+  "este": { meaning: "this", baseForm: "este", partOfSpeech: "Masculine singular demonstrative determiner", syntacticRole: "Identifies the nearby or currently relevant autobús.", morphology: "Masculine singular form agreeing with autobús.", usage: "Place it before the noun: este autobús.", contrast: "Vietnamese places này after xe buýt; English places this before bus." },
+  "puede": { meaning: "can; are you able to, formally", baseForm: "poder", partOfSpeech: "Finite modal verb", syntacticRole: "Frames a polite formal request before the infinitive hablar.", morphology: "Present indicative, third-person singular; in this question it addresses formal usted. Poder changes o to ue.", usage: "¿Puede + infinitive...? is a broadly useful courteous request frame.", contrast: "English uses can before the subject; Vietnamese uses có thể with a stable verb and question frame." },
+  "hablar": { meaning: "to speak", baseForm: "hablar", partOfSpeech: "Infinitive verb", syntacticRole: "Names the requested action after puede.", morphology: "Regular -ar infinitive; person and tense are carried by puede.", usage: "Keep the infinitive after a conjugated modal verb.", contrast: "English drops to after can; Vietnamese uses nói after có thể." },
+  "expresarme": { meaning: "to express myself", baseForm: "expresarse", partOfSpeech: "Reflexive infinitive with attached pronoun", syntacticRole: "Names what the speaker is learning to do.", morphology: "Infinitive expresar plus the first-person reflexive clitic me attached at the end.", usage: "Aprendo a expresarme means ‘I learn to express myself.’", contrast: "English separates myself; Vietnamese expresses the idea through diễn đạt without the same reflexive form." },
 };
 
 // Reviewed reusable Vietnamese terms and constructions. This is deliberately
@@ -98,12 +145,36 @@ const vietnameseLexicon: Record<string, VietnameseLexicalEntry> = {
   "cà phê": { meaning: "coffee", baseForm: "cà phê", partOfSpeech: "Noun phrase", syntacticRole: "Names the drink or its ingredient in context.", morphology: "Invariant; quantity and classifiers can refine the noun phrase.", usage: "A familiar international borrowing, pronounced and used within Vietnamese sound and sentence patterns.", contrast: "Spanish café is a close lexical cousin, but surrounding grammar still differs." },
   "làm ơn": { meaning: "please; do me a favor", baseForm: "làm ơn", partOfSpeech: "Courtesy phrase", syntacticRole: "Softens or frames a request politely.", morphology: "A fixed phrase; read it as one social action rather than as unrelated words.", usage: "Appropriate when asking for something with explicit courtesy.", contrast: "Spanish por favor is similarly courteous, though the natural placement and tone can differ." },
   "cảm ơn": { meaning: "thank you", baseForm: "cảm ơn", partOfSpeech: "Gratitude phrase", syntacticRole: "Completes an exchange by expressing thanks.", morphology: "A stable multiword expression.", usage: "Use as a whole phrase; an added pronoun can specify whom you thank when needed.", contrast: "Spanish gracias is one word, while Vietnamese expresses gratitude through a phrase." },
+  "nghỉ ngơi": { meaning: "to rest; to take restorative rest", baseForm: "nghỉ ngơi", partOfSpeech: "Verb phrase", syntacticRole: "Names the restorative action in the sentence.", morphology: "Stable two-syllable compound expression; it does not conjugate for person or tense.", usage: "Read nghỉ ngơi as one natural expression for resting.", contrast: "Spanish descansar and English rest use one lexical verb." },
+  "được gặp": { meaning: "to get to meet; to have the welcome opportunity to see", baseForm: "được gặp", partOfSpeech: "Modal-result verb phrase", syntacticRole: "Frames meeting someone as a welcomed or enabled experience.", morphology: "Được contributes permission, benefit, or favorable possibility before the unchanged verb gặp.", usage: "Common in warm social expressions such as rất vui được gặp bạn.", contrast: "Spanish verte attaches the object pronoun; English often simply says to meet/see you." },
+  "bên cạnh": { meaning: "beside; next to", baseForm: "bên cạnh", partOfSpeech: "Relational location phrase", syntacticRole: "Locates one object adjacent to another.", morphology: "Stable two-word relation; the reference object follows it.", usage: "Keep bên cạnh together before the object used as the spatial reference.", contrast: "Spanish uses junto a; English can use beside or next to." },
+  "đơn giản": { meaning: "simple; uncomplicated", baseForm: "đơn giản", partOfSpeech: "Adjective", syntacticRole: "Describes the food or item as simple.", morphology: "Stable two-syllable Sino-Vietnamese adjective; it does not agree for gender or number.", usage: "Usually follows the noun phrase it describes.", contrast: "Spanish sencillo/sencilla changes for agreement; Vietnamese đơn giản remains stable." },
+  "bây giờ": { meaning: "now; at the present time", baseForm: "bây giờ", partOfSpeech: "Time expression", syntacticRole: "Anchors the statement in the present moment.", morphology: "Fixed two-word temporal expression.", usage: "Can frame a present action or introduce the current clock time.", contrast: "Spanish ahora and English now use one word." },
+  "đi bộ": { meaning: "to walk; to go on foot", baseForm: "đi bộ", partOfSpeech: "Verb phrase", syntacticRole: "Names movement on foot.", morphology: "Đi supplies movement; bộ specifies the pedestrian mode. The phrase remains unchanged for person and tense.", usage: "Read the two words together for the ordinary verb walk.", contrast: "Spanish caminar and English walk lexicalize the action in one verb." },
+  "vào buổi sáng": { meaning: "in the morning", baseForm: "vào buổi sáng", partOfSpeech: "Time prepositional phrase", syntacticRole: "Places the habitual action within the morning period.", morphology: "Vào introduces the time frame; buổi classifies a period of the day; sáng names morning.", usage: "Use as a complete time setting for an action.", contrast: "Spanish en/por la mañana and English in the morning organize the phrase differently." },
+  "có thể": { meaning: "can; be able to", baseForm: "có thể", partOfSpeech: "Modal phrase", syntacticRole: "Marks ability or possibility before the main verb.", morphology: "Stable two-word modal expression; the following verb remains unchanged.", usage: "In questions, it commonly appears inside the có thể...không frame.", contrast: "Spanish conjugates poder; English uses the modal can." },
+  "diễn đạt": { meaning: "to express; to formulate meaning", baseForm: "diễn đạt", partOfSpeech: "Verb", syntacticRole: "Names the act of putting a thought or feeling into communicable form.", morphology: "Stable two-syllable verb; no person or tense conjugation.", usage: "Use for expressing an idea clearly in words or another form.", contrast: "Spanish uses expresarse reflexively in this lesson; English uses express oneself." },
+  "indiana": { meaning: "Indiana", baseForm: "Indiana", partOfSpeech: "Proper place name", syntacticRole: "Names the place of origin after đến từ.", morphology: "Proper noun retained across the language stack.", usage: "Place it after the origin phrase.", contrast: "The name remains stable while the surrounding origin structure changes." },
+  "desmond": { meaning: "Desmond", baseForm: "Desmond", partOfSpeech: "Personal proper name", syntacticRole: "Supplies the person’s name in the introduction.", morphology: "Proper noun retained without person or number inflection.", usage: "Place it after tên là or the naturally chosen naming frame.", contrast: "The name remains stable across languages." },
+  "vui": { meaning: "glad; happy; joyful", baseForm: "vui", partOfSpeech: "Stative adjective", syntacticRole: "Names a positive emotional state.", morphology: "Invariant; it does not agree for person, gender, or number.", usage: "Can combine with rất for degree and with a following clause for the cause of gladness.", contrast: "Spanish may use alegre or a construction such as me alegra; English chooses glad or happy." },
+  "cách": { meaning: "way; method; manner", baseForm: "cách", partOfSpeech: "Noun or method marker", syntacticRole: "Introduces the manner or method by which an action is performed.", morphology: "Invariant; with học, học cách + verb means ‘learn how to.’", usage: "Read it with the action that follows when it introduces a method.", contrast: "English often uses how to; Spanish commonly links aprender a directly to an infinitive." },
+  "đó": { meaning: "that; that one; there, according to context", baseForm: "đó", partOfSpeech: "Demonstrative or deictic word", syntacticRole: "Points to a person, object, or situation already identifiable in context.", morphology: "Invariant demonstrative form.", usage: "Its position and surrounding noun determine whether it means that or there.", contrast: "Spanish demonstratives inflect for gender and number; English that remains less marked." },
+  "về": { meaning: "return; toward; about", baseForm: "về", partOfSpeech: "Direction verb or relational marker", syntacticRole: "Marks movement toward home/a reference point or introduces a topic.", morphology: "Invariant; context determines its directional or relational use.", usage: "In về nhà, it carries movement toward or back home.", contrast: "Spanish and English choose different prepositions or motion verbs for these senses." },
+  "món": { meaning: "dish; item; classifier for prepared food", baseForm: "món", partOfSpeech: "Noun and classifier", syntacticRole: "Classifies one prepared dish or item.", morphology: "Invariant; quantity normally appears before it and the described quality after the noun phrase.", usage: "Một món introduces one dish/item in a food context.", contrast: "Spanish and English often use an article plus a noun without a separate classifier." },
+  "bằng": { meaning: "by; with; equal to", baseForm: "bằng", partOfSpeech: "Means marker or relational word", syntacticRole: "Introduces the method or instrument used to perform an action.", morphology: "Invariant relational form.", usage: "In trả bằng thẻ, it introduces card as the means of payment.", contrast: "Spanish uses con and English by/with depending on the expression." },
+  "tám": { meaning: "eight", baseForm: "tám", partOfSpeech: "Cardinal number", syntacticRole: "Names the hour or counts eight items.", morphology: "Invariant number word.", usage: "Before giờ, it identifies eight o’clock.", contrast: "The number maps directly, but surrounding clock-time grammar differs." },
+  "đi": { meaning: "go; move away; travel", baseForm: "đi", partOfSpeech: "Movement verb", syntacticRole: "Carries movement and can combine with another verb or mode to shape the action.", morphology: "Invariant; person and time come from pronouns, particles, and context.", usage: "In đi bộ it means go on foot; before thăm it can support the movement toward a visit.", contrast: "Spanish conjugates ir; English changes go/went, while Vietnamese keeps đi stable." },
+  "người": { meaning: "person; human being; classifier for people", baseForm: "người", partOfSpeech: "Noun and human classifier", syntacticRole: "Names or classifies a person in the noun phrase.", morphology: "Invariant; number and definiteness come from surrounding words.", usage: "Một người bạn literally builds ‘one person friend,’ naturally ‘a friend.’", contrast: "Spanish and English articles do not use a separate human classifier." },
+  "vào": { meaning: "enter; into; at/in a time frame", baseForm: "vào", partOfSpeech: "Direction verb or preposition", syntacticRole: "Introduces inward movement or places an event within a named time.", morphology: "Invariant; context distinguishes spatial entry from temporal framing.", usage: "Before a weekday or day period, it commonly means on/in.", contrast: "Spanish and English divide these uses among several prepositions." },
+  "rồi": { meaning: "already; then; afterward", baseForm: "rồi", partOfSpeech: "Aspect or sequence particle", syntacticRole: "Marks completion or moves the sequence to the next action.", morphology: "Invariant particle; placement and discourse context determine its force.", usage: "Between actions it can carry the natural sequence ‘then.’", contrast: "Spanish uses sequence words or tense/aspect; English often uses then or already." },
+  "nói": { meaning: "speak; say", baseForm: "nói", partOfSpeech: "Verb", syntacticRole: "Names the act of speaking requested in the sentence.", morphology: "Invariant; modal and comparison words surround it without changing the verb.", usage: "After có thể it forms ‘can speak’; an adverb can specify how.", contrast: "Spanish leaves hablar infinitive after puede; English uses speak after can." },
+  "hơn": { meaning: "more; comparatively", baseForm: "hơn", partOfSpeech: "Comparative marker", syntacticRole: "Marks a higher degree after an adjective or adverb.", morphology: "Invariant and typically follows the quality being compared.", usage: "Chậm hơn means more slowly; tốt hơn means better.", contrast: "Spanish and English normally place más/more before the quality." },
 };
 
 // These reviewed expressions should open as complete semantic units when any
 // of their visible words is tapped. Their components remain available through
 // the explicit scope selector when a learner wants the narrower analysis.
-const vietnamesePreferredPhraseSelections = new Set(["cái này", "bao nhiêu"]);
+const vietnamesePreferredPhraseSelections = new Set(["cái này", "bao nhiêu", "nghỉ ngơi", "được gặp", "bên cạnh", "đơn giản", "bây giờ", "đi bộ", "vào buổi sáng", "có thể", "diễn đạt"]);
 
 const languageSentence = (lesson: LessonForTools, language: TranslationLanguage) => language === "Spanish"
   ? lesson.sentence.target
@@ -143,6 +214,10 @@ function normalizeVietnamese(value: string) {
   return strip(value).toLocaleLowerCase("vi").replace(/\s+/g, " ");
 }
 
+function normalizeSpanish(value: string) {
+  return strip(value).normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("es").replace(/\s+/g, " ");
+}
+
 function phraseFor(lesson: LessonForTools, language: TranslationLanguage) {
   const words = lesson.vocabulary.slice(0, 2).map((word) => languageValue(word, language));
   return words.join(" ");
@@ -155,21 +230,21 @@ export function xrayScopes(lesson: LessonForTools, language: TranslationLanguage
   const phraseScopes: XRayScope[] = [];
   const authoredPhrase = language === "Spanish" ? lesson.grammar.focus : grammarFor(lesson, language).pattern;
 
-  // Every contiguous group is a legitimate phrase-level lens. This keeps
-  // Vietnamese, English, and Spanish equally explorable without pretending
-  // that their visible tokens always map one-to-one across the stack.
-  for (let start = 0; start < words.length; start += 1) {
-    for (let end = start + 2; end <= words.length; end += 1) {
-      if (start === 0 && end === words.length) continue;
-      phraseScopes.push({
-        id: `${language}-phrase-${start}-${end}`,
-        kind: "phrase",
-        language,
-        text: words.slice(start, end).join(" "),
-        tokenStart: start,
-        tokenEnd: end,
-      });
-    }
+  // Phrase scopes are authored linguistic units, not every mathematically
+  // possible run of adjacent words. This avoids presenting accidental groups
+  // as if they carried a stable grammatical meaning.
+  for (const item of lesson.vocabulary) {
+    const phrase = languageValue(item, language);
+    const phraseTokens = Array.from(phrase.matchAll(/[\p{L}]+(?:[’'][\p{L}]+)?/gu)).map((match) => match[0]);
+    if (phraseTokens.length < 2) continue;
+    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalizeSpanish(words[wordIndex + tokenIndex] || "") === normalizeSpanish(token)));
+    if (start >= 0) phraseScopes.push({ id: `${language}-vocabulary-phrase-${start}-${start + phraseTokens.length}`, kind: "phrase", language, text: words.slice(start, start + phraseTokens.length).join(" "), tokenStart: start, tokenEnd: start + phraseTokens.length });
+  }
+  const reviewedPhraseKeys = language === "Vietnamese" ? Object.keys(vietnameseLexicon) : language === "Spanish" ? Object.keys(spanishLexicon) : Object.keys(lesson.xray?.[language]?.units || {});
+  for (const phrase of reviewedPhraseKeys.filter((item) => item.includes(" "))) {
+    const phraseTokens = phrase.split(" ");
+    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalizeSpanish(words[wordIndex + tokenIndex] || "") === normalizeSpanish(token)));
+    if (start >= 0) phraseScopes.push({ id: `${language}-reviewed-phrase-${start}-${start + phraseTokens.length}`, kind: "phrase", language, text: words.slice(start, start + phraseTokens.length).join(" "), tokenStart: start, tokenEnd: start + phraseTokens.length });
   }
 
   const authoredTokens = Array.from(authoredPhrase.matchAll(/[\p{L}]+(?:[’'][\p{L}]+)?/gu)).map((match) => match[0]);
@@ -187,9 +262,10 @@ export function xrayScopes(lesson: LessonForTools, language: TranslationLanguage
     });
   }
 
+  const uniquePhrases = [...new Map(phraseScopes.map((scope) => [`${scope.tokenStart}-${scope.tokenEnd}`, scope])).values()];
   return [
     ...words.map((text, index) => ({ id: `${language}-word-${index}`, kind: "word" as const, language, text, tokenStart: index, tokenEnd: index + 1 })),
-    ...phraseScopes,
+    ...uniquePhrases,
     { id: `${language}-sentence`, kind: "sentence" as const, language, text: sentence, tokenStart: 0, tokenEnd: words.length },
   ];
 }
@@ -198,12 +274,15 @@ function isAuthoredPhrase(lesson: LessonForTools, scope: XRayScope) {
   if (scope.kind !== "phrase") return false;
   const normalized = strip(scope.text).toLocaleLowerCase();
   if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
+  if (scope.language === "Spanish" && normalizeSpanish(scope.text) === normalizeSpanish(lesson.grammar.focus)) return true;
+  if (lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)]) return true;
   return lesson.vocabulary.some((word) => strip(languageValue(word, scope.language)).toLocaleLowerCase() === normalized);
 }
 
 function hasStandaloneMeaning(lesson: LessonForTools, scope: XRayScope) {
   if (scope.kind !== "word") return false;
   if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
+  if (lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)]) return true;
   const normalized = strip(scope.text).toLocaleLowerCase();
   return lesson.vocabulary.some((word) => {
     const value = strip(languageValue(word, scope.language));
@@ -220,7 +299,7 @@ export function resolveXRayTokenScope(lesson: LessonForTools, language: Translat
     .sort((a, b) => (a.tokenEnd - a.tokenStart) - (b.tokenEnd - b.tokenStart));
   const preferredPhrase = language === "Vietnamese"
     ? meaningfulPhrases.find((scope) => vietnamesePreferredPhraseSelections.has(normalizeVietnamese(scope.text)))
-    : undefined;
+    : meaningfulPhrases.find((scope) => lesson.xray?.[language]?.preferredPhrases?.some((phrase) => normalizeSpanish(phrase) === normalizeSpanish(scope.text)));
   if (preferredPhrase) return preferredPhrase;
   if (hasStandaloneMeaning(lesson, word)) return word;
   return meaningfulPhrases[0] || word;
@@ -265,6 +344,119 @@ const voyAnalysis: XRayAnalysis = {
   relationship: "Voy links the time word mañana to the action visitar, carrying person, tense, and the plan’s forward movement for the whole sentence.",
 };
 
+const spanishVerbLemmas: Record<string, string> = {
+  "soy": "ser", "eres": "ser", "es": "ser", "son": "ser", "estoy": "estar", "esta": "estar", "estas": "estar",
+  "llamo": "llamarse", "quiero": "querer", "trabajo": "trabajar", "descanso": "descansar", "escuchando": "escuchar",
+  "siento": "sentirse", "necesito": "necesitar", "alegra": "alegrar", "vive": "vivir", "hay": "haber", "pasa": "pasar",
+  "sientate": "sentarse", "gusta": "gustar", "quisiera": "querer", "pedir": "pedir", "cuesta": "costar", "voy": "ir",
+  "pagar": "pagar", "camino": "caminar", "visitar": "visitar", "puedes": "poder", "venir": "venir", "sigue": "seguir",
+  "gira": "girar", "lleva": "llevar", "puede": "poder", "hablar": "hablar", "aprendo": "aprender", "expresarme": "expresarse",
+  "verte": "ver", "descansar": "descansar",
+};
+const spanishAdverbs = new Set(["aqui", "donde", "hoy", "despues", "ahora", "porque", "como", "cerca", "muy", "siempre", "nunca", "temprano", "derecho", "mas", "despacio", "mejor"]);
+const spanishAdjectives = new Set(["tranquilo", "cansado", "amable", "paciente", "bienvenido", "sencilla", "sencillo", "libre", "izquierda"]);
+
+function spanishVocabularyAnalysis(lesson: LessonForTools, scope: XRayScope, word: LessonForTools["vocabulary"][number]): XRayAnalysis {
+  const normalized = normalizeSpanish(scope.text);
+  const grammar = lesson.grammar.target;
+  const lemma = spanishVerbLemmas[normalized];
+  const partOfSpeech = lemma ? (/[aei]r$/.test(normalized) ? "Infinitive verb" : normalized.endsWith("ando") || normalized.endsWith("iendo") ? "Gerund" : "Finite or inflected verb")
+    : spanishAdverbs.has(normalized) ? "Adverb or adverbial expression"
+      : spanishAdjectives.has(normalized) ? "Adjective"
+        : "Noun or nominal expression";
+  const form = lemma ? `${lemma}, the source verb for ${scope.text}` : scope.text;
+  const morphology = lemma
+    ? `${scope.text} is the reviewed verb form used in ${grammar.pattern}. ${grammar.explanation}`
+    : partOfSpeech === "Adjective"
+      ? `This form participates in the agreement and word-order pattern ${grammar.pattern}; the sentence context determines its gender and number here.`
+      : `The visible form remains ${scope.text} inside the authored pattern ${grammar.pattern}.`;
+  return {
+    title: scope.text,
+    scope: "word",
+    interpretation: "standalone",
+    directMeaning: word.english,
+    contextualMeaning: word.note || `Here it contributes its reviewed meaning to “${lesson.sentence.target}”`,
+    baseForm: form,
+    morphology,
+    partOfSpeech,
+    syntacticRole: `It performs its ${partOfSpeech.toLocaleLowerCase()} role inside ${grammar.pattern}.`,
+    structure: `${scope.text} belongs to the lesson’s target structure: ${grammar.pattern}.`,
+    usage: `The curriculum introduces it through the natural sentence “${lesson.sentence.target}”, not as an isolated substitution exercise.`,
+    contrast: `Its natural English value here is “${word.english}”; Vietnamese expresses the corresponding contribution as “${word.vietnamese}” without requiring the same grammar.`,
+    relationship: `It helps construct the complete meaning: ${lesson.sentence.anchor}`,
+  };
+}
+
+function authoredVocabularyAnalysis(lesson: LessonForTools, scope: XRayScope, word: LessonForTools["vocabulary"][number]): XRayAnalysis {
+  const language = scope.language;
+  const grammar = grammarFor(lesson, language);
+  return {
+    title: scope.text,
+    scope: "word",
+    interpretation: "standalone",
+    directMeaning: languageValue(word, "English"),
+    contextualMeaning: word.note || `This is reviewed vocabulary in “${languageSentence(lesson, language)}”.`,
+    baseForm: languageValue(word, language),
+    morphology: `${scope.text} is the reviewed ${language} form used inside ${grammar.pattern}. ${grammar.explanation}`,
+    partOfSpeech: "Reviewed lexical unit",
+    syntacticRole: `Carries its authored lexical contribution inside ${grammar.pattern}.`,
+    structure: `Read it in the complete ${language} realization before comparing its position across languages.`,
+    usage: `Use it through the natural model “${languageSentence(lesson, language)}”.`,
+    contrast: `The same lesson contribution appears as “${word.word}” in Spanish and “${word.vietnamese}” in Vietnamese; the grammar need not map one to one.`,
+    relationship: `It helps construct the complete meaning: ${lesson.sentence.anchor}`,
+  };
+}
+
+const englishRoles: Record<string, { meaning: string; base: string; part: string; role: string }> = {
+  "i": { meaning: "the speaker", base: "I", part: "First-person singular subject pronoun", role: "Names the speaker as the subject." },
+  "you": { meaning: "the person or people addressed", base: "you", part: "Second-person pronoun", role: "Refers to the listener as subject or object according to position." },
+  "they": { meaning: "the person or people referred to", base: "they", part: "Third-person pronoun", role: "Supplies the subject while leaving gender unspecified here." },
+  "my": { meaning: "belonging or related to the speaker", base: "my", part: "Possessive determiner", role: "Marks the following noun as connected to the speaker." },
+  "myself": { meaning: "the speaker as the reflexive object", base: "myself", part: "Reflexive pronoun", role: "Returns the action or expression to the speaker." },
+  "a": { meaning: "one nonspecific member", base: "a", part: "Indefinite article", role: "Introduces a singular countable noun not yet identified." },
+  "the": { meaning: "the contextually identifiable one", base: "the", part: "Definite article", role: "Marks the following noun as identifiable in context." },
+  "from": { meaning: "originating at or in", base: "from", part: "Preposition", role: "Introduces the source or place of origin." },
+  "to": { meaning: "to; toward; infinitive marker", base: "to", part: "Preposition or infinitive marker", role: "Links direction or introduces the infinitive that follows." },
+  "at": { meaning: "at a point or setting", base: "at", part: "Preposition", role: "Introduces a location or point in time." },
+  "in": { meaning: "within a place or time frame", base: "in", part: "Preposition", role: "Places the action inside a location or period." },
+  "on": { meaning: "on; within a named day", base: "on", part: "Preposition", role: "Introduces a day or surface relation." },
+  "by": { meaning: "by means of", base: "by", part: "Preposition", role: "Introduces the method or means used." },
+  "and": { meaning: "and", base: "and", part: "Coordinating conjunction", role: "Links parallel words, phrases, or actions." },
+  "is": { meaning: "is", base: "be", part: "Finite copular or auxiliary verb", role: "Links a third-person singular subject or supports another verb form." },
+  "am": { meaning: "am", base: "be", part: "First-person singular finite verb", role: "Agrees with I and links or supports the predicate." },
+  "are": { meaning: "are", base: "be", part: "Finite copular or auxiliary verb", role: "Agrees with you, we, they, or a plural subject." },
+  "would": { meaning: "would; here, polite or conditional framing", base: "will", part: "Modal auxiliary", role: "Softens or conditionally frames the following verb." },
+  "does": { meaning: "does; question support", base: "do", part: "Third-person singular auxiliary", role: "Carries tense and question formation so the main verb stays in its base form." },
+  "can": { meaning: "can; be able to", base: "can", part: "Modal auxiliary", role: "Marks ability or possibility before a base-form verb." },
+  "more": { meaning: "to a greater degree", base: "more", part: "Comparative degree word", role: "Raises the degree of the adjective or adverb that follows." },
+};
+const englishVerbs = new Set(["meet", "like", "work", "rest", "see", "cost", "going", "walk", "come", "continue", "go", "speak", "express"]);
+const englishAdjectives = new Set(["nice", "glad", "simple"]);
+const englishAdverbs = new Set(["attentively", "beside", "morning", "thirty"]);
+
+function englishWordAnalysis(lesson: LessonForTools, scope: XRayScope): XRayAnalysis {
+  const normalized = normalizeSpanish(scope.text.replace(/[’']/g, ""));
+  const authored = englishRoles[normalized];
+  const part = authored?.part || (englishVerbs.has(normalized) ? "Verb or verb form" : englishAdjectives.has(normalized) ? "Adjective" : englishAdverbs.has(normalized) ? "Adverb or adverbial word" : /^\d+$/.test(normalized) || normalized === "eight" ? "Cardinal number" : /^[A-Z]/.test(scope.text) ? "Proper noun or sentence-initial content word" : "Content noun or lexical word");
+  const meaning = authored?.meaning || `the English lexical meaning “${scope.text}” in this sentence`;
+  const role = authored?.role || `Contributes its ${part.toLocaleLowerCase()} meaning inside the anchor sentence.`;
+  return {
+    title: scope.text,
+    scope: "word",
+    interpretation: "standalone",
+    directMeaning: meaning,
+    contextualMeaning: `Here it contributes to: “${lesson.sentence.anchor}”`,
+    baseForm: authored?.base || scope.text,
+    morphology: authored ? `${scope.text} appears in its ${part.toLocaleLowerCase()} form; English position and auxiliaries establish its sentence function.` : `This visible English form operates inside ${lesson.grammar.anchor.pattern}.`,
+    partOfSpeech: part,
+    syntacticRole: role,
+    structure: `Read it within the anchor pattern: ${lesson.grammar.anchor.pattern}.`,
+    usage: `The anchor sentence supplies the natural context before the learner compares other language structures.`,
+    contrast: `Spanish uses ${lesson.grammar.target.pattern}; Vietnamese uses ${lesson.grammar.bridge.pattern}. The same meaning need not occupy one matching word.`,
+    relationship: `It helps construct the complete meaning: ${lesson.sentence.anchor}`,
+  };
+}
+
 export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRayAnalysis {
   if (scope.language === "Spanish" && scope.kind === "word" && strip(scope.text).toLocaleLowerCase("es") === "voy") return voyAnalysis;
 
@@ -280,6 +472,8 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
   const grammarExplanation = grammar.explanation;
   const normalizedScope = normalizeVietnamese(scope.text);
   const lexicalEntry = scope.language === "Vietnamese" ? vietnameseLexicon[normalizedScope] : undefined;
+  const spanishEntry = scope.language === "Spanish" ? spanishLexicon[normalizeSpanish(scope.text)] : undefined;
+  const additionalEntry = lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)];
 
   if (scope.kind === "sentence") {
     return {
@@ -296,6 +490,44 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
       usage: "Use the natural sentence as a model, then vary people, objects, place, or time without copying English word order.",
       contrast: `English, Spanish, and Vietnamese preserve the intention while distributing grammatical information differently. ${lesson.grammar.insight}`,
       relationship: `Every selected part contributes to this whole: ${naturalSentence}`,
+    };
+  }
+
+  if (scope.language === "Spanish" && spanishEntry) {
+    return {
+      title: scope.text,
+      scope: scope.kind,
+      interpretation: scope.kind === "phrase" ? "phrase" : "standalone",
+      directMeaning: spanishEntry.meaning,
+      contextualMeaning: `Here it contributes to: “${naturalSentence}”`,
+      baseForm: spanishEntry.baseForm,
+      morphology: spanishEntry.morphology,
+      partOfSpeech: spanishEntry.partOfSpeech,
+      syntacticRole: spanishEntry.syntacticRole,
+      structure: `Read it inside the authored Spanish structure: ${pattern}.`,
+      usage: spanishEntry.usage,
+      contrast: spanishEntry.contrast,
+      relationship: `It helps build the whole meaning: ${lesson.sentence.anchor}`,
+    };
+  }
+
+  if (scope.language === "Spanish" && scope.kind === "word" && matchingWord) return spanishVocabularyAnalysis(lesson, scope, matchingWord);
+
+  if (additionalEntry) {
+    return {
+      title: scope.text,
+      scope: scope.kind,
+      interpretation: scope.kind === "phrase" ? "phrase" : "standalone",
+      directMeaning: additionalEntry.meaning,
+      contextualMeaning: `Here it contributes to: “${naturalSentence}”`,
+      baseForm: additionalEntry.baseForm,
+      morphology: additionalEntry.morphology,
+      partOfSpeech: additionalEntry.partOfSpeech,
+      syntacticRole: additionalEntry.syntacticRole,
+      structure: `Read it inside the authored ${languageLabel} structure: ${pattern}.`,
+      usage: additionalEntry.usage,
+      contrast: additionalEntry.contrast,
+      relationship: `It helps build the whole meaning: ${lesson.sentence.anchor}`,
     };
   }
 
@@ -316,6 +548,10 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
       relationship: `It helps build the whole meaning: ${lesson.sentence.anchor}`,
     };
   }
+
+  if (scope.kind === "word" && matchingWord) return authoredVocabularyAnalysis(lesson, scope, matchingWord);
+
+  if (scope.language === "English" && scope.kind === "word") return englishWordAnalysis(lesson, scope);
 
   if (scope.kind === "phrase") {
     return {
@@ -354,7 +590,9 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
     ? "Personal pronoun"
     : vietnameseMarkers[normalizedScope]
       ? "Aspect or time marker"
-      : "Contextual Vietnamese word";
+      : containingVietnamesePhrase
+        ? "Component within reviewed Vietnamese expression"
+        : "Contextual Vietnamese word";
   return {
     title: scope.text,
     scope: "word",
