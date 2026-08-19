@@ -5,6 +5,7 @@ export type VocabularyItem = {
   word: string;
   english: string;
   vietnamese: string;
+  translations?: Record<string, string>;
   note: string;
 };
 
@@ -32,13 +33,14 @@ export type LessonDefinition = {
     hint: string;
     rescue: { answer: string };
   };
-  sentence: { target: string; anchor: string; bridge: string; note: string };
+  sentence: { target: string; anchor: string; bridge: string; note: string; translations?: Record<string, string> };
   anatomy?: InteractiveSentenceModel;
   grammar: {
     focus: string;
     target: GrammarLayer;
     anchor: GrammarLayer;
     bridge: GrammarLayer;
+    additional?: Record<string, GrammarLayer>;
     insight: string;
     deep: Array<{ title: string; principle: string; explanation: string }>;
     summary: string;
