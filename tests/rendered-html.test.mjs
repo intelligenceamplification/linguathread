@@ -110,7 +110,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
     read("../curriculum/README.md"),
   ]);
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(mapSource, new RegExp(`${level}: \\[`));
-  assert.match(mapSource, /plannedLessons: 8/);
+  assert.match(mapSource, /plannedLessons: 4/);
   assert.match(mapSource, /plannedCourseLessonCount/);
   assert.match(page, /Your language course/);
   assert.match(page, />Course<\/button>/);

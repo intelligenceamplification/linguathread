@@ -139,7 +139,7 @@ export const courseMap: CourseLevel[] = levels.map((level, levelIndex) => ({
       id: `${level.toLocaleLowerCase()}-u${unitIndex + 1}`,
       level,
       sequence,
-      plannedLessons: 8,
+      plannedLessons: 4,
       outsidePractice: {
         purpose: "Move authored language into spontaneous human use without turning LinguaThread into an audio simulator.",
         prompt: `In a conversation with a person or GPT Live, try to ${unit.communicativeOutcome.charAt(0).toLocaleLowerCase()}${unit.communicativeOutcome.slice(1)} Notice what comes naturally and what you want to revisit here.`,

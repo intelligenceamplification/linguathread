@@ -15,7 +15,7 @@ const expectedLevels = ["A1", "A2", "B1", "B2", "C1", "C2"];
 
 if (courseMap.length !== expectedLevels.length) errors.push("The map must contain A1 through C2.");
 if (courseUnits.length !== 72) errors.push(`Expected 72 course units; found ${courseUnits.length}.`);
-if (plannedCourseLessonCount !== 576) errors.push(`Expected a 576-lesson authoring target; found ${plannedCourseLessonCount}.`);
+if (plannedCourseLessonCount !== 288) errors.push(`Expected a complete 288-lesson catalog; found ${plannedCourseLessonCount}.`);
 
 const ids = new Set();
 for (const [levelIndex, stage] of courseMap.entries()) {
@@ -28,7 +28,7 @@ for (const [levelIndex, stage] of courseMap.entries()) {
     for (const field of ["languageFunctions", "spanishStructures", "vietnameseStructures", "domains"]) {
       if (!Array.isArray(unit[field]) || unit[field].length < 2) errors.push(`${unit.id} needs substantive ${field}.`);
     }
-    if (unit.plannedLessons < 8) errors.push(`${unit.id} needs a substantial lesson target.`);
+    if (unit.plannedLessons !== 4) errors.push(`${unit.id} must contain four multi-stage authored lessons.`);
     if (!unit.outsidePractice?.purpose || !unit.outsidePractice?.prompt?.includes("GPT Live")) errors.push(`${unit.id} needs a quiet external speaking checkpoint.`);
     if (unit.sequence > 1 && !unit.prerequisiteUnitId) errors.push(`${unit.id} needs a prerequisite unit.`);
   }

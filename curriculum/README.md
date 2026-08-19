@@ -4,7 +4,7 @@ LinguaThread is one continuous Spanish and Vietnamese course. The learner moves 
 
 ## Two different kinds of completeness
 
-- `app/course-map.ts` is the permanent A1-C2 scope: 72 ordered units and 576 lesson positions.
+- `app/course-map.ts` is the permanent A1-C2 scope: 72 ordered units and 288 multi-stage authored lessons. Each lesson contains a complete learning cycle rather than a single prompt.
 - `curriculum/packs/*.json` contains authored, reviewed lessons that can enter the learner's sequence.
 
 A mapped lesson position is not a published lesson. A lesson becomes publishable only when its Spanish, English, and Vietnamese expressions, exercise answers, grammatical explanation, prerequisites, and X-Ray behavior pass validation and editorial review.
