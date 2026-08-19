@@ -13,6 +13,7 @@ if (!Array.isArray(manifest.packs)) errors.push("Manifest packs must be an array
 const packFiles = await readdir(resolve(root, "curriculum/packs"));
 const seenLessonIds = new Set();
 const seenObjectiveIds = new Set();
+const tokens = (value) => value.toLocaleLowerCase().match(/[\p{L}\p{N}]+/gu) || [];
 
 for (const descriptor of manifest.packs || []) {
   const filename = `${descriptor.id}.v${descriptor.version}.json`;
@@ -38,6 +39,25 @@ for (const descriptor of manifest.packs || []) {
       errors.push(`${lesson.id} must include Spanish, English, and Vietnamese.`);
     }
     if (!Array.isArray(lesson.prerequisites)) errors.push(`${lesson.id} prerequisites must be an array.`);
+    if (descriptor.quality === "xray-reviewed") {
+      for (const [language, sentenceKey] of [["Spanish", "spanish"], ["Vietnamese", "vietnamese"]]) {
+        const layer = lesson.xray?.[language];
+        if (!layer?.units || !Object.keys(layer.units).length) {
+          errors.push(`${lesson.id} needs authored ${language} X-Ray units.`);
+          continue;
+        }
+        const authoredTokens = tokens((layer.preferredPhrases || []).join(" "));
+        for (const token of tokens(lesson[sentenceKey])) {
+          if (!authoredTokens.includes(token)) errors.push(`${lesson.id} leaves ${language} token “${token}” outside reviewed X-Ray scopes.`);
+        }
+        for (const [unit, entry] of Object.entries(layer.units)) {
+          const fields = ["meaning", "baseForm", "partOfSpeech", "syntacticRole", "morphology", "usage", "contrast"];
+          if (!fields.every((field) => typeof entry[field] === "string" && entry[field].trim()) || entry.morphology.length < 16 || entry.syntacticRole.length < 12) {
+            errors.push(`${lesson.id} X-Ray unit ${unit} is incomplete.`);
+          }
+        }
+      }
+    }
   }
 }
 
