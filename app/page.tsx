@@ -337,7 +337,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         )}
 
         {stage === "sentence" && (
-          <InteractiveSentence model={sentenceAnatomyForLesson(lesson)} showBridge={bridgeEnabled} onContinue={() => resetAnswer("grammar")} />
+          <InteractiveSentence model={sentenceAnatomyForLesson(lesson)} lesson={lesson} showBridge={bridgeEnabled} onContinue={() => resetAnswer("grammar")} />
         )}
 
         {stage === "grammar" && (

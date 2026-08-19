@@ -297,6 +297,17 @@ test("resolves the Vietnamese price question into meaningful X-Ray units", async
   assert.match(howMuch.morphology, /meaning belongs to the phrase/);
 });
 
+test("uses the canonical X-Ray engine inside every displayed sentence language", async () => {
+  const [component, page] = await Promise.all([read("../app/sentence-anatomy.tsx"), read("../app/page.tsx")]);
+  assert.match(page, /<InteractiveSentence[^>]*lesson=\{lesson\}/);
+  assert.match(component, /xrayScopes\(lesson, activeToolLanguage\)/);
+  assert.match(component, /resolveXRayTokenScope\(lesson, activeToolLanguage, word\.tokenStart\)/);
+  assert.match(component, /analyzeXRayScope\(lesson, scope\)/);
+  assert.match(component, /Complete sentence breakdown/);
+  assert.match(component, /xraySentenceBreakdown\(lesson, scope\.language\)/);
+  assert.doesNotMatch(component, /mode === "xray"[\s\S]{0,500}selectUnit\(unit/);
+});
+
 test("derives X-Ray language tabs from authored language realizations", async () => {
   const { xrayLanguages, xrayScopes } = await loadLessonToolsModule();
   const lesson = {

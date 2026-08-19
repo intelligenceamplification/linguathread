@@ -305,7 +305,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
       scope: scope.kind,
       interpretation: scope.kind === "phrase" ? "phrase" : "standalone",
       directMeaning: lexicalEntry.meaning,
-      contextualMeaning: `Here it contributes to: “${naturalSentence}”.`,
+      contextualMeaning: `Here it contributes to: “${naturalSentence}”`,
       baseForm: lexicalEntry.baseForm,
       morphology: lexicalEntry.morphology,
       partOfSpeech: lexicalEntry.partOfSpeech,
@@ -360,7 +360,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
     scope: "word",
     interpretation: containingVietnamesePhrase ? "component" : "contextual",
     directMeaning: direct,
-    contextualMeaning: `Here it contributes to: “${naturalSentence}”.`,
+    contextualMeaning: `Here it contributes to: “${naturalSentence}”`,
     baseForm: matchingWord
       ? `${languageValue(matchingWord, scope.language)} is the lesson’s authored vocabulary form.`
       : containingVietnamesePhrase
