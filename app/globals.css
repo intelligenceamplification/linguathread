@@ -269,6 +269,9 @@ button { color: inherit; }
 .learning-signal { width: min(470px, 100%); margin: 40px auto 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .learning-signal span { display: block; margin-bottom: 6px; color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .1em; }
 .learning-signal p { margin: 8px 0 0; color: var(--moss); }
+.outside-practice { width: min(640px, 100%); margin: 28px auto 0; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
+.outside-practice span { color: var(--moss-dark); font-size: .7rem; font-weight: 750; text-transform: uppercase; }
+.outside-practice p { margin-top: 8px; color: var(--muted); line-height: 1.55; }
 .text-action { display: block; margin: 20px auto 0; color: var(--muted); }
 .edit-languages-action { font-size: .78rem; }
 
@@ -307,6 +310,15 @@ button { color: inherit; }
 
 .review-content { position: relative; width: min(780px, 100%); }
 .back-action { position: absolute; top: 0; left: 0; width: 42px; height: 42px; font-size: 1.4rem; }
+.review-introduction { max-width: 680px; margin: 18px auto 0; color: var(--muted); line-height: 1.65; }
+.cefr-course-map { margin-top: 42px; border-top: 1px solid var(--line); text-align: left; }
+.cefr-stage { display: grid; grid-template-columns: 100px minmax(0, 1fr) 150px; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.cefr-stage > div { display: flex; align-items: baseline; gap: 10px; }
+.cefr-stage strong { font-family: var(--serif); font-size: 1.55rem; font-weight: 500; }
+.cefr-stage span, .cefr-stage em { color: var(--subtle); font-size: .72rem; font-style: normal; }
+.cefr-stage p { color: var(--muted); line-height: 1.5; }
+.cefr-stage em { color: var(--moss); text-align: right; }
+.course-authoring-note { margin: 20px 0 0; color: var(--subtle); font-size: .78rem; line-height: 1.5; text-align: left; }
 .review-list { margin-top: 50px; border-top: 1px solid var(--line); text-align: left; }
 .review-row { min-height: 64px; display: grid; grid-template-columns: 38px 1fr 1.2fr 70px; align-items: center; gap: 16px; border-bottom: 1px solid var(--line); }
 .review-row > span { color: var(--subtle); font-size: .72rem; }
@@ -358,6 +370,9 @@ button { color: inherit; }
   .feedback { align-items: flex-start; flex-direction: column; }
   .review-row { grid-template-columns: 28px 1fr auto; gap: 10px; }
   .review-row p { display: none; }
+  .cefr-stage { grid-template-columns: 72px minmax(0, 1fr); gap: 12px; padding: 18px 0; }
+  .cefr-stage > div { align-self: start; flex-direction: column; gap: 2px; }
+  .cefr-stage em { grid-column: 2; text-align: left; }
   .lesson-footer { justify-content: center; text-align: center; }
   .lesson-footer span:last-child { display: none; }
   .word-reveal { align-items: flex-start; flex-direction: column; text-align: left; }

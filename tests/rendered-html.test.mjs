@@ -100,6 +100,29 @@ test("loads independently published curriculum packs with a bundled fallback", a
   assert.equal(JSON.parse(manifest).revision, 1);
 });
 
+test("defines a complete A1-C2 course spine without mislabeling planned content as authored", async () => {
+  const [mapSource, page, route, documentation] = await Promise.all([
+    read("../app/course-map.ts"),
+    read("../app/page.tsx"),
+    read("../app/api/curriculum/route.ts"),
+    read("../curriculum/README.md"),
+  ]);
+  for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(mapSource, new RegExp(`${level}: \\[`));
+  assert.match(mapSource, /plannedLessons: 12/);
+  assert.match(mapSource, /plannedCourseLessonCount/);
+  assert.match(page, /Your language course/);
+  assert.match(page, />Course<\/button>/);
+  assert.match(page, /Authoring in progress/);
+  assert.match(page, /Only reviewed, publishable lessons enter your learning sequence/);
+  assert.match(route, /mappedUnitCount/);
+  assert.match(route, /plannedLessonCount/);
+  assert.match(documentation, /A mapped lesson position is not a published lesson/);
+  assert.match(documentation, /Listening and spontaneous speaking require separate practice and assessment/);
+  assert.match(mapSource, /outsidePractice/);
+  assert.match(page, /Beyond LinguaThread · optional practice/);
+  assert.match(page, /lesson\.lesson % 4 === 0/);
+});
+
 test("activates Vietnamese production from any non-native profile position", async () => {
   const source = await read("../app/page.tsx");
   assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);

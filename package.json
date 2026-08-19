@@ -11,7 +11,7 @@
     "start": "next start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern .next --ignore-pattern dist",
-    "curriculum:validate": "node scripts/validate-curriculum.mjs",
+    "curriculum:validate": "node scripts/validate-course-map.mjs && node scripts/validate-curriculum.mjs",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

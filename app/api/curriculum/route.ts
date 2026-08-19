@@ -1,5 +1,6 @@
 import { curriculum } from "../../curriculum";
 import { mergeCurriculum, validateManifest, validatePack } from "../../curriculum-packs";
+import { courseMap, courseUnits, plannedCourseLessonCount } from "../../course-map";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,9 @@ export async function GET() {
       revision: manifest.revision,
       source: "published",
       lessonCount: lessons.length,
+      courseMap,
+      mappedUnitCount: courseUnits.length,
+      plannedLessonCount: plannedCourseLessonCount,
       lessons,
     });
   } catch (error) {
@@ -31,6 +35,9 @@ export async function GET() {
       revision: 0,
       source: "bundled",
       lessonCount: curriculum.length,
+      courseMap,
+      mappedUnitCount: courseUnits.length,
+      plannedLessonCount: plannedCourseLessonCount,
       lessons: curriculum,
     });
   }

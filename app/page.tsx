@@ -7,6 +7,7 @@ import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson
 import { InteractiveSentence } from "./sentence-anatomy";
 import { DailyLesson } from "./daily-lesson";
 import { UniversalXRay } from "./universal-xray";
+import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
 import {
   completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
   migrateCompletedLessons, recordEvidence, selectNextLesson,
@@ -128,6 +129,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const stageIndex = Math.max(0, stages.indexOf(stage));
   const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
   const currentWord = lesson.vocabulary[wordIndex];
+  const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
 
   function advanceVocabulary() {
     if (wordIndex < lesson.vocabulary.length - 1) setWordIndex((value) => value + 1);
@@ -284,7 +286,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         </div>
         <div className="header-actions">
           <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today</button>
-          {hasHistory && stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Review</button>}
+          {stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Course</button>}
           <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>X-Ray</button>
         </div>
       </header>
@@ -406,6 +408,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <strong>Spanish · {lesson.skill}</strong>
               <p>{lesson.vocabulary.map((item) => item.word).join(" · ")}</p>
             </div>
+            {outsidePractice && lesson.lesson % 4 === 0 && <aside className="outside-practice">
+              <span>Beyond LinguaThread · optional practice</span>
+              <p>{outsidePractice.prompt}</p>
+            </aside>}
             <button className="primary-action" onClick={continueLearning}>Continue learning <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => setStage("review")}>Review the stack</button>
             <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
@@ -416,7 +422,19 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <div className="focus-content review-content">
             <button className="back-action" onClick={() => setStage(hasHistory ? "complete" : "vocabulary")} aria-label="Back">←</button>
             <p className="eyebrow">Quiet review</p>
-            <h1>Your Spanish foundations</h1>
+            <h1>Your language course</h1>
+            <p className="review-introduction">A continuous Spanish and Vietnamese path from first foundations through precise, independent expression. Published lessons become available here as their language and X-Ray content pass review.</p>
+            <div className="cefr-course-map" aria-label="CEFR course path">
+              {courseMap.map((stage) => {
+                const authored = course.filter((item) => item.level === stage.level).length;
+                return <section key={stage.level} className="cefr-stage">
+                  <div><strong>{stage.level}</strong><span>{stage.units.length} units</span></div>
+                  <p>{stage.outcome}</p>
+                  <em>{authored > 0 ? `${authored} authored lesson${authored === 1 ? "" : "s"} available` : "Authoring in progress"}</em>
+                </section>;
+              })}
+            </div>
+            <p className="course-authoring-note">The permanent map contains {plannedCourseLessonCount} lesson positions. Only reviewed, publishable lessons enter your learning sequence.</p>
             <div className="review-list">
               {course.map((item, index) => (
                 <div className="review-row stacked-review-row" key={item.id}>
