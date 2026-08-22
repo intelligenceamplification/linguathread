@@ -211,6 +211,8 @@ button { color: inherit; }
 .xray-scope-field select { width: 100%; min-height: 46px; padding: 0 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--control); color: var(--ink); font: inherit; font-size: .82rem; letter-spacing: 0; text-transform: none; }
 .xray-analysis { margin-top: 24px; }
 .xray-analysis > h3 { margin: 0; font-family: Georgia, serif; font-size: 2rem; font-weight: 500; }
+.xray-leading-meaning { color: var(--ink) !important; font-family: Georgia, serif; font-size: 1.15rem !important; }
+.translation-direction { margin: 12px 0 20px; color: var(--moss-dark); font-size: .76rem; font-weight: 720; letter-spacing: .06em; text-transform: uppercase; }
 .xray-kind { margin: 6px 0 0; color: var(--moss); font-size: .68rem; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
 .xray-breakdown { display: grid; gap: 0; border-bottom: 1px solid var(--line); }
 .xray-breakdown button { display: grid; grid-template-columns: minmax(90px, .7fr) 1.3fr; gap: 4px 14px; min-height: 70px; padding: 12px 0; border: 0; border-top: 1px solid var(--line); background: transparent; color: var(--ink); cursor: pointer; text-align: left; }

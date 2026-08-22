@@ -461,6 +461,32 @@ test("composes a finite Daily Lesson with review, vocabulary, application, rotat
   for (const direction of ["English->Spanish", "Spanish->English", "English->Vietnamese", "Vietnamese->English", "Spanish->Vietnamese", "Vietnamese->Spanish"]) assert.ok(directions.has(direction));
 });
 
+test("adds Spanish and Vietnamese reverse recall to every ordinary curriculum lesson", async () => {
+  const [{ curriculum }, { createReverseRecallExercises }] = await Promise.all([loadCurriculumModule(), loadLessonToolsModule()]);
+  for (const lesson of curriculum) {
+    const exercises = createReverseRecallExercises(lesson, true);
+    assert.deepEqual(Array.from(exercises, (item) => `${item.from}->${item.to}`), ["Spanish->English", "Vietnamese->English"]);
+    for (const exercise of exercises) {
+      assert.ok(exercise.prompt.trim(), `${lesson.id} has a source prompt`);
+      assert.equal(exercise.answer, lesson.sentence.anchor);
+      assert.ok(exercise.accepted.includes(lesson.sentence.anchor));
+    }
+  }
+});
+
+test("keeps the voy X-Ray specific, concise, and transformational", async () => {
+  const [{ curriculum }, { analyzeXRayScope, xrayScopes }] = await Promise.all([loadCurriculumModule(), loadLessonToolsModule()]);
+  const lesson = curriculum.find((item) => xrayScopes(item, "Spanish").some((scope) => scope.kind === "word" && scope.text.toLocaleLowerCase() === "voy"));
+  assert.ok(lesson);
+  const scope = xrayScopes(lesson, "Spanish").find((item) => item.kind === "word" && item.text.toLocaleLowerCase() === "voy");
+  const analysis = analyzeXRayScope(lesson, scope);
+  assert.equal(analysis.baseForm, "ir, “to go”");
+  assert.match(analysis.morphology, /first-person singular/i);
+  assert.match(analysis.pronunciation, /\/boj\//);
+  assert.match(analysis.transformation, /voy.*vas.*va.*vamos.*van/);
+  assert.doesNotMatch(JSON.stringify(analysis), /Contextual sentence element|meaningful part of this complete thought/i);
+});
+
 test("keeps Today and universal X-Ray optional, recoverable, and separate from the existing lesson path", async () => {
   const [page, daily, xray] = await Promise.all([read("../app/page.tsx"), read("../app/daily-lesson.tsx"), read("../app/universal-xray.tsx")]);
   assert.match(page, /<DailyLesson/);
@@ -470,9 +496,9 @@ test("keeps Today and universal X-Ray optional, recoverable, and separate from t
   assert.match(daily, /Skip this part for now/);
   assert.match(daily, /The thread is in motion/);
   assert.match(daily, /Return to self-directed learning/);
-  assert.match(xray, /Choose one word, one phrase, or the whole sentence/);
+  assert.match(xray, /Choose a word, phrase, or the complete sentence/);
   assert.match(xray, /xray-sentence/);
-  assert.match(xray, /Every language in the stack is equally available here/);
+  assert.match(xray, /Compare and transform/);
   assert.match(xray, /aria-modal/);
 });
 

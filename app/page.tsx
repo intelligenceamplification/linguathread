@@ -7,13 +7,14 @@ import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson
 import { InteractiveSentence } from "./sentence-anatomy";
 import { DailyLesson } from "./daily-lesson";
 import { UniversalXRay } from "./universal-xray";
+import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
 import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
 import {
   completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
   migrateCompletedLessons, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
-type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "complete" | "review";
+type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "complete" | "review";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
 type ProductionLanguage = "Spanish" | "Vietnamese";
@@ -25,7 +26,7 @@ const commonLanguages = [
   "Hindi", "Russian", "Dutch", "Turkish", "Indonesian", "Thai", "Tagalog", "Swahili",
 ];
 
-const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "complete"];
+const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "complete"];
 const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 
@@ -79,6 +80,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [mastery, setMastery] = useState(false);
   const [productionLanguage, setProductionLanguage] = useState<ProductionLanguage>("Spanish");
   const [spanishConfirmed, setSpanishConfirmed] = useState(false);
+  const [reverseIndex, setReverseIndex] = useState(0);
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
   const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
@@ -130,6 +132,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
   const currentWord = lesson.vocabulary[wordIndex];
   const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
+  const reverseExercises = createReverseRecallExercises(lesson, bridgeEnabled);
 
   function advanceVocabulary() {
     if (wordIndex < lesson.vocabulary.length - 1) setWordIndex((value) => value + 1);
@@ -240,6 +243,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setMastery(false);
     setProductionLanguage("Spanish");
     setSpanishConfirmed(false);
+    setReverseIndex(0);
     setAccelerated(false);
     setDeepGrammar(false);
   }
@@ -393,9 +397,23 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             )}
             {feedback === "gentle" && failedAttempts < 3 && accelerated && productionLanguage === "Spanish" && <Feedback kind="gentle" title="This foundation is worth making explicit." detail={lesson.mastery.hint} action="Learn the foundation" onClick={learnFoundation} />}
             {feedback === "gentle" && failedAttempts < 3 && !(accelerated && productionLanguage === "Spanish") && <Feedback kind="gentle" title={productionLanguage === "Spanish" ? lesson.mastery.hint : lesson.bridgeMastery.hint} detail={`${failedAttempts} of 3 attempts · Try once more from memory.`} action="Try again" onClick={() => resetAnswer()} />}
-            {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail={accelerated ? "LinguaThread will move quickly until the work reveals your actual edge." : "You produced the meaning across every active learning language."} action="Complete lesson" onClick={finishLesson} />}
+            {feedback === "correct" && (productionLanguage === "Vietnamese" || !bridgeEnabled) && <Feedback kind="correct" title={productionLanguage === "Vietnamese" ? lesson.bridgeMastery.answer : lesson.mastery.answer} detail="Now recover the shared meaning from each language." action="Reverse the direction" onClick={() => resetAnswer("reverse")} />}
           </div>
         )}
+
+        {stage === "reverse" && <ReverseRecall
+          key={reverseExercises[reverseIndex]?.id}
+          exercise={reverseExercises[reverseIndex]}
+          position={reverseIndex + 1}
+          total={reverseExercises.length}
+          onAttempt={(correct, language) => recordAttempt("reverse-recall", correct, language)}
+          onComplete={() => reverseIndex < reverseExercises.length - 1 ? setReverseIndex((value) => value + 1) : finishLesson()}
+          onSkip={() => {
+            recordAttempt("skipped-reverse", false, reverseExercises[reverseIndex].evidenceLanguage);
+            if (reverseIndex < reverseExercises.length - 1) setReverseIndex((value) => value + 1);
+            else finishLesson();
+          }}
+        />}
 
         {stage === "complete" && (
           <div className="focus-content completion-content">
@@ -632,4 +650,30 @@ function TransformExercise({ lesson, onAttempt, onComplete, onSkip }: { lesson: 
       {modelVisible && <button className="text-action" onClick={onSkip}>Skip this lesson for now</button>}
     </div>
   );
+}
+
+function ReverseRecall({ exercise, position, total, onAttempt, onComplete, onSkip }: { exercise: LessonTranslationExercise; position: number; total: number; onAttempt: (correct: boolean, language: string) => void; onComplete: () => void; onSkip: () => void }) {
+  const [answer, setAnswer] = useState("");
+  const [feedback, setFeedback] = useState<FeedbackState>("idle");
+  const [failedAttempts, setFailedAttempts] = useState(0);
+
+  function checkAnswer() {
+    const passed = exercise.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
+    onAttempt(passed, exercise.evidenceLanguage);
+    if (!passed) setFailedAttempts((value) => value + 1);
+    setFeedback(passed ? "correct" : "gentle");
+  }
+
+  return <div className="focus-content exercise-content reverse-recall">
+    <p className="eyebrow">Reverse recall · {position} of {total}</p>
+    <p className="translation-direction">{exercise.from} <span aria-hidden="true">→</span> {exercise.to}</p>
+    <h1 className="exercise-title" lang={exercise.from === "Spanish" ? "es" : "vi"}>{exercise.prompt}</h1>
+    <p className="instruction">{exercise.instruction}</p>
+    {failedAttempts < 3 ? <>
+      <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder="Write the English meaning" label="English answer" />
+      {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkAnswer}>Check meaning</button>}
+    </> : <RecoveryBuilder answer={exercise.answer} onComplete={onComplete} onSkip={onSkip} />}
+    {feedback === "gentle" && failedAttempts < 3 && <Feedback kind="gentle" title="Return to the complete meaning." detail={`${failedAttempts} of 3 attempts · Read the ${exercise.from} as a whole.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
+    {feedback === "correct" && <Feedback kind="correct" title={exercise.answer} detail={`You recovered the meaning directly from ${exercise.from}.`} action={position < total ? "Continue reverse recall" : "Complete lesson"} onClick={onComplete} />}
+  </div>;
 }

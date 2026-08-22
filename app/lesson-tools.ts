@@ -45,6 +45,19 @@ export type XRayAnalysis = {
   usage: string;
   contrast: string;
   relationship: string;
+  pronunciation?: string;
+  transformation?: string;
+};
+
+export type LessonTranslationExercise = {
+  id: string;
+  from: "Spanish" | "Vietnamese";
+  to: "English";
+  prompt: string;
+  answer: string;
+  accepted: string[];
+  instruction: string;
+  evidenceLanguage: "Spanish" | "Vietnamese";
 };
 
 export type TranslationExercise = {
@@ -342,6 +355,8 @@ const voyAnalysis: XRayAnalysis = {
   usage: "Very common and natural for an intended or imminent action. In this sentence it is a plan, not literal travel on foot.",
   contrast: "Iré is a simple-future form and often sounds more definite or formal. Estoy visitando describes an action already underway. Voy a visitar keeps the plan close to the present.",
   relationship: "Voy links the time word mañana to the action visitar, carrying person, tense, and the plan’s forward movement for the whole sentence.",
+  pronunciation: "One syllable, /boj/. The initial sound follows the usual Spanish b/v pronunciation.",
+  transformation: "ir → voy (I go) · vas (you go) · va (he, she, or formal you goes) · vamos (we go) · van (they or plural you go)",
 };
 
 const spanishVerbLemmas: Record<string, string> = {
@@ -370,6 +385,17 @@ function spanishVocabularyAnalysis(lesson: LessonForTools, scope: XRayScope, wor
     : partOfSpeech === "Adjective"
       ? `This form participates in the agreement and word-order pattern ${grammar.pattern}; the sentence context determines its gender and number here.`
       : `The visible form remains ${scope.text} inside the authored pattern ${grammar.pattern}.`;
+  const syntacticRole = lemma
+    ? /[aei]r$/.test(normalized)
+      ? `Names the action governed by the conjugated verb inside ${grammar.pattern}.`
+      : normalized.endsWith("ando") || normalized.endsWith("iendo")
+        ? `Carries the unfolding action while the auxiliary carries person and tense inside ${grammar.pattern}.`
+        : `Carries the clause’s verb meaning and its inflection inside ${grammar.pattern}.`
+    : partOfSpeech === "Adjective"
+      ? `Describes its noun or subject within ${grammar.pattern}.`
+      : partOfSpeech.startsWith("Adverb")
+        ? `Modifies the action, quality, place, or time within ${grammar.pattern}.`
+        : `Names a participant or idea within ${grammar.pattern}.`;
   return {
     title: scope.text,
     scope: "word",
@@ -379,7 +405,7 @@ function spanishVocabularyAnalysis(lesson: LessonForTools, scope: XRayScope, wor
     baseForm: form,
     morphology,
     partOfSpeech,
-    syntacticRole: `It performs its ${partOfSpeech.toLocaleLowerCase()} role inside ${grammar.pattern}.`,
+    syntacticRole,
     structure: `${scope.text} belongs to the lesson’s target structure: ${grammar.pattern}.`,
     usage: `The curriculum introduces it through the natural sentence “${lesson.sentence.target}”, not as an isolated substitution exercise.`,
     contrast: `Its natural English value here is “${word.english}”; Vietnamese expresses the corresponding contribution as “${word.vietnamese}” without requiring the same grammar.`,
@@ -554,17 +580,26 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
   if (scope.language === "English" && scope.kind === "word") return englishWordAnalysis(lesson, scope);
 
   if (scope.kind === "phrase") {
+    const normalizedPhrase = strip(scope.text).toLocaleLowerCase();
+    const constituentMeanings = lesson.vocabulary
+      .filter((word) => normalizedPhrase.includes(strip(languageValue(word, scope.language)).toLocaleLowerCase()))
+      .map((word) => word.english);
+    const phraseMeaning = matchingWord
+      ? matchingWord.english
+      : constituentMeanings.length
+        ? constituentMeanings.join(" + ")
+        : `The core ${languageLabel} expression for this lesson’s meaning.`;
     return {
       title: scope.text,
       scope: "phrase",
       interpretation: "phrase",
-      directMeaning: `A working pattern inside “${naturalSentence}”.`,
-      contextualMeaning: `In ${languageLabel}, this group works within the reusable pattern ${pattern}.`,
+      directMeaning: phraseMeaning,
+      contextualMeaning: `Within “${naturalSentence}” these words operate together through ${pattern}.`,
       baseForm: `Pattern: ${pattern}`,
       morphology: grammarExplanation,
       partOfSpeech: "Phrase-level construction",
-      syntacticRole: "The words operate together; their meaning comes from the relationship, not only from isolated dictionary entries.",
-      structure: `Keep this group intact before varying what comes around it. ${pattern}.`,
+      syntacticRole: `Carries the lesson’s ${pattern} relationship as one selectable unit.`,
+      structure: `Keep this group intact before varying the sentence around ${pattern}.`,
       usage: "Use it as a productive frame for personal, practical statements.",
       contrast: "The other languages may regroup, omit, or state information differently. The shared intention matters more than word-for-word symmetry.",
       relationship: `This phrase helps organize the ${languageLabel} realization of the full meaning: ${naturalSentence}`,
@@ -626,6 +661,23 @@ const dailyDirections: Array<[TranslationLanguage, TranslationLanguage]> = [
   ["English", "Spanish"], ["Spanish", "English"], ["English", "Vietnamese"],
   ["Vietnamese", "English"], ["Spanish", "Vietnamese"], ["Vietnamese", "Spanish"],
 ];
+
+/** Reverse recall belongs to every ordinary lesson, not only the guided Today path. */
+export function createReverseRecallExercises(lesson: LessonForTools, includeVietnamese: boolean): LessonTranslationExercise[] {
+  const english = languageSentence(lesson, "English");
+  return [
+    {
+      id: `${lesson.id}-spanish-english`, from: "Spanish", to: "English",
+      prompt: languageSentence(lesson, "Spanish"), answer: english, accepted: [english],
+      instruction: "Recover the complete English meaning from the Spanish.", evidenceLanguage: "Spanish",
+    },
+    ...(includeVietnamese ? [{
+      id: `${lesson.id}-vietnamese-english`, from: "Vietnamese" as const, to: "English" as const,
+      prompt: languageSentence(lesson, "Vietnamese"), answer: english, accepted: [english],
+      instruction: "Recover the complete English meaning from the Vietnamese.", evidenceLanguage: "Vietnamese" as const,
+    }] : []),
+  ];
+}
 
 function exercise(lesson: LessonForTools, id: string, phase: TranslationExercise["phase"], scope: TranslationScope, from: TranslationLanguage, to: TranslationLanguage, note: string): TranslationExercise {
   const source = scope === "word" ? languageValue(lesson.vocabulary[0], from) : scope === "phrase" ? phraseFor(lesson, from) : languageSentence(lesson, from);
