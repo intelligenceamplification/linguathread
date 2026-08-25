@@ -48,6 +48,16 @@ test("preserves the language setup and calm learning interface", async () => {
   assert.match(page, /Language begins from what you already know/);
 });
 
+test("resets onboarding scroll and focus after every rendered step", async () => {
+  const page = await read("../app/page.tsx");
+  assert.match(page, /requestAnimationFrame/);
+  assert.match(page, /window\.scrollTo\(\{ top: 0/);
+  assert.match(page, /focus\(\{ preventScroll: true \}\)/);
+  assert.match(page, /tabIndex=\{-1\}/);
+  assert.match(page, /Return to previous step/);
+  assert.match(page, /goToStep/);
+});
+
 test("follows the device light and dark appearance automatically", async () => {
   const [styles, layout] = await Promise.all([read("../app/globals.css"), read("../app/layout.tsx")]);
   assert.match(styles, /color-scheme: light dark/);
@@ -223,11 +233,36 @@ test("creates structured anatomy, relationships, and non-one-to-one mappings for
   assert.equal(model.realizations.length, 3);
   assert.ok(model.realizations.every((realization) => realization.units.length > 0));
   assert.equal(model.relationships.length, 3);
-  assert.equal(model.mappings.length, 2);
-  assert.ok(model.mappings.every((mapping) => mapping.from.unitIds.length > 1 && mapping.to.unitIds.length > 1));
-  assert.match(model.mappings[1].explanation, /tôi \+ muốn \+ noun/);
+  assert.ok(model.mappings.length > 2);
+  const sentenceMappings = model.mappings.filter((mapping) => mapping.id.endsWith("anchor-map") || mapping.id.endsWith("bridge-map"));
+  assert.equal(sentenceMappings.length, 2);
+  assert.ok(sentenceMappings.every((mapping) => mapping.from.unitIds.length > 1 && mapping.to.unitIds.length > 1));
+  assert.match(sentenceMappings[1].explanation, /tôi \+ muốn \+ noun/);
   assert.equal(model.realizations[0].units[0].meaning, "I would like");
   assert.ok(model.realizations.every((realization) => realization.units.every((unit) => unit.label === undefined && unit.structural === undefined && unit.grammar.length === 0)));
+});
+
+test("derives concept-level mappings for semantic choreography", async () => {
+  const { createInteractiveSentenceModel } = await loadInteractiveSentenceModule();
+  const model = createInteractiveSentenceModel({
+    id: "origin", spanish: "Soy de Indiana.", english: "I am from Indiana.", vietnamese: "Mình đến từ Indiana.",
+    focus: "Soy", pattern: "soy + de", bridgePattern: "pronoun + đến từ", words: [["soy", "I am", "mình"], ["de", "from", "từ"]],
+  });
+  const soy = model.mappings.find((mapping) => mapping.label.includes("soy carries"));
+  const de = model.mappings.find((mapping) => mapping.label.includes("de carries"));
+  assert.deepEqual(Array.from(soy.from.unitIds), ["spanish-1"]);
+  assert.deepEqual(Array.from(soy.to.unitIds), ["english-1", "english-2"]);
+  assert.deepEqual(Array.from(de.from.unitIds), ["spanish-2"]);
+  assert.deepEqual(Array.from(de.to.unitIds), ["english-3"]);
+});
+
+test("configures the retired PolyFlow host as a permanent server redirect", async () => {
+  const vercel = JSON.parse(await read("../vercel.json"));
+  const redirect = vercel.redirects.find((item) => item.has?.some((condition) => condition.type === "host" && condition.value === "polyflow-language.vercel.app"));
+  assert.ok(redirect);
+  assert.equal(redirect.source, "/:path*");
+  assert.equal(redirect.destination, "https://linguathread.vercel.app/:path*");
+  assert.equal(redirect.permanent, true);
 });
 
 test("keeps universal X-Ray quiet until lesson-specific structure is authored", async () => {

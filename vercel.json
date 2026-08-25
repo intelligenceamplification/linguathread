@@ -1,4 +1,12 @@
 {
   "framework": "nextjs",
-  "buildCommand": "npm run build"
+  "buildCommand": "npm run build",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "polyflow-language.vercel.app" }],
+      "destination": "https://linguathread.vercel.app/:path*",
+      "permanent": true
+    }
+  ]
 }

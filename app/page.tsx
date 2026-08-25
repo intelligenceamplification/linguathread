@@ -485,6 +485,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
 function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: LanguageProfile; onComplete: (profile: LanguageProfile) => void }) {
   const [step, setStep] = useState(0);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const [native, setNative] = useState(initialProfile?.native ?? "English");
   const [second, setSecond] = useState<string | null>(initialProfile?.second ?? "Vietnamese");
   const [secondConfidence, setSecondConfidence] = useState<Confidence>(initialProfile?.secondConfidence ?? "developing");
@@ -492,6 +493,16 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
 
   const target = additional[additional.length - 1] || second || "a new language";
   const totalSteps = 4;
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      headingRef.current?.focus({ preventScroll: true });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [step]);
+
+  const goToStep = (nextStep: number) => setStep(Math.max(0, Math.min(totalSteps - 1, nextStep)));
 
   return (
     <main className="app-shell setup-shell">
@@ -504,38 +515,39 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
 
       <section className="lesson-stage setup-stage">
         {step === 0 && (
-          <SetupFrame eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="LinguaThread uses your native language to make unfamiliar grammar immediately intelligible.">
+          <SetupFrame headingRef={headingRef} eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="LinguaThread uses your native language to make unfamiliar grammar immediately intelligible.">
             <LanguagePicker selected={[native]} excluded={[]} onSelect={(language) => setNative(language)} />
-            <button className="primary-action" onClick={() => { if (second === native) setSecond(null); setStep(1); }}>Continue <span aria-hidden="true">→</span></button>
+            <button className="primary-action" onClick={() => { if (second === native) setSecond(null); goToStep(1); }}>Continue <span aria-hidden="true">→</span></button>
           </SetupFrame>
         )}
 
         {step === 1 && (
-          <SetupFrame eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. LinguaThread will use it only when it makes the new language clearer.">
+          <SetupFrame headingRef={headingRef} onBack={() => goToStep(0)} eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. LinguaThread will use it only when it makes the new language clearer.">
             <LanguagePicker selected={second ? [second] : []} excluded={[native]} onSelect={(language) => setSecond(language)} />
             {second && <ConfidencePicker value={secondConfidence} onChange={setSecondConfidence} />}
-            <button className="primary-action" onClick={() => setStep(2)}>Continue <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => { setSecond(null); setStep(2); }}>I do not have another language yet</button>
+            <button className="primary-action" onClick={() => goToStep(2)}>Continue <span aria-hidden="true">→</span></button>
+            <button className="text-action" onClick={() => { setSecond(null); goToStep(2); }}>I do not have another language yet</button>
           </SetupFrame>
         )}
 
         {step === 2 && (
-          <SetupFrame eyebrow="The rest of your language life" title="Which other languages are part of you?" description="Add as many as you need, from stronger languages toward the ones still growing.">
+          <SetupFrame headingRef={headingRef} onBack={() => goToStep(1)} eyebrow="The rest of your language life" title="Which other languages are part of you?" description="Add as many as you need, from stronger languages toward the ones still growing.">
             <LanguagePicker
               selected={additional}
               excluded={[native, ...(second ? [second] : [])]}
               multiple
               onSelect={(language) => setAdditional((current) => current.includes(language) ? current.filter((item) => item !== language) : [...current, language])}
             />
-            <button className="primary-action" onClick={() => setStep(3)}>Shape my stack <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => setStep(3)}>That is enough for now</button>
+            <button className="primary-action" onClick={() => goToStep(3)}>Shape my stack <span aria-hidden="true">→</span></button>
+            <button className="text-action" onClick={() => goToStep(3)}>That is enough for now</button>
           </SetupFrame>
         )}
 
         {step === 3 && (
           <div className="focus-content setup-content ready-content">
+            <button className="setup-back" onClick={() => goToStep(2)} aria-label="Return to additional languages">←</button>
             <p className="eyebrow">Your learning architecture</p>
-            <h1>Your languages can help one another.</h1>
+            <h1 ref={headingRef} tabIndex={-1}>Your languages can help one another.</h1>
             <div className="profile-stack">
               <ProfileLanguage index="01" role="Native anchor" language={native} />
               {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
@@ -543,7 +555,7 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
             </div>
             <p className="setup-description ready-description">LinguaThread will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
             <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => setStep(0)}>Edit my languages</button>
+            <button className="text-action" onClick={() => goToStep(0)}>Edit my languages</button>
           </div>
         )}
       </section>
@@ -553,8 +565,8 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
   );
 }
 
-function SetupFrame({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: React.ReactNode }) {
-  return <div className="focus-content setup-content"><p className="eyebrow">{eyebrow}</p><h1>{title}</h1><p className="setup-description">{description}</p>{children}</div>;
+function SetupFrame({ eyebrow, title, description, children, headingRef, onBack }: { eyebrow: string; title: string; description: string; children: React.ReactNode; headingRef: React.RefObject<HTMLHeadingElement | null>; onBack?: () => void }) {
+  return <div className="focus-content setup-content">{onBack && <button className="setup-back" onClick={onBack} aria-label="Return to previous step">←</button>}<p className="eyebrow">{eyebrow}</p><h1 ref={headingRef} tabIndex={-1}>{title}</h1><p className="setup-description">{description}</p>{children}</div>;
 }
 
 const confidenceLabels: Record<Confidence, string> = { developing: "Developing", comfortable: "Comfortable", strong: "Strong" };

@@ -23,6 +23,12 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
   const availableMappings = model.mappings.filter((mapping) => showBridge || (model.realizations.find((item) => item.language === mapping.from.language)?.role !== "bridge" && model.realizations.find((item) => item.language === mapping.to.language)?.role !== "bridge"));
   const xrayLabels = realization ? [...new Set(realization.units.map((unit) => unit.label).filter((label): label is string => Boolean(label)))] : [];
 
+  function changeMode(nextMode: Mode) {
+    setMode(nextMode);
+    if (nextMode === "changes" && availableMappings[0]) setSelection({ kind: "mapping", mapping: availableMappings[0] });
+    else closeInspector();
+  }
+
   function selectUnit(unit: SentenceUnit, trigger: HTMLButtonElement) {
     triggerRef.current = trigger;
     setSelection({ kind: "unit", unit });
@@ -55,7 +61,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
 
       <div className="sentence-controls" aria-label="Sentence exploration controls">
         {(["reading", "changes", "xray"] as Mode[]).map((item) => (
-          <button key={item} className={mode === item ? "selected" : ""} aria-pressed={mode === item} onClick={() => { setMode(item); closeInspector(); }}>
+          <button key={item} className={mode === item ? "selected" : ""} aria-pressed={mode === item} onClick={() => changeMode(item)}>
             {item === "reading" ? "Read naturally" : item === "changes" ? "See what changes" : "Language X-Ray"}
           </button>
         ))}
@@ -70,7 +76,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
       <div className="anatomy-layout">
         <section className="sentence-reading" aria-label={realization ? `${realization.label} sentence` : "Sentence unavailable"}>
           {!realization ? <p className="instruction">This sentence is being prepared. Continue with the lesson while its anatomy is completed.</p> : <>
-          <p className="anatomy-language-label">{realization.label}</p>
+          {mode === "changes" ? <ComparisonChoreography realizations={availableRealizations} mapping={selection?.kind === "mapping" ? selection.mapping : null} /> : <><p className="anatomy-language-label">{realization.label}</p>
           <p className="anatomy-sentence">
             {mode === "xray" ? xrayWords.map((word, index) => {
               const selectedScope = selection?.kind === "xray" ? selection.scope : null;
@@ -81,7 +87,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
                 selectXRayScope(scope, event.currentTarget);
               }}>{word.text}</button>;
             }) : realization.units.map((unit, index) => <button key={unit.id} className={`sentence-unit ${selection?.kind === "unit" && selection.unit.id === unit.id ? "selected" : ""}`} aria-pressed={selection?.kind === "unit" && selection.unit.id === unit.id} data-follows-word={index < realization.units.length - 1} onClick={(event) => selectUnit(unit, event.currentTarget)}>{unit.text}</button>)}
-          </p>
+          </p></>}
           {mode === "xray" && <label className="xray-scope-field anatomy-xray-scope"><span>Word, phrase, or full sentence</span><select value={selection?.kind === "xray" ? selection.scope.id : ""} onChange={(event) => { const scope = activeXRayScopes.find((item) => item.id === event.target.value); if (scope) selectXRayScope(scope); }}><option value="" disabled>Choose a scope</option>{activeXRayScopes.map((scope) => <option key={scope.id} value={scope.id}>{scope.kind === "sentence" ? "Complete sentence breakdown" : scope.kind === "phrase" ? `Phrase: ${scope.text}` : `Word: ${scope.text}`}</option>)}</select></label>}
           {mode === "xray" && xrayLabels.length > 0 && <div className="xray-key" aria-label="Language X-Ray categories">{xrayLabels.map((label) => <span key={label}>{label}</span>)}</div>}
           {mode === "changes" && <div className="mapping-list" aria-label="Cross-language transformations">{availableMappings.length > 0 ? availableMappings.map((mapping) => <button key={mapping.id} className={selection?.kind === "mapping" && selection.mapping.id === mapping.id ? "selected" : ""} onClick={(event) => { triggerRef.current = event.currentTarget; setSelection({ kind: "mapping", mapping }); }}><span>{mapping.kind}</span>{mapping.label}</button>) : <p className="instruction">This comparison has not been authored yet.</p>}</div>}
@@ -98,6 +104,17 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
       <button className="primary-action" onClick={onContinue}>Continue with the lesson <span aria-hidden="true">→</span></button>
     </div>
   );
+}
+
+function ComparisonChoreography({ realizations, mapping }: { realizations: InteractiveSentenceModel["realizations"]; mapping: CrossLanguageMapping | null }) {
+  const selectedIds = new Set(mapping ? [...mapping.from.unitIds, ...mapping.to.unitIds] : []);
+  const involvedLanguages = new Set(mapping ? [mapping.from.language, mapping.to.language] : []);
+  return <div className="meaning-choreography" aria-live="polite">
+    {realizations.map((item, rowIndex) => <div key={item.language} className="choreography-row" data-role={item.role} data-involved={involvedLanguages.has(item.language)}>
+      <span className="choreography-label">{item.label}</span>
+      <p lang={item.language === "spanish" ? "es" : item.language === "vietnamese" ? "vi" : "en"}>{item.units.map((unit, unitIndex) => <span key={unit.id} className={selectedIds.has(unit.id) ? "mapped-unit" : "stable-unit"} style={{ "--unit-order": rowIndex * 3 + unitIndex } as React.CSSProperties}>{unit.text}{unit.after}</span>)}</p>
+    </div>)}
+  </div>;
 }
 
 function Inspector({ selection, relationships, model, lesson, onXRayScope, onRelationship, onClose }: { selection: Exclude<Selection, null>; relationships: SentenceRelationship[]; model: InteractiveSentenceModel; lesson: LessonForTools; onXRayScope: (scope: XRayScope) => void; onRelationship: (relationship: SentenceRelationship) => void; onClose: () => void }) {

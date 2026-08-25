@@ -112,6 +112,18 @@ function sentenceUnits(language: SentenceLanguage, sentence: string, vocabulary:
   });
 }
 
+function matchingUnitIds(units: SentenceUnit[], value: string) {
+  const alternatives = value.split("/").map((item) => item.trim()).filter(Boolean);
+  for (const alternative of alternatives) {
+    const sought = alternative.split(/\s+/).map(normalizeToken).filter(Boolean);
+    for (let start = 0; start <= units.length - sought.length; start += 1) {
+      const candidate = units.slice(start, start + sought.length).map((unit) => normalizeToken(unit.text));
+      if (candidate.every((token, index) => token === sought[index])) return units.slice(start, start + sought.length).map((unit) => unit.id);
+    }
+  }
+  return [];
+}
+
 /**
  * The default authored curriculum structure. Individual lessons can replace this
  * with a richer model when a particular construction warrants deeper treatment.
@@ -121,6 +133,23 @@ export function createInteractiveSentenceModel(source: CurriculumSentenceSource)
   const english = sentenceUnits("english", source.english, source.words);
   const vietnamese = sentenceUnits("vietnamese", source.vietnamese, source.words);
   const all = (units: SentenceUnit[]) => units.map((unit) => unit.id);
+  const conceptMappings = source.words.flatMap(([spanishWord, englishWord, vietnameseWord], index) => {
+    const spanishIds = matchingUnitIds(spanish, spanishWord);
+    const englishIds = matchingUnitIds(english, englishWord);
+    const vietnameseIds = matchingUnitIds(vietnamese, vietnameseWord);
+    const mappings: CrossLanguageMapping[] = [];
+    if (spanishIds.length && englishIds.length) mappings.push({
+      id: `${source.id}-concept-${index}-anchor`, from: { language: "spanish", unitIds: spanishIds }, to: { language: "english", unitIds: englishIds },
+      kind: spanishIds.length === englishIds.length ? "one-to-one" : "expanded", label: `${spanishWord} carries “${englishWord}”`,
+      explanation: `${spanishWord} expresses the shared concept “${englishWord}” here. The correspondence spans ${spanishIds.length === englishIds.length ? "the same number of visible units" : "a different number of visible units"}.`,
+    });
+    if (spanishIds.length && vietnameseIds.length) mappings.push({
+      id: `${source.id}-concept-${index}-bridge`, from: { language: "spanish", unitIds: spanishIds }, to: { language: "vietnamese", unitIds: vietnameseIds },
+      kind: spanishIds.length === vietnameseIds.length ? "one-to-one" : "expanded", label: `${spanishWord} connects with ${vietnameseWord}`,
+      explanation: `Spanish uses ${spanishWord}; Vietnamese carries the related contribution through ${vietnameseWord}. Their visible forms need not divide the meaning identically.`,
+    });
+    return mappings;
+  });
 
   return {
     meaning: source.english,
@@ -135,6 +164,7 @@ export function createInteractiveSentenceModel(source: CurriculumSentenceSource)
       { id: `${source.id}-bridge-pattern`, languages: ["vietnamese"], unitIds: all(vietnamese), label: "Bridge structure", explanation: `Vietnamese organizes this thought through ${source.bridgePattern}, showing which information is carried by order rather than Spanish-style inflection.` },
     ],
     mappings: [
+      ...conceptMappings,
       { id: `${source.id}-anchor-map`, from: { language: "spanish", unitIds: all(spanish) }, to: { language: "english", unitIds: all(english) }, kind: "structural", label: "Meaning is retained, structure changes", explanation: `Spanish uses ${source.pattern}; English uses its own sentence order to express the same thought. This is a sentence-level correspondence, not a forced word-by-word equation.`, reusablePattern: source.pattern },
       { id: `${source.id}-bridge-map`, from: { language: "spanish", unitIds: all(spanish) }, to: { language: "vietnamese", unitIds: all(vietnamese) }, kind: "structural", label: "The bridge carries it differently", explanation: `Vietnamese uses ${source.bridgePattern}. The shared meaning stays intact even where the languages group, omit, or order information differently.`, reusablePattern: source.bridgePattern },
     ],
