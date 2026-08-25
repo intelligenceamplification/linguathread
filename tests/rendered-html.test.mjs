@@ -256,13 +256,12 @@ test("derives concept-level mappings for semantic choreography", async () => {
   assert.deepEqual(Array.from(de.to.unitIds), ["english-3"]);
 });
 
-test("configures the retired PolyFlow host as a permanent server redirect", async () => {
+test("configures the retired PolyFlow host as permanent root and nested redirects", async () => {
   const vercel = JSON.parse(await read("../vercel.json"));
-  const redirect = vercel.redirects.find((item) => item.has?.some((condition) => condition.type === "host" && condition.value === "polyflow-language.vercel.app"));
-  assert.ok(redirect);
-  assert.equal(redirect.source, "/:path*");
-  assert.equal(redirect.destination, "https://linguathread.vercel.app/:path*");
-  assert.equal(redirect.permanent, true);
+  const redirects = vercel.redirects.filter((item) => item.has?.some((condition) => condition.type === "host" && condition.value === "polyflow-language.vercel.app"));
+  assert.deepEqual(redirects.map((item) => item.source), ["/", "/:path*"]);
+  assert.deepEqual(redirects.map((item) => item.destination), ["https://linguathread.vercel.app/", "https://linguathread.vercel.app/:path*"]);
+  assert.ok(redirects.every((item) => item.permanent === true));
 });
 
 test("keeps universal X-Ray quiet until lesson-specific structure is authored", async () => {

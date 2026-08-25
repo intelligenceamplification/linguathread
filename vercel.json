@@ -3,6 +3,12 @@
   "buildCommand": "npm run build",
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "polyflow-language.vercel.app" }],
+      "destination": "https://linguathread.vercel.app/",
+      "permanent": true
+    },
+    {
       "source": "/:path*",
       "has": [{ "type": "host", "value": "polyflow-language.vercel.app" }],
       "destination": "https://linguathread.vercel.app/:path*",
