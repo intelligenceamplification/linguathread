@@ -141,8 +141,8 @@ export const courseMap: CourseLevel[] = levels.map((level, levelIndex) => ({
       sequence,
       plannedLessons: 4,
       outsidePractice: {
-        purpose: "Move authored language into spontaneous human use without turning LinguaThread into an audio simulator.",
-        prompt: `In a conversation with a person or GPT Live, try to ${unit.communicativeOutcome.charAt(0).toLocaleLowerCase()}${unit.communicativeOutcome.slice(1)} Notice what comes naturally and what you want to revisit here.`,
+        purpose: "Move authored language into spontaneous use beyond this text-first practice.",
+        prompt: `Practice speaking with a conversational AI you prefer or with someone who knows the language. Listen to or watch something in the language, then try to ${unit.communicativeOutcome.charAt(0).toLocaleLowerCase()}${unit.communicativeOutcome.slice(1)} Notice what feels natural and what you want to revisit here.`,
       },
       prerequisiteUnitId: sequence === 1 ? undefined : `${levels[Math.floor((sequence - 2) / 12)].toLocaleLowerCase()}-u${((sequence - 2) % 12) + 1}`,
     };

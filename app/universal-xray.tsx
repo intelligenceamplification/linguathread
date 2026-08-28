@@ -26,8 +26,8 @@ export function UniversalXRay({ lesson, showBridge, onClose }: { lesson: LessonF
     return () => window.removeEventListener("keydown", close);
   }, [onClose]);
 
-  return <aside className="universal-xray" role="dialog" aria-modal="true" aria-label="Language X-Ray">
-    <div className="inspector-heading"><span>Language X-Ray</span><button ref={closeRef} onClick={onClose} aria-label="Close Language X-Ray">×</button></div>
+  return <aside className="universal-xray" role="dialog" aria-modal="true" aria-label="Expression X-Ray">
+    <div className="inspector-heading"><span>Expression X-Ray</span><button ref={closeRef} onClick={onClose} aria-label="Close Expression X-Ray">×</button></div>
     <h2>See how this meaning is built.</h2>
     <p className="xray-intro">Choose a word, phrase, or the complete sentence.</p>
     <div className="xray-language-tabs" role="tablist" aria-label="X-Ray language">

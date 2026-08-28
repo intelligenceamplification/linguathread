@@ -1,7 +1,5 @@
 "use client";
 
-/* eslint-disable react-hooks/set-state-in-effect -- browser storage is loaded after hydration */
-
 import { useEffect, useRef, useState } from "react";
 import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
@@ -30,14 +28,7 @@ const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transfo
 const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 
-function learnerHeaders(json = false) {
-  let learnerId = window.localStorage.getItem(learnerIdKey);
-  if (!learnerId) {
-    learnerId = crypto.randomUUID();
-    window.localStorage.setItem(learnerIdKey, learnerId);
-  }
-  return { ...(json ? { "content-type": "application/json" } : {}), "x-linguathread-learner-id": learnerId };
-}
+const jsonHeaders = { "content-type": "application/json" };
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
@@ -46,19 +37,28 @@ export default function Home() {
 
   useEffect(() => {
     const saved = window.localStorage.getItem("linguathread.language-profile.v1");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved) as Partial<LanguageProfile>;
-        if (parsed.native && Array.isArray(parsed.additional)) {
-          setProfile({ native: parsed.native, second: parsed.second || null, secondConfidence: parsed.second ? (parsed.secondConfidence || "developing") : null, additional: parsed.additional });
-        }
-      } catch { window.localStorage.removeItem("linguathread.language-profile.v1"); }
-    }
-    setLoaded(true);
+    const legacyLearnerId = window.localStorage.getItem(learnerIdKey);
+    let localProfile: LanguageProfile | null = null;
+    if (saved) try {
+      const parsed = JSON.parse(saved) as Partial<LanguageProfile>;
+      if (parsed.native && Array.isArray(parsed.additional)) localProfile = { native: parsed.native, second: parsed.second || null, secondConfidence: parsed.second ? (parsed.secondConfidence || "developing") : null, additional: parsed.additional };
+    } catch { window.localStorage.removeItem("linguathread.language-profile.v1"); }
+
+    fetch("/api/session", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ legacyLearnerId }) })
+      .then(async (response) => {
+        const session = response.ok ? await response.json() as { legacyClaimed?: boolean } : {};
+        if (session.legacyClaimed) window.localStorage.removeItem(learnerIdKey);
+        const profileResponse = await fetch("/api/profile");
+        const data = profileResponse.ok ? await profileResponse.json() as { profile?: LanguageProfile | null } : {};
+        setProfile(data.profile || localProfile);
+      })
+      .catch(() => setProfile(localProfile))
+      .finally(() => setLoaded(true));
   }, []);
 
   function saveProfile(nextProfile: LanguageProfile) {
     window.localStorage.setItem("linguathread.language-profile.v1", JSON.stringify(nextProfile));
+    fetch("/api/profile", { method: "PUT", headers: jsonHeaders, body: JSON.stringify(nextProfile), keepalive: true }).catch(() => undefined);
     setProfile(nextProfile);
     setEditingProfile(false);
   }
@@ -98,7 +98,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         .then((response) => response.ok ? response.json() : Promise.reject())
         .then((data: { lessons?: LessonDefinition[] }) => data.lessons?.length ? data.lessons : curriculum)
         .catch(() => curriculum),
-      fetch("/api/progress", { headers: learnerHeaders() })
+      fetch("/api/progress")
         .then((response) => response.ok ? response.json() : Promise.reject())
         .catch(() => ({ completedLessonIds: [], reviewDueLessonIds: [] })),
     ]).then(([loadedCourse, data]: [
@@ -185,7 +185,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     });
     fetch("/api/progress", {
       method: "POST",
-      headers: learnerHeaders(true),
+      headers: jsonHeaders,
       body: JSON.stringify({
         type: "attempt",
         lessonId: evidenceLesson.id,
@@ -224,7 +224,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
     });
-    fetch("/api/progress", { method: "POST", headers: learnerHeaders(true), body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
+    fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
     setStage("complete");
   }
 
@@ -289,9 +289,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
         </div>
         <div className="header-actions">
-          <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today</button>
-          {stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Course</button>}
-          <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>X-Ray</button>
+          <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today’s Lesson</button>
+          {stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Language Path</button>}
+          <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>Expression X-Ray</button>
         </div>
       </header>
 

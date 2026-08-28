@@ -1,18 +1,15 @@
 import { and, asc, eq, lte, sql } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { answerAttempts, learnerProfiles, lessonProgress, objectiveMastery } from "../../../db/schema";
+import { isSameOriginMutation, learnerForRequest } from "../../learner-session";
 
 export const dynamic = "force-dynamic";
 
-function learnerId(request: Request) {
-  const id = request.headers.get("x-linguathread-learner-id")?.trim();
-  return id && /^[a-zA-Z0-9-]{16,80}$/.test(id) ? id : null;
-}
-
 export async function GET(request: Request) {
   const db = getDb();
-  const learner = learnerId(request);
-  if (!db || !learner) return Response.json({ completedLessonIds: [], reviewDueLessonIds: [], localOnly: true });
+  if (!db) return Response.json({ completedLessonIds: [], reviewDueLessonIds: [], localOnly: true });
+  const learner = await learnerForRequest(request);
+  if (!learner) return Response.json({ error: "Unauthenticated installation" }, { status: 401 });
 
   const now = new Date();
   const [completed, due, evidence] = await Promise.all([
@@ -34,9 +31,11 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  if (!isSameOriginMutation(request)) return Response.json({ error: "Cross-origin request rejected" }, { status: 403 });
   const db = getDb();
-  const learner = learnerId(request);
-  if (!db || !learner) return Response.json({ saved: false, localOnly: true });
+  if (!db) return Response.json({ saved: false, localOnly: true });
+  const learner = await learnerForRequest(request);
+  if (!learner) return Response.json({ error: "Unauthenticated installation" }, { status: 401 });
 
   const body = await request.json() as {
     type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string;

@@ -123,7 +123,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
   assert.match(mapSource, /plannedLessons: 4/);
   assert.match(mapSource, /plannedCourseLessonCount/);
   assert.match(page, /Your language course/);
-  assert.match(page, />Course<\/button>/);
+  assert.match(page, />Language Path<\/button>/);
   assert.match(page, /Authoring in progress/);
   assert.match(page, /Only reviewed, publishable lessons enter your learning sequence/);
   assert.match(route, /mappedUnitCount/);
@@ -521,19 +521,67 @@ test("keeps the voy X-Ray specific, concise, and transformational", async () => 
   assert.doesNotMatch(JSON.stringify(analysis), /Contextual sentence element|meaningful part of this complete thought/i);
 });
 
-test("keeps Today and universal X-Ray optional, recoverable, and separate from the existing lesson path", async () => {
+test("uses the approved primary navigation language", async () => {
   const [page, daily, xray] = await Promise.all([read("../app/page.tsx"), read("../app/daily-lesson.tsx"), read("../app/universal-xray.tsx")]);
   assert.match(page, /<DailyLesson/);
   assert.match(page, /<UniversalXRay/);
-  assert.match(page, />Today</);
-  assert.match(page, />X-Ray</);
+  assert.match(page, />Today’s Lesson<\/button>/);
+  assert.match(page, />Language Path<\/button>/);
+  assert.match(page, />Expression X-Ray<\/button>/);
+  assert.doesNotMatch(page, />Today<\/button>|>Course<\/button>|>X-Ray<\/button>/);
   assert.match(daily, /Skip this part for now/);
   assert.match(daily, /The thread is in motion/);
   assert.match(daily, /Return to self-directed learning/);
+  assert.match(xray, /aria-label="Expression X-Ray"/);
+  assert.match(xray, /Close Expression X-Ray/);
   assert.match(xray, /Choose a word, phrase, or the complete sentence/);
   assert.match(xray, /xray-sentence/);
   assert.match(xray, /Compare and transform/);
   assert.match(xray, /aria-modal/);
+});
+
+test("uses provider-neutral outside-practice guidance", async () => {
+  const [map, validator] = await Promise.all([read("../app/course-map.ts"), read("../scripts/validate-course-map.mjs")]);
+  assert.match(map, /conversational AI you prefer/);
+  assert.match(map, /Listen to or watch something in the language/);
+  assert.match(map, /someone who knows the language/);
+  assert.doesNotMatch(map, /GPT Live/);
+  assert.match(validator, /provider-neutral outside practice guidance/);
+});
+
+test("derives private ownership only from a server-issued HttpOnly session", async () => {
+  const [session, progress, profile, schema, migration] = await Promise.all([
+    read("../app/learner-session.ts"),
+    read("../app/api/progress/route.ts"),
+    read("../app/api/profile/route.ts"),
+    read("../db/schema.ts"),
+    read("../drizzle/0004_private_learner_identity.sql"),
+  ]);
+  assert.match(session, /randomBytes\(32\)/);
+  assert.match(session, /createHash\("sha256"\)/);
+  assert.match(session, /HttpOnly; Secure; SameSite=Lax/);
+  assert.match(progress, /learnerForRequest\(request\)/);
+  assert.match(profile, /learnerForRequest\(request\)/);
+  assert.doesNotMatch(`${progress}\n${profile}`, /x-linguathread-learner-id/);
+  assert.match(schema, /learnerSessions/);
+  assert.match(schema, /legacyLearnerClaims/);
+  assert.match(schema, /references\(\(\) => learners\.id/);
+  assert.match(migration, /FOREIGN KEY \(learner_id\) REFERENCES learners\(id\) ON DELETE CASCADE/);
+});
+
+test("fresh installs bootstrap privately and legacy state has a one-time claim path", async () => {
+  const [page, route, documentation] = await Promise.all([
+    read("../app/page.tsx"),
+    read("../app/api/session/route.ts"),
+    read("../docs/learner-identity.md"),
+  ]);
+  assert.match(page, /fetch\("\/api\/session"/);
+  assert.match(page, /fetch\("\/api\/profile"/);
+  assert.match(page, /if \(!loaded \|\| !profile\) return <LanguageSetup/);
+  assert.match(route, /onConflictDoNothing\(\)/);
+  assert.match(route, /legacyLearnerClaims/);
+  assert.match(route, /legacyClaimed/);
+  assert.match(documentation, /Cross-device recovery remains disabled until an identity provider is selected/);
 });
 
 test("defines the complete CEFR progression from A1 through C2", async () => {

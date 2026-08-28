@@ -373,11 +373,11 @@ button { color: inherit; }
 }
 
 @media (max-width: 700px) {
-  .topline { height: 62px; grid-template-columns: 1fr auto; }
+  .topline { min-height: 104px; height: auto; grid-template-columns: 1fr auto; align-content: center; row-gap: 8px; padding-top: 10px; padding-bottom: 8px; }
   .lesson-context { display: none; }
-  .quiet-action, .header-balance { display: none; }
-  .header-actions { gap: 10px; }
-  .header-actions .today-action, .header-actions .xray-action { display: inline-flex; align-items: center; min-height: 38px; }
+  .header-balance { display: none; }
+  .header-actions { grid-column: 1 / -1; justify-self: stretch; justify-content: space-between; gap: 4px; }
+  .header-actions .quiet-action { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; padding: 6px 7px; font-size: .73rem; white-space: nowrap; }
   .lesson-stage { padding-top: 34px; padding-bottom: 34px; }
   .grammar-grid { grid-template-columns: 1fr; }
   .grammar-grid article { padding: 18px 0; }
@@ -392,7 +392,7 @@ button { color: inherit; }
   .lesson-footer { justify-content: center; text-align: center; }
   .lesson-footer span:last-child { display: none; }
   .word-reveal { align-items: flex-start; flex-direction: column; text-align: left; }
-  .setup-topline { grid-template-columns: 1fr auto 1fr; }
+  .setup-topline { min-height: 62px; grid-template-columns: 1fr auto 1fr; padding-top: 0; padding-bottom: 0; }
   .setup-topline .lesson-context { justify-self: center; }
   .language-options { grid-template-columns: repeat(2, 1fr); }
   .setup-content h1 { font-size: clamp(2.4rem, 12vw, 4.2rem); }

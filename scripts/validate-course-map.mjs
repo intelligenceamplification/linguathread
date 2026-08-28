@@ -29,7 +29,7 @@ for (const [levelIndex, stage] of courseMap.entries()) {
       if (!Array.isArray(unit[field]) || unit[field].length < 2) errors.push(`${unit.id} needs substantive ${field}.`);
     }
     if (unit.plannedLessons !== 4) errors.push(`${unit.id} must contain four multi-stage authored lessons.`);
-    if (!unit.outsidePractice?.purpose || !unit.outsidePractice?.prompt?.includes("GPT Live")) errors.push(`${unit.id} needs a quiet external speaking checkpoint.`);
+    if (!unit.outsidePractice?.purpose || !unit.outsidePractice?.prompt?.includes("conversational AI") || !unit.outsidePractice?.prompt?.includes("someone who knows the language") || !unit.outsidePractice?.prompt?.includes("Listen to or watch")) errors.push(`${unit.id} needs provider-neutral outside practice guidance.`);
     if (unit.sequence > 1 && !unit.prerequisiteUnitId) errors.push(`${unit.id} needs a prerequisite unit.`);
   }
 }

@@ -1,14 +1,42 @@
-import { boolean, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+
+export const learnerAccounts = pgTable("learner_accounts", {
+  id: text("id").primaryKey(),
+  provider: text("provider").notNull(),
+  providerSubject: text("provider_subject").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+}, (table) => [uniqueIndex("learner_accounts_provider_subject_idx").on(table.provider, table.providerSubject)]);
+
+export const learners = pgTable("learners", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").references(() => learnerAccounts.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+}, (table) => [index("learners_account_idx").on(table.accountId)]);
+
+export const learnerSessions = pgTable("learner_sessions", {
+  tokenHash: text("token_hash").primaryKey(),
+  learnerId: text("learner_id").notNull().references(() => learners.id, { onDelete: "cascade" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  revokedAt: timestamp("revoked_at", { withTimezone: true }),
+}, (table) => [index("learner_sessions_owner_idx").on(table.learnerId)]);
+
+export const legacyLearnerClaims = pgTable("legacy_learner_claims", {
+  legacyIdHash: text("legacy_id_hash").primaryKey(),
+  learnerId: text("learner_id").notNull().references(() => learners.id, { onDelete: "cascade" }),
+  claimedAt: timestamp("claimed_at", { withTimezone: true }).notNull(),
+});
 
 export const learnerProfiles = pgTable("learner_profiles", {
-  learnerId: text("learner_id").primaryKey(),
+  learnerId: text("learner_id").primaryKey().references(() => learners.id, { onDelete: "cascade" }),
   profileJson: text("profile_json").notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).notNull(),
 });
 
 export const lessonProgress = pgTable("lesson_progress", {
   id: text("id").primaryKey(),
-  learnerId: text("learner_id").notNull(),
+  learnerId: text("learner_id").notNull().references(() => learners.id, { onDelete: "cascade" }),
   lessonId: text("lesson_id").notNull(),
   skill: text("skill").notNull(),
   status: text("status").notNull(),
@@ -21,7 +49,7 @@ export const lessonProgress = pgTable("lesson_progress", {
 
 export const answerAttempts = pgTable("answer_attempts", {
   id: text("id").primaryKey(),
-  learnerId: text("learner_id").notNull(),
+  learnerId: text("learner_id").notNull().references(() => learners.id, { onDelete: "cascade" }),
   lessonId: text("lesson_id").notNull(),
   skill: text("skill").notNull(),
   kind: text("kind").notNull(),
@@ -32,7 +60,7 @@ export const answerAttempts = pgTable("answer_attempts", {
 
 export const objectiveMastery = pgTable("objective_mastery", {
   id: text("id").primaryKey(),
-  learnerId: text("learner_id").notNull(),
+  learnerId: text("learner_id").notNull().references(() => learners.id, { onDelete: "cascade" }),
   objectiveId: text("objective_id").notNull(),
   language: text("language").notNull(),
   status: text("status").notNull().default("introduced"),

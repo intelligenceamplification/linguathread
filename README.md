@@ -13,7 +13,9 @@ npm install
 npm run dev
 ```
 
-LinguaThread works without a database by keeping the language profile and completed lessons in the browser. To sync progress through the API, create a Neon or Vercel Postgres database, run `drizzle/0002_vercel_postgres.sql`, and set `DATABASE_URL` from `.env.example`.
+LinguaThread works without a database by keeping each installation's language profile and completed lessons in that browser. A fresh installation begins at onboarding.
+
+For private hosted progress, create a Neon or Vercel Postgres database, run `drizzle/0002_vercel_postgres.sql`, `drizzle/0003_objective_mastery.sql`, and `drizzle/0004_private_learner_identity.sql` in order, then set `DATABASE_URL` from `.env.example`. The server issues an opaque HttpOnly installation session and ignores client-supplied learner IDs. See `docs/learner-identity.md` for ownership, migration, and cross-device requirements.
 
 ## Curriculum publishing
 
@@ -32,7 +34,7 @@ Every shipped lesson now enters LinguaThread's Interactive Sentence Model at its
 
 The model keeps realizations, sentence units, relationships, cross-language mappings, and related patterns separate. Units may include multiple visible segments or be marked implied or omitted; mappings can be one-to-one, reordered, structural, expanded, or implicit. The interface only shows concepts that have authored data.
 
-To add another interactive lesson, create a reviewed `InteractiveSentenceModel`, attach it to the matching `CompactLesson`, then add coverage to `tests/rendered-html.test.mjs`. The same data drives normal reading, Language X-Ray, the inspector, and See What Changes. Current remote-pack validation preserves optional anatomy data; a future curriculum schema revision should validate it field by field before accepting externally published anatomy lessons.
+To add another interactive lesson, create a reviewed `InteractiveSentenceModel`, attach it to the matching `CompactLesson`, then add coverage to `tests/rendered-html.test.mjs`. The same data drives normal reading, Expression X-Ray, the inspector, and See What Changes. Current remote-pack validation preserves optional anatomy data; a future curriculum schema revision should validate it field by field before accepting externally published anatomy lessons.
 
 No pronunciation metadata is rendered. The type has a reserved authoring field only, so audio can be reviewed as a separate product decision later.
 
@@ -40,7 +42,7 @@ Editorial note: the existing Vietnamese course wording `Gia đình tôi sống g
 
 ## Vercel
 
-Import the GitHub repository into Vercel. The project uses standard Next.js defaults and needs no custom build settings. Add `DATABASE_URL` to Vercel only when hosted progress sync is desired.
+Import the GitHub repository into Vercel. The project uses standard Next.js defaults and needs no custom build settings. Apply the identity migration before adding `DATABASE_URL`. Cross-device recovery must remain off until a verified identity provider is selected and configured server-side.
 
 ## Verification
 
