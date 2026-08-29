@@ -5,6 +5,7 @@ import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson
 import { InteractiveSentence } from "./sentence-anatomy";
 import { DailyLesson } from "./daily-lesson";
 import { UniversalXRay } from "./universal-xray";
+import { FirstLaunchIntro } from "./first-launch-intro";
 import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
 import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
 import {
@@ -34,6 +35,7 @@ export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [launchState, setLaunchState] = useState<"checking" | "intro" | "app">("checking");
 
   useEffect(() => {
     const saved = window.localStorage.getItem("linguathread.language-profile.v1");
@@ -50,9 +52,14 @@ export default function Home() {
         if (session.legacyClaimed) window.localStorage.removeItem(learnerIdKey);
         const profileResponse = await fetch("/api/profile");
         const data = profileResponse.ok ? await profileResponse.json() as { profile?: LanguageProfile | null } : {};
-        setProfile(data.profile || localProfile);
+        const nextProfile = data.profile || localProfile;
+        setProfile(nextProfile);
+        setLaunchState("intro");
       })
-      .catch(() => setProfile(localProfile))
+      .catch(() => {
+        setProfile(localProfile);
+        setLaunchState("intro");
+      })
       .finally(() => setLoaded(true));
   }, []);
 
@@ -63,7 +70,9 @@ export default function Home() {
     setEditingProfile(false);
   }
 
-  if (!loaded || !profile) return <LanguageSetup onComplete={saveProfile} />;
+  if (!loaded || launchState === "checking") return <main className="app-shell launch-loading" aria-label="Loading LinguaThread" />;
+  if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
+  if (!profile) return <LanguageSetup onComplete={saveProfile} />;
   if (editingProfile) return <LanguageSetup initialProfile={profile} onComplete={saveProfile} />;
   return <Lesson profile={profile} onEditLanguages={() => setEditingProfile(true)} />;
 }

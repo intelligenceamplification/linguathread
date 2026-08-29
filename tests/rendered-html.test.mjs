@@ -48,6 +48,30 @@ test("preserves the language setup and calm learning interface", async () => {
   assert.match(page, /Language begins from what you already know/);
 });
 
+test("shows the launch intro before the unchanged onboarding on every app launch", async () => {
+  const [page, intro, styles] = await Promise.all([
+    read("../app/page.tsx"),
+    read("../app/first-launch-intro.tsx"),
+    read("../app/globals.css"),
+  ]);
+  assert.doesNotMatch(page, /firstLaunchKey|first-launch-intro\.v1/);
+  assert.match(page, /launchState === "intro"/);
+  assert.match(page, /setLaunchState\("intro"\)/);
+  assert.match(page, /FirstLaunchIntro onBegin=\{\(\) => setLaunchState\("app"\)\}/);
+  assert.match(page, /<LanguageSetup onComplete=\{saveProfile\} \/>/);
+  assert.match(intro, /single fine thread|intro-thread-single/);
+  assert.match(intro, /intro-strand-one/);
+  assert.match(intro, /intro-strand-two/);
+  assert.match(intro, /intro-strand-three/);
+  assert.match(intro, /intro-direction-reverse/);
+  assert.match(intro, /Pull a thread\. Discover how language is built\./);
+  assert.match(intro, />Begin <span/);
+  assert.match(styles, /@keyframes intro-single/);
+  assert.match(styles, /@keyframes intro-separate/);
+  assert.match(styles, /@keyframes intro-reverse-flow/);
+  assert.match(styles, /\.intro-copy \{ opacity: 1 !important/);
+});
+
 test("resets onboarding scroll and focus after every rendered step", async () => {
   const page = await read("../app/page.tsx");
   assert.match(page, /requestAnimationFrame/);
@@ -577,7 +601,9 @@ test("fresh installs bootstrap privately and legacy state has a one-time claim p
   ]);
   assert.match(page, /fetch\("\/api\/session"/);
   assert.match(page, /fetch\("\/api\/profile"/);
-  assert.match(page, /if \(!loaded \|\| !profile\) return <LanguageSetup/);
+  assert.match(page, /if \(!loaded \|\| launchState === "checking"\)/);
+  assert.match(page, /if \(launchState === "intro"\) return <FirstLaunchIntro/);
+  assert.match(page, /if \(!profile\) return <LanguageSetup/);
   assert.match(route, /onConflictDoNothing\(\)/);
   assert.match(route, /legacyLearnerClaims/);
   assert.match(route, /legacyClaimed/);
