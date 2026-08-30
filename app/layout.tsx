@@ -44,7 +44,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geist.variable} antialiased`}>
+      <body className={`${geist.className} ${geist.variable} antialiased`}>
         {children}
       </body>
     </html>

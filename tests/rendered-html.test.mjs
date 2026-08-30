@@ -117,9 +117,10 @@ test("uses the launch screen visual system throughout the app", async () => {
   assert.match(styles, /--text-accent: #5f6d79/);
   assert.match(styles, /--text-accent-strong: #303941/);
   assert.match(styles, /--serif: Georgia/);
-  assert.match(styles, /body \{[^}]*font-family: var\(--serif\)/);
+  assert.match(layout, /className=\{`\$\{geist\.className\} \$\{geist\.variable\} antialiased`\}/);
+  assert.match(styles, /body \{[^}]*font-family: var\(--font-geist\)/);
   assert.match(styles, /\.intro-copy h1 \{[^}]*font-weight: 320/);
-  assert.match(styles, /\.wordmark \{[^}]*font-family: var\(--font-geist\), var\(--serif\);[^}]*font-weight: 320/);
+  assert.match(styles, /\.wordmark \{[^}]*font-family: var\(--font-geist\);[^}]*font-weight: 320/);
   assert.match(styles, /\.focus-content h1 \{[^}]*font-family: var\(--serif\);[^}]*font-weight: 400/);
   assert.match(styles, /\.stack-line strong \{[^}]*font-family: var\(--serif\);[^}]*font-weight: 400/);
   assert.match(styles, /\.contemplative-note \{[^}]*font-family: var\(--serif\);[^}]*font-style: italic/);
