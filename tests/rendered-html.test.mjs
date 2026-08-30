@@ -99,10 +99,30 @@ test("follows the device light and dark appearance automatically", async () => {
   const [styles, layout] = await Promise.all([read("../app/globals.css"), read("../app/layout.tsx")]);
   assert.match(styles, /color-scheme: light dark/);
   assert.match(styles, /@media \(prefers-color-scheme: dark\)/);
-  assert.match(styles, /--paper: #0f1412/);
-  assert.match(styles, /--primary-text: #101512/);
+  assert.match(styles, /--paper: #ffffff/);
+  assert.match(styles, /--paper: #0d1114/);
+  assert.match(styles, /--primary-text: #111518/);
   assert.match(layout, /prefers-color-scheme: light/);
   assert.match(layout, /prefers-color-scheme: dark/);
+});
+
+test("uses the launch screen visual system throughout the app", async () => {
+  const [styles, layout, manifest] = await Promise.all([
+    read("../app/globals.css"),
+    read("../app/layout.tsx"),
+    read("../app/manifest.ts"),
+  ]);
+  assert.match(styles, /--ink: #101315/);
+  assert.match(styles, /--muted: #68737c/);
+  assert.match(styles, /--text-accent: #5f6d79/);
+  assert.match(styles, /--text-accent-strong: #303941/);
+  assert.match(styles, /--serif: Georgia, "Times New Roman", serif/);
+  assert.match(styles, /\.focus-content h1 \{[^}]*font-family: var\(--font-geist-sans\), system-ui, sans-serif;[^}]*font-weight: 320/);
+  assert.match(styles, /\.contemplative-note \{[^}]*font-family: var\(--serif\);[^}]*font-style: italic/);
+  assert.match(layout, /color: "#ffffff"/);
+  assert.match(manifest, /background_color: "#ffffff"/);
+  assert.doesNotMatch(styles, /(?:^|\n)\s*color: var\(--moss(?:-dark)?\)/);
+  assert.doesNotMatch(styles, /#426d5a|#254638|#dce8df|#d9a94f|#8fbea6|#b7dbc8|#e0b768/i);
 });
 
 test("ships an expanded A1 curriculum rather than one repeating foundation", async () => {
@@ -212,12 +232,12 @@ test("uses typed target production with a three-attempt model that must be typed
   assert.match(engine, /export type LearningLanguage = string/);
 });
 
-test("treats the target model as a eucalyptus reference sheet", async () => {
+test("treats the target model as a neutral editorial reference sheet", async () => {
   const styles = await read("../app/globals.css");
-  assert.match(styles, /--model-bg: #eef3f0/);
-  assert.match(styles, /--model-border: #9bafa3/);
-  assert.match(styles, /--model-bg: #19251f/);
-  assert.match(styles, /--model-border: #5d7b6c/);
+  assert.match(styles, /--model-bg: #f4f6f7/);
+  assert.match(styles, /--model-border: #aab5be/);
+  assert.match(styles, /--model-bg: #181f24/);
+  assert.match(styles, /--model-border: #596670/);
   assert.match(styles, /\.target-model \{[^}]*border: 1px solid var\(--model-border\); background: var\(--model-bg\)/);
 });
 

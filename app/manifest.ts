@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "How Language Is Built through language stacking.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f6f7f3",
-    theme_color: "#f6f7f3",
+    background_color: "#ffffff",
+    theme_color: "#ffffff",
     icons: [{ src: "/favicon.svg", sizes: "any", type: "image/svg+xml" }],
   };
 }
