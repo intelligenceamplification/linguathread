@@ -121,7 +121,6 @@ button { color: inherit; }
 .intro-strand-four { stroke: var(--intro-thread); animation-delay: 1.65s; }
 .intro-language-fragments { fill: var(--intro-accent); font-family: Georgia, "Times New Roman", serif; font-size: 25px; opacity: 0; animation: intro-fragments 1.25s 2.9s cubic-bezier(.2,.75,.25,1) both; }
 .intro-fragment-italic { font-style: italic; }
-.intro-fragment-end { text-anchor: end; }
 .intro-copy h1 { position: relative; z-index: 1; margin: 0; color: var(--intro-ink); font-size: clamp(3rem, 9.4vw, 8rem); line-height: .94; font-weight: 320; white-space: nowrap; opacity: 0; animation: intro-title-resolve 1.25s 3.6s cubic-bezier(.2,.75,.25,1) both; }
 .intro-title-line { width: fit-content; margin: -4px auto 0; padding: 0 14px 20px; border-bottom: 1px solid var(--intro-thread); color: var(--intro-ink); font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.08; opacity: 0; animation: intro-recognition .9s 4.6s cubic-bezier(.2,.75,.25,1) both; }
 .intro-invitation { margin: 20px auto 0; color: var(--intro-muted); font-family: Georgia, serif; font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; line-height: 1.5; opacity: 0; animation: intro-recognition .9s 4.8s cubic-bezier(.2,.75,.25,1) both; }

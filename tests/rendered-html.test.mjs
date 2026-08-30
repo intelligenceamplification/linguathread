@@ -64,6 +64,8 @@ test("shows the launch intro before the unchanged onboarding on every app launch
   assert.match(intro, /intro-strand-two/);
   assert.match(intro, /intro-strand-three/);
   assert.match(intro, /intro-thread-fade/);
+  assert.match(intro, /textAnchor="end"/);
+  assert.match(intro, /textAnchor="middle"/);
   assert.match(intro, /Pull a thread\. Follow the meaning\./);
   assert.match(intro, /관계/);
   assert.match(intro, /quan hệ/);

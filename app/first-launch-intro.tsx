@@ -43,10 +43,10 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
               <defs>
                 <linearGradient id="intro-thread-fade" x1="0" y1="0" x2="1" y2="0">
                   <stop className="intro-thread-stop" offset="0%" />
-                  <stop className="intro-thread-stop" offset="31%" />
-                  <stop className="intro-thread-stop-transparent" offset="44%" />
-                  <stop className="intro-thread-stop-transparent" offset="56%" />
-                  <stop className="intro-thread-stop" offset="69%" />
+                  <stop className="intro-thread-stop" offset="24%" />
+                  <stop className="intro-thread-stop-transparent" offset="42%" />
+                  <stop className="intro-thread-stop-transparent" offset="58%" />
+                  <stop className="intro-thread-stop" offset="76%" />
                   <stop className="intro-thread-stop" offset="100%" />
                 </linearGradient>
               </defs>
@@ -58,15 +58,15 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
                 <path className="intro-strand intro-strand-four" d="M600 286 C600 330 600 365 600 454" />
               </g>
               <g className="intro-language-fragments">
-                <text x="92" y="94">관계</text>
-                <text className="intro-fragment-end" x="1108" y="94">이해</text>
-                <text className="intro-fragment-italic" x="72" y="258">quan hệ</text>
-                <text className="intro-fragment-italic intro-fragment-end" x="1128" y="258">thấu hiểu</text>
-                <text className="intro-fragment-italic" x="92" y="414">relación</text>
-                <text className="intro-fragment-italic intro-fragment-end" x="1108" y="414">comprensión</text>
-                <text x="579" y="352">명령</text>
-                <text className="intro-fragment-italic" x="554" y="408">mệnh lệnh</text>
-                <text className="intro-fragment-italic" x="555" y="462">imperativo</text>
+                <text x="136" y="94" textAnchor="end">관계</text>
+                <text x="1064" y="94">이해</text>
+                <text className="intro-fragment-italic" x="114" y="258" textAnchor="end">quan hệ</text>
+                <text className="intro-fragment-italic" x="1086" y="258">thấu hiểu</text>
+                <text className="intro-fragment-italic" x="136" y="414" textAnchor="end">relación</text>
+                <text className="intro-fragment-italic" x="1064" y="414">comprensión</text>
+                <text x="600" y="352" textAnchor="middle">명령</text>
+                <text className="intro-fragment-italic" x="600" y="408" textAnchor="middle">mệnh lệnh</text>
+                <text className="intro-fragment-italic" x="600" y="462" textAnchor="middle">imperativo</text>
               </g>
             </svg>
             <h1 id="intro-title">LinguaThread</h1>
