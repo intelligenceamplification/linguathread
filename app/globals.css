@@ -466,10 +466,10 @@ button { color: inherit; }
   .intro-stage { padding: 18px 22px; }
   .intro-copy h1 { font-size: clamp(2.3rem, 10vh, 4.8rem); }
   .intro-kicker { margin-bottom: 10px; }
-  .intro-title-line { margin-top: 8px; font-size: clamp(1.35rem, 6vh, 2.3rem); }
-  .intro-invitation { margin-top: 12px; font-size: 1rem; }
-  .intro-begin { min-height: 46px; margin-top: 18px; }
-  .intro-mark { height: min(220px, 54svh); }
+  .intro-title-line { margin-top: 8px; padding-bottom: 14px; font-size: clamp(1.35rem, 6vh, 2.3rem); }
+  .intro-invitation { margin-top: 10px; font-size: 1rem; }
+  .intro-begin { min-height: 46px; margin-top: 14px; }
+  .intro-mark { height: min(180px, 46svh); }
   .intro-thread-art { width: min(900px, 148svh); left: 50%; transform: translateX(-50%); }
 }
 
