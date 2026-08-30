@@ -73,7 +73,7 @@ button { color: inherit; }
   cursor: pointer;
 }
 
-.wordmark { justify-self: start; font-family: var(--font-geist), var(--serif); font-weight: 560; font-size: 1.05rem; }
+.wordmark { justify-self: start; font-family: var(--font-geist), var(--serif); font-weight: 320; font-size: 1.05rem; }
 .static-wordmark { cursor: default; }
 .lesson-context { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .82rem; }
 .language-mark { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--primary-bg); color: var(--primary-text); font-size: .68rem; font-weight: 750; }
