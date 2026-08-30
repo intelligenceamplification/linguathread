@@ -93,36 +93,46 @@ button { color: inherit; }
 @keyframes settle { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes confirm-thread { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
-/* The first launch is a single visual thought: one thread differentiates, connects, and reverses before the name arrives. */
-.intro-shell { grid-template-rows: 1fr; }
+/* The first launch is a single visual thought: one thread differentiates into meaning, then resolves around the name. */
+.intro-shell {
+  --intro-paper: #ffffff;
+  --intro-ink: #101315;
+  --intro-accent: #5f6d79;
+  --intro-thread: #c3cbd1;
+  --intro-muted: #68737c;
+  --intro-button-bg: #101315;
+  --intro-button-text: #ffffff;
+  grid-template-rows: 1fr;
+  background: var(--intro-paper);
+  color: var(--intro-ink);
+}
 .intro-stage { position: relative; min-height: 100svh; display: grid; place-items: center; overflow: hidden; padding: 40px 22px; }
-.intro-thread-field { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; animation: intro-field-resolve 6.4s 0s cubic-bezier(.2,.75,.25,1) both; transform-origin: center; }
-.intro-thread-art { width: min(1080px, 124vw); height: auto; overflow: visible; transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px)); transition: transform .8s cubic-bezier(.2,.75,.25,1); }
-.intro-thread-single, .intro-strand, .intro-direction path, .intro-direction-reverse { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-.intro-thread-single { stroke: var(--moss); stroke-width: 1.2; stroke-dasharray: 980; stroke-dashoffset: 980; animation: intro-single 5.2s cubic-bezier(.2,.75,.25,1) both; }
-.intro-strand { stroke: var(--moss); stroke-width: 1.5; stroke-dasharray: 920; stroke-dashoffset: 920; opacity: 0; animation: intro-separate 7.8s 1s cubic-bezier(.2,.75,.25,1) both; }
-.intro-strand-two { stroke: var(--moss-dark); animation-delay: 1.15s; }
-.intro-strand-three { stroke: var(--moss); animation-delay: 1.3s; }
-.intro-direction { fill: none; stroke: var(--moss-dark); stroke-width: 1; stroke-dasharray: 2 22; stroke-linecap: round; opacity: 0; animation: intro-flow 4.8s 3.6s linear infinite; }
-.intro-direction-reverse { stroke: var(--moss); stroke-dasharray: 2 18; animation-name: intro-reverse-flow; animation-delay: 4.4s; }
-.intro-copy { position: relative; z-index: 1; width: min(720px, 100%); text-align: center; opacity: 0; animation: intro-recognition 1s 5.2s cubic-bezier(.2,.75,.25,1) both; }
-.intro-kicker { margin: 0 0 24px; color: var(--moss); font-size: .7rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; }
-.intro-copy h1 { margin: 0; font-size: clamp(2.6rem, 10vw, 8rem); line-height: .94; font-weight: 520; white-space: nowrap; }
-.intro-title-line { margin: 22px 0 0; color: var(--moss-dark); font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.08; }
-.intro-invitation { margin: 30px auto 0; color: var(--muted); font-family: Georgia, serif; font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; line-height: 1.5; }
-.intro-begin { margin-top: 36px; }
+.intro-copy { position: relative; z-index: 1; width: min(1160px, 100%); text-align: center; }
+.intro-kicker { margin: 0 0 4px; color: var(--intro-accent); font-size: .7rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; opacity: 0; animation: intro-recognition .9s 4.4s cubic-bezier(.2,.75,.25,1) both; }
+.intro-mark { position: relative; height: clamp(260px, 37vw, 430px); display: grid; place-items: center; }
+.intro-thread-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px)); transition: transform .8s cubic-bezier(.2,.75,.25,1); }
+.intro-thread-stop { stop-color: var(--intro-thread); stop-opacity: 1; }
+.intro-thread-stop-transparent { stop-color: var(--intro-thread); stop-opacity: 0; }
+.intro-thread-single, .intro-strand { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.intro-thread-single { stroke: var(--intro-accent); stroke-width: 1.15; stroke-dasharray: 1100; stroke-dashoffset: 1100; animation: intro-single 3.4s cubic-bezier(.2,.75,.25,1) both; }
+.intro-strand { stroke: url(#intro-thread-fade); stroke-width: 1.15; stroke-dasharray: 980; stroke-dashoffset: 980; opacity: 0; animation: intro-separate 4s 1.15s cubic-bezier(.2,.75,.25,1) both; }
+.intro-strand-two { animation-delay: 1.3s; }
+.intro-strand-three { animation-delay: 1.45s; }
+.intro-strand-four { stroke: var(--intro-thread); animation-delay: 1.65s; }
+.intro-language-fragments { fill: var(--intro-accent); font-family: Georgia, "Times New Roman", serif; font-size: 25px; opacity: 0; animation: intro-fragments 1.25s 2.9s cubic-bezier(.2,.75,.25,1) both; }
+.intro-fragment-italic { font-style: italic; }
+.intro-fragment-end { text-anchor: end; }
+.intro-copy h1 { position: relative; z-index: 1; margin: 0; color: var(--intro-ink); font-size: clamp(3rem, 9.4vw, 8rem); line-height: .94; font-weight: 320; white-space: nowrap; opacity: 0; animation: intro-title-resolve 1.25s 3.6s cubic-bezier(.2,.75,.25,1) both; }
+.intro-title-line { width: fit-content; margin: -4px auto 0; padding: 0 14px 20px; border-bottom: 1px solid var(--intro-thread); color: var(--intro-ink); font-family: Georgia, serif; font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.08; opacity: 0; animation: intro-recognition .9s 4.6s cubic-bezier(.2,.75,.25,1) both; }
+.intro-invitation { margin: 20px auto 0; color: var(--intro-muted); font-family: Georgia, serif; font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; line-height: 1.5; opacity: 0; animation: intro-recognition .9s 4.8s cubic-bezier(.2,.75,.25,1) both; }
+.intro-begin { margin-top: 28px; background: var(--intro-button-bg); color: var(--intro-button-text); opacity: 0; animation: intro-recognition .9s 5s cubic-bezier(.2,.75,.25,1) both; }
 .launch-loading { background: var(--paper); }
 
-@keyframes intro-single { 0% { opacity: 0; stroke-dashoffset: 980; } 16% { opacity: 1; } 64% { opacity: 1; stroke-dashoffset: 0; } 84%, 100% { opacity: 0; stroke-dashoffset: -50; } }
-@keyframes intro-separate { 0% { opacity: 0; stroke-dashoffset: 920; } 20% { opacity: .8; } 66% { opacity: .8; stroke-dashoffset: 0; } 100% { opacity: .68; stroke-dashoffset: -18; } }
-@keyframes intro-flow { 0% { opacity: 0; stroke-dashoffset: 0; } 12% { opacity: .42; } 100% { opacity: .42; stroke-dashoffset: -260; } }
-@keyframes intro-reverse-flow { 0% { opacity: 0; stroke-dashoffset: 0; } 12% { opacity: .48; } 100% { opacity: .48; stroke-dashoffset: 260; } }
+@keyframes intro-single { 0% { opacity: 0; stroke-dashoffset: 1100; } 16%, 62% { opacity: .72; } 78% { stroke-dashoffset: 0; } 100% { opacity: 0; stroke-dashoffset: 0; } }
+@keyframes intro-separate { 0% { opacity: 0; stroke-dashoffset: 980; } 24% { opacity: .72; } 72%, 100% { opacity: 1; stroke-dashoffset: 0; } }
+@keyframes intro-fragments { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes intro-title-resolve { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes intro-recognition { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes intro-field-resolve {
-  0%, 58% { opacity: 1; transform: translateY(0) scale(1); }
-  76% { opacity: .72; transform: translateY(-3.2rem) scale(.38); }
-  100% { opacity: 0; transform: translateY(-3.2rem) scale(.04); }
-}
 
 .eyebrow { margin: 0 0 28px; color: var(--moss); font-size: .72rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; }
 .focus-content h1 { margin: 0; font-size: clamp(3.5rem, 10vw, 7.5rem); line-height: .95; font-weight: 520; letter-spacing: 0; }
@@ -401,6 +411,15 @@ button { color: inherit; }
     --primary-text: #101512;
     --primary-hover: #b7dbc8;
   }
+  .intro-shell {
+    --intro-paper: #0d1114;
+    --intro-ink: #f2f4f5;
+    --intro-accent: #aab5be;
+    --intro-thread: #4d5962;
+    --intro-muted: #9ba5ad;
+    --intro-button-bg: #f2f4f5;
+    --intro-button-text: #111518;
+  }
 }
 
 @media (max-width: 700px) {
@@ -426,7 +445,10 @@ button { color: inherit; }
   .setup-topline { min-height: 62px; grid-template-columns: 1fr auto 1fr; padding-top: 0; padding-bottom: 0; }
   .setup-topline .lesson-context { justify-self: center; }
   .language-options { grid-template-columns: repeat(2, 1fr); }
-  .intro-copy h1 { font-size: clamp(2.5rem, 12.2vw, 4.6rem); }
+  .intro-copy h1 { font-size: clamp(2.3rem, 10vw, 4rem); }
+  .intro-mark { height: clamp(250px, 92vw, 350px); }
+  .intro-thread-art { width: 100%; max-width: none; left: 0; }
+  .intro-language-fragments { font-size: 32px; }
   .setup-content h1 { font-size: clamp(2.4rem, 12vw, 4.2rem); }
   .profile-language div { align-items: flex-start; flex-direction: column; gap: 4px; }
   .anatomy-layout { grid-template-columns: 1fr; gap: 0; }
@@ -443,20 +465,19 @@ button { color: inherit; }
 
 @media (orientation: landscape) and (max-height: 600px) {
   .intro-stage { padding: 18px 22px; }
-  .intro-copy h1 { font-size: clamp(2.5rem, 12vh, 5.5rem); }
+  .intro-copy h1 { font-size: clamp(2.3rem, 10vh, 4.8rem); }
   .intro-kicker { margin-bottom: 10px; }
   .intro-title-line { margin-top: 8px; font-size: clamp(1.35rem, 6vh, 2.3rem); }
   .intro-invitation { margin-top: 12px; font-size: 1rem; }
   .intro-begin { min-height: 46px; margin-top: 18px; }
-  .intro-thread-art { width: min(860px, 155svh); }
+  .intro-mark { height: min(220px, 54svh); }
+  .intro-thread-art { width: min(900px, 148svh); left: 50%; transform: translateX(-50%); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   .choreography-row p span { transform: none !important; }
-  .intro-copy { opacity: 1 !important; animation-delay: 0s !important; transform: none !important; }
-  .intro-thread-field { animation: none !important; opacity: 0 !important; transform: scale(.04) !important; }
+  .intro-copy, .intro-kicker, .intro-copy h1, .intro-title-line, .intro-invitation, .intro-begin, .intro-language-fragments { opacity: 1 !important; animation-delay: 0s !important; transform: none !important; }
   .intro-thread-single { opacity: 0 !important; animation-delay: 0s !important; }
   .intro-strand { opacity: .68 !important; animation-delay: 0s !important; stroke-dashoffset: 0 !important; }
-  .intro-direction { opacity: .42 !important; animation-delay: 0s !important; stroke-dashoffset: 0 !important; }
 }

@@ -63,13 +63,24 @@ test("shows the launch intro before the unchanged onboarding on every app launch
   assert.match(intro, /intro-strand-one/);
   assert.match(intro, /intro-strand-two/);
   assert.match(intro, /intro-strand-three/);
-  assert.match(intro, /intro-direction-reverse/);
-  assert.match(intro, /Pull a thread\. Discover how language is built\./);
+  assert.match(intro, /intro-thread-fade/);
+  assert.match(intro, /Pull a thread\. Follow the meaning\./);
+  assert.match(intro, /관계/);
+  assert.match(intro, /quan hệ/);
+  assert.match(intro, /relación/);
+  assert.match(intro, /이해/);
+  assert.match(intro, /thấu hiểu/);
+  assert.match(intro, /comprensión/);
+  assert.match(intro, /명령/);
+  assert.match(intro, /mệnh lệnh/);
+  assert.match(intro, /imperativo/);
   assert.match(intro, />Begin <span/);
   assert.match(styles, /@keyframes intro-single/);
   assert.match(styles, /@keyframes intro-separate/);
-  assert.match(styles, /@keyframes intro-reverse-flow/);
-  assert.match(styles, /\.intro-copy \{ opacity: 1 !important/);
+  assert.match(styles, /--intro-paper: #ffffff/);
+  assert.match(styles, /--intro-paper: #0d1114/);
+  assert.match(styles, /\.intro-thread-stop-transparent/);
+  assert.match(styles, /\.intro-copy, \.intro-kicker/);
 });
 
 test("resets onboarding scroll and focus after every rendered step", async () => {
