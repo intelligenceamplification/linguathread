@@ -116,12 +116,16 @@ test("uses the launch screen visual system throughout the app", async () => {
   assert.match(styles, /--muted: #68737c/);
   assert.match(styles, /--text-accent: #5f6d79/);
   assert.match(styles, /--text-accent-strong: #303941/);
-  assert.match(styles, /--serif: Georgia, "Times New Roman", serif/);
-  assert.match(styles, /\.focus-content h1 \{[^}]*font-family: var\(--font-geist-sans\), system-ui, sans-serif;[^}]*font-weight: 320/);
+  assert.match(styles, /--serif: Georgia/);
+  assert.match(styles, /body \{[^}]*font-family: var\(--serif\)/);
+  assert.match(styles, /\.intro-copy h1 \{[^}]*font-weight: 320/);
+  assert.match(styles, /\.focus-content h1 \{[^}]*font-family: var\(--serif\);[^}]*font-weight: 400/);
+  assert.match(styles, /\.stack-line strong \{[^}]*font-family: var\(--serif\);[^}]*font-weight: 400/);
   assert.match(styles, /\.contemplative-note \{[^}]*font-family: var\(--serif\);[^}]*font-style: italic/);
   assert.match(layout, /color: "#ffffff"/);
   assert.match(manifest, /background_color: "#ffffff"/);
   assert.doesNotMatch(styles, /(?:^|\n)\s*color: var\(--moss(?:-dark)?\)/);
+  assert.doesNotMatch(styles, /system-ui|sans-serif|Times New Roman/);
   assert.doesNotMatch(styles, /#426d5a|#254638|#dce8df|#d9a94f|#8fbea6|#b7dbc8|#e0b768/i);
 });
 
