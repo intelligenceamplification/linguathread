@@ -6,6 +6,8 @@ LinguaThread is a calm, text-first multilingual expression engine built around t
 
 The initial curriculum teaches Spanish with English as the native anchor and Vietnamese as an active supporting language. Its level architecture follows CEFR from A1 through C2 while retaining LinguaThread's own pedagogy.
 
+Product, curriculum, language-expansion, and cross-platform decisions are governed by [`docs/product-source-of-truth.md`](docs/product-source-of-truth.md). The web master and native clients must remain one coherent product: quiet, text-first, free of attention-extraction mechanics, and delivered through seamless local caching and background synchronization rather than forced course downloads.
+
 ## Local development
 
 ```bash

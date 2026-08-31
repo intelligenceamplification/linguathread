@@ -21,8 +21,7 @@ type LanguageProfile = { native: string; second: string | null; secondConfidence
 
 const commonLanguages = [
   "English", "Spanish", "Vietnamese", "French", "Portuguese", "German",
-  "Italian", "Mandarin Chinese", "Cantonese", "Japanese", "Korean", "Arabic",
-  "Hindi", "Russian", "Dutch", "Turkish", "Indonesian", "Thai", "Tagalog", "Swahili",
+  "Italian", "Mandarin Chinese", "Japanese", "Korean", "Arabic", "Hindi", "Russian",
 ];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "complete"];
@@ -594,14 +593,12 @@ function ConfidencePicker({ value, onChange }: { value: Confidence; onChange: (c
 function LanguagePicker({ selected, excluded, multiple = false, onSelect }: { selected: string[]; excluded: string[]; multiple?: boolean; onSelect: (language: string) => void }) {
   const [query, setQuery] = useState("");
   const choices = commonLanguages.filter((language) => !excluded.includes(language) && language.toLowerCase().includes(query.trim().toLowerCase())).slice(0, query ? 12 : 9);
-  const customLanguage = query.trim() && !commonLanguages.some((language) => language.toLowerCase() === query.trim().toLowerCase()) ? query.trim() : null;
 
   return (
     <div className="language-picker">
-      <input className="language-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search or type a language" aria-label="Search languages" />
+      <input className="language-search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search languages" aria-label="Search languages" />
       <div className="language-options" role={multiple ? "group" : "radiogroup"} aria-label="Languages">
         {choices.map((language) => <button key={language} className={selected.includes(language) ? "selected" : ""} onClick={() => onSelect(language)} role={multiple ? undefined : "radio"} aria-checked={multiple ? undefined : selected.includes(language)}><span>{language}</span>{selected.includes(language) && <em>{multiple ? "Added" : "Selected"}</em>}</button>)}
-        {customLanguage && <button className={selected.includes(customLanguage) ? "selected" : ""} onClick={() => { onSelect(customLanguage); setQuery(""); }}><span>Add “{customLanguage}”</span><em>Custom</em></button>}
       </div>
       {multiple && selected.length > 0 && <div className="selected-languages" aria-label="Selected additional languages">{selected.map((language) => <button key={language} onClick={() => onSelect(language)}>{language}<span aria-hidden="true">×</span></button>)}</div>}
     </div>

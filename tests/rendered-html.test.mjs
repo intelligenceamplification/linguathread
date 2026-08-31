@@ -44,7 +44,10 @@ test("preserves the language setup and calm learning interface", async () => {
   assert.match(layout, /LinguaThread/);
   assert.match(page, /Your language stack/);
   assert.match(page, /What language shaped your first thoughts/);
-  assert.match(page, /Search or type a language/);
+  assert.match(page, /placeholder="Search languages"/);
+  assert.match(page, /"Mandarin Chinese"/);
+  assert.match(page, /"Arabic"/);
+  assert.doesNotMatch(page, /"Tagalog"|"Swahili"|customLanguage/);
   assert.match(page, /Language begins from what you already know/);
 });
 
