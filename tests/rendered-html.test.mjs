@@ -6,6 +6,22 @@ import ts from "typescript";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
 
+test("keeps native safe-area paper adaptive without changing the web content bounds", async () => {
+  const host = await read("../ios/LinguaThread/ContentView.swift");
+  assert.match(host, /@Environment\(\\\.colorScheme\)/);
+  assert.match(host, /\.ignoresSafeArea\(\)/);
+  assert.match(host, /traits\.userInterfaceStyle == \.dark/);
+  assert.match(host, /webView\.scrollView\.backgroundColor = paper/);
+  assert.doesNotMatch(host, /webView\.backgroundColor = \.white/);
+});
+
+test("separates landscape lesson context from compact navigation", async () => {
+  const css = await read("../app/globals.css");
+  assert.match(css, /@media \(min-width: 701px\) and \(max-width: 1200px\)/);
+  assert.match(css, /\.lesson-context \{ grid-column: 1 \/ -1; grid-row: 2; justify-self: center/);
+  assert.match(css, /\.header-actions \.quiet-action \{[^}]*white-space: nowrap; min-height: 44px/);
+});
+
 async function loadInteractiveSentenceModule() {
   const source = await read("../app/interactive-sentence.ts");
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
