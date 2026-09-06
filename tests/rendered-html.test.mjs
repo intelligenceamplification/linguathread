@@ -104,6 +104,13 @@ test("shows the launch intro before the unchanged onboarding on every app launch
   assert.match(styles, /\.intro-copy, \.intro-kicker/);
 });
 
+test("preserves the launch choreography before the multilingual beta", async () => {
+  const preview = await read("../app/multilingual-preview/preview-client.tsx");
+  assert.match(preview, /import \{ FirstLaunchIntro \} from "\.\.\/first-launch-intro"/);
+  assert.match(preview, /useState<"intro" \| "app">\("intro"\)/);
+  assert.match(preview, /if \(launchState === "intro"\) return <FirstLaunchIntro onBegin=\{\(\) => setLaunchState\("app"\)\} \/>/);
+});
+
 test("resets onboarding scroll and focus after every rendered step", async () => {
   const page = await read("../app/page.tsx");
   assert.match(page, /requestAnimationFrame/);

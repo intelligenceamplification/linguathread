@@ -7,6 +7,7 @@ import { emptyProgress as empty, parseProgress, type Progress } from "./progress
 import { emptyLiteracy, type LiteracySession } from "./literacy-session";
 import { literacyCopy } from "./literacy-copy";
 import dynamic from "next/dynamic";
+import { FirstLaunchIntro } from "../first-launch-intro";
 const ScriptCourseView = dynamic(() => import("./script-course-view"), { loading: () => <p role="status">Opening script lessons…</p> });
 
 const direction = (id: FoundationLanguage) => id === "ar" ? "rtl" : "ltr";
@@ -18,6 +19,7 @@ function restore(key: string): Progress {
  return empty();
 }
 export default function MultilingualPreview() {
+ const [launchState, setLaunchState] = useState<"intro" | "app">("intro");
  const [stack, setStack] = useState<FoundationStack>({ anchor: "en", bridge: "vi", target: "es" });
  const [active, setActive] = useState(false);
  const [progress, setProgress] = useState<Progress>(empty);
@@ -50,6 +52,7 @@ export default function MultilingualPreview() {
  function expression(language: FoundationLanguage) {
   return <span lang={language} dir={direction(language)}>{foundationContent[language][objective].text}</span>;
  }
+ if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
  return <main className="app-shell pilot-shell">
   <header className="pilot-header"><span className="wordmark">LinguaThread</span><span>Multilingual foundation · Beta</span></header>
   <p className="pilot-notice">An early curriculum build for personal testing. Script content and four introductory expressions are available in every offered language; the full CEFR curriculum remains in authoring and review.</p>
