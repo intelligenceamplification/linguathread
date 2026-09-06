@@ -31,6 +31,8 @@ Do not fork the lesson experience into separately maintained web and native impl
 
 ## Seamless curriculum delivery
 
+Author and review the complete curriculum in advance; deliver it in small cached units. Published learning must never depend on live AI generation or lead into unfinished content. Fetch only the selected language realization and explanation layers. Update immutable unit revisions independently of app releases. Measure compressed selected-course size before offering whole-course offline storage; do not bundle every language into every installation.
+
 Every published lesson should feel ready to open, but every lesson does not need to be downloaded at launch.
 
 The present all-course curriculum response is a transitional implementation. The durable delivery model is:
@@ -83,6 +85,24 @@ Vietnamese remains central even though it is not in the global top ten for learn
 Do not expand the profile catalog or visible target-course menu merely to appear comprehensive. Regional breadth is not a product objective. Add a language only when its global relevance and its complete curriculum, X-Ray content, answer acceptance, progression graph, review behavior, and native editorial review meet the same standard as the established course.
 
 ## Release gates
+
+### Script literacy and input readiness
+
+The complete multilingual release must satisfy [the language-specific release scope](multilingual-release-scope.md). Every offered language needs a complete from-scratch literacy route as well as placement from existing ability. Four-expression pilots, charts, and a CEFR backbone do not satisfy course completeness. Do not describe incomplete coverage as release-ready.
+
+For every non-native language, ask: “How familiar are you with written [language]?” Offer “Start from the foundations” and “Check what I already know.” Familiarity with a spoken bridge does not imply script literacy. Keep foundations accessible after placement, and keep a stack-change action available throughout the experience. Switching stacks must preserve each stack’s lesson position and unfinished work.
+
+Placement must distinguish recognition, independent production, copied input, and assisted/dictated input. A short introductory check cannot certify complete script mastery. Dictation is optional convenience, not proof of spelling or keyboard readiness. Do not infer input method from browser text events. Store separate evidence before using placement to skip curriculum prerequisites.
+
+Coherence is a release gate: prompts must be understandable in the learner’s anchor language; no exercise may demand an untaught prerequisite; no completion label may overstate the evidence; accepted variants must match the declared writing convention. Check these properties across onboarding, foundations, lessons, feedback, review, stack changes, and resumed sessions.
+
+- Assess reading familiarity separately from speaking familiarity and typing readiness for each learning or bridge language. Skip native-language script instruction by default, with optional help.
+- Integrate small, meaningful script lessons before exercises that require them: letters and diacritics for Latin scripts; Hangul blocks; kana and kanji; Arabic direction and joined forms; Devanagari signs and conjuncts; Cyrillic; and Mandarin characters with pinyin and tone marks.
+- Reading aids remain available on demand. Romanization is not evidence of character mastery. Recognition, typing, handwriting, and pronunciation are distinct skills; the silent app must not claim to assess pronunciation.
+- Prompt for keyboard setup before first required typing, not at every launch. Prefer system keyboards; offer a practice entry, an already-ready path, and help. Do not claim installed-keyboard detection where unavailable.
+- Preserve work before learners leave for system settings. Keyboard help must be platform-specific and reviewed against official instructions. Never install a keyboard or change system settings automatically.
+- CEFR is a proficiency framework, not a universal character inventory. Language-specific literacy progression needs editorial review and must not imply automatic equivalence with other exams.
+- These requirements apply to the shared runtime on web and iOS. Experimental previews are not published course availability.
 
 A language course is ready only when:
 

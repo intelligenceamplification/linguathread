@@ -1,0 +1,43 @@
+.pilot-shell { grid-template-rows: auto auto auto auto 1fr auto; }
+.script-course { max-width: 760px; width: 100%; line-height: 1.7; text-align: start; }
+.script-course h1 { font-family: Georgia, serif; font-size: clamp(1.8rem, 5vw, 3rem); line-height: 1.25; margin-block: 24px; }
+.script-course h2 { font-size: 1.2rem; margin-block: 12px; }
+.script-course p { margin-block: 16px; }
+.script-path { padding-inline-start: 24px; }
+.script-path li { padding-block: 20px; border-bottom: 1px solid var(--line); }
+.script-path small { display: block; color: var(--muted); }
+.script-inventory { font-size: 1.3rem; overflow-wrap: anywhere; }
+.script-assistance { display: flex; align-items: start; gap: 12px; margin-block: 20px; }
+.script-assistance input { margin-top: 8px; flex: none; }
+.readiness-choices { display: grid; gap: 18px; margin-block: 24px; }
+.literacy-results > div { display: flex; justify-content: space-between; gap: 24px; padding-block: 12px; border-bottom: 1px solid var(--line); }
+.literacy-results dd { white-space: nowrap; }
+.literacy-input-method { border: 0; padding: 0; margin-block: 20px; }
+.literacy-input-method legend { color: var(--muted); font-size: .85rem; }
+.literacy-input-method label { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.literacy-input-method input { flex: none; }
+.readiness-choices button { min-height: 44px; white-space: normal; }
+.pilot-stage aside { max-width: 640px; margin-inline: auto; line-height: 1.7; }
+.pilot-stage aside p { margin-block: 18px; }
+.pilot-stage aside h2 { font-family: Georgia, serif; font-size: clamp(1.5rem, 4vw, 2.2rem); line-height: 1.3; }
+.pilot-navigation details button { display: block; margin-block: 12px; }
+.pilot-header, .pilot-navigation { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 18px clamp(22px, 4vw, 64px); }
+.pilot-header > span:last-child, .pilot-navigation { font-size: .78rem; color: var(--muted); }
+.pilot-notice { max-width: 760px; margin: 12px auto; padding: 0 22px; font-size: .8rem; line-height: 1.6; color: var(--muted); text-align: center; }
+.pilot-setup { width: min(560px, 100%); margin: 32px auto; padding: 0 22px; }
+.pilot-setup h1 { font-family: Georgia, serif; font-size: clamp(2rem, 7vw, 3.5rem); line-height: 1.2; }
+.pilot-setup > p { margin-block: 18px; }
+.pilot-setup label { display: grid; gap: 8px; margin: 22px 0; color: var(--muted); }
+.pilot-setup select { width: 100%; min-width: 0; min-height: 48px; padding: 10px; border: 1px solid var(--line); border-radius: 4px; background: var(--control); color: var(--ink); font: inherit; }
+.pilot-stage { display: grid; place-items: center; padding: 34px 22px 48px; min-width: 0; }
+.pilot-expression { font-family: Georgia, 'Songti SC', 'Yu Mincho', 'AppleMyungjo', serif; font-size: clamp(2rem, 6vw, 4rem); line-height: 1.6; margin: 24px 0; overflow-wrap: anywhere; }
+.pilot-expression span, .pilot-line span, .pilot-model span { unicode-bidi: isolate; }
+.pilot-stack { margin: 24px 0; }
+.pilot-line { display: grid; grid-template-columns: minmax(100px, .5fr) minmax(0, 1fr); gap: 16px; border-top: 1px solid var(--line); padding: 20px 0; text-align: start; align-items: center; }
+.pilot-line small { color: var(--muted); }
+.pilot-line p, .pilot-model { font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1.7; overflow-wrap: anywhere; }
+.pilot-model { padding: 12px; background: var(--sage); margin-top: 20px; }
+.pilot-feedback { min-height: 28px; margin: 14px 0; }
+.pilot-stage .answer-field { margin-top: 20px; }
+.pilot-stage .primary-action, .pilot-setup .primary-action { margin-top: 18px; max-width: 100%; white-space: normal; }
+@media (max-width: 500px) { .pilot-navigation { justify-content: center; } .pilot-line { grid-template-columns: 1fr; gap: 6px; text-align: center; } }
