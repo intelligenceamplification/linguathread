@@ -2,6 +2,7 @@
 import { foundationContent, foundationInstructions, foundationObjectives, languageInfo, type FoundationLanguage } from "../multilingual-foundation";
 import { advanceLiteracy, assessLiteracy, beginLiteracy, emptyLiteracy, literacyCounts, type LiteracySession } from "./literacy-session";
 import { literacyCopy } from "./literacy-copy";
+import ListenButton from "../listen-button";
 
 export default function Readiness({ language, anchor, session, onChange, onReady }: {
  language: FoundationLanguage; anchor: FoundationLanguage; session: LiteracySession;
@@ -31,7 +32,7 @@ export default function Readiness({ language, anchor, session, onChange, onReady
   </> : <>
    <p className="eyebrow">{session.index + 1} / 4</p>
    {session.phase === "study" ? <>
-    <p>{t.study}</p><p className="pilot-expression">{target}</p><p>{anchorText}</p>
+    <p>{t.study}</p><p className="pilot-expression">{target}</p><ListenButton text={foundationContent[language][objective].text} language={language}/><p>{anchorText}</p>
    </> : session.phase === "recognize" ? <>
     <p>{t.recognize}</p><p className="pilot-expression">{target}</p>
     <div className="readiness-choices">{foundationObjectives.map(choice => <button className="quiet-action" key={choice} disabled={session.feedback === "correct"} onClick={() => onChange(assessLiteracy(session, language, choice))}>{foundationContent[anchor][choice].text}</button>)}</div>

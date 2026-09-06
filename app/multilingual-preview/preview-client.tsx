@@ -8,6 +8,7 @@ import { emptyLiteracy, type LiteracySession } from "./literacy-session";
 import { literacyCopy } from "./literacy-copy";
 import dynamic from "next/dynamic";
 import { FirstLaunchIntro } from "../first-launch-intro";
+import ListenButton from "../listen-button";
 const ScriptCourseView = dynamic(() => import("./script-course-view"), { loading: () => <p role="status">Opening script lessons…</p> });
 
 const direction = (id: FoundationLanguage) => id === "ar" ? "rtl" : "ltr";
@@ -74,13 +75,14 @@ export default function MultilingualPreview() {
      <button className="primary-action" onClick={() => { save(empty()); clearAnswer(); }}>{t[9]}</button>
     </> : <>
      {!needsReadiness && <><p className="eyebrow">{progress.stage === 0 ? t[0] : progress.stage === 3 ? t[7] : t[1]}</p>
-     <h1 className="pilot-expression">{expression(progress.stage === 0 ? stack.target : prompt)}</h1></>}
+     <h1 className="pilot-expression">{expression(progress.stage === 0 ? stack.target : prompt)}</h1>
+     <ListenButton text={foundationContent[progress.stage === 0 ? stack.target : prompt][objective].text} language={progress.stage === 0 ? stack.target : prompt}/></>}
      {needsReadiness ? <Readiness key={output} language={output} anchor={stack.anchor} session={progress.literacy[output] || emptyLiteracy()} onChange={session => saveLiteracy(output, session)} onReady={() => saveLiteracy(output, { ...progress.literacy[output]!, acknowledged: true })}/> : progress.stage === 0 ? <>
-      <div className="pilot-stack" dir="ltr">{([stack.anchor, stack.bridge]).map(language => <div className="pilot-line" key={language} data-language={language}><small>{languageInfo(language).native}</small><p>{expression(language)}</p></div>)}</div>
+      <div className="pilot-stack" dir="ltr">{([stack.anchor, stack.bridge]).map(language => <div className="pilot-line" key={language} data-language={language}><small>{languageInfo(language).native}</small><div><p>{expression(language)}</p><ListenButton text={foundationContent[language][objective].text} language={language}/></div></div>)}</div>
       <button className="primary-action" onClick={advance}>{t[6]}</button>
      </> : <>
       <p><bdi>{languageInfo(output).native}</bdi></p>
-      {revealed && <p className="pilot-model">{expression(output)}</p>}
+      {revealed && <div className="pilot-model"><p>{expression(output)}</p><ListenButton text={foundationContent[output][objective].text} language={output}/></div>}
       <input className="answer-field" aria-label="Practice answer" lang={output} dir={direction(output)} autoComplete="off" autoCorrect="off" spellCheck={false} value={answer} onChange={e => { setAnswer(e.target.value); save({ ...progress, draftAnswer: e.target.value }); setResult("idle"); }} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && result !== "correct") check(); }} />
       <p role="status" className="pilot-feedback">{result === "correct" ? t[3] : result === "retry" ? t[4] : "\u00a0"}</p>
       {result === "correct" ? <button className="primary-action" onClick={advance}>{t[6]}</button> : <>

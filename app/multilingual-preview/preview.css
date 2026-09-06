@@ -35,8 +35,15 @@
 .pilot-stack { margin: 24px 0; }
 .pilot-line { display: grid; grid-template-columns: minmax(100px, .5fr) minmax(0, 1fr); gap: 16px; border-top: 1px solid var(--line); padding: 20px 0; text-align: start; align-items: center; }
 .pilot-line small { color: var(--muted); }
-.pilot-line p, .pilot-model { font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1.7; overflow-wrap: anywhere; }
+.pilot-line p, .pilot-model > p { font-size: clamp(1.3rem, 3vw, 2rem); line-height: 1.7; overflow-wrap: anywhere; }
+.pilot-line p { margin: 0 0 8px; }
 .pilot-model { padding: 12px; background: var(--sage); margin-top: 20px; }
+.pilot-model > p { margin: 0 0 10px; }
+.listen-action { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); font: inherit; font-size: .82rem; cursor: pointer; }
+.listen-action:hover { background: var(--control); }
+.listen-action:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.listen-action:disabled { opacity: .45; cursor: default; }
+.audio-unavailable { color: var(--muted); font-size: .78rem; }
 .pilot-feedback { min-height: 28px; margin: 14px 0; }
 .pilot-stage .answer-field { margin-top: 20px; }
 .pilot-stage .primary-action, .pilot-setup .primary-action { margin-top: 18px; max-width: 100%; white-space: normal; }

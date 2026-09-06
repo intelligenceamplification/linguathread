@@ -682,3 +682,17 @@ test("defines the complete CEFR progression from A1 through C2", async () => {
   assert.match(source, /Independent user/);
   assert.match(source, /Proficient user/);
 });
+
+test("multilingual lessons expose quiet optional audio without autoplay", async () => {
+  const [preview, readiness, script, audio] = await Promise.all([
+    read("../app/multilingual-preview/preview-client.tsx"),
+    read("../app/multilingual-preview/readiness.tsx"),
+    read("../app/multilingual-preview/script-course-view.tsx"),
+    read("../app/listen-button.tsx"),
+  ]);
+  assert.match(preview, /<ListenButton/);
+  assert.match(readiness, /<ListenButton/);
+  assert.match(script, /<ListenButton/);
+  assert.match(audio, /speechSynthesis\.speak\(utterance\)/);
+  assert.doesNotMatch(audio, /autoPlay|autoplay/);
+});

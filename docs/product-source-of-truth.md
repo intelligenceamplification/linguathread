@@ -8,7 +8,7 @@ LinguaThread is a quiet, text-first language practice. The learner opens it inte
 
 The app is a retreat from attention-seeking software. It does not depend on streak pressure, lives, leaderboards, mascots, celebratory noise, autoplay, microphone performance, or interruption-driven notifications. Notifications are absent by default. If reminders are ever introduced, they must be explicitly enabled, infrequent, silent, and easy to disable.
 
-The absence of audio and microphone exercises is a deliberate product boundary unless later evidence justifies changing it. LinguaThread may suggest appropriate speaking and listening practice outside the app without turning the app itself into a noisy multimedia environment.
+Audio is an optional, learner-initiated companion to visible lesson text. It must never autoplay, interrupt, gamify, or require microphone access. System text-to-speech may support beta listening practice across languages, but synthetic output is not a substitute for pronunciation review by qualified speakers. If listening reveals an answer during an independent assessment, the attempt must be recorded as supported practice.
 
 ## The learning method
 

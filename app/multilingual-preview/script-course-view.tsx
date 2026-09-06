@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptLesson } from "../script-courses";
 import { advanceScript, assessScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, type ScriptPractice } from "../script-course-engine";
+import ListenButton from "../listen-button";
 
 type Index = { language: string; revision: number; convention: string; inventory: string; lessons: Pick<ScriptLesson, "id" | "title" | "prerequisites">[] };
 function validIndex(value: unknown, language: string): value is Index {
@@ -109,7 +110,7 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
   {index && unit && <>
    <button className="text-action" onClick={() => { loadId.current += 1; setUnit(null); setLoading(false); setReviewClock(Date.now()); }}>Back to script path</button>
    <h1>{unit.title}</h1>
-   {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Practise recognition</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Practised with support" : "Introductory check completed"}</h2><p>This records this lesson’s written task, not complete literacy or spoken proficiency. It will become due for review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to script path</button></> : <>
+   {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Practise recognition</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Practised with support" : "Introductory check completed"}</h2><p>This records this lesson’s written task, not complete literacy or spoken proficiency. It will become due for review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to script path</button></> : <>
     <p>{unit.prompt}</p>
     {practice.phase === "recognize" ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <button key={choice} className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct"} onClick={() => save(assessScript(unit, practice, choice))}>{choice}</button>)}</div> : <>
      <label>Write the form requested<input className="answer-field" lang={language} dir={dir} maxLength={2000} autoComplete="off" autoCorrect="off" spellCheck={false} value={practice.answer} onChange={e => save({ ...practice, answer: e.target.value, result: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && practice.answer.trim()) save(assessScript(unit, practice, practice.answer)); }}/></label>
