@@ -696,3 +696,20 @@ test("multilingual lessons expose quiet optional audio without autoplay", async 
   assert.match(audio, /speechSynthesis\.speak\(utterance\)/);
   assert.doesNotMatch(audio, /autoPlay|autoplay/);
 });
+
+test("official course retains its progression while adding optional audio", async () => {
+  const [page, sentence, daily, nativeShell] = await Promise.all([
+    read("../app/page.tsx"),
+    read("../app/sentence-anatomy.tsx"),
+    read("../app/daily-lesson.tsx"),
+    read("../ios/LinguaThread/ContentView.swift"),
+  ]);
+  assert.match(page, /failedAttempts < 3/);
+  assert.match(page, /createReverseRecallExercises/);
+  assert.match(page, /<InteractiveSentence/);
+  assert.match(page, /<ListenButton/);
+  assert.match(sentence, /<ListenButton/);
+  assert.match(daily, /<ListenButton/);
+  assert.match(nativeShell, /https:\/\/linguathread\.vercel\.app\//);
+  assert.doesNotMatch(nativeShell, /multilingual-preview/);
+});

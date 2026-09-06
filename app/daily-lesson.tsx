@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { createDailyLessonPlan, type LessonForTools, type TranslationExercise } from "./lesson-tools";
+import ListenButton from "./listen-button";
+import { speechLanguage } from "./speech";
 
 const normalize = (value: string) => value.trim().normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase().replace(/[¿?¡!.,;:“”'’]/g, "").replace(/\s+/g, " ");
 
@@ -50,13 +52,14 @@ export function DailyLesson({ course, current, dueIds, completedIds, onClose, on
   return <DailyFrame eyebrow={`Today · ${exercise.phase.replace("-", " ")}`} title={`Translate into ${exercise.to}.`}>
     <p className="instruction">{exercise.scope} scope · {exercise.from} → {exercise.to}</p>
     <p className="daily-prompt">{exercise.prompt}</p>
+    {speechLanguage(exercise.from) && <ListenButton text={exercise.prompt} language={speechLanguage(exercise.from)!} />}
     <p className="bridge-reminder">{exercise.note}</p>
     {!modelVisible ? <>
       <input className="answer-field" autoFocus value={answer} onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }} onKeyDown={(event) => event.key === "Enter" && check()} placeholder={`Write in ${exercise.to}`} aria-label={`${exercise.scope} translation into ${exercise.to}`} />
       {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={check}>Check translation</button>}
       {feedback === "gentle" && <div className="feedback gentle"><div><strong>Return to the structure.</strong><p>{attempts} of 3 attempts. The next step will keep the model in view.</p></div><button onClick={() => { setAnswer(""); setFeedback("idle"); }}>Try again <span aria-hidden="true">→</span></button></div>}
       {feedback === "correct" && <div className="feedback correct"><div><strong>Meaning carried across.</strong><p>The direction changes; the thought stays available.</p></div><button onClick={advance}>Continue <span aria-hidden="true">→</span></button></div>}
-    </> : <div className="recovery-builder"><p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the direction, or leave this part for now.</span></p><div className="target-model"><span>Target model</span><strong>{exercise.answer}</strong></div><input className="answer-field" autoFocus value={answer} onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }} onKeyDown={(event) => event.key === "Enter" && check()} placeholder="Type the model" aria-label="Supported daily translation" />{feedback !== "correct" && <button className="primary-action" onClick={check}>Check model</button>}{feedback === "correct" && <div className="feedback correct"><div><strong>Meaning rebuilt.</strong></div><button onClick={advance}>Continue <span aria-hidden="true">→</span></button></div>}<button className="text-action" onClick={advance}>Skip this part for now</button></div>}
+    </> : <div className="recovery-builder"><p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the direction, or leave this part for now.</span></p><div className="target-model"><span>Target model</span><strong>{exercise.answer}</strong>{speechLanguage(exercise.to) && <ListenButton text={exercise.answer} language={speechLanguage(exercise.to)!} />}</div><input className="answer-field" autoFocus value={answer} onChange={(event) => { setAnswer(event.target.value); setFeedback("idle"); }} onKeyDown={(event) => event.key === "Enter" && check()} placeholder="Type the model" aria-label="Supported daily translation" />{feedback !== "correct" && <button className="primary-action" onClick={check}>Check model</button>}{feedback === "correct" && <div className="feedback correct"><div><strong>Meaning rebuilt.</strong></div><button onClick={advance}>Continue <span aria-hidden="true">→</span></button></div>}<button className="text-action" onClick={advance}>Skip this part for now</button></div>}
     <button className="text-action" onClick={onClose}>Return to self-directed learning</button>
   </DailyFrame>;
 }

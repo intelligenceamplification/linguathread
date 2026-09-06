@@ -6,6 +6,16 @@ export const speechLocales: Record<FoundationLanguage, string> = {
  ar: "ar-SA", hi: "hi-IN", ru: "ru-RU",
 };
 
+const languageNames: Record<string, FoundationLanguage> = {
+ english: "en", spanish: "es", vietnamese: "vi", french: "fr", portuguese: "pt",
+ german: "de", italian: "it", "mandarin chinese": "zh", japanese: "ja", korean: "ko",
+ arabic: "ar", hindi: "hi", russian: "ru",
+};
+
+export function speechLanguage(language: string) {
+ return languageNames[language.trim().toLowerCase()] || null;
+}
+
 export function voiceForLanguage(voices: SpeechSynthesisVoice[], language: FoundationLanguage) {
  const locale = speechLocales[language].toLowerCase();
  const base = locale.split("-")[0];

@@ -147,6 +147,7 @@ button { color: inherit; }
 .stack-line > span { color: var(--muted); font-size: .7rem; font-weight: 620; letter-spacing: .08em; text-transform: uppercase; }
 .stack-line small { display: block; margin-top: 4px; color: var(--subtle); font-size: .68rem; font-weight: 500; letter-spacing: 0; text-transform: none; }
 .stack-line strong { font-family: var(--serif); font-size: 1.18rem; font-weight: 400; }
+.stack-line > div { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; min-width: 0; }
 .compact-stack { margin-top: 38px; }
 .calibration-action { color: var(--text-accent-strong); }
 .contemplative-note { max-width: 430px; margin: 44px auto 0; color: var(--muted); font-family: var(--serif); font-size: 1.05rem; line-height: 1.7; font-style: italic; }
@@ -289,6 +290,7 @@ button { color: inherit; }
 .inspector-actions button { min-height: 34px; padding: 7px 9px; border: 1px solid var(--line); border-radius: 4px; background: transparent; color: var(--text-accent-strong); cursor: pointer; font-size: .75rem; }
 .anatomy-stack { width: min(740px, 100%); margin: 30px auto 0; border-top: 1px solid var(--line); text-align: left; }
 .anatomy-stack p { min-height: 48px; display: grid; grid-template-columns: minmax(130px, .6fr) 1.4fr; align-items: center; gap: 18px; margin: 0; border-bottom: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+.anatomy-expression { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; }
 .anatomy-stack span { color: var(--subtle); font-size: .67rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
 
 .grammar-content { width: min(900px, 100%); }
@@ -318,6 +320,11 @@ button { color: inherit; }
 .target-model { width: min(560px, 100%); margin: 28px auto 0; padding: 18px 20px; border: 1px solid var(--model-border); background: var(--model-bg); text-align: left; }
 .target-model span { display: block; color: var(--text-accent-strong); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .target-model strong { display: block; margin-top: 8px; color: var(--ink); font-family: var(--serif); font-size: clamp(24px, 4vw, 32px); font-weight: 400; }
+.target-model .listen-action { margin-top: 12px; }
+.listen-action { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: transparent; color: var(--ink); font: inherit; font-size: .82rem; cursor: pointer; }
+.listen-action:hover { background: var(--control); }
+.listen-action:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.audio-unavailable { color: var(--muted); font-size: .78rem; }
 .target-model p { margin: 10px 0 0; color: var(--subtle); font-family: var(--serif); line-height: 1.5; }
 .recovery-builder .primary-action { margin-top: 28px; }
 .bridge-reminder { margin: 22px 0 0; color: var(--muted); font-family: var(--serif); font-size: .85rem; }
@@ -328,6 +335,10 @@ button { color: inherit; }
 .learning-signal { width: min(470px, 100%); margin: 40px auto 0; padding: 22px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .learning-signal span { display: block; margin-bottom: 6px; color: var(--muted); font-size: .76rem; text-transform: uppercase; letter-spacing: .1em; }
 .learning-signal p { margin: 8px 0 0; color: var(--text-accent); }
+.literacy-paths { margin: 40px auto; padding: 28px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
+.literacy-paths h2 { margin: 10px 0; font-family: var(--serif); font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 400; }
+.literacy-paths > p:not(.eyebrow) { color: var(--muted); font-family: var(--serif); line-height: 1.55; }
+.literacy-paths > div { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
 .outside-practice { width: min(640px, 100%); margin: 28px auto 0; padding: 18px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); text-align: left; }
 .outside-practice span { color: var(--text-accent-strong); font-size: .7rem; font-weight: 750; text-transform: uppercase; }
 .outside-practice p { margin-top: 8px; color: var(--muted); font-family: var(--serif); line-height: 1.55; }

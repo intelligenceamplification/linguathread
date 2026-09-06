@@ -6,7 +6,7 @@ import WebKit
 /// engine, learner persistence, and future web updates on one source of truth.
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
-    private let masterURL = URL(string: "https://linguathread.vercel.app/multilingual-preview")!
+    private let masterURL = URL(string: "https://linguathread.vercel.app/")!
 
     var body: some View {
         LinguaThreadWebView(url: masterURL)

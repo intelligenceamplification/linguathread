@@ -1,11 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
 import { DailyLesson } from "./daily-lesson";
 import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
+import ListenButton from "./listen-button";
+import { speechLanguage } from "./speech";
+import type { FoundationLanguage } from "./multilingual-foundation";
+import "./multilingual-preview/preview.css";
 import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
 import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
 import {
@@ -29,6 +34,7 @@ const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 
 const jsonHeaders = { "content-type": "application/json" };
+const ScriptCourseView = dynamic(() => import("./multilingual-preview/script-course-view"), { loading: () => <p role="status">Opening writing foundations…</p> });
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
@@ -96,6 +102,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [course, setCourse] = useState<LessonDefinition[]>(curriculum);
   const [dailyOpen, setDailyOpen] = useState(false);
   const [xrayOpen, setXrayOpen] = useState(false);
+  const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -141,6 +148,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const currentWord = lesson.vocabulary[wordIndex];
   const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
   const reverseExercises = createReverseRecallExercises(lesson, bridgeEnabled);
+  const literacyLanguages = [...new Set([profile.second, ...profile.additional])]
+    .filter((language): language is string => Boolean(language) && language !== profile.native)
+    .map((language) => ({ name: language, id: speechLanguage(language) }))
+    .filter((item): item is { name: string; id: FoundationLanguage } => item.id !== null);
 
   function advanceVocabulary() {
     if (wordIndex < lesson.vocabulary.length - 1) setWordIndex((value) => value + 1);
@@ -310,11 +321,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section className="lesson-stage" aria-live="polite">
-        {dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson)} /> : <>
+        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson)} /> : <>
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
             <h1>{currentWord.word}</h1>
+            <ListenButton text={currentWord.word} language="es" />
             <div className="language-stack compact-stack">
               <StackLine role="Native anchor" language={profile.native} value={currentWord.english} />
               {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />}
@@ -341,6 +353,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             ) : (
               <RecoveryBuilder
                 answer={lesson.recall.rescue.answer}
+                language="English"
                 onComplete={completeSupportedRecall}
                 onSkip={() => skipLesson("English")}
               />
@@ -399,6 +412,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             ) : (
               <RecoveryBuilder
                 answer={productionLanguage === "Spanish" ? lesson.mastery.answer : lesson.bridgeMastery.answer}
+                language={productionLanguage}
                 onComplete={completeSupportedMastery}
                 onSkip={() => skipLesson(productionLanguage)}
               />
@@ -461,6 +475,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               })}
             </div>
             <p className="course-authoring-note">The permanent map contains {plannedCourseLessonCount} lesson positions. Only reviewed, publishable lessons enter your learning sequence.</p>
+            <section className="literacy-paths" aria-label="Writing foundations for selected languages">
+              <p className="eyebrow">Writing foundations</p>
+              <h2>Learn the script or demonstrate what you know.</h2>
+              <p>Each selected non-native language keeps its own recognition, writing, support, and review record.</p>
+              <div>{literacyLanguages.map((item) => <button key={item.id} className="quiet-action" onClick={() => setScriptLanguage(item.id)}>{item.name} · Open writing path</button>)}</div>
+            </section>
             <div className="review-list">
               {course.map((item, index) => (
                 <div className="review-row stacked-review-row" key={item.id}>
@@ -610,7 +630,8 @@ function ProfileLanguage({ index, role, language, detail }: { index: string; rol
 }
 
 function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
-  return <div className="stack-line"><span>{role}<small>{language}</small></span><strong>{value}</strong></div>;
+  const audioLanguage = speechLanguage(language);
+  return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} />}</div></div>;
 }
 
 function AnswerField({ value, onChange, onEnter, placeholder, label }: { value: string; onChange: (value: string) => void; onEnter: () => void; placeholder: string; label: string }) {
@@ -621,7 +642,7 @@ function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | 
   return <div className={`feedback ${kind}`}><div><strong>{title}</strong>{detail && <p>{detail}</p>}</div><button onClick={onClick}>{action} <span aria-hidden="true">→</span></button></div>;
 }
 
-function RecoveryBuilder({ answer, onComplete, onSkip }: { answer: string; onComplete: () => void; onSkip: () => void }) {
+function RecoveryBuilder({ answer, language, onComplete, onSkip }: { answer: string; language: string; onComplete: () => void; onSkip: () => void }) {
   const [typedAnswer, setTypedAnswer] = useState("");
   const [checked, setChecked] = useState(false);
   const isCorrect = normalizeAnswer(typedAnswer) === normalizeAnswer(answer);
@@ -629,7 +650,7 @@ function RecoveryBuilder({ answer, onComplete, onSkip }: { answer: string; onCom
   return (
     <div className="recovery-builder">
       <p className="recovery-intro"><strong>Here is the model.</strong><span>Type it to reinforce the pattern, or skip this lesson for now.</span></p>
-      <div className="target-model"><span>Target model</span><strong>{answer}</strong></div>
+      <div className="target-model"><span>Target model</span><strong>{answer}</strong>{speechLanguage(language) && <ListenButton text={answer} language={speechLanguage(language)!} />}</div>
       <AnswerField value={typedAnswer} onChange={(value) => { setTypedAnswer(value); setChecked(false); }} onEnter={() => setChecked(true)} placeholder="Type the model" label="Supported answer" />
       {!checked && <button className="primary-action" onClick={() => setChecked(true)}>Check model</button>}
       {checked && isCorrect && <Feedback kind="correct" title="You rebuilt the meaning." detail="This will return in review so it can become available without support." action="Continue" onClick={onComplete} />}
@@ -661,7 +682,7 @@ function TransformExercise({ lesson, onAttempt, onComplete, onSkip }: { lesson: 
       <p className="bridge-reminder">{lesson.transform.bridgeReminder}</p>
       <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder={placeholder} label={`${targetLanguage} target answer`} />
       {feedback === "idle" && <button className="primary-action" onClick={checkAnswer}>Check structure</button>}
-      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong><p>Type this sentence to secure the pattern, or skip this lesson for now.</p></div>}
+      {modelVisible && <div className="target-model" role="status"><span>Target model</span><strong>{lesson.transform.answer}</strong>{speechLanguage(targetLanguage) && <ListenButton text={lesson.transform.answer} language={speechLanguage(targetLanguage)!} />}<p>Type this sentence to secure the pattern, or skip this lesson for now.</p></div>}
       {feedback === "gentle" && !modelVisible && <Feedback kind="gentle" title={lesson.transform.hint} detail={`${failedAttempts} of 3 attempts. Try again from the structure.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
       {feedback === "gentle" && modelVisible && <Feedback kind="gentle" title="Here is the model." detail="Read it, type it, and let the sentence settle into the stack." action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
       {feedback === "correct" && <Feedback kind="correct" title="Natural and complete." detail="You produced the target sentence from the structure." action="Final check" onClick={onComplete} />}
@@ -686,11 +707,12 @@ function ReverseRecall({ exercise, position, total, onAttempt, onComplete, onSki
     <p className="eyebrow">Reverse recall · {position} of {total}</p>
     <p className="translation-direction">{exercise.from} <span aria-hidden="true">→</span> {exercise.to}</p>
     <h1 className="exercise-title" lang={exercise.from === "Spanish" ? "es" : "vi"}>{exercise.prompt}</h1>
+    {speechLanguage(exercise.from) && <ListenButton text={exercise.prompt} language={speechLanguage(exercise.from)!} />}
     <p className="instruction">{exercise.instruction}</p>
     {failedAttempts < 3 ? <>
       <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder="Write the English meaning" label="English answer" />
       {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkAnswer}>Check meaning</button>}
-    </> : <RecoveryBuilder answer={exercise.answer} onComplete={onComplete} onSkip={onSkip} />}
+    </> : <RecoveryBuilder answer={exercise.answer} language={exercise.to} onComplete={onComplete} onSkip={onSkip} />}
     {feedback === "gentle" && failedAttempts < 3 && <Feedback kind="gentle" title="Return to the complete meaning." detail={`${failedAttempts} of 3 attempts · Read the ${exercise.from} as a whole.`} action="Try again" onClick={() => { setAnswer(""); setFeedback("idle"); }} />}
     {feedback === "correct" && <Feedback kind="correct" title={exercise.answer} detail={`You recovered the meaning directly from ${exercise.from}.`} action={position < total ? "Continue reverse recall" : "Complete lesson"} onClick={onComplete} />}
   </div>;
