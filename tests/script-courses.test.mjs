@@ -28,7 +28,7 @@ test("every offered language has authored script instruction and an acyclic orde
  for (const [language, course] of Object.entries(scriptCourses)) {
   assert.equal(course.language, language);
   assert.equal(course.status, "release-foundation");
-  assert.equal(course.revision, 2);
+  assert.equal(course.revision, 3);
   assert.ok(course.requirements.length >= 2);
   assert.ok(course.lessons.length >= 4);
   const previous = new Set();
@@ -55,6 +55,12 @@ test("release literacy contract covers every directional mode and script-specifi
  assert.ok(literacy.scriptRequirements.vi[1].scope.includes("Telex"));
  assert.ok(literacy.scriptRequirements.zh[1].scope.includes("course-linked"));
  assert.ok(literacy.scriptRequirements.hi[1].scope.includes("halant"));
+});
+test("Vietnamese lessons use only Vietnamese D and Đ forms, never Icelandic eth", () => {
+ const text = JSON.stringify(scriptCourses.vi);
+ assert.doesNotMatch(text, /[Ðð]/u);
+ assert.deepEqual([...scriptCourses.vi.lessons[0].alternatives], ["d", "Đ"]);
+ assert.equal(scriptCourses.vi.lessons[0].answer, "đ");
 });
 test("every authored unit traverses study and check routes with reload-safe review scheduling", () => {
  for (const course of Object.values(scriptCourses)) for (const unit of course.lessons) for (const check of [false, true]) {
