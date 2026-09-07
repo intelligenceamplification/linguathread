@@ -764,3 +764,16 @@ test("every sentence realization exposes audio by language identity, not its des
   assert.doesNotMatch(sentence, /speechLanguage\((?:realization|item)\.label\)/);
   assert.match(sentence, /ComparisonChoreography[\s\S]*<ListenButton/);
 });
+
+test("highlighted learned-language material remains hearable across daily and literacy paths", async () => {
+  const [daily, readiness, script] = await Promise.all([
+    read("../app/daily-lesson.tsx"),
+    read("../app/multilingual-preview/readiness.tsx"),
+    read("../app/multilingual-preview/script-course-view.tsx"),
+  ]);
+  assert.match(daily, /text=\{plan\.application\.target\} language="es"/);
+  assert.match(daily, /text=\{plan\.application\.anchor\} language="en"/);
+  assert.match(daily, /text=\{plan\.application\.bridge\} language="vi"/);
+  assert.match(readiness, /text=\{foundationContent\[language\]\[objective\]\.text\} language=\{language\}/);
+  assert.match(script, /script-choice-row[\s\S]*<ListenButton text=\{choice\}/);
+});

@@ -43,6 +43,8 @@
 .listen-action:hover { background: var(--control); }
 .listen-action:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .listen-action:disabled { opacity: .45; cursor: default; }
+.script-choice-row { display: flex; align-items: center; gap: 10px; }
+.script-choice-row > .quiet-action { flex: 1; }
 .audio-unavailable { color: var(--muted); font-size: .78rem; }
 .pilot-feedback { min-height: 28px; margin: 14px 0; }
 .pilot-stage .answer-field { margin-top: 20px; }

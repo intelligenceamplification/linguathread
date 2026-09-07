@@ -22,14 +22,15 @@ export function DailyLesson({ course, current, dueIds, completedIds, onClose, on
   const advance = () => { setStep((value) => value + 1); setAnswer(""); setAttempts(0); setFeedback("idle"); };
 
   if (screen.kind === "vocabulary") return <DailyFrame eyebrow="Today · new language" title="A small new foundation.">
-    <div className="daily-vocabulary">{plan.newVocabulary.map((word) => <div key={word.word}><strong>{word.word}</strong><span>English · {word.english}</span><span>Vietnamese · {word.vietnamese}</span></div>)}</div>
+    <div className="daily-vocabulary">{plan.newVocabulary.map((word) => <div key={word.word}><strong>{word.word}</strong><ListenButton text={word.word} language="es"/><span>English · {word.english}</span><span>Vietnamese · {word.vietnamese}</span></div>)}</div>
     <p className="contemplative-note wide">Two words are enough when they are carried into a living sentence.</p>
     <button className="primary-action" onClick={advance}>Place them in context <span aria-hidden="true">→</span></button>
     <button className="text-action" onClick={onClose}>Return to self-directed learning</button>
   </DailyFrame>;
 
   if (screen.kind === "application") return <DailyFrame eyebrow="Today · application" title={plan.application.target}>
-    <div className="language-stack compact-stack"><div className="stack-line"><span>English anchor</span><strong>{plan.application.anchor}</strong></div><div className="stack-line"><span>Vietnamese bridge</span><strong>{plan.application.bridge}</strong></div></div>
+    <ListenButton text={plan.application.target} language="es"/>
+    <div className="language-stack compact-stack"><div className="stack-line"><span>English anchor</span><div><strong>{plan.application.anchor}</strong><ListenButton text={plan.application.anchor} language="en"/></div></div><div className="stack-line"><span>Vietnamese bridge</span><div><strong>{plan.application.bridge}</strong><ListenButton text={plan.application.bridge} language="vi"/></div></div></div>
     <p className="contemplative-note wide">{plan.application.note}</p>
     <button className="primary-action" onClick={advance}>Recall the meaning <span aria-hidden="true">→</span></button>
     <button className="text-action" onClick={onClose}>Return to self-directed learning</button>

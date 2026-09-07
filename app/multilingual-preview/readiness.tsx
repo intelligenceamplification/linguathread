@@ -34,7 +34,7 @@ export default function Readiness({ language, anchor, session, onChange, onReady
    {session.phase === "study" ? <>
     <p>{t.study}</p><p className="pilot-expression">{target}</p><ListenButton text={foundationContent[language][objective].text} language={language}/><p>{anchorText}</p>
    </> : session.phase === "recognize" ? <>
-    <p>{t.recognize}</p><p className="pilot-expression">{target}</p>
+   <p>{t.recognize}</p><p className="pilot-expression">{target}</p><ListenButton text={foundationContent[language][objective].text} language={language}/>
     <div className="readiness-choices">{foundationObjectives.map(choice => <button className="quiet-action" key={choice} disabled={session.feedback === "correct"} onClick={() => onChange(assessLiteracy(session, language, choice))}>{foundationContent[anchor][choice].text}</button>)}</div>
    </> : <>
     <p>{t.write}</p><p>{anchorText}</p>
@@ -43,7 +43,7 @@ export default function Readiness({ language, anchor, session, onChange, onReady
      <label><input type="radio" name={language} checked={session.input === "assisted"} onChange={() => onChange({ ...session, input: "assisted", revealed: true, feedback: "idle" })}/>{t.assisted}</label>
     </fieldset>
     <details><summary>{t.keyboard}</summary><p><a href="https://support.apple.com/guide/iphone/add-or-change-keyboards-iph73b71eb/ios" target="_blank" rel="noreferrer">iPhone</a> · <a href="https://support.google.com/gboard/answer/7068494?hl=en" target="_blank" rel="noreferrer">Android · Gboard</a></p></details>
-    {session.revealed && <p className="pilot-model">{target}</p>}
+    {session.revealed && <div className="pilot-model"><p>{target}</p><ListenButton text={foundationContent[language][objective].text} language={language}/></div>}
     <input className="answer-field" aria-label={t.write} lang={language} dir={language === "ar" ? "rtl" : "ltr"} autoComplete="off" autoCorrect="off" spellCheck={false} maxLength={2000} value={session.answer} onChange={e => onChange({ ...session, answer: e.target.value, feedback: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && session.answer.trim()) check(); }}/>
     {session.feedback !== "correct" && <button className="primary-action" disabled={!session.answer.trim()} onClick={check}>{foundationInstructions[anchor][2]}</button>}
     {!session.revealed && session.feedback !== "correct" && <button className="text-action" onClick={() => onChange({ ...session, revealed: true })}>{t.model}</button>}
