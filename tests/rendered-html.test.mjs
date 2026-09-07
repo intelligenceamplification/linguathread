@@ -756,3 +756,11 @@ test("official course retains its progression while adding optional audio", asyn
   assert.match(nativeShell, /https:\/\/linguathread\.vercel\.app\//);
   assert.doesNotMatch(nativeShell, /multilingual-preview/);
 });
+
+test("every sentence realization exposes audio by language identity, not its descriptive label", async () => {
+  const sentence = await read("../app/sentence-anatomy.tsx");
+  assert.match(sentence, /speechLanguage\(realization\.language\)/);
+  assert.match(sentence, /speechLanguage\(item\.language\)/);
+  assert.doesNotMatch(sentence, /speechLanguage\((?:realization|item)\.label\)/);
+  assert.match(sentence, /ComparisonChoreography[\s\S]*<ListenButton/);
+});

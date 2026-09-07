@@ -90,7 +90,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
               }}>{word.text}</button>;
             }) : realization.units.map((unit, index) => <button key={unit.id} className={`sentence-unit ${selection?.kind === "unit" && selection.unit.id === unit.id ? "selected" : ""}`} aria-pressed={selection?.kind === "unit" && selection.unit.id === unit.id} data-follows-word={index < realization.units.length - 1} onClick={(event) => selectUnit(unit, event.currentTarget)}>{unit.text}</button>)}
           </p>
-          {speechLanguage(realization.label) && <ListenButton text={realization.sentence} language={speechLanguage(realization.label)!} />}</>}
+          {speechLanguage(realization.language) && <ListenButton text={realization.sentence} language={speechLanguage(realization.language)!} />}</>}
           {mode === "xray" && <label className="xray-scope-field anatomy-xray-scope"><span>Word, phrase, or full sentence</span><select value={selection?.kind === "xray" ? selection.scope.id : ""} onChange={(event) => { const scope = activeXRayScopes.find((item) => item.id === event.target.value); if (scope) selectXRayScope(scope); }}><option value="" disabled>Choose a scope</option>{activeXRayScopes.map((scope) => <option key={scope.id} value={scope.id}>{scope.kind === "sentence" ? "Complete sentence breakdown" : scope.kind === "phrase" ? `Phrase: ${scope.text}` : `Word: ${scope.text}`}</option>)}</select></label>}
           {mode === "xray" && xrayLabels.length > 0 && <div className="xray-key" aria-label="Language X-Ray categories">{xrayLabels.map((label) => <span key={label}>{label}</span>)}</div>}
           {mode === "changes" && <div className="mapping-list" aria-label="Cross-language transformations">{availableMappings.length > 0 ? availableMappings.map((mapping) => <button key={mapping.id} className={selection?.kind === "mapping" && selection.mapping.id === mapping.id ? "selected" : ""} onClick={(event) => { triggerRef.current = event.currentTarget; setSelection({ kind: "mapping", mapping }); }}><span>{mapping.kind}</span>{mapping.label}</button>) : <p className="instruction">This comparison has not been authored yet.</p>}</div>}
@@ -102,7 +102,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
       </div>
 
       <div className="anatomy-stack" aria-label="Other expressions of the same meaning">
-        {availableRealizations.filter((item) => item.language !== activeLanguage).map((item) => <p key={item.language}><span>{item.label}</span><span className="anatomy-expression">{item.sentence}{speechLanguage(item.label) && <ListenButton text={item.sentence} language={speechLanguage(item.label)!} />}</span></p>)}
+        {availableRealizations.filter((item) => item.language !== activeLanguage).map((item) => <p key={item.language}><span>{item.label}</span><span className="anatomy-expression">{item.sentence}{speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} />}</span></p>)}
       </div>
       <button className="primary-action" onClick={onContinue}>Continue with the lesson <span aria-hidden="true">→</span></button>
     </div>
@@ -116,6 +116,7 @@ function ComparisonChoreography({ realizations, mapping }: { realizations: Inter
     {realizations.map((item, rowIndex) => <div key={item.language} className="choreography-row" data-role={item.role} data-involved={involvedLanguages.has(item.language)}>
       <span className="choreography-label">{item.label}</span>
       <p lang={item.language === "spanish" ? "es" : item.language === "vietnamese" ? "vi" : "en"}>{item.units.map((unit, unitIndex) => <span key={unit.id} className={selectedIds.has(unit.id) ? "mapped-unit" : "stable-unit"} style={{ "--unit-order": rowIndex * 3 + unitIndex } as React.CSSProperties}>{unit.text}{unit.after}</span>)}</p>
+      {speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} />}
     </div>)}
   </div>;
 }
