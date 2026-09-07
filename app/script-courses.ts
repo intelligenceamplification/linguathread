@@ -1,14 +1,16 @@
 import type { FoundationLanguage } from "./multilingual-foundation";
+import { requiredScriptModes, scriptRequirements, type ScriptStrand, type ScriptTaskMode } from "./script-literacy";
 
 /** Authored review material, not editorially approved course availability. */
 export type ScriptLesson = {
  id: string; title: string; explanation: string; example: string; meaning: string;
  prompt: string; answer: string; alternatives: string[]; prerequisites: string[];
+ strand: ScriptStrand; modes: ScriptTaskMode[]; components: string[];
 };
-export type ScriptCourse = { language: FoundationLanguage; revision: 1; status: "draft"; explanationLanguage: "en"; convention: string; inventory: string; lessons: ScriptLesson[] };
+export type ScriptCourse = { language: FoundationLanguage; revision: 2; status: "release-foundation"; explanationLanguage: "en"; convention: string; inventory: string; requirements: typeof scriptRequirements[FoundationLanguage]; lessons: ScriptLesson[] };
 type Row = readonly [id: string, title: string, explanation: string, example: string, meaning: string, prompt: string, answer: string, ...alternatives: string[]];
 function course(language: FoundationLanguage, convention: string, inventory: string, rows: Row[]): ScriptCourse {
- return { language, revision: 1, status: "draft", explanationLanguage: "en", convention, inventory, lessons: rows.map((r, i) => ({ id: `${language}-script-${r[0]}`, title: r[1], explanation: r[2], example: r[3], meaning: r[4], prompt: r[5], answer: r[6], alternatives: r.slice(7), prerequisites: i ? [`${language}-script-${rows[i - 1][0]}`] : [] })) };
+ return { language, revision: 2, status: "release-foundation", explanationLanguage: "en", convention, inventory, requirements: scriptRequirements[language], lessons: rows.map((r, i) => ({ id: `${language}-script-${r[0]}`, title: r[1], explanation: r[2], example: r[3], meaning: r[4], prompt: r[5], answer: r[6], alternatives: r.slice(7), prerequisites: i ? [`${language}-script-${rows[i - 1][0]}`] : [], strand: /input|keyboard|pinyin/i.test(r[0]) ? "input" : /block|component|join|conjunct|final|cluster/i.test(r[0]) ? "composition" : /tone|sound|vowel|consonant|voice|stress/i.test(r[0]) ? "sound-system" : /sentence|question|punctuation/i.test(r[0]) ? "sentences" : "orthography", modes: [...requiredScriptModes], components: Array.from(r[6].normalize("NFC")) })) };
 }
 const latin = "A a · B b · C c · D d · E e · F f · G g · H h · I i · J j · K k · L l · M m · N n · O o · P p · Q q · R r · S s · T t · U u · V v · W w · X x · Y y · Z z";
 export const scriptCourses: Record<FoundationLanguage, ScriptCourse> = {

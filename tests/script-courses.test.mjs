@@ -3,13 +3,14 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import vm from "node:vm";
 import ts from "typescript";
-async function load(path) {
+async function load(path, dependencies = {}) {
  const source = await readFile(new URL(path, import.meta.url), "utf8");
  const cjs = { exports: {} };
- vm.runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module: cjs, exports: cjs.exports });
+ vm.runInNewContext(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module: cjs, exports: cjs.exports, require: (id) => dependencies[id] });
  return cjs.exports;
 }
-const { scriptCourses } = await load("../app/script-courses.ts");
+const literacy = await load("../app/script-literacy.ts");
+const { scriptCourses } = await load("../app/script-courses.ts", { "./script-literacy": literacy });
 const { newScriptPractice, assessScript, advanceScript, scriptAnswerMatches, parseScriptPractice, restartScriptPractice, hasScriptCompletion, scriptChoices } = await load("../app/script-course-engine.ts");
 test("recognition answers do not occupy one predictable position", () => {
  const positions = new Set();
@@ -26,7 +27,9 @@ test("every offered language has authored script instruction and an acyclic orde
  const globalIds = new Set();
  for (const [language, course] of Object.entries(scriptCourses)) {
   assert.equal(course.language, language);
-  assert.equal(course.status, "draft");
+  assert.equal(course.status, "release-foundation");
+  assert.equal(course.revision, 2);
+  assert.ok(course.requirements.length >= 2);
   assert.ok(course.lessons.length >= 4);
   const previous = new Set();
   for (const unit of course.lessons) {
@@ -42,11 +45,25 @@ test("every offered language has authored script instruction and an acyclic orde
   }
  }
 });
+test("release literacy contract covers every directional mode and script-specific finite inventory", () => {
+ assert.deepEqual([...literacy.requiredScriptModes].sort(), ["component-assembly", "device-dictation", "form-to-sound", "keyboard-reconstruction", "meaning-retrieval", "sound-to-form", "unseen-transfer", "visual-recognition"].sort());
+ assert.equal(literacy.scriptRequirements.ko[0].inventory.length, 40);
+ assert.equal(literacy.scriptRequirements.ar[0].inventory.length, 28);
+ assert.equal(literacy.scriptRequirements.ru[0].inventory.length, 33);
+ assert.equal(literacy.scriptRequirements.ja[0].inventory.length, 46);
+ assert.equal(literacy.scriptRequirements.ja[1].inventory.length, 46);
+ assert.ok(literacy.scriptRequirements.vi[1].scope.includes("Telex"));
+ assert.ok(literacy.scriptRequirements.zh[1].scope.includes("course-linked"));
+ assert.ok(literacy.scriptRequirements.hi[1].scope.includes("halant"));
+});
 test("every authored unit traverses study and check routes with reload-safe review scheduling", () => {
  for (const course of Object.values(scriptCourses)) for (const unit of course.lessons) for (const check of [false, true]) {
   let state = newScriptPractice(check);
   if (!check) state = advanceScript(state, 1000);
   state = advanceScript(assessScript(unit, state, unit.answer), 1000);
+  state = advanceScript(assessScript(unit, state, unit.answer), 1000);
+  state = { ...state, result: "correct", passed: { ...state.passed, "component-assembly": true } };
+  state = advanceScript(state, 1000);
   state = parseScriptPractice(JSON.parse(JSON.stringify(state)));
   assert.equal(state.phase, "write");
   state = advanceScript(assessScript(unit, state, unit.answer), 1000);
@@ -65,8 +82,10 @@ test("errors and assistance cannot silently become an unaided check", () => {
  const unit = scriptCourses.ko.lessons[0];
  let state = assessScript(unit, newScriptPractice(true), unit.alternatives[0]);
  assert.equal(state.result, "retry");
- assert.equal(advanceScript(state, 1000).phase, "recognize");
+ assert.equal(advanceScript(state, 1000).phase, "visual");
  state = advanceScript(assessScript(unit, state, unit.answer), 1000);
+ state = advanceScript(assessScript(unit, state, unit.answer), 1000);
+ state = advanceScript({ ...state, result: "correct", passed: { ...state.passed, "component-assembly": true } }, 1000);
  state = advanceScript(assessScript(unit, state, unit.answer), 1000);
  assert.equal(state.supported, true);
  assert.equal(parseScriptPractice({ ...newScriptPractice(), phase: "complete" }), null);
@@ -74,6 +93,8 @@ test("errors and assistance cannot silently become an unaided check", () => {
 test("revisiting a completed lesson does not relock downstream prerequisites", () => {
  const unit = scriptCourses.ko.lessons[0];
  let state = advanceScript(assessScript(unit, newScriptPractice(true), unit.answer), 1000);
+ state = advanceScript(assessScript(unit, state, unit.answer), 1000);
+ state = advanceScript({ ...state, result: "correct", passed: { ...state.passed, "component-assembly": true } }, 1000);
  state = advanceScript(assessScript(unit, state, unit.answer), 1000);
  const restarted = restartScriptPractice(state);
  assert.equal(restarted.phase, "study");

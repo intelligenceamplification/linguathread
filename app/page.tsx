@@ -260,6 +260,24 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     }).catch(() => undefined);
   }
 
+  function recordScriptEvidence(unitId: string, mode: import("./script-literacy").ScriptTaskMode, correct: boolean, supported: boolean) {
+    const languageName = literacyLanguages.find((item) => item.id === scriptLanguage)?.name || scriptLanguage || "script";
+    const modalities: Record<string, [import("./learning-engine").RetrievalModality, import("./learning-engine").RetrievalModality]> = {
+      "visual-recognition": ["script", "meaning"], "sound-to-form": ["sound", "script"], "form-to-sound": ["script", "sound"],
+      "component-assembly": ["component", "script"], "keyboard-reconstruction": ["meaning", "input"], "device-dictation": ["sound", "input"],
+      "meaning-retrieval": ["script", "meaning"], "unseen-transfer": ["structure", "script"],
+    };
+    const [fromModality, toModality] = modalities[mode];
+    const retrievalType = mode === "unseen-transfer" ? "transfer" : mode.includes("reconstruction") || mode === "component-assembly" ? "reconstruction" : "recognition";
+    const edge: RetrievalEdge = { fromLanguage: languageName, toLanguage: languageName, fromModality, toModality, retrievalType };
+    setLearnerModel((current) => {
+      const next = recordEvidence(current, unitId, languageName, correct, supported, new Date(), edge, Math.max(0, Date.now() - attemptStartedAtRef.current), correct ? undefined : mode === "sound-to-form" ? "listening" : mode === "component-assembly" ? "composition" : mode.includes("dictation") || mode.includes("keyboard") ? "input" : "script");
+      window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
+      return next;
+    });
+    fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "attempt", lessonId: unitId, objectiveId: unitId, skill: "writing-system", kind: mode, language: languageName, correct, supported, edgeKey: [languageName, languageName, fromModality, toModality, retrievalType].join(":"), fromLanguage: languageName, toLanguage: languageName, fromModality, toModality, retrievalType, errorType: correct ? undefined : "script" }), keepalive: true }).catch(() => undefined);
+  }
+
   function resetAnswer(nextStage?: Stage) {
     setAnswer("");
     setFeedback("idle");
@@ -355,6 +373,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         <div className="header-actions">
           <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today’s Lesson</button>
           {stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Language Path</button>}
+          {literacyLanguages[0] && <button className="quiet-action writing-action" onClick={() => setScriptLanguage(literacyLanguages[0].id)}>Writing System</button>}
           <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>Expression X-Ray</button>
         </div>
       </header>
@@ -366,7 +385,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section className="lesson-stage" aria-live="polite">
-        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
+        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} onEvidence={recordScriptEvidence} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
           fromLanguage: exercise.from, toLanguage: exercise.to, fromModality: "written", toModality: exercise.to === "English" ? "meaning" : "written", retrievalType: exercise.phase === "variation" ? "transfer" : exercise.phase === "review" ? "reverse" : "production",
         }, correct ? undefined : exercise.scope === "word" ? "lexical" : "structural")} /> : <>
         {stage === "vocabulary" && (

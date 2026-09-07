@@ -91,6 +91,7 @@ button { color: inherit; }
 .header-balance { width: 52px; }
 .header-actions { justify-self: end; display: flex; align-items: center; gap: 18px; }
 .header-actions .quiet-action { justify-self: auto; font-size: .78rem; white-space: nowrap; min-height: 44px; }
+.writing-action { color: var(--text-accent); }
 .today-action { color: var(--text-accent); }
 .xray-action { padding: 8px 12px; border: 1px solid var(--glass-edge); border-radius: 999px; background: var(--glass-clear); box-shadow: 0 5px 18px var(--glass-shadow), inset 0 1px 0 var(--glass-edge); color: var(--text-accent-strong); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); }
 

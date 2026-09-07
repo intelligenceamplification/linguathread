@@ -2,19 +2,21 @@
 import { useEffect, useRef, useState } from "react";
 import type { FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptLesson } from "../script-courses";
-import { advanceScript, assessScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, type ScriptPractice } from "../script-course-engine";
+import type { ScriptRequirement, ScriptTaskMode } from "../script-literacy";
+import { advanceScript, appendAssembly, assessScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, type ScriptPractice } from "../script-course-engine";
 import ListenButton from "../listen-button";
 
-type Index = { language: string; revision: number; convention: string; inventory: string; lessons: Pick<ScriptLesson, "id" | "title" | "prerequisites">[] };
+type Index = { language: string; revision: number; convention: string; inventory: string; requirements: ScriptRequirement[]; lessons: Pick<ScriptLesson, "id" | "title" | "prerequisites" | "strand">[] };
 function validIndex(value: unknown, language: string): value is Index {
  const i = value as Index;
- return !!i && i.language === language && Number.isInteger(i.revision) && i.revision > 0 && typeof i.convention === "string" && typeof i.inventory === "string" && Array.isArray(i.lessons) && i.lessons.length > 0 && i.lessons.every(l => typeof l.id === "string" && typeof l.title === "string" && Array.isArray(l.prerequisites) && l.prerequisites.every(p => typeof p === "string"));
+ return !!i && i.language === language && Number.isInteger(i.revision) && i.revision > 0 && typeof i.convention === "string" && typeof i.inventory === "string" && Array.isArray(i.requirements) && i.requirements.length > 0 && Array.isArray(i.lessons) && i.lessons.length > 0 && i.lessons.every(l => typeof l.id === "string" && typeof l.title === "string" && typeof l.strand === "string" && Array.isArray(l.prerequisites) && l.prerequisites.every(p => typeof p === "string"));
 }
 function validUnit(value: unknown, id: string): value is ScriptLesson {
  const u = value as ScriptLesson;
- return !!u && u.id === id && [u.title, u.explanation, u.example, u.meaning, u.prompt, u.answer].every(v => typeof v === "string" && v.length > 0) && Array.isArray(u.alternatives) && u.alternatives.every(v => typeof v === "string") && Array.isArray(u.prerequisites);
+ return !!u && u.id === id && [u.title, u.explanation, u.example, u.meaning, u.prompt, u.answer].every(v => typeof v === "string" && v.length > 0) && Array.isArray(u.alternatives) && u.alternatives.every(v => typeof v === "string") && Array.isArray(u.prerequisites) && Array.isArray(u.components) && u.components.length > 0 && Array.isArray(u.modes);
 }
-export default function ScriptCourseView({ language, onClose }: { language: FoundationLanguage; onClose: () => void }) {
+type EvidenceHandler = (unitId: string, mode: ScriptTaskMode, correct: boolean, supported: boolean) => void;
+export default function ScriptCourseView({ language, onClose, onEvidence }: { language: FoundationLanguage; onClose: () => void; onEvidence?: EvidenceHandler }) {
  const [index, setIndex] = useState<Index | null>(null);
  const [unit, setUnit] = useState<ScriptLesson | null>(null);
  const [practice, setPractice] = useState<ScriptPractice>(newScriptPractice);
@@ -24,7 +26,7 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
  const [loading, setLoading] = useState(false);
  const [reviewClock, setReviewClock] = useState(() => Date.now());
  const loadId = useRef(0);
- const progressKey = `linguathread.script-practice.draft.v1:${language}`;
+ const progressKey = `linguathread.script-practice.v2:${language}`;
  useEffect(() => {
   let cancelled = false;
   async function initialize() {
@@ -35,16 +37,16 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
     if (!validIndex(data, language)) throw new Error("index");
     if (cancelled) return;
     setIndex(data);
-    try { localStorage.setItem(`linguathread.script-index.draft.v1:${language}`, JSON.stringify(data)); } catch { setStorageError(true); }
+    try { localStorage.setItem(`linguathread.script-index.v2:${language}`, JSON.stringify(data)); } catch { setStorageError(true); }
    } catch {
     try {
-     const cached: unknown = JSON.parse(localStorage.getItem(`linguathread.script-index.draft.v1:${language}`) || "null");
+     const cached: unknown = JSON.parse(localStorage.getItem(`linguathread.script-index.v2:${language}`) || "null");
      if (!validIndex(cached, language)) throw new Error("index");
      if (!cancelled) { setIndex(cached); setError("Offline: showing the last cached course index. Only previously saved units are available."); }
     } catch { if (!cancelled) setError("The course index is unavailable. Reconnect and reopen script lessons."); }
    }
    try {
-    const saved = JSON.parse(localStorage.getItem(progressKey) || "{}");
+    const saved = JSON.parse(localStorage.getItem(progressKey) || localStorage.getItem(`linguathread.script-practice.draft.v1:${language}`) || "{}");
     const restored: Record<string, ScriptPractice> = {};
     if (saved && typeof saved === "object") for (const [id, value] of Object.entries(saved)) { const record = parseScriptPractice(value); if (record) restored[id] = record; }
     if (!cancelled) setRecords(restored);
@@ -54,7 +56,7 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
   return () => { cancelled = true; loadId.current += 1; };
  }, [language, progressKey]);
  async function loadUnit(id: string, revision: number) {
-  const key = `linguathread.script-unit.draft.v1:${language}:${id}:${revision}`;
+  const key = `linguathread.script-unit.v2:${language}:${id}:${revision}`;
   try { const cached: unknown = JSON.parse(localStorage.getItem(key) || "null"); if (validUnit(cached, id)) return cached; } catch { /* Fetch an uncached or invalid unit. */ }
   const response = await fetch(`/api/script-course?language=${language}&unit=${encodeURIComponent(id)}&revision=${revision}`);
   if (!response.ok) throw new Error("Unit unavailable. Reconnect and reopen the course to refresh its index.");
@@ -85,16 +87,33 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
   setRecords(nextRecords);
   try { localStorage.setItem(progressKey, JSON.stringify(nextRecords)); setStorageError(false); } catch { setStorageError(true); }
  }
+ function assess(answer: string) {
+  if (!unit) return;
+  const next = assessScript(unit, practice, answer);
+  if (next.attempts > practice.attempts) {
+   const mode: ScriptTaskMode = practice.phase === "visual" ? "visual-recognition" : practice.phase === "sound" ? "sound-to-form" : practice.inputMode === "dictation" ? "device-dictation" : "keyboard-reconstruction";
+   onEvidence?.(unit.id, mode, next.result === "correct", next.supported);
+  }
+  save(next);
+ }
+ function assemble(component: string) {
+  if (!unit) return;
+  const next = appendAssembly(unit, practice, component);
+  if (next.result === "correct" && practice.result !== "correct") onEvidence?.(unit.id, "component-assembly", true, next.supported);
+  save(next);
+ }
  const dir = language === "ar" ? "rtl" : "ltr";
  return <section lang="en" dir="ltr" className="script-course">
   <button className="text-action" onClick={onClose}>Return to stack</button>
-  <p className="pilot-notice">Authored script lessons · Beta. Explanations are currently in English. Additional lessons and qualified editorial review remain underway.</p>
+  <p className="pilot-notice">Writing-system foundations are measured separately by direction. Explanations currently use your English anchor; forms, audio and input remain in the language being learned.</p>
   {error && <p role="alert">{error}</p>}
   {storageError && <p role="alert">Local saving is unavailable. Keep this page open; recent work or downloaded units may not survive closing it.</p>}
   {loading && <p role="status">Opening lesson…</p>}
   {!index && !error && <p role="status">Loading script path…</p>}
   {index && !unit && <>
-   <h1>Writing foundations</h1><p>{index.convention}</p>
+   <p className="eyebrow">Writing system path</p><h1>Learn the foundations—or demonstrate them.</h1><p>{index.convention}</p>
+   <div className="script-requirements" aria-label="Literacy scope">{index.requirements.map(requirement => <section key={requirement.title}><h2>{requirement.title}</h2><p>{requirement.scope}</p><small>{requirement.inventory.length} foundational forms or conventions mapped</small></section>)}</div>
+   <p className="script-evidence-note">Meaning → sound → written form → reconstruction. Keyboard and device dictation both prove understanding, while preserving distinct evidence of how the form was produced.</p>
    <details><summary>Reference forms</summary><p className="script-inventory" lang={language} dir={dir}>{index.inventory}</p></details>
    <ol className="script-path">{index.lessons.map(lesson => {
     const record = records[`${index.revision}:${lesson.id}`];
@@ -109,16 +128,23 @@ export default function ScriptCourseView({ language, onClose }: { language: Foun
   </>}
   {index && unit && <>
    <button className="text-action" onClick={() => { loadId.current += 1; setUnit(null); setLoading(false); setReviewClock(Date.now()); }}>Back to script path</button>
-   <h1>{unit.title}</h1>
-   {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Practise recognition</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Practised with support" : "Introductory check completed"}</h2><p>This records this lesson’s written task, not complete literacy or spoken proficiency. It will become due for review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to script path</button></> : <>
-    <p>{unit.prompt}</p>
-    {practice.phase === "recognize" ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <div className="script-choice-row" key={choice}><button className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct"} onClick={() => save(assessScript(unit, practice, choice))}>{choice}</button><ListenButton text={choice} language={language}/></div>)}</div> : <>
-     <label>Write the form requested<input className="answer-field" lang={language} dir={dir} maxLength={2000} autoComplete="off" autoCorrect="off" spellCheck={false} value={practice.answer} onChange={e => save({ ...practice, answer: e.target.value, result: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && practice.answer.trim()) save(assessScript(unit, practice, practice.answer)); }}/></label>
-     <label className="script-assistance"><input type="checkbox" checked={practice.supported} onChange={() => save({ ...practice, supported: true })}/>I used a model, dictation or other help. Once used, support stays recorded for this attempt.</label>
-     {practice.result !== "correct" && <button className="primary-action" disabled={!practice.answer.trim()} onClick={() => save(assessScript(unit, practice, practice.answer))}>Check writing</button>}
+   <p className="eyebrow">{unit.strand.replace("-", " ")} · {practice.phase === "study" ? "notice" : practice.phase}</p><h1>{unit.title}</h1>
+   {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Begin directional practice</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Foundation practised" : "Independent evidence recorded"}</h2><p>Recognition, sound-to-form, component assembly and input are stored as separate pathways. A weak direction returns for focused review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to writing system</button></> : <>
+    <p>{practice.phase === "sound" ? "Listen without reading the model, then choose the written form you heard." : practice.phase === "assemble" ? "Reconstruct the written form from its visible elements." : unit.prompt}</p>
+    {practice.phase === "sound" && <div className="script-listen-cue"><ListenButton text={unit.answer} language={language}/></div>}
+    {(practice.phase === "visual" || practice.phase === "sound") ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <div className="script-choice-row" key={choice}><button className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct"} onClick={() => assess(choice)}>{choice}</button>{practice.phase === "visual" && <ListenButton text={choice} language={language}/>}</div>)}</div> : practice.phase === "assemble" ? <>
+     <div className="assembly-result" lang={language} dir={dir}>{practice.assembly.join("") || "\u00a0"}</div>
+     <div className="component-bank">{unit.components.map((component, index) => <button key={`${component}-${index}`} className="glass-chip" disabled={practice.assembly.length !== index || practice.result === "correct"} onClick={() => assemble(component)}>{component === " " ? "space" : component}</button>)}</div>
+     {practice.result !== "correct" && practice.assembly.length > 0 && <button className="text-action" onClick={() => save({ ...practice, assembly: [], answer: "", result: "idle" })}>Clear and rebuild</button>}
+    </> : <>
+     <fieldset className="literacy-input-method"><legend>How will you reconstruct it?</legend><label><input type="radio" name="script-input" checked={practice.inputMode === "keyboard"} onChange={() => save({ ...practice, inputMode: "keyboard", answer: "", result: "idle" })}/>Keyboard · orthographic reconstruction</label><label><input type="radio" name="script-input" checked={practice.inputMode === "dictation"} onChange={() => save({ ...practice, inputMode: "dictation", answer: "", result: "idle" })}/>Device dictation · spoken reconstruction</label></fieldset>
+     {practice.inputMode === "dictation" && <p className="dictation-guidance">Use whichever dictation system you prefer on your device. LinguaThread evaluates the resulting language; it does not provide the dictation service.</p>}
+     <label>Write the form requested<input className="answer-field" lang={language} dir={dir} maxLength={2000} autoComplete="off" autoCorrect="off" spellCheck={false} value={practice.answer} onChange={e => save({ ...practice, answer: e.target.value, result: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && practice.answer.trim()) assess(practice.answer); }}/></label>
+     <label className="script-assistance"><input type="checkbox" checked={practice.supported} onChange={() => save({ ...practice, supported: true })}/>I used the model or another aid. Support remains attached to this attempt.</label>
+     {practice.result !== "correct" && <button className="primary-action" disabled={!practice.answer.trim()} onClick={() => assess(practice.answer)}>Check reconstruction</button>}
     </>}
     <p role="status">{practice.result === "correct" ? "The written form matches." : practice.result === "retry" ? "Look again at the exact letters and marks. This task checks the specific written form, including its capitalization, spacing and punctuation." : "\u00a0"}</p>
-    {practice.result === "correct" ? <button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Continue</button> : <button className="text-action" onClick={() => save({ ...practice, phase: "study", supported: true, result: "idle" })}>Read the explanation and model</button>}
+    {practice.result === "correct" ? <button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Continue</button> : practice.phase !== "assemble" && <button className="text-action" onClick={() => save({ ...practice, phase: "study", supported: true, result: "idle" })}>Read the explanation and model</button>}
    </>}
   </>}
  </section>;

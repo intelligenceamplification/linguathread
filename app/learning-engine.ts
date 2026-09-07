@@ -3,7 +3,7 @@ import type { LessonDefinition } from "./curriculum";
 export type LearningLanguage = string;
 export type ActivityKind = "recall" | "production" | "reconstruction";
 export type MasteryState = "introduced" | "forming" | "usable" | "stable" | "maintenance";
-export type RetrievalModality = "meaning" | "written" | "audio" | "script" | "structure";
+export type RetrievalModality = "meaning" | "written" | "audio" | "script" | "structure" | "sound" | "component" | "input";
 export type RetrievalType = "recognition" | "reconstruction" | "production" | "transfer" | "reverse";
 
 export type RetrievalEdge = {
@@ -25,7 +25,7 @@ export type SkillEvidence = {
   nextReviewAt: string;
   edge?: RetrievalEdge;
   lastLatencyMs?: number;
-  errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "unknown";
+  errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "input" | "composition" | "unknown";
 };
 
 export type LearnerModel = {
