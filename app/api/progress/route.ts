@@ -41,6 +41,8 @@ export async function POST(request: Request) {
     type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string;
     language?: string; correct?: boolean; accelerated?: boolean; profile?: unknown;
     objectiveId?: string; supported?: boolean;
+    edgeKey?: string; fromLanguage?: string; toLanguage?: string;
+    fromModality?: string; toModality?: string; retrievalType?: string; errorType?: string; latencyMs?: number;
   };
   if (!body.type || !body.lessonId || !body.skill) return Response.json({ error: "Invalid progress event" }, { status: 400 });
 
@@ -48,14 +50,22 @@ export async function POST(request: Request) {
   const progressId = `${learner}:${body.lessonId}`;
   if (body.type === "attempt") {
     const language = body.language || "Spanish";
-    const evidenceId = `${learner}:${body.objectiveId || body.lessonId}:${language.toLocaleLowerCase()}`;
+    // Store a directional edge in the existing language slot so this release remains
+    // compatible with the deployed schema. A future additive migration can promote
+    // these dimensions into indexed columns without losing the edge identity.
+    const evidenceDimension = body.edgeKey || language;
+    const evidenceId = `${learner}:${body.objectiveId || body.lessonId}:${evidenceDimension.toLocaleLowerCase()}`;
     const gain = body.correct ? (body.supported ? 7 : 18) : -8;
-    const initialScore = Math.max(0, gain);
-    const nextReviewAt = new Date(now.getTime() + (initialScore >= 35 ? 3 : 1) * 86_400_000);
+    const [existingEvidence] = await db.select({ score: objectiveMastery.score }).from(objectiveMastery)
+      .where(eq(objectiveMastery.id, evidenceId)).limit(1);
+    const updatedScore = Math.max(0, Math.min(100, (existingEvidence?.score || 0) + gain));
+    const intervalDays = updatedScore >= 92 ? 30 : updatedScore >= 78 ? 14 : updatedScore >= 58 ? 7 : updatedScore >= 35 ? 3 : 1;
+    const nextReviewAt = new Date(now.getTime() + intervalDays * 86_400_000);
     await Promise.all([
       db.insert(answerAttempts).values({
         id: crypto.randomUUID(), learnerId: learner, lessonId: body.lessonId, skill: body.skill,
-        kind: body.kind || "unknown", language, correct: Boolean(body.correct), createdAt: now,
+        kind: body.errorType ? `${body.kind || "unknown"}:${body.errorType}` : body.kind || "unknown",
+        language, correct: Boolean(body.correct), createdAt: now,
       }),
       db.insert(lessonProgress).values({
         id: progressId, learnerId: learner, lessonId: body.lessonId, skill: body.skill,
@@ -72,9 +82,9 @@ export async function POST(request: Request) {
         id: evidenceId,
         learnerId: learner,
         objectiveId: body.objectiveId || body.lessonId,
-        language,
+        language: evidenceDimension,
         status: body.correct ? "forming" : "introduced",
-        score: initialScore,
+        score: updatedScore,
         attempts: 1,
         independentSuccesses: body.correct && !body.supported ? 1 : 0,
         supportedSuccesses: body.correct && body.supported ? 1 : 0,

@@ -12,10 +12,11 @@ import { speechLanguage } from "./speech";
 import type { FoundationLanguage } from "./multilingual-foundation";
 import "./multilingual-preview/preview.css";
 import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
+import { loadCurriculum } from "./curriculum-cache";
 import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
 import {
-  completeSession, emptyLearnerModel, evidenceKey, LearnerModel, masteryState,
-  migrateCompletedLessons, recordEvidence, selectNextLesson,
+  completeSession, emptyLearnerModel, languageMastery, LearnerModel, RetrievalEdge,
+  migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
 type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "complete" | "review";
@@ -104,15 +105,23 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [xrayOpen, setXrayOpen] = useState(false);
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
+  const attemptStartedAtRef = useRef(Date.now());
 
   useEffect(() => {
-    const localCompleted = JSON.parse(window.localStorage.getItem("linguathread.completed-lessons.v1") || "[]") as string[];
+    attemptStartedAtRef.current = Date.now();
+  }, [stage, wordIndex, productionLanguage, reverseIndex, dailyOpen, scriptLanguage]);
+
+  useEffect(() => {
+    let localCompleted: string[] = [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem("linguathread.completed-lessons.v1") || "[]");
+      localCompleted = Array.isArray(stored) ? stored.filter((item): item is string => typeof item === "string") : [];
+    } catch {
+      window.localStorage.removeItem("linguathread.completed-lessons.v1");
+    }
     const savedModel = window.localStorage.getItem(learnerModelKey);
     Promise.all([
-      fetch("/api/curriculum")
-        .then((response) => response.ok ? response.json() : Promise.reject())
-        .then((data: { lessons?: LessonDefinition[] }) => data.lessons?.length ? data.lessons : curriculum)
-        .catch(() => curriculum),
+      loadCurriculum(curriculum).then((result) => result.lessons),
       fetch("/api/progress")
         .then((response) => response.ok ? response.json() : Promise.reject())
         .catch(() => ({ completedLessonIds: [], reviewDueLessonIds: [] })),
@@ -121,7 +130,14 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       { completedLessonIds?: string[]; reviewDueLessonIds?: string[] },
     ]) => {
         const completed = data.completedLessonIds?.length ? data.completedLessonIds : localCompleted;
-        const localModel = savedModel ? JSON.parse(savedModel) as LearnerModel : migrateCompletedLessons(completed, loadedCourse);
+        let localModel = migrateCompletedLessons(completed, loadedCourse);
+        if (savedModel) {
+          try {
+            localModel = normalizeLearnerModel(JSON.parse(savedModel));
+          } catch {
+            window.localStorage.removeItem(learnerModelKey);
+          }
+        }
         setCourse(loadedCourse);
         setLearnerModel(localModel);
         window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
@@ -169,13 +185,17 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const passed = lesson.recall.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
     setFeedback(passed ? "correct" : "gentle");
     if (!passed) setFailedAttempts((value) => value + 1);
-    recordAttempt("recall", passed);
+    recordAttempt("recall", passed, "Spanish", lesson, {
+      fromLanguage: "Spanish", toLanguage: "English", fromModality: "written", toModality: "meaning", retrievalType: "recognition",
+    }, passed ? undefined : "lexical");
   }
 
   function checkMastery() {
     const production = productionLanguage === "Spanish" ? lesson.mastery : lesson.bridgeMastery;
     const passed = production.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
-    recordAttempt("mastery", passed, productionLanguage);
+    recordAttempt("mastery", passed, productionLanguage, lesson, {
+      fromLanguage: "English", toLanguage: productionLanguage, fromModality: "meaning", toModality: "written", retrievalType: "production",
+    }, passed ? undefined : "production");
     if (passed && productionLanguage === "Spanish" && bridgeEnabled) {
       setSpanishConfirmed(true);
       setProductionLanguage("Vietnamese");
@@ -189,8 +209,17 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setMastery(passed);
   }
 
-  function recordAttempt(kind: string, correct: boolean, language = "Spanish", evidenceLesson = lesson) {
+  function recordAttempt(
+    kind: string,
+    correct: boolean,
+    language = "Spanish",
+    evidenceLesson = lesson,
+    edge?: RetrievalEdge,
+    errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "unknown",
+  ) {
     const learningLanguage = language;
+    const latencyMs = Math.max(0, Date.now() - attemptStartedAtRef.current);
+    attemptStartedAtRef.current = Date.now();
     setLearnerModel((current) => {
       const next = recordEvidence(
         current,
@@ -198,6 +227,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         learningLanguage,
         correct,
         kind === "supported-reconstruction" || kind === "transform-model",
+        new Date(),
+        edge,
+        latencyMs,
+        errorType,
       );
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
@@ -214,6 +247,14 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         language,
         correct,
         supported: kind === "supported-reconstruction" || kind === "transform-model",
+        edgeKey: edge ? [edge.fromLanguage, edge.toLanguage, edge.fromModality, edge.toModality, edge.retrievalType].join(":") : undefined,
+        fromLanguage: edge?.fromLanguage,
+        toLanguage: edge?.toLanguage,
+        fromModality: edge?.fromModality,
+        toModality: edge?.toModality,
+        retrievalType: edge?.retrievalType,
+        errorType,
+        latencyMs,
       }),
       keepalive: true,
     }).catch(() => undefined);
@@ -275,13 +316,17 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function completeSupportedRecall() {
-    recordAttempt("supported-reconstruction", true);
+    recordAttempt("supported-reconstruction", true, "Spanish", lesson, {
+      fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "reconstruction",
+    });
     setFailedAttempts(0);
     resetAnswer("sentence");
   }
 
   function completeSupportedMastery() {
-    recordAttempt("supported-reconstruction", true, productionLanguage);
+    recordAttempt("supported-reconstruction", true, productionLanguage, lesson, {
+      fromLanguage: "English", toLanguage: productionLanguage, fromModality: "meaning", toModality: "written", retrievalType: "reconstruction",
+    });
     setFailedAttempts(0);
     if (productionLanguage === "Spanish" && bridgeEnabled) {
       setSpanishConfirmed(true);
@@ -321,7 +366,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section className="lesson-stage" aria-live="polite">
-        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson)} /> : <>
+        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
+          fromLanguage: exercise.from, toLanguage: exercise.to, fromModality: "written", toModality: exercise.to === "English" ? "meaning" : "written", retrievalType: exercise.phase === "variation" ? "transfer" : exercise.phase === "review" ? "reverse" : "production",
+        }, correct ? undefined : exercise.scope === "word" ? "lexical" : "structural")} /> : <>
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
@@ -395,7 +442,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "transform" && <TransformExercise lesson={lesson} onAttempt={(correct, supported, language) => recordAttempt(supported ? "transform-model" : "transform", correct, language)} onComplete={() => resetAnswer("mastery")} onSkip={() => skipLesson(lesson.transform.language)} />}
+        {stage === "transform" && <TransformExercise lesson={lesson} onAttempt={(correct, supported, language) => recordAttempt(supported ? "transform-model" : "transform", correct, language, lesson, {
+          fromLanguage: "English", toLanguage: language, fromModality: "meaning", toModality: "written", retrievalType: "reconstruction",
+        }, correct ? undefined : "structural")} onComplete={() => resetAnswer("mastery")} onSkip={() => skipLesson(lesson.transform.language)} />}
 
         {stage === "mastery" && (
           <div className="focus-content exercise-content">
@@ -428,7 +477,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           exercise={reverseExercises[reverseIndex]}
           position={reverseIndex + 1}
           total={reverseExercises.length}
-          onAttempt={(correct, language) => recordAttempt("reverse-recall", correct, language)}
+          onAttempt={(correct, language) => recordAttempt("reverse-recall", correct, language, lesson, {
+            fromLanguage: reverseExercises[reverseIndex].from,
+            toLanguage: reverseExercises[reverseIndex].to,
+            fromModality: "written", toModality: "meaning", retrievalType: "reverse",
+          }, correct ? undefined : "structural")}
           onComplete={() => reverseIndex < reverseExercises.length - 1 ? setReverseIndex((value) => value + 1) : finishLesson()}
           onSkip={() => {
             recordAttempt("skipped-reverse", false, reverseExercises[reverseIndex].evidenceLanguage);
@@ -482,18 +535,27 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <div>{literacyLanguages.map((item) => <button key={item.id} className="quiet-action" onClick={() => setScriptLanguage(item.id)}>{item.name} · Open writing path</button>)}</div>
             </section>
             <div className="review-list">
-              {course.map((item, index) => (
-                <div className="review-row stacked-review-row" key={item.id}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{item.title}</strong>
-                  <p>{item.level} · {item.unitTitle} · {item.skill}</p>
-                  <em>{reviewDueIds.includes(item.id)
-                    ? "Due"
-                    : completedIds.includes(item.id)
-                      ? masteryState(learnerModel.evidence[evidenceKey(item.objectiveId || item.id, "Spanish")])
-                      : index === lessonIndex ? "Next" : "Waiting"}</em>
-                </div>
-              ))}
+              {courseMap.map((level) => {
+                const levelLessons = course.filter((item) => item.level === level.level);
+                const containsCurrent = levelLessons.some((item) => item.id === lesson.id);
+                const dueCount = levelLessons.filter((item) => reviewDueIds.includes(item.id)).length;
+                return <details key={level.level} className="review-level" open={containsCurrent}>
+                  <summary><span>{level.level}</span><strong>{containsCurrent ? "Current level" : `${levelLessons.length} lessons`}</strong><em>{dueCount ? `${dueCount} due` : "Explore"}</em></summary>
+                  {levelLessons.map((item) => {
+                    const index = course.findIndex((candidate) => candidate.id === item.id);
+                    return <div className="review-row stacked-review-row" key={item.id}>
+                      <span>{String(index + 1).padStart(2, "0")}</span>
+                      <strong>{item.title}</strong>
+                      <p>{item.level} · {item.unitTitle} · {item.skill}</p>
+                      <em>{reviewDueIds.includes(item.id)
+                        ? "Due"
+                        : completedIds.includes(item.id)
+                          ? languageMastery(learnerModel, item.objectiveId || item.id, "Spanish")
+                          : index === lessonIndex ? "Next" : "Waiting"}</em>
+                    </div>;
+                  })}
+                </details>;
+              })}
             </div>
             <button className="primary-action" onClick={() => resetLesson()}>Return to lesson</button>
           </div>
@@ -707,8 +769,8 @@ function ReverseRecall({ exercise, position, total, onAttempt, onComplete, onSki
     <p className="eyebrow">Reverse recall · {position} of {total}</p>
     <p className="translation-direction">{exercise.from} <span aria-hidden="true">→</span> {exercise.to}</p>
     <h1 className="exercise-title" lang={exercise.from === "Spanish" ? "es" : "vi"}>{exercise.prompt}</h1>
-    {speechLanguage(exercise.from) && <ListenButton text={exercise.prompt} language={speechLanguage(exercise.from)!} />}
     <p className="instruction">{exercise.instruction}</p>
+    {speechLanguage(exercise.from) && <div className="reverse-audio"><ListenButton text={exercise.prompt} language={speechLanguage(exercise.from)!} /></div>}
     {failedAttempts < 3 ? <>
       <AnswerField value={answer} onChange={(value) => { setAnswer(value); setFeedback("idle"); }} onEnter={checkAnswer} placeholder="Write the English meaning" label="English answer" />
       {feedback === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={checkAnswer}>Check meaning</button>}

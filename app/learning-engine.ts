@@ -3,6 +3,16 @@ import type { LessonDefinition } from "./curriculum";
 export type LearningLanguage = string;
 export type ActivityKind = "recall" | "production" | "reconstruction";
 export type MasteryState = "introduced" | "forming" | "usable" | "stable" | "maintenance";
+export type RetrievalModality = "meaning" | "written" | "audio" | "script" | "structure";
+export type RetrievalType = "recognition" | "reconstruction" | "production" | "transfer" | "reverse";
+
+export type RetrievalEdge = {
+  fromLanguage: LearningLanguage;
+  toLanguage: LearningLanguage;
+  fromModality: RetrievalModality;
+  toModality: RetrievalModality;
+  retrievalType: RetrievalType;
+};
 
 export type SkillEvidence = {
   objectiveId: string;
@@ -13,22 +23,59 @@ export type SkillEvidence = {
   score: number;
   lastPracticedAt: string;
   nextReviewAt: string;
+  edge?: RetrievalEdge;
+  lastLatencyMs?: number;
+  errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "unknown";
 };
 
 export type LearnerModel = {
-  version: 1;
+  version: 2;
   sessionsCompleted: number;
   evidence: Record<string, SkillEvidence>;
 };
 
 export const emptyLearnerModel = (): LearnerModel => ({
-  version: 1,
+  version: 2,
   sessionsCompleted: 0,
   evidence: {},
 });
 
+export function normalizeLearnerModel(value: unknown): LearnerModel {
+  if (!value || typeof value !== "object") return emptyLearnerModel();
+  const candidate = value as Partial<LearnerModel>;
+  return {
+    version: 2,
+    sessionsCompleted: Number.isFinite(candidate.sessionsCompleted) ? Math.max(0, Number(candidate.sessionsCompleted)) : 0,
+    evidence: candidate.evidence && typeof candidate.evidence === "object" ? candidate.evidence : {},
+  };
+}
+
 export function evidenceKey(objectiveId: string, language: LearningLanguage) {
   return `${objectiveId}:${language.toLocaleLowerCase()}`;
+}
+
+export function edgeEvidenceKey(objectiveId: string, edge: RetrievalEdge) {
+  return [objectiveId, edge.fromLanguage, edge.toLanguage, edge.fromModality, edge.toModality, edge.retrievalType]
+    .map((value) => value.toLocaleLowerCase())
+    .join(":");
+}
+
+export function evidenceForObjective(model: LearnerModel, objectiveId: string) {
+  return Object.values(model.evidence).filter((item) => item.objectiveId === objectiveId);
+}
+
+export function weakestEvidence(model: LearnerModel, objectiveId: string) {
+  const values = evidenceForObjective(model, objectiveId);
+  if (!values.length) return undefined;
+  return values.reduce((weakest, item) => item.score < weakest.score ? item : weakest);
+}
+
+export function languageMastery(model: LearnerModel, objectiveId: string, language: LearningLanguage) {
+  const normalized = language.toLocaleLowerCase();
+  const values = evidenceForObjective(model, objectiveId).filter((item) =>
+    item.language.toLocaleLowerCase() === normalized || item.edge?.toLanguage.toLocaleLowerCase() === normalized);
+  if (!values.length) return masteryState(model.evidence[evidenceKey(objectiveId, language)]);
+  return masteryState(values.reduce((weakest, item) => item.score < weakest.score ? item : weakest));
 }
 
 export function masteryState(evidence?: SkillEvidence): MasteryState | "waiting" {
@@ -47,8 +94,11 @@ export function recordEvidence(
   correct: boolean,
   supported: boolean,
   now = new Date(),
+  edge?: RetrievalEdge,
+  latencyMs?: number,
+  errorType?: SkillEvidence["errorType"],
 ): LearnerModel {
-  const key = evidenceKey(objectiveId, language);
+  const key = edge ? edgeEvidenceKey(objectiveId, edge) : evidenceKey(objectiveId, language);
   const previous = model.evidence[key];
   const independentSuccesses = (previous?.independentSuccesses || 0) + (correct && !supported ? 1 : 0);
   const supportedSuccesses = (previous?.supportedSuccesses || 0) + (correct && supported ? 1 : 0);
@@ -70,6 +120,9 @@ export function recordEvidence(
         score,
         lastPracticedAt: now.toISOString(),
         nextReviewAt: nextReview.toISOString(),
+        edge,
+        lastLatencyMs: latencyMs,
+        errorType: correct ? undefined : (errorType || "unknown"),
       },
     },
   };
@@ -80,8 +133,8 @@ export function completeSession(model: LearnerModel) {
 }
 
 function objectiveIsUsable(model: LearnerModel, objectiveId: string) {
-  const spanish = masteryState(model.evidence[evidenceKey(objectiveId, "Spanish")]);
-  const vietnamese = masteryState(model.evidence[evidenceKey(objectiveId, "Vietnamese")]);
+  const spanish = languageMastery(model, objectiveId, "Spanish");
+  const vietnamese = languageMastery(model, objectiveId, "Vietnamese");
   return ["usable", "stable", "maintenance"].includes(spanish) &&
     ["usable", "stable", "maintenance"].includes(vietnamese);
 }
@@ -107,8 +160,8 @@ export function selectNextLesson(
   const unlockedNew = curriculum.find((lesson) =>
     !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum));
   const due = curriculum.find((lesson) => {
-    const evidence = model.evidence[evidenceKey(lesson.objectiveId || lesson.id, "Spanish")];
-    return completedLessonIds.includes(lesson.id) && evidence && new Date(evidence.nextReviewAt) <= now;
+    const evidence = evidenceForObjective(model, lesson.objectiveId || lesson.id);
+    return completedLessonIds.includes(lesson.id) && evidence.some((item) => new Date(item.nextReviewAt) <= now);
   });
 
   // New material remains the normal flow; every fourth session gives a due skill priority.
@@ -121,8 +174,8 @@ export function selectNextLesson(
   const weakest = [...curriculum]
     .filter((lesson) => completedLessonIds.includes(lesson.id))
     .sort((a, b) => {
-      const aScore = model.evidence[evidenceKey(a.objectiveId || a.id, "Spanish")]?.score || 0;
-      const bScore = model.evidence[evidenceKey(b.objectiveId || b.id, "Spanish")]?.score || 0;
+      const aScore = weakestEvidence(model, a.objectiveId || a.id)?.score || 0;
+      const bScore = weakestEvidence(model, b.objectiveId || b.id)?.score || 0;
       return aScore - bScore;
     })[0];
   return { lesson: weakest || curriculum[0], mode: "strengthen" as const };

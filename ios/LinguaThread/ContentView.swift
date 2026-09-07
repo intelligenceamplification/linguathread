@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+@preconcurrency import AVFoundation
 
 /// The iOS target hosts the same production runtime as the Vercel master.
 /// This keeps the launch choreography, typography, responsive layout, lesson
@@ -29,6 +30,12 @@ private struct LinguaThreadWebView: UIViewRepresentable {
     func makeUIView(context: Context) -> WKWebView {
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
+        configuration.userContentController.add(context.coordinator, name: "linguathreadAudio")
+        configuration.userContentController.addUserScript(WKUserScript(
+            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true;",
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        ))
 
         let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.isOpaque = true
@@ -42,6 +49,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         webView.scrollView.backgroundColor = paper
         webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.navigationDelegate = context.coordinator
+        context.coordinator.webView = webView
         webView.allowsBackForwardNavigationGestures = false
         webView.load(URLRequest(url: url, cachePolicy: .useProtocolCachePolicy))
         return webView
@@ -53,7 +61,47 @@ private struct LinguaThreadWebView: UIViewRepresentable {
     }
 
     @MainActor
-    final class Coordinator: NSObject, WKNavigationDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler, @preconcurrency AVSpeechSynthesizerDelegate {
+        weak var webView: WKWebView?
+        private let synthesizer = AVSpeechSynthesizer()
+
+        override init() {
+            super.init()
+            synthesizer.delegate = self
+        }
+
+        func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            guard message.name == "linguathreadAudio",
+                  let payload = message.body as? [String: Any],
+                  let action = payload["action"] as? String else { return }
+            if action == "stop" {
+                synthesizer.stopSpeaking(at: .immediate)
+                notifySpeechEnded()
+                return
+            }
+            guard action == "speak",
+                  let text = payload["text"] as? String,
+                  let language = payload["language"] as? String else { return }
+            synthesizer.stopSpeaking(at: .immediate)
+            let utterance = AVSpeechUtterance(string: text)
+            utterance.voice = AVSpeechSynthesisVoice(language: language)
+            utterance.rate = 0.46
+            utterance.pitchMultiplier = 1
+            synthesizer.speak(utterance)
+        }
+
+        func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
+            notifySpeechEnded()
+        }
+
+        func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
+            notifySpeechEnded()
+        }
+
+        private func notifySpeechEnded() {
+            webView?.evaluateJavaScript("window.dispatchEvent(new Event('linguathread:native-speech-ended'))")
+        }
+
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,

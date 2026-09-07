@@ -182,14 +182,18 @@ test("uses a durable learner model and adaptive curriculum router", async () => 
   assert.match(engine, /sessionsCompleted % 4/);
 });
 
-test("loads independently published curriculum packs with a bundled fallback", async () => {
-  const [page, route, packs, manifest] = await Promise.all([
+test("loads independently published curriculum packs with a last-known-good cache and bundled fallback", async () => {
+  const [page, cache, route, packs, manifest] = await Promise.all([
     read("../app/page.tsx"),
+    read("../app/curriculum-cache.ts"),
     read("../app/api/curriculum/route.ts"),
     read("../app/curriculum-packs.ts"),
     read("../curriculum/manifest.json"),
   ]);
-  assert.match(page, /fetch\("\/api\/curriculum"\)/);
+  assert.match(page, /loadCurriculum/);
+  assert.match(cache, /fetch\("\/api\/curriculum"\)/);
+  assert.match(cache, /last-known-good/);
+  assert.match(cache, /indexedDB/);
   assert.match(route, /raw\.githubusercontent\.com/);
   assert.match(route, /curriculum-data/);
   assert.match(route, /source: "bundled"/);
@@ -199,6 +203,45 @@ test("loads independently published curriculum packs with a bundled fallback", a
   assert.match(packs, /quality\?: "legacy" \| "xray-reviewed"/);
   assert.match(packs, /needs reviewed X-Ray content before publication/);
   assert.equal(JSON.parse(manifest).revision, 1);
+});
+
+test("records directional multimodal retrieval edges", async () => {
+  const [page, engine, route] = await Promise.all([
+    read("../app/page.tsx"), read("../app/learning-engine.ts"), read("../app/api/progress/route.ts"),
+  ]);
+  assert.match(engine, /RetrievalEdge/);
+  assert.match(engine, /edgeEvidenceKey/);
+  assert.match(engine, /fromModality/);
+  assert.match(engine, /retrievalType/);
+  assert.match(page, /retrievalType: "reverse"/);
+  assert.match(page, /retrievalType: "reconstruction"/);
+  assert.match(page, /exercise\.phase === "variation" \? "transfer"/);
+  assert.match(route, /edgeKey/);
+});
+
+test("repairs legacy local progress and schedules review from the updated edge score", async () => {
+  const [engine, page, progress] = await Promise.all([
+    read("../app/learning-engine.ts"),
+    read("../app/page.tsx"),
+    read("../app/api/progress/route.ts"),
+  ]);
+  assert.match(engine, /function normalizeLearnerModel/);
+  assert.match(engine, /version: 2/);
+  assert.match(page, /localStorage\.removeItem\(learnerModelKey\)/);
+  assert.match(page, /localStorage\.removeItem\("linguathread\.completed-lessons\.v1"\)/);
+  assert.match(progress, /existingEvidence/);
+  assert.match(progress, /updatedScore >= 92 \? 30/);
+  assert.doesNotMatch(progress, /initialScore >= 35/);
+});
+
+test("uses native Apple speech with browser speech as a zero-cost fallback", async () => {
+  const [button, native] = await Promise.all([
+    read("../app/listen-button.tsx"), read("../ios/LinguaThread/ContentView.swift"),
+  ]);
+  assert.match(button, /linguathreadAudio/);
+  assert.match(button, /speechSynthesis/);
+  assert.match(native, /AVSpeechSynthesizer/);
+  assert.match(native, /WKScriptMessageHandler/);
 });
 
 test("defines a complete A1-C2 course spine without mislabeling planned content as authored", async () => {

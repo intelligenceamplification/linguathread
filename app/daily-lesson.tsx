@@ -7,7 +7,7 @@ import { speechLanguage } from "./speech";
 
 const normalize = (value: string) => value.trim().normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase().replace(/[¿?¡!.,;:“”'’]/g, "").replace(/\s+/g, " ");
 
-export function DailyLesson({ course, current, dueIds, completedIds, onClose, onEvidence }: { course: LessonForTools[]; current: LessonForTools; dueIds: string[]; completedIds: string[]; onClose: () => void; onEvidence: (correct: boolean, language: string, lessonId: string) => void }) {
+export function DailyLesson({ course, current, dueIds, completedIds, onClose, onEvidence }: { course: LessonForTools[]; current: LessonForTools; dueIds: string[]; completedIds: string[]; onClose: () => void; onEvidence: (correct: boolean, language: string, lessonId: string, exercise: TranslationExercise) => void }) {
   const plan = createDailyLessonPlan(course, current, dueIds, completedIds);
   const [step, setStep] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -45,7 +45,7 @@ export function DailyLesson({ course, current, dueIds, completedIds, onClose, on
   const targetLabel = exercise.to === "Spanish" ? "Spanish" : exercise.to === "Vietnamese" ? "Vietnamese" : "English";
   const check = () => {
     const correct = exercise.accepted.map(normalize).includes(normalize(answer));
-    onEvidence(correct, targetLabel, exercise.lessonId);
+    onEvidence(correct, targetLabel, exercise.lessonId, exercise);
     setFeedback(correct ? "correct" : "gentle");
     if (!correct) setAttempts((value) => value + 1);
   };
