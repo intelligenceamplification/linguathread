@@ -98,10 +98,12 @@ button { color: inherit; }
 .progress-track { height: 2px; margin: 0 clamp(22px, 4vw, 64px); background: var(--progress-wash); overflow: hidden; }
 .progress-track span { display: block; height: 100%; background: var(--moss); transition: width .5s cubic-bezier(.2,.8,.2,1); }
 
-.lesson-stage { min-height: 0; display: grid; place-items: center; padding: clamp(32px, 6vh, 72px) 22px; overflow-y: auto; }
+.lesson-stage { width: 100%; min-width: 0; min-height: 0; display: grid; place-items: center; padding: clamp(32px, 6vh, 72px) 22px; overflow-y: auto; }
 
 .focus-content {
-  width: min(720px, 100%);
+  width: 100%;
+  max-width: 720px;
+  min-width: 0;
   text-align: center;
   animation: settle .42s cubic-bezier(.2,.75,.25,1) both;
 }

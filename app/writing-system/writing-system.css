@@ -1,4 +1,4 @@
-.writing-system { width: min(100%, 880px); margin: 0 auto; text-align: left; padding: 20px 0 72px; }
+.writing-system { width: 100%; max-width: 880px; min-width: 0; margin: 0 auto; text-align: left; padding: 20px 0 72px; overflow-wrap: anywhere; }
 .focus-content .writing-system h1, .writing-system h1 { max-width: 760px; font-family: var(--serif); font-size: clamp(2rem, 3.25vw, 2.85rem); line-height: 1.12; margin: 24px 0; text-align: left; }
 .focus-content .writing-system, .writing-system { text-align: left; }
 .writing-system p { line-height: 1.75; }
@@ -7,7 +7,7 @@
 .writing-toolbar select { font: inherit; color: inherit; background: var(--paper, transparent); padding: 10px; border: 1px solid var(--line); border-radius: 12px; }
 .writing-summary { display: flex; flex-wrap: wrap; gap: 12px 28px; padding: 20px 0; border-block: 1px solid var(--line); color: var(--muted); }
 .writing-note { font-size: .85rem; color: var(--muted); }
-.writing-tracks { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0; }
+.writing-tracks { width: 100%; min-width: 0; display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0; }
 .writing-tracks button { font: inherit; color: inherit; background: transparent; border: 1px solid transparent; padding: 12px 16px; border-radius: 999px; min-height: 44px; }
 .writing-tracks button[aria-pressed=true] { border-color: var(--line); box-shadow: 0 4px 20px #0000000a; backdrop-filter: blur(12px); }
 .writing-inventory { display: grid; gap: 44px; margin-top: 26px; }

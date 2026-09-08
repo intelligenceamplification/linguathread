@@ -15,6 +15,17 @@ test("keeps native safe-area paper adaptive without changing the web content bou
   assert.doesNotMatch(host, /webView\.backgroundColor = \.white/);
 });
 
+test("keeps every lesson and writing path inside the portrait viewport", async () => {
+  const [globalCss, writingCss] = await Promise.all([
+    read("../app/globals.css"),
+    read("../app/writing-system/writing-system.css"),
+  ]);
+  assert.match(globalCss, /\.lesson-stage \{ width: 100%; min-width: 0;/);
+  assert.match(globalCss, /\.focus-content \{[\s\S]*width: 100%;[\s\S]*max-width: 720px;[\s\S]*min-width: 0;/);
+  assert.match(writingCss, /\.writing-system \{ width: 100%; max-width: 880px; min-width: 0;/);
+  assert.match(writingCss, /\.writing-tracks \{ width: 100%; min-width: 0;/);
+});
+
 test("separates landscape lesson context from compact navigation", async () => {
   const css = await read("../app/globals.css");
   assert.match(css, /@media \(min-width: 701px\) and \(max-width: 1200px\)/);
