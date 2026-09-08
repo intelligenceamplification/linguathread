@@ -9,7 +9,7 @@ import { literacyCopy } from "./literacy-copy";
 import dynamic from "next/dynamic";
 import { FirstLaunchIntro } from "../first-launch-intro";
 import ListenButton from "../listen-button";
-const ScriptCourseView = dynamic(() => import("./script-course-view"), { loading: () => <p role="status">Opening script lessons…</p> });
+const ScriptCourseView = dynamic(() => import("../writing-system/view"), { loading: () => <p role="status">Opening script lessons…</p> });
 
 const direction = (id: FoundationLanguage) => id === "ar" ? "rtl" : "ltr";
 function restore(key: string): Progress {

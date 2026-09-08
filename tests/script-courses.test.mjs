@@ -11,7 +11,7 @@ async function load(path, dependencies = {}) {
 }
 const literacy = await load("../app/script-literacy.ts");
 const { scriptCourses } = await load("../app/script-courses.ts", { "./script-literacy": literacy });
-const { newScriptPractice, assessScript, advanceScript, scriptAnswerMatches, parseScriptPractice, restartScriptPractice, hasScriptCompletion, scriptChoices } = await load("../app/script-course-engine.ts");
+const { newScriptPractice, assessScript, advanceScript, scriptAnswerMatches, parseScriptPractice, restartScriptPractice, hasScriptCompletion, scriptChoices, scriptInstruction, canAdvanceScript } = await load("../app/script-course-engine.ts");
 test("recognition answers do not occupy one predictable position", () => {
  const positions = new Set();
  for (const course of Object.values(scriptCourses)) for (const unit of course.lessons) {
@@ -61,6 +61,20 @@ test("Vietnamese lessons use only Vietnamese D and Đ forms, never Icelandic eth
  assert.doesNotMatch(text, /[Ðð]/u);
  assert.deepEqual([...scriptCourses.vi.lessons[0].alternatives], ["d", "Đ"]);
  assert.equal(scriptCourses.vi.lessons[0].answer, "đ");
+});
+test("interaction wording and progression agree with the rendered control type", () => {
+ const lesson = scriptCourses.vi.lessons[0];
+ const visual = newScriptPractice(true);
+ assert.match(scriptInstruction(lesson, visual), /^Choose\b/);
+ assert.equal(canAdvanceScript(visual), false);
+ const selected = assessScript(lesson, visual, lesson.answer);
+ assert.equal(canAdvanceScript(selected), true);
+ const sound = advanceScript(selected, 1000);
+ assert.match(scriptInstruction(lesson, sound), /^Listen\b/);
+ const write = { ...sound, phase: "write", result: "idle", answer: "" };
+ assert.match(scriptInstruction(lesson, write), /^(Write|Enter|Type|Compose)\b/);
+ assert.equal(canAdvanceScript(write), false);
+ assert.equal(canAdvanceScript(assessScript(lesson, write, lesson.answer)), true);
 });
 test("every authored unit traverses study and check routes with reload-safe review scheduling", () => {
  for (const course of Object.values(scriptCourses)) for (const unit of course.lessons) for (const check of [false, true]) {

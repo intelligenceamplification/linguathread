@@ -777,3 +777,11 @@ test("highlighted learned-language material remains hearable across daily and li
   assert.match(readiness, /text=\{foundationContent\[language\]\[objective\]\.text\} language=\{language\}/);
   assert.match(script, /script-choice-row[\s\S]*<ListenButton text=\{choice\}/);
 });
+
+test("script prompts always render the matching response control and a correct-answer continuation", async () => {
+  const script = await read("../app/multilingual-preview/script-course-view.tsx");
+  assert.match(script, /practice\.phase === "visual" \|\| practice\.phase === "sound"/);
+  assert.match(script, /className="script-choice-row"/);
+  assert.match(script, /<input className="answer-field"/);
+  assert.match(script, /canAdvanceScript\(practice\)[\s\S]*>Continue</);
+});

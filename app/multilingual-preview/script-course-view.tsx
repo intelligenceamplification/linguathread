@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptLesson } from "../script-courses";
 import type { ScriptRequirement, ScriptTaskMode } from "../script-literacy";
-import { advanceScript, appendAssembly, assessScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, type ScriptPractice } from "../script-course-engine";
+import { advanceScript, appendAssembly, assessScript, canAdvanceScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, scriptInstruction, type ScriptPractice } from "../script-course-engine";
 import ListenButton from "../listen-button";
 
 type Index = { language: string; revision: number; convention: string; inventory: string; requirements: ScriptRequirement[]; lessons: Pick<ScriptLesson, "id" | "title" | "prerequisites" | "strand">[] };
@@ -130,7 +130,7 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
    <button className="text-action" onClick={() => { loadId.current += 1; setUnit(null); setLoading(false); setReviewClock(Date.now()); }}>Back to script path</button>
    <p className="eyebrow">{unit.strand.replace("-", " ")} · {practice.phase === "study" ? "notice" : practice.phase}</p><h1>{unit.title}</h1>
    {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Begin directional practice</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Foundation practised" : "Independent evidence recorded"}</h2><p>Recognition, sound-to-form, component assembly and input are stored as separate pathways. A weak direction returns for focused review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to writing system</button></> : <>
-    <p>{practice.phase === "visual" ? unit.prompt.replace(/^Write\b/, "Choose") : practice.phase === "sound" ? "Listen without reading the model, then choose the written form you heard." : practice.phase === "assemble" ? "Reconstruct the written form from its visible elements." : unit.prompt}</p>
+    <p>{scriptInstruction(unit, practice)}</p>
     {practice.phase === "sound" && <div className="script-listen-cue"><ListenButton text={unit.answer} language={language}/></div>}
     {(practice.phase === "visual" || practice.phase === "sound") ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <div className="script-choice-row" key={choice}><button className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct"} onClick={() => assess(choice)}>{choice}</button>{practice.phase === "visual" && <ListenButton text={choice} language={language}/>}</div>)}</div> : practice.phase === "assemble" ? <>
      <div className="assembly-result" lang={language} dir={dir}>{practice.assembly.join("") || "\u00a0"}</div>
@@ -144,7 +144,7 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
      {practice.result !== "correct" && <button className="primary-action" disabled={!practice.answer.trim()} onClick={() => assess(practice.answer)}>Check reconstruction</button>}
     </>}
     <p role="status">{practice.result === "correct" ? "The written form matches." : practice.result === "retry" ? "Look again at the exact letters and marks. This task checks the specific written form, including its capitalization, spacing and punctuation." : "\u00a0"}</p>
-    {practice.result === "correct" ? <button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Continue</button> : practice.phase !== "assemble" && <button className="text-action" onClick={() => save({ ...practice, phase: "study", supported: true, result: "idle" })}>Read the explanation and model</button>}
+    {canAdvanceScript(practice) ? <button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Continue</button> : practice.phase !== "assemble" && <button className="text-action" onClick={() => save({ ...practice, phase: "study", supported: true, result: "idle" })}>Read the explanation and model</button>}
    </>}
   </>}
  </section>;

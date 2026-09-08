@@ -35,7 +35,7 @@ const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 
 const jsonHeaders = { "content-type": "application/json" };
-const ScriptCourseView = dynamic(() => import("./multilingual-preview/script-course-view"), { loading: () => <p role="status">Opening writing foundations…</p> });
+const ScriptCourseView = dynamic(() => import("./writing-system/view"), { loading: () => <p role="status">Opening writing foundations…</p> });
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
@@ -385,7 +385,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section className="lesson-stage" aria-live="polite">
-        {scriptLanguage ? <div className="focus-content"><ScriptCourseView language={scriptLanguage} onClose={() => setScriptLanguage(null)} onEvidence={recordScriptEvidence} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
+        {scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => setScriptLanguage(null)} onEvidence={recordScriptEvidence} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
           fromLanguage: exercise.from, toLanguage: exercise.to, fromModality: "written", toModality: exercise.to === "English" ? "meaning" : "written", retrievalType: exercise.phase === "variation" ? "transfer" : exercise.phase === "review" ? "reverse" : "production",
         }, correct ? undefined : exercise.scope === "word" ? "lexical" : "structural")} /> : <>
         {stage === "vocabulary" && (
@@ -536,6 +536,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <p className="eyebrow">Quiet review</p>
             <h1>Your language course</h1>
             <p className="review-introduction">A continuous Spanish and Vietnamese path from first foundations through precise, independent expression. Published lessons become available here as their language and X-Ray content pass review.</p>
+            <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
             <div className="cefr-course-map" aria-label="CEFR course path">
               {courseMap.map((stage) => {
                 const authored = course.filter((item) => item.level === stage.level).length;
@@ -601,6 +602,7 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
   const [additional, setAdditional] = useState<string[]>(initialProfile?.additional ?? ["Spanish"]);
 
   const target = additional[additional.length - 1] || second || "a new language";
+  const publishedCommunicationTarget = target === "Spanish";
   const totalSteps = 4;
 
   useEffect(() => {
@@ -660,9 +662,9 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
             <div className="profile-stack">
               <ProfileLanguage index="01" role="Native anchor" language={native} />
               {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
-              {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 ? "Growing edge" : "Additional bridge"} language={language} />)}
+              {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 && publishedCommunicationTarget ? "Growing edge" : "Writing path and bridge"} language={language} />)}
             </div>
-            <p className="setup-description ready-description">LinguaThread will begin with essential {target} vocabulary and place it into daily conversation. Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
+            <p className="setup-description ready-description">{publishedCommunicationTarget ? `LinguaThread will begin with essential ${target} vocabulary and place it into daily conversation.` : `${target} has an independent, expanded Writing System path in this release. The reviewed communication course remains Spanish with Vietnamese active practice; LinguaThread will not substitute unreviewed ${target} lessons.`} Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
             <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => goToStep(0)}>Edit my languages</button>
           </div>

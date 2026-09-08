@@ -1,0 +1,143 @@
+import { scriptCourses } from "../script-courses";
+import type { FoundationLanguage } from "../multilingual-foundation";
+import type { Course, Exercise, Stage, Unit } from "./model";
+import { addArchitecture } from "./architecture";
+import { addReading } from "./reading";
+import { addFamilyCurriculum } from "./families";
+
+const sources = {
+ cefr: { id: "cefr", title: "Council of Europe: CEFR Companion Volume", url: "https://rm.coe.int/cefr-companion-volume-with-new-descriptors-2020/16809ea0d4" },
+ vi: { id: "vi", title: "Michigan State University: Basic Vietnamese", url: "https://openbooks.lib.msu.edu/vietnamese/part/alphabets-and-pronunciation/" },
+ ko: { id: "ko", title: "Sungkyunkwan University: Beginning Korean", url: "https://skb.skku.edu/_res/summer/etc/KL_Begin.pdf" },
+ zh: { id: "zh", title: "Southern Utah University: Beginning Mandarin", url: "https://my.suu.edu/syllabus/202530/CHIN-1010-01/" },
+ ja: { id: "ja", title: "Japan Foundation: JF Standard", url: "https://www.jfstandard.jpf.go.jp/summaryen/ja/render.do" },
+ ar: { id: "ar", title: "Michigan State University: Elementary Arabic", url: "https://openbooks.lib.msu.edu/arb101/chapter/chapter-1/" },
+ hi: { id: "hi", title: "University of Texas: Hindi teaching materials", url: "https://hindi.la.utexas.edu/resources/textbooks/" },
+ ru: { id: "ru", title: "Cornell University: Beginning Russian", url: "https://russian.cornell.edu/russian.web/courses/131-132/131-132_syl_S18.htm" },
+};
+type Word = [form: string, meaning: string, reading: string];
+const words: Record<FoundationLanguage, Word[]> = {
+ en: [["cat", "a small domestic feline", "cat"], ["ship", "a large boat", "ship"], ["tree", "a tall plant with a trunk", "tree"], ["book", "bound pages for reading", "book"], ["rain", "water falling from clouds", "rain"], ["light", "illumination", "light"]],
+ es: [["casa", "house", "casa"], ["año", "year", "año"], ["perro", "dog", "perro"], ["gente", "people", "gente"], ["queso", "cheese", "queso"], ["agua", "water", "agua"]],
+ vi: [["ba", "three", "ba"], ["bà", "grandmother; older woman", "bà"], ["bá", "a count or earl in the title bá tước", "bá"], ["bả", "bait or poison bait", "bả"], ["bã", "residue; grounds", "bã"], ["bạ", "indiscriminately, as in nói bạ", "bạ"], ["cá", "fish", "cá"], ["cà", "eggplant (in names such as cà tím)", "cà"], ["cô", "aunt; female teacher", "cô"], ["cơ", "opportunity, in cơ hội", "cơ"], ["thu", "autumn", "thu"], ["thư", "letter; correspondence", "thư"], ["ăn", "eat", "ăn"], ["ân", "favour or grace, in ân huệ", "ân"], ["đi", "go", "đi"], ["nhà", "house", "nhà"], ["nghe", "hear; listen", "nghe"], ["nghỉ", "rest", "nghỉ"], ["ghế", "chair", "ghế"], ["trường", "school", "trường"], ["nước", "water; country", "nước"], ["người", "person", "người"], ["tiếng", "sound; language in context", "tiếng"], ["Việt", "Vietnamese", "Việt"], ["bạn", "friend; you in suitable contexts", "bạn"]],
+ fr: [["chat", "cat", "chat"], ["eau", "water", "eau"], ["rue", "street", "rue"], ["pain", "bread", "pain"], ["livre", "book", "livre"], ["maison", "house", "maison"]],
+ pt: [["casa", "house", "casa"], ["pão", "bread", "pão"], ["filho", "son", "filho"], ["vinho", "wine", "vinho"], ["água", "water", "água"], ["rua", "street", "rua"]],
+ de: [["Haus", "house", "Haus"], ["Buch", "book", "Buch"], ["Wasser", "water", "Wasser"], ["Schule", "school", "Schule"], ["Zug", "train", "Zug"], ["Tür", "door", "Tür"]],
+ it: [["casa", "house", "casa"], ["chiave", "key", "chiave"], ["gelato", "ice cream", "gelato"], ["figlio", "son", "figlio"], ["acqua", "water", "acqua"], ["scuola", "school", "scuola"]],
+ zh: [["人", "person", "rén"], ["口", "mouth", "kǒu"], ["水", "water", "shuǐ"], ["木", "wood; tree", "mù"], ["日", "sun; day", "rì"], ["月", "moon; month", "yuè"], ["你", "you", "nǐ"], ["我", "I; me", "wǒ"], ["好", "good", "hǎo"], ["中国", "China", "Zhōngguó"], ["学生", "student", "xuésheng"], ["学校", "school", "xuéxiào"], ["朋友", "friend", "péngyou"], ["今天", "today", "jīntiān"], ["明天", "tomorrow", "míngtiān"], ["喝水", "drink water", "hē shuǐ"]],
+ ja: [["あめ", "rain", "ame"], ["いぬ", "dog", "inu"], ["ねこ", "cat", "neko"], ["みず", "water", "mizu"], ["えき", "station", "eki"], ["きって", "postage stamp", "kitte"], ["おちゃ", "tea", "ocha"], ["コーヒー", "coffee", "kōhī"], ["カメラ", "camera", "kamera"], ["ホテル", "hotel", "hoteru"], ["山", "mountain", "yama"], ["川", "river", "kawa"], ["水", "water", "mizu"], ["日本", "Japan", "Nihon"], ["学生", "student", "gakusei"]],
+ ko: [["가", "the syllable ga", "ga"], ["고", "the syllable go", "go"], ["나", "I (informal)", "na"], ["우유", "milk", "uyu"], ["한", "the syllable han", "han"], ["산", "mountain", "san"], ["문", "door", "mun"], ["물", "water", "mul"], ["학교", "school", "hakgyo"], ["한국", "Korea", "Hanguk"], ["사람", "person", "saram"], ["책", "book", "chaek"]],
+ ar: [["باب", "door", "bāb"], ["بيت", "house", "bayt"], ["نور", "light", "nūr"], ["كِتاب", "book", "kitāb"], ["كُتُب", "books", "kutub"], ["قَلَم", "pen", "qalam"], ["ماء", "water", "māʾ"], ["مدرسة", "school", "madrasa"], ["شمس", "sun", "shams"], ["قمر", "moon", "qamar"]],
+ hi: [["घर", "house", "ghar"], ["पानी", "water", "pānī"], ["किताब", "book", "kitāb"], ["नाम", "name", "nām"], ["माँ", "mother", "mā̃"], ["दिन", "day", "din"], ["रात", "night", "rāt"], ["स्कूल", "school", "skūl"], ["नमस्ते", "greeting", "namaste"], ["क्रम", "order; sequence", "kram"]],
+ ru: [["дом", "house", "dom"], ["мама", "mother", "máma"], ["вода", "water", "vodá"], ["книга", "book", "kníga"], ["школа", "school", "shkóla"], ["день", "day", "denʹ"], ["чай", "tea", "chay"], ["метро", "metro", "metró"]],
+};
+
+const latin = [..."abcdefghijklmnopqrstuvwxyz"];
+const forms: Record<FoundationLanguage, string[]> = {
+ en: latin, es: [..."abcdefghijklmnñopqrstuvwxyz"], vi: [..."aăâbcdđeêghiklmnoôơpqrstuưvxy"], fr: [...latin, ..."àâçéèêëîïôùûüÿœ"], pt: [...latin, ..."áâãàéêíóôõúç"], de: [...latin, ..."äöüß"], it: [...latin, ..."àèéìòù"],
+ zh: ["b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h", "j", "q", "x", "zh", "ch", "sh", "r", "z", "c", "s", "a", "o", "e", "i", "u", "ü", "ai", "ei", "ao", "ou", "an", "en", "ang", "eng", "ong", "ia", "ie", "iao", "iu", "ian", "in", "iang", "ing", "iong", "ua", "uo", "uai", "ui", "uan", "un", "uang", "ueng", "üe", "üan", "ün", "er"],
+ ja: [..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん", ..."アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン"],
+ ko: [..."ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㄱㄴㄷㄹㅁㅂㅅㅇㅈㅎㅋㅌㅍㅊㄲㄸㅃㅆㅉㅐㅒㅔㅖㅘㅙㅚㅝㅞㅟㅢ"],
+ ar: [..."ابتثجحخدذرزسشصضطظعغفقكلمنهوي"],
+ hi: [..."अआइईउऊऋएऐओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह"],
+ ru: [..."абвгдеёжзийклмнопрстуфхцчшщъыьэюя"],
+};
+const kanaReadings = "a i u e o ka ki ku ke ko sa shi su se so ta chi tsu te to na ni nu ne no ha hi fu he ho ma mi mu me mo ya yu yo ra ri ru re ro wa o n".split(" ");
+const koreanReadings = "a ya eo yeo o yo u yu eu i giyeok nieun digeut rieul mieum bieup siot ieung jieut hieut kieuk tieut pieup chieut ssang-giyeok ssang-digeut ssang-bieup ssang-siot ssang-jieut ae yae e ye wa wae oe wo we wi ui".split(" ");
+const arabicReadings = "alif bāʾ tāʾ thāʾ jīm ḥāʾ khāʾ dāl dhāl rāʾ zāy sīn shīn ṣād ḍād ṭāʾ ẓāʾ ʿayn ghayn fāʾ qāf kāf lām mīm nūn hāʾ wāw yāʾ".split(" ");
+const hindiReadings = "a ā i ī u ū ṛ e ai o au ka kha ga gha ṅa ca cha ja jha ña ṭa ṭha ḍa ḍha ṇa ta tha da dha na pa pha ba bha ma ya ra la va śa ṣa sa ha".split(" ");
+function label(language: FoundationLanguage, form: string, i: number) {
+ if (language === "ja") return kanaReadings[i % 46];
+ if (language === "ko") return koreanReadings[i];
+ if (language === "ar") return arabicReadings[i];
+ if (language === "hi") return hindiReadings[i];
+ if (language === "zh") return `Pinyin ${form}`;
+ return form === "ß" ? "ẞ" : form.toLocaleUpperCase(language);
+}
+
+function makeCourse(language: FoundationLanguage): Course {
+ const legacy = scriptCourses[language];
+ const source = sources[language as keyof typeof sources] || sources.cefr;
+ const c: Course = { language, version: 4, title: legacy.convention, tracks: [], sources: [sources.cefr, ...(source.id === "cefr" ? [] : [source])], units: [], editorialStatus: "awaiting-language-review" };
+ const add = (id: string, title: string, track: string, stage: Stage, explanation: string, items: Exercise[], example = "", meaning = "", prerequisites?: string[]) => {
+  const previous = c.units.filter(u => u.track === track).at(-1);
+  const level: Unit["level"] = stage === "forms" || stage === "contrasts" || stage === "composition" ? "Foundation" : stage === "decoding" || stage === "words" ? "A1" : stage === "sentences" ? "A2" : "B1";
+  const unit: Unit = { id: `${language}-literacy-${id}`, title, track, stage, level, prerequisites: prerequisites || (previous ? [previous.id] : []), objective: title, explanation, forms: [...new Set(items.filter(e => e.kind !== "audio-choice").map(e => e.answer))], example, meaning, exercises: items, sourceIds: [source.id], courseTerms: example ? [example] : [] };
+  c.units.push(unit); return unit;
+ };
+ const primary = language === "zh" ? "pinyin" : language === "ja" ? "hiragana" : "foundations";
+ const primaryTitle = language === "zh" ? "Pinyin" : language === "ja" ? "Hiragana" : "Forms and sounds";
+ c.tracks.push({ id: primary, title: primaryTitle, description: "Build the elementary forms, then recognize them in combinations." });
+ if (language === "ja") c.tracks.push({ id: "katakana", title: "Katakana", description: "A second set of kana for loanwords, names and other uses." });
+ const inventory = forms[language];
+ for (let at = 0; at < inventory.length; at += 5) {
+  const group = inventory.slice(at, Math.min(at + 5, language === "ja" && at < 46 ? 46 : inventory.length));
+  const track = language === "ja" && at >= 46 ? "katakana" : primary;
+  const exercises: Exercise[] = group.flatMap((form, j) => {
+   const reading = label(language, form, at + j);
+   const skill = `${language}:form:${form}`;
+   const explanation = language === "ko" ? `${form} is a jamo. ${reading} is its conventional name or reading aid. Jamo are arranged into syllable blocks in ordinary Korean.` : language === "ar" ? `${form} is the isolated form of ${reading}. Its shape and joining behavior in words will be practised separately.` : language === "hi" ? `${form} is the independent form labelled ${reading}. Consonants combine with dependent vowel signs later.` : language === "ja" ? `${form} is read ${reading}. Roman letters are an introductory aid; the kana remains the written form.` : language === "zh" ? `${form} is a Pinyin spelling unit. Its pronunciation must be learned in valid syllables; it is not an English spelling rule.` : `Match ${reading} with ${form}. Keep every letter-shape mark. Sound patterns are practised separately in words.`;
+   const choices = [...new Set([form, inventory[(at + j + 1) % inventory.length], inventory[(at + j + 2) % inventory.length]])];
+   return [
+    { id: `${skill}:identify`, skill, direction: "recognize", kind: "choice", prompt: `Choose the form labelled ${reading}.`, answer: form, choices, explanation, reading },
+    { id: `${skill}:discriminate`, skill, direction: "recognize", kind: "choice", prompt: `Distinguish ${reading} from its neighboring forms.`, answer: form, choices: [...choices].reverse(), explanation, reading },
+    { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: `Enter the form labelled ${reading}.`, answer: form, explanation, reading },
+    { id: `${skill}:reconstruct`, skill, direction: "input", kind: "input", prompt: `Reconstruct ${reading} exactly, preserving every mark.`, answer: form, explanation, reading },
+   ];
+  });
+  add(`forms-${at}`, `${group.join(" · ")}`, track, "forms", "Read each form and its label. Practise recognition first, then enter the form using your device keyboard. These introductory checks establish familiarity; later decoding and review establish independence.", exercises);
+  if (language === "ja" && at < 46 && at + 5 >= 46) at = 41;
+ }
+ c.tracks.push({ id: "architecture", title: "How the script is built", description: "Contrasts, composition and spelling conventions." });
+ for (const lesson of legacy.lessons) {
+  const skill = `${language}:architecture:${lesson.id}`;
+  const exercises: Exercise[] = [
+   { id: `${skill}:choose`, skill, direction: "recognize", kind: "choice", prompt: lesson.prompt.replace(/^(Write|Enter|Type|Compose)/, "Choose"), answer: lesson.answer, choices: [lesson.answer, ...lesson.alternatives], explanation: lesson.explanation },
+   { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: lesson.prompt, answer: lesson.answer, explanation: lesson.explanation },
+  ];
+  add(lesson.id, lesson.title, "architecture", "contrasts", lesson.explanation, exercises, lesson.example, lesson.meaning);
+ }
+ c.tracks.push({ id: language === "zh" ? "hanzi" : language === "ja" ? "words-kanji" : "words", title: language === "zh" ? "Hanzi and words" : language === "ja" ? "Words and kanji" : "Read and reconstruct words", description: "Connect written words with sound, meaning and independent input." });
+ const wordTrack = c.tracks.at(-1)!.id;
+ const vocabulary = words[language];
+ vocabulary.forEach(([form, meaning, reading], i) => {
+  const skill = `${language}:word:${form}`;
+  const alternatives = [vocabulary[(i + 1) % vocabulary.length][0], vocabulary[(i + 2) % vocabulary.length][0]];
+  const explanation = `Read ${form} as ${reading}. Here it means ${meaning}. Recognizing the form, understanding it, and entering it independently are separate skills.`;
+  const exercises: Exercise[] = [
+   { id: `${skill}:meaning`, skill, direction: "meaning", kind: "choice", prompt: "Read the word and choose its meaning.", cue: form, answer: meaning, choices: [meaning, vocabulary[(i + 1) % vocabulary.length][1], vocabulary[(i + 2) % vocabulary.length][1]], explanation, reading },
+   { id: `${skill}:meaning-2`, skill, direction: "meaning", kind: "choice", prompt: "Recover the meaning of this written form without transliteration.", cue: form, answer: meaning, choices: [vocabulary[(i + 2) % vocabulary.length][1], meaning, vocabulary[(i + 1) % vocabulary.length][1]], explanation },
+   { id: `${skill}:listen`, skill, direction: "sound-form", kind: "choice", prompt: "Listen, then choose the written word.", audio: form, answer: form, choices: [form, ...alternatives], explanation },
+   { id: `${skill}:sound`, skill, direction: "form-sound", kind: "audio-choice", prompt: "Read the word. Listen to the options and choose the matching pronunciation.", cue: form, answer: form, choices: [form, ...alternatives], explanation },
+   { id: `${skill}:write`, skill, direction: "input", kind: "input", prompt: `Enter the word meaning “${meaning}”.`, answer: form, explanation },
+   { id: `${skill}:write-2`, skill, direction: "input", kind: "input", prompt: `Enter the written form read “${reading}”.`, answer: form, explanation },
+   { id: `${skill}:heard-input`, skill, direction: "sound-form", kind: "input", prompt: "Listen and enter the written word.", audio: form, answer: form, explanation },
+  ];
+  add(`word-${i}`, form, wordTrack, "words", explanation, exercises, form, meaning);
+ });
+ addArchitecture(c);
+ addFamilyCurriculum(c);
+ if (language === "zh") {
+  const hanzi = c.units.filter(unit => unit.track === "hanzi").sort((a, b) => {
+   const rank = (unit: Unit) => unit.id.includes("hanzi-component") || unit.id.includes("hanzi-water") ? 0 : unit.stage === "words" && [...unit.title].length === 1 ? 1 : unit.id.includes("literacy-word") ? 2 : 3;
+   return rank(a) - rank(b);
+  });
+  const other = c.units.filter(unit => unit.track !== "hanzi");
+  hanzi.forEach((unit, index) => { unit.prerequisites = index ? [hanzi[index - 1].id] : []; });
+  c.units = [...other, ...hanzi];
+ }
+ addReading(c);
+ if (language === "vi") {
+  const toneUnits: Record<string, string> = { "\u0300": "huyền", "\u0301": "sắc", "\u0309": "hỏi", "\u0303": "ngã", "\u0323": "nặng" };
+  for (const unit of c.units.filter(u => u.stage !== "forms")) {
+   const written = unit.forms.join("").toLocaleLowerCase("vi");
+   const letters = [...written.normalize("NFD").replace(/[\u0300\u0301\u0309\u0303\u0323]/g, "").normalize("NFC")];
+   const foundationIds = c.units.filter(u => u.stage === "forms" && u.forms.some(form => letters.includes(form))).map(u => u.id);
+   const toneIds = unit.stage === "words" ? Object.entries(toneUnits).filter(([mark]) => written.normalize("NFD").includes(mark)).map(([, name]) => `vi-architecture-tone-${name}`) : [];
+   unit.prerequisites = [...new Set([...unit.prerequisites, ...foundationIds, ...toneIds])];
+  }
+ }
+ return c;
+}
+
+export const writingCourses = Object.fromEntries((Object.keys(scriptCourses) as FoundationLanguage[]).map(language => [language, makeCourse(language)])) as Record<FoundationLanguage, Course>;

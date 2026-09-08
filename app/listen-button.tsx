@@ -1,26 +1,31 @@
 "use client";
-import { useEffect, useId, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { languageInfo, type FoundationLanguage } from "./multilingual-foundation";
 import { speechLocales, voiceForLanguage } from "./speech";
 
 const speechEvent = "linguathread:speech-start";
+const nativeSpeechStartEvent = "linguathread:native-speech-started";
 const nativeSpeechEndEvent = "linguathread:native-speech-ended";
 const subscribeToSpeechSupport = () => () => {};
 const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: { linguathreadAudio?: { postMessage: (value: unknown) => void } } }; __LINGUATHREAD_NATIVE_SPEECH__?: boolean }).webkit?.messageHandlers?.linguathreadAudio;
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
 
-export default function ListenButton({ text, language, onUse }: { text: string; language: FoundationLanguage; onUse?: () => void }) {
+export default function ListenButton({ text, language, onUse, onPlayback }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void }) {
  const id = useId();
  const supported = useSyncExternalStore(subscribeToSpeechSupport, hasSpeechSupport, noServerSpeechSupport);
  const [speaking, setSpeaking] = useState(false);
+ const playback = useRef(onPlayback);
+ useEffect(() => { playback.current = onPlayback; }, [onPlayback]);
 
  useEffect(() => {
   const resetForAnother = (event: Event) => { if ((event as CustomEvent<string>).detail !== id) setSpeaking(false); };
   window.addEventListener(speechEvent, resetForAnother);
   const nativeEnded = () => setSpeaking(false);
+  const nativeStarted = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(true); playback.current?.(); } };
   window.addEventListener(nativeSpeechEndEvent, nativeEnded);
-  return () => { window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); };
+  window.addEventListener(nativeSpeechStartEvent, nativeStarted);
+  return () => { window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); };
  }, [id]);
 
  function toggle() {
@@ -37,8 +42,7 @@ export default function ListenButton({ text, language, onUse }: { text: string; 
   const native = nativeHandler();
   if (native) {
     try {
-      native.postMessage({ action: "speak", text, language: speechLocales[language] });
-      setSpeaking(true);
+      native.postMessage({ action: "speak", text, language: speechLocales[language], requestID: id });
       return;
     } catch {
       // Continue with the browser/device speech engine below.
@@ -50,7 +54,7 @@ export default function ListenButton({ text, language, onUse }: { text: string; 
   utterance.pitch = 1;
   const voice = voiceForLanguage(window.speechSynthesis.getVoices(), language);
   if (voice) utterance.voice = voice;
-  utterance.onstart = () => setSpeaking(true);
+  utterance.onstart = () => { setSpeaking(true); playback.current?.(); };
   utterance.onend = () => setSpeaking(false);
   utterance.onerror = () => setSpeaking(false);
   window.speechSynthesis.speak(utterance);

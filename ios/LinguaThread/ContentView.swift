@@ -64,6 +64,8 @@ private struct LinguaThreadWebView: UIViewRepresentable {
     final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler, @preconcurrency AVSpeechSynthesizerDelegate {
         weak var webView: WKWebView?
         private let synthesizer = AVSpeechSynthesizer()
+        private var pendingRequestID: String?
+        private var activeRequestID: String?
 
         override init() {
             super.init()
@@ -83,11 +85,17 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                   let text = payload["text"] as? String,
                   let language = payload["language"] as? String else { return }
             synthesizer.stopSpeaking(at: .immediate)
+            pendingRequestID = payload["requestID"] as? String
             let utterance = AVSpeechUtterance(string: text)
             utterance.voice = AVSpeechSynthesisVoice(language: language)
             utterance.rate = 0.46
             utterance.pitchMultiplier = 1
             synthesizer.speak(utterance)
+        }
+
+        func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
+            activeRequestID = pendingRequestID
+            notifySpeechEvent("linguathread:native-speech-started", requestID: activeRequestID)
         }
 
         func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
@@ -99,7 +107,15 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         }
 
         private func notifySpeechEnded() {
-            webView?.evaluateJavaScript("window.dispatchEvent(new Event('linguathread:native-speech-ended'))")
+            notifySpeechEvent("linguathread:native-speech-ended", requestID: activeRequestID)
+            activeRequestID = nil
+        }
+
+        private func notifySpeechEvent(_ name: String, requestID: String?) {
+            let payload: Any = requestID ?? NSNull()
+            guard let data = try? JSONSerialization.data(withJSONObject: payload),
+                  let json = String(data: data, encoding: .utf8) else { return }
+            webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('\(name)', { detail: \(json) }))")
         }
 
         func webView(

@@ -19,6 +19,15 @@ export function restartScriptPractice(previous: ScriptPractice | undefined, chec
 }
 export function hasScriptCompletion(state: ScriptPractice | undefined) { return state?.phase === "complete" || !!state?.previousCompletion; }
 export function scriptAnswerMatches(lesson: ScriptLesson, answer: string) { return answer.normalize("NFC").trim() === lesson.answer.normalize("NFC").trim(); }
+export function scriptInstruction(lesson: ScriptLesson, state: ScriptPractice) {
+ if (state.phase === "visual") return lesson.prompt.replace(/^(Write|Enter|Type|Compose)\b/, "Choose");
+ if (state.phase === "sound") return "Listen without reading the model, then choose the written form you heard.";
+ if (state.phase === "assemble") return "Reconstruct the written form from its visible elements.";
+ return lesson.prompt;
+}
+export function canAdvanceScript(state: ScriptPractice) {
+ return state.result === "correct" && ["visual", "sound", "assemble", "write"].includes(state.phase);
+}
 function modeFor(state: ScriptPractice): ScriptTaskMode | null {
  if (state.phase === "visual") return "visual-recognition";
  if (state.phase === "sound") return "sound-to-form";
@@ -34,7 +43,7 @@ export function assessScript(lesson: ScriptLesson, state: ScriptPractice, answer
 }
 export function advanceScript(state: ScriptPractice, now: number): ScriptPractice {
  if (state.phase === "study") return { ...state, phase: "visual", answer: "", result: "idle" };
- if (state.result !== "correct") return state;
+ if (!canAdvanceScript(state)) return state;
  if (state.phase === "visual") return { ...state, phase: "sound", answer: "", result: "idle" };
  if (state.phase === "sound") return { ...state, phase: "assemble", answer: "", result: "idle", assembly: [] };
  if (state.phase === "assemble") return { ...state, phase: "write", answer: "", result: "idle", inputMode: "keyboard" };
