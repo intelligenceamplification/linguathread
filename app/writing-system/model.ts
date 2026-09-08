@@ -6,7 +6,7 @@ export type Direction = "recognize" | "sound-form" | "form-sound" | "compose" | 
 export type Exercise = {
  id: string; skill: string; direction: Direction; kind: "choice" | "input" | "compose" | "audio-choice";
  prompt: string; cue?: string; audio?: string; answer: string; accepted?: string[];
- choices?: string[]; components?: string[]; composition?: "sequence" | "hangul";
+ choices?: string[]; choiceAudio?: Record<string, string>; components?: string[]; composition?: "sequence" | "hangul";
  explanation: string; reading?: string; meaning?: string; transfer?: boolean; answerLanguage?: FoundationLanguage;
 };
 export type Unit = {
@@ -14,12 +14,15 @@ export type Unit = {
  level: "Foundation" | "A1" | "A2" | "B1" | "B2";
  objective: string; explanation: string; forms: string[]; example: string; meaning: string;
  exercises: Exercise[]; sourceIds: string[]; courseTerms: string[];
+ inventorySection?: string;
 };
+export type InventoryItem = { id: string; form: string; label: string; reading: string; skill: string; unitId: string };
+export type InventorySection = { id: string; track: string; title: string; description: string; items: InventoryItem[] };
 export type Course = {
  language: FoundationLanguage; version: number; title: string;
  tracks: { id: string; title: string; description: string }[];
  sources: { id: string; title: string; url: string }[];
- units: Unit[]; editorialStatus: "awaiting-language-review" | "reviewed";
+ units: Unit[]; inventory: InventorySection[]; editorialStatus: "awaiting-language-review" | "reviewed";
 };
 export type Edge = {
  attempts: number; independent: number; supported: number; failures: number;

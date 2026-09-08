@@ -1,5 +1,6 @@
 .writing-system { width: min(100%, 880px); margin: 0 auto; text-align: left; padding: 20px 0 72px; }
-.writing-system h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.2; margin: 24px 0; }
+.focus-content .writing-system h1, .writing-system h1 { max-width: 760px; font-family: var(--serif); font-size: clamp(2rem, 3.25vw, 2.85rem); line-height: 1.12; margin: 24px 0; text-align: left; }
+.focus-content .writing-system, .writing-system { text-align: left; }
 .writing-system p { line-height: 1.75; }
 .writing-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 20px; margin-bottom: 40px; }
 .writing-toolbar label { display: flex; align-items: center; gap: 12px; color: var(--muted); }
@@ -9,6 +10,22 @@
 .writing-tracks { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0; }
 .writing-tracks button { font: inherit; color: inherit; background: transparent; border: 1px solid transparent; padding: 12px 16px; border-radius: 999px; min-height: 44px; }
 .writing-tracks button[aria-pressed=true] { border-color: var(--line); box-shadow: 0 4px 20px #0000000a; backdrop-filter: blur(12px); }
+.writing-inventory { display: grid; gap: 44px; margin-top: 26px; }
+.inventory-section { content-visibility: auto; contain-intrinsic-size: 360px; }
+.inventory-section > header { display: flex; align-items: end; justify-content: space-between; gap: 32px; margin-bottom: 18px; }
+.inventory-section h2 { font-family: var(--serif); font-size: clamp(1.55rem, 3vw, 2rem); margin: 5px 0; }
+.inventory-section header p { color: var(--muted); margin: 0; max-width: 640px; line-height: 1.55; }
+.inventory-section header > span { color: var(--muted); font-size: .8rem; white-space: nowrap; padding-bottom: 5px; }
+.inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(116px, 1fr)); gap: 12px; }
+.inventory-card { position: relative; display: grid; grid-template-rows: minmax(48px, auto) minmax(32px, auto) 4px; align-content: start; gap: 6px; min-height: 116px; padding: 15px 14px 12px; color: inherit; text-align: center; border: 1px solid color-mix(in srgb, var(--line) 78%, transparent); border-radius: 20px; background: color-mix(in srgb, var(--paper) 42%, transparent); box-shadow: 0 10px 30px #00000008; backdrop-filter: blur(24px) saturate(1.2); -webkit-backdrop-filter: blur(24px) saturate(1.2); }
+.inventory-card:not(:disabled):hover { border-color: color-mix(in srgb, currentColor 24%, var(--line)); transform: translateY(-1px); }
+.inventory-form { align-self: center; font-family: var(--serif); font-size: 1.7rem; line-height: 1.1; overflow-wrap: anywhere; }
+.inventory-label { align-self: start; color: var(--muted); font-size: .72rem; line-height: 1.25; }
+.inventory-meter { align-self: end; display: block; width: 100%; height: 4px; overflow: hidden; border-radius: 999px; background: color-mix(in srgb, var(--line) 76%, transparent); }
+.inventory-meter i { display: block; height: 100%; border-radius: inherit; background: currentColor; transition: width .25s ease; }
+.inventory-lock { position: absolute; inset: 8px 8px auto auto; color: var(--muted); font-size: .62rem; text-transform: uppercase; letter-spacing: .08em; }
+.writing-sequence { margin-top: 54px !important; border-top: 1px solid var(--line); }
+.writing-sequence > summary { color: var(--muted); }
 .writing-next { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px 0; }
 .writing-next h2 { margin: 8px 0; }
 .writing-track { margin-top: 48px; }
@@ -51,5 +68,6 @@
 .writing-course-link div { padding-block: 10px; border-top: 1px solid var(--line); }
 .writing-edge-list { padding: 0; list-style: none; }
 .writing-edge-list li { font-size: .85rem; padding: 8px 0; gap: 16px; }
-@media (max-width: 600px) { .writing-toolbar, .writing-next { align-items: stretch; flex-direction: column; } .writing-system { padding-top: 0; } .writing-track li { align-items: flex-start; flex-direction: column; gap: 12px; } .writing-unit-actions { width: 100%; justify-content: space-between; } .writing-tracks { gap: 4px; } .writing-tracks button { font-size: .85rem; padding: 10px 12px; } }
-@media (prefers-reduced-transparency: reduce) { .writing-tracks button[aria-pressed=true], .writing-course-link { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--paper); } }
+@media (max-width: 600px) { .writing-toolbar, .writing-next, .inventory-section > header { align-items: stretch; flex-direction: column; } .writing-system { padding-top: 0; } .writing-track li { align-items: flex-start; flex-direction: column; gap: 12px; } .writing-unit-actions { width: 100%; justify-content: space-between; } .writing-tracks { flex-wrap: nowrap; overflow-x: auto; margin-inline: -20px; padding-inline: 20px; scrollbar-width: none; } .writing-tracks button { flex: 0 0 auto; font-size: .85rem; padding: 10px 12px; } .inventory-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; } .inventory-card { min-height: 108px; padding-inline: 9px; border-radius: 18px; } .inventory-section header > span { align-self: flex-start; } }
+@media (orientation: landscape) and (max-height: 620px) { .focus-content .writing-system h1, .writing-system h1 { font-size: clamp(1.9rem, 4.5vh, 2.45rem); max-width: 680px; } .writing-toolbar { margin-bottom: 24px; } .writing-system { padding-top: 8px; } }
+@media (prefers-reduced-transparency: reduce) { .writing-tracks button[aria-pressed=true], .writing-course-link, .inventory-card { backdrop-filter: none; -webkit-backdrop-filter: none; background: var(--paper); } }

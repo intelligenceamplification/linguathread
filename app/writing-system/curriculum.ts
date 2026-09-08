@@ -1,9 +1,10 @@
 import { scriptCourses } from "../script-courses";
 import type { FoundationLanguage } from "../multilingual-foundation";
-import type { Course, Exercise, Stage, Unit } from "./model";
+import type { Course, Exercise, InventorySection, Stage, Unit } from "./model";
 import { addArchitecture } from "./architecture";
 import { addReading } from "./reading";
 import { addFamilyCurriculum } from "./families";
+import { writingInventories } from "./inventories";
 
 const sources = {
  cefr: { id: "cefr", title: "Council of Europe: CEFR Companion Volume", url: "https://rm.coe.int/cefr-companion-volume-with-new-descriptors-2020/16809ea0d4" },
@@ -32,61 +33,39 @@ const words: Record<FoundationLanguage, Word[]> = {
  ru: [["дом", "house", "dom"], ["мама", "mother", "máma"], ["вода", "water", "vodá"], ["книга", "book", "kníga"], ["школа", "school", "shkóla"], ["день", "day", "denʹ"], ["чай", "tea", "chay"], ["метро", "metro", "metró"]],
 };
 
-const latin = [..."abcdefghijklmnopqrstuvwxyz"];
-const forms: Record<FoundationLanguage, string[]> = {
- en: latin, es: [..."abcdefghijklmnñopqrstuvwxyz"], vi: [..."aăâbcdđeêghiklmnoôơpqrstuưvxy"], fr: [...latin, ..."àâçéèêëîïôùûüÿœ"], pt: [...latin, ..."áâãàéêíóôõúç"], de: [...latin, ..."äöüß"], it: [...latin, ..."àèéìòù"],
- zh: ["b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h", "j", "q", "x", "zh", "ch", "sh", "r", "z", "c", "s", "a", "o", "e", "i", "u", "ü", "ai", "ei", "ao", "ou", "an", "en", "ang", "eng", "ong", "ia", "ie", "iao", "iu", "ian", "in", "iang", "ing", "iong", "ua", "uo", "uai", "ui", "uan", "un", "uang", "ueng", "üe", "üan", "ün", "er"],
- ja: [..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん", ..."アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン"],
- ko: [..."ㅏㅑㅓㅕㅗㅛㅜㅠㅡㅣㄱㄴㄷㄹㅁㅂㅅㅇㅈㅎㅋㅌㅍㅊㄲㄸㅃㅆㅉㅐㅒㅔㅖㅘㅙㅚㅝㅞㅟㅢ"],
- ar: [..."ابتثجحخدذرزسشصضطظعغفقكلمنهوي"],
- hi: [..."अआइईउऊऋएऐओऔकखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह"],
- ru: [..."абвгдеёжзийклмнопрстуфхцчшщъыьэюя"],
-};
-const kanaReadings = "a i u e o ka ki ku ke ko sa shi su se so ta chi tsu te to na ni nu ne no ha hi fu he ho ma mi mu me mo ya yu yo ra ri ru re ro wa o n".split(" ");
-const koreanReadings = "a ya eo yeo o yo u yu eu i giyeok nieun digeut rieul mieum bieup siot ieung jieut hieut kieuk tieut pieup chieut ssang-giyeok ssang-digeut ssang-bieup ssang-siot ssang-jieut ae yae e ye wa wae oe wo we wi ui".split(" ");
-const arabicReadings = "alif bāʾ tāʾ thāʾ jīm ḥāʾ khāʾ dāl dhāl rāʾ zāy sīn shīn ṣād ḍād ṭāʾ ẓāʾ ʿayn ghayn fāʾ qāf kāf lām mīm nūn hāʾ wāw yāʾ".split(" ");
-const hindiReadings = "a ā i ī u ū ṛ e ai o au ka kha ga gha ṅa ca cha ja jha ña ṭa ṭha ḍa ḍha ṇa ta tha da dha na pa pha ba bha ma ya ra la va śa ṣa sa ha".split(" ");
-function label(language: FoundationLanguage, form: string, i: number) {
- if (language === "ja") return kanaReadings[i % 46];
- if (language === "ko") return koreanReadings[i];
- if (language === "ar") return arabicReadings[i];
- if (language === "hi") return hindiReadings[i];
- if (language === "zh") return `Pinyin ${form}`;
- return form === "ß" ? "ẞ" : form.toLocaleUpperCase(language);
-}
-
 function makeCourse(language: FoundationLanguage): Course {
  const legacy = scriptCourses[language];
  const source = sources[language as keyof typeof sources] || sources.cefr;
- const c: Course = { language, version: 4, title: legacy.convention, tracks: [], sources: [sources.cefr, ...(source.id === "cefr" ? [] : [source])], units: [], editorialStatus: "awaiting-language-review" };
- const add = (id: string, title: string, track: string, stage: Stage, explanation: string, items: Exercise[], example = "", meaning = "", prerequisites?: string[]) => {
+ const c: Course = { language, version: 5, title: legacy.convention, tracks: [], sources: [sources.cefr, ...(source.id === "cefr" ? [] : [source])], units: [], inventory: [], editorialStatus: "awaiting-language-review" };
+ const add = (id: string, title: string, track: string, stage: Stage, explanation: string, items: Exercise[], example = "", meaning = "", prerequisites?: string[], inventorySection?: string) => {
   const previous = c.units.filter(u => u.track === track).at(-1);
   const level: Unit["level"] = stage === "forms" || stage === "contrasts" || stage === "composition" ? "Foundation" : stage === "decoding" || stage === "words" ? "A1" : stage === "sentences" ? "A2" : "B1";
-  const unit: Unit = { id: `${language}-literacy-${id}`, title, track, stage, level, prerequisites: prerequisites || (previous ? [previous.id] : []), objective: title, explanation, forms: [...new Set(items.filter(e => e.kind !== "audio-choice").map(e => e.answer))], example, meaning, exercises: items, sourceIds: [source.id], courseTerms: example ? [example] : [] };
+  const unit: Unit = { id: `${language}-literacy-${id}`, title, track, stage, level, prerequisites: prerequisites || (previous ? [previous.id] : []), objective: title, explanation, forms: [...new Set(items.filter(e => e.kind !== "audio-choice").map(e => e.answer))], example, meaning, exercises: items, sourceIds: [source.id], courseTerms: example ? [example] : [], inventorySection };
   c.units.push(unit); return unit;
  };
- const primary = language === "zh" ? "pinyin" : language === "ja" ? "hiragana" : "foundations";
- const primaryTitle = language === "zh" ? "Pinyin" : language === "ja" ? "Hiragana" : "Forms and sounds";
- c.tracks.push({ id: primary, title: primaryTitle, description: "Build the elementary forms, then recognize them in combinations." });
- if (language === "ja") c.tracks.push({ id: "katakana", title: "Katakana", description: "A second set of kana for loanwords, names and other uses." });
- const inventory = forms[language];
- for (let at = 0; at < inventory.length; at += 5) {
-  const group = inventory.slice(at, Math.min(at + 5, language === "ja" && at < 46 ? 46 : inventory.length));
-  const track = language === "ja" && at >= 46 ? "katakana" : primary;
-  const exercises: Exercise[] = group.flatMap((form, j) => {
-   const reading = label(language, form, at + j);
-   const skill = `${language}:form:${form}`;
-   const explanation = language === "ko" ? `${form} is a jamo. ${reading} is its conventional name or reading aid. Jamo are arranged into syllable blocks in ordinary Korean.` : language === "ar" ? `${form} is the isolated form of ${reading}. Its shape and joining behavior in words will be practised separately.` : language === "hi" ? `${form} is the independent form labelled ${reading}. Consonants combine with dependent vowel signs later.` : language === "ja" ? `${form} is read ${reading}. Roman letters are an introductory aid; the kana remains the written form.` : language === "zh" ? `${form} is a Pinyin spelling unit. Its pronunciation must be learned in valid syllables; it is not an English spelling rule.` : `Match ${reading} with ${form}. Keep every letter-shape mark. Sound patterns are practised separately in words.`;
-   const choices = [...new Set([form, inventory[(at + j + 1) % inventory.length], inventory[(at + j + 2) % inventory.length]])];
-   return [
-    { id: `${skill}:identify`, skill, direction: "recognize", kind: "choice", prompt: `Choose the form labelled ${reading}.`, answer: form, choices, explanation, reading },
-    { id: `${skill}:discriminate`, skill, direction: "recognize", kind: "choice", prompt: `Distinguish ${reading} from its neighboring forms.`, answer: form, choices: [...choices].reverse(), explanation, reading },
-    { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: `Enter the form labelled ${reading}.`, answer: form, explanation, reading },
-    { id: `${skill}:reconstruct`, skill, direction: "input", kind: "input", prompt: `Reconstruct ${reading} exactly, preserving every mark.`, answer: form, explanation, reading },
-   ];
-  });
-  add(`forms-${at}`, `${group.join(" · ")}`, track, "forms", "Read each form and its label. Practise recognition first, then enter the form using your device keyboard. These introductory checks establish familiarity; later decoding and review establish independence.", exercises);
-  if (language === "ja" && at < 46 && at + 5 >= 46) at = 41;
+ const trackNames: Record<string, string> = { letters: "Letters", alphabet: "Alphabet", conventions: "Conventions", "tone-orthography": "Tones and marks", syllables: "Syllable architecture", pinyin: "Pinyin", hanzi: "Hanzi", hiragana: "Hiragana", katakana: "Katakana", "kana-composition": "Kana combinations", kanji: "Kanji", jamo: "Jamo", blocks: "Syllable blocks", vocalization: "Vowel signs", devanagari: "Devanagari", composition: "Composition" };
+ for (const group of writingInventories[language]) {
+  if (!c.tracks.some(track => track.id === group.track)) c.tracks.push({ id: group.track, title: trackNames[group.track] || group.title, description: group.description });
+  const published: InventorySection = { id: group.id, track: group.track, title: group.title, description: group.description, items: [] };
+  for (let at = 0; at < group.items.length; at += 4) {
+   const slice = group.items.slice(at, at + 4);
+   const unitId = `${language}-literacy-inventory-${group.id}-${at}`;
+   const exercises: Exercise[] = slice.flatMap((item, offset) => {
+    const pool = group.items.filter(candidate => candidate.form !== item.form);
+    const choices = [item.form, pool[(at + offset) % pool.length]?.form, pool[(at + offset + 1) % pool.length]?.form].filter(Boolean);
+    const skill = `${language}:inventory:${group.id}:${item.form}`;
+    const explanation = `${item.form} is ${item.label}. Learn the written form, its reading or sound, and its role inside ${group.title.toLocaleLowerCase()}. Recognition, listening, and independent input remain separate evidence.`;
+    published.items.push({ id: item.id || `${group.id}-${at + offset}`, form: item.form, label: item.label, reading: item.reading || item.label, skill, unitId });
+    return [
+     { id: `${skill}:identify`, skill, direction: "recognize", kind: "choice", prompt: `Choose ${item.label}.`, answer: item.form, choices, explanation, reading: item.reading || item.label },
+     { id: `${skill}:sound-form`, skill, direction: "sound-form", kind: "choice", prompt: "Listen, then choose the written form.", audio: item.audio || item.form.replace(/^-/, ""), answer: item.form, choices, explanation, reading: item.reading || item.label },
+     { id: `${skill}:form-sound`, skill, direction: "form-sound", kind: "audio-choice", prompt: "Read the form, then choose its matching audio.", cue: item.form, answer: item.form, choices, choiceAudio: Object.fromEntries(group.items.map(candidate => [candidate.form, candidate.audio || candidate.form])), explanation, reading: item.reading || item.label },
+     { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: `Enter ${item.label} exactly.`, answer: item.form.replace(/^-/, ""), accepted: item.form.startsWith("-") ? [item.form] : undefined, explanation, reading: item.reading || item.label },
+    ];
+   });
+   add(`inventory-${group.id}-${at}`, `${group.title} · ${slice.map(item => item.form).join("  ")}`, group.track, "forms", group.description, exercises, "", "", undefined, group.id);
+  }
+  c.inventory.push(published);
  }
  c.tracks.push({ id: "architecture", title: "How the script is built", description: "Contrasts, composition and spelling conventions." });
  for (const lesson of legacy.lessons) {

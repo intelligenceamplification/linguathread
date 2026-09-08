@@ -785,3 +785,27 @@ test("script prompts always render the matching response control and a correct-a
   assert.match(script, /<input className="answer-field"/);
   assert.match(script, /canAdvanceScript\(practice\)[\s\S]*>Continue</);
 });
+
+test("writing-system inventory is complete, progressive, and assessed in four directions", async () => {
+  const [curriculum, inventories, view] = await Promise.all([
+    read("../app/writing-system/curriculum.ts"),
+    read("../app/writing-system/inventories.ts"),
+    read("../app/writing-system/view.tsx"),
+  ]);
+  for (const language of ["en", "es", "vi", "fr", "pt", "de", "it", "zh", "ja", "ko", "ar", "hi", "ru"]) {
+    assert.match(inventories, new RegExp(`\\n ${language}: \\[`));
+  }
+  for (const direction of ["recognize", "sound-form", "form-sound", "input"]) assert.match(curriculum, new RegExp(`direction: "${direction}"`));
+  assert.match(view, /Complete inventory/);
+  assert.match(view, /inventoryEvidence/);
+  assert.match(view, /Locked/);
+  assert.match(view, /choiceAudio/);
+  assert.match(view, /v\.version >= 5/);
+  assert.match(view, /v\.inventory\.length/);
+});
+
+test("native speech callbacks encode scalar request identifiers without JSONSerialization crashes", async () => {
+  const nativeShell = await read("../ios/LinguaThread/ContentView.swift");
+  assert.match(nativeShell, /JSONEncoder\(\)\.encode\(requestID\)/);
+  assert.doesNotMatch(nativeShell, /JSONSerialization\.data\(withJSONObject: payload\)/);
+});

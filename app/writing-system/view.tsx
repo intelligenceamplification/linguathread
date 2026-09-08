@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import ListenButton from "../listen-button";
 import { languageInfo, type FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptTaskMode } from "../script-literacy";
-import { assess, combine, edgeKey, edgeState, emptyProgress, migrateLegacy, parseProgress, recordAttempt, supportVisible, type Course, type Exercise, type Progress, type Unit } from "./model";
+import { assess, combine, edgeKey, edgeState, emptyProgress, migrateLegacy, parseProgress, recordAttempt, supportVisible, type Course, type Exercise, type InventoryItem, type Progress, type Unit } from "./model";
 import "./writing-system.css";
 import type { LessonDefinition } from "../curriculum";
 import { courseMaterial, relatedVocabulary } from "./course-links";
@@ -15,7 +15,7 @@ const modeMap: Record<Exercise["direction"], ScriptTaskMode> = { recognize: "vis
 const progressKey = (language: string) => `linguathread.writing-progress.v1:${language}`;
 const cacheKey = (language: string, version: number, unit: string) => `linguathread.writing-unit.v1:${language}:${version}:${unit}`;
 function isIndex(value: unknown, language: string): value is Index {
- const v = value as Index; return Boolean(v && v.language === language && Number.isInteger(v.version) && Array.isArray(v.units) && Array.isArray(v.tracks) && v.units.every(u => typeof u.id === "string" && Array.isArray(u.prerequisites) && Array.isArray(u.skills)));
+ const v = value as Index; return Boolean(v && v.language === language && Number.isInteger(v.version) && v.version >= 5 && Array.isArray(v.units) && Array.isArray(v.tracks) && Array.isArray(v.inventory) && v.inventory.length && v.units.every(u => typeof u.id === "string" && Array.isArray(u.prerequisites) && Array.isArray(u.skills)));
 }
 function isUnit(value: unknown, id: string): value is Unit {
  const u = value as Unit; return Boolean(u && u.id === id && Array.isArray(u.exercises) && u.exercises.length && u.exercises.every(e => typeof e.answer === "string" && typeof e.skill === "string" && ["choice", "audio-choice", "compose", "input"].includes(e.kind)));
@@ -25,6 +25,14 @@ function order<T>(items: T[], seed: string): T[] {
  const output = [...items]; let n = [...seed].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 17);
  for (let i = output.length - 1; i > 0; i--) { n = (n * 1664525 + 1013904223) >>> 0; const j = n % (i + 1); [output[i], output[j]] = [output[j], output[i]]; }
  return output;
+}
+const evidenceDirections: Exercise["direction"][] = ["recognize", "sound-form", "form-sound", "input"];
+function inventoryEvidence(item: InventoryItem, progress: Progress, now: number) {
+ const states = evidenceDirections.map(direction => edgeState(progress.edges[`${item.skill}:${direction}`], now));
+ const weights = { new: 0, weak: .12, learning: .3, review: .52, usable: .72, strong: 1 } as const;
+ const value = states.reduce((sum, state) => sum + weights[state], 0) / states.length;
+ const label = states.every(state => state === "strong") ? "Strong" : states.some(state => state === "weak") ? "Needs repair" : states.some(state => state !== "new") ? "Learning" : "Not introduced";
+ return { value, label };
 }
 
 export default function WritingSystemView({ language, onClose, onEvidence, languages, onLanguage, currentLesson }: Props) {
@@ -166,12 +174,16 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
    <nav className="writing-tracks" aria-label="Writing system tracks"><button aria-pressed={!activeTrack} onClick={() => setActiveTrack("")}>All</button>{index.tracks.map(t => <button key={t.id} aria-pressed={activeTrack === t.id} onClick={() => setActiveTrack(t.id)}>{t.title}</button>)}</nav>
    {nextUnit && <div className="writing-next"><div><span className="eyebrow">Next lesson</span><h2>{nextUnit.title}</h2></div><button className="primary-action" disabled={loading} onClick={() => void open(nextUnit.id)}>Continue writing path →</button></div>}
    {dueUnits.length > 0 && <button className="quiet-action" disabled={loading} onClick={() => void open(dueUnits[0].id, false, true)}>Review a due pathway</button>}
-   {index.tracks.filter(t => !activeTrack || t.id === activeTrack).map(track => <section className="writing-track" key={track.id}><h2>{track.title}</h2><p>{track.description}</p><ol>{visibleUnits.filter(u => u.track === track.id).map(u => {
+   <div className="writing-inventory">{index.inventory.filter(section => !activeTrack || section.track === activeTrack).map(section => <section key={section.id} className="inventory-section"><header><div><span className="eyebrow">Complete inventory</span><h2>{section.title}</h2><p>{section.description}</p></div><span>{section.items.filter(item => inventoryEvidence(item, progress, clock).label === "Strong").length} of {section.items.length} strong</span></header><div className="inventory-grid">{section.items.map(item => {
+    const evidence = inventoryEvidence(item, progress, clock); const outline = index.units.find(candidate => candidate.id === item.unitId); const ready = Boolean(outline && (progress.completed.includes(outline.id) || outline.prerequisites.every(id => progress.completed.includes(id))));
+    return <button key={item.id} className="inventory-card" disabled={loading || !ready} onClick={() => void open(item.unitId)} aria-label={`${item.form}, ${item.label}. ${evidence.label}${ready ? "" : ". Locked"}`}><span className="inventory-form" lang={language} dir={dir}>{item.form}</span><span className="inventory-label">{item.label}</span><span className="inventory-meter" aria-hidden="true"><i style={{ width: `${Math.round(evidence.value * 100)}%` }}/></span><span className="sr-only">{evidence.label}</span>{!ready && <span className="inventory-lock" aria-hidden="true">Later</span>}</button>;
+   })}</div></section>)}</div>
+   <details className="writing-sequence"><summary>See the complete lesson sequence</summary>{index.tracks.filter(t => !activeTrack || t.id === activeTrack).map(track => <section className="writing-track" key={track.id}><h2>{track.title}</h2><p>{track.description}</p><ol>{visibleUnits.filter(u => u.track === track.id).map(u => {
     const completed = progress.completed.includes(u.id); const ready = completed || u.prerequisites.every(id => progress.completed.includes(id)); const learning = progress.introduced.includes(u.id);
     const states = u.skills.map(s => edgeState(progress.edges[s.key], clock));
     const state = states.includes("weak") ? "A pathway needs attention" : states.includes("review") ? "Review due" : states.every(s => s === "strong") ? "Strong across assessed pathways" : completed ? "Practised · Continue strengthening" : learning ? "Learning" : ready ? "Ready to begin" : "Later in this track";
     return <li key={u.id}><div><span className="eyebrow">{u.level} · {u.stage === "reading" ? "Connected reading" : u.stage}</span><h3 lang={u.stage === "forms" || u.stage === "words" ? language : "en"} dir={u.stage === "forms" || u.stage === "words" ? dir : "ltr"}>{u.title}</h3><span>{state}</span>{learning && <details><summary>See each pathway</summary><ul className="writing-edge-list">{u.skills.map(s => <li key={s.key}><span lang={language} dir={dir}>{s.form}</span><span>{s.direction.replaceAll("-", " → ")} · {edgeState(progress.edges[s.key], clock)}</span></li>)}</ul></details>}</div><div className="writing-unit-actions"><button className="quiet-action" disabled={loading || !ready} onClick={() => void open(u.id, false, completed)}>{completed ? "Practise again" : learning ? "Resume" : "Learn"}</button><button className="text-action" disabled={loading} onClick={() => void open(u.id, true)}>Demonstrate</button></div></li>;
-   })}</ol></section>)}
+   })}</ol></section>)}</details>
    <details className="writing-sources"><summary>Curriculum references</summary><p>Reading and writing outcomes follow CEFR. Script order follows the writing system and the academic references below.</p>{index.sources.map(s => <p key={s.id}><a href={s.url} target="_blank" rel="noreferrer">{s.title}</a></p>)}</details>
   </>}
   {unit && <>
@@ -182,7 +194,7 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
     <p className="writing-prompt">{exercise.prompt}</p>
     {exercise.cue && <div className="writing-cue"><p lang={language} dir={dir}>{exercise.cue}</p>{exercise.kind !== "audio-choice" && <ListenButton text={exercise.cue} language={language} onUse={() => setHelped(true)}/>}</div>}
     {exercise.audio && <div className="writing-audio"><ListenButton text={exercise.audio} language={language} onPlayback={() => setHeard(true)}/>{!heard && <p>Listen before answering. The response unlocks when playback begins. If the voice is unavailable, return to the path and practise another skill.</p>}</div>}
-    {(exercise.kind === "choice" || exercise.kind === "audio-choice") && <div className="writing-choices">{choices.map((choice, i) => <div key={choice}>{exercise.kind === "audio-choice" && <ListenButton text={choice} language={language}/>}<button className="quiet-action" disabled={result === "correct" || Boolean(exercise.audio && !heard)} onClick={() => check(choice)} lang={answerLanguage} dir={answerDir}>{exercise.kind === "audio-choice" ? `Choose audio ${i + 1}` : choice}</button></div>)}</div>}
+    {(exercise.kind === "choice" || exercise.kind === "audio-choice") && <div className="writing-choices">{choices.map((choice, i) => <div key={choice}>{exercise.kind === "audio-choice" && <ListenButton text={exercise.choiceAudio?.[choice] || choice} language={language}/>}<button className="quiet-action" disabled={result === "correct" || Boolean(exercise.audio && !heard)} onClick={() => check(choice)} lang={answerLanguage} dir={answerDir}>{exercise.kind === "audio-choice" ? `Choose audio ${i + 1}` : choice}</button></div>)}</div>}
     {exercise.kind === "compose" && <><output className="writing-assembly" lang={language} dir={dir}>{combine(parts.map(i => exercise.components![i]), exercise.composition) || "…"}</output><div className="writing-bank">{bank.map(({text, id}) => <button className="quiet-action" key={id} disabled={parts.includes(id) || result === "correct"} onClick={() => { setParts([...parts, id]); setResult("idle"); }}>{/^\p{M}/u.test(text) ? `◌${text}` : text}</button>)}</div><button className="text-action" onClick={() => { setParts([]); setResult("idle"); }}>Clear</button><button className="primary-action" disabled={!parts.length || result === "correct"} onClick={() => check(combine(parts.map(i => exercise.components![i]), exercise.composition))}>Check composition</button></>}
     {exercise.kind === "input" && <><label className="writing-input">Your answer<input value={answer} lang={language} dir={dir} autoComplete="off" autoCorrect="off" spellCheck={false} maxLength={2000} disabled={result === "correct"} onChange={e => { setAnswer(e.target.value); setResult("idle"); }} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && answer.trim()) check(answer); }}/></label><fieldset className="writing-method"><legend>Input method</legend><label><input type="radio" checked={method === "keyboard"} onChange={() => setMethod("keyboard")}/>Keyboard</label><label><input type="radio" checked={method === "dictation"} onChange={() => setMethod("dictation")}/>My device’s dictation</label></fieldset>{method === "dictation" && <p className="writing-note">Use your device’s dictation, then inspect the resulting text. This records dictation-assisted input separately from spelling through the keyboard.</p>}<button className="primary-action" disabled={!answer.trim() || result === "correct" || Boolean(exercise.audio && !heard)} onClick={() => check(answer)}>Check answer</button></>}
     <p role="status" className="writing-feedback">{result === "correct" ? "Correct. Your evidence is recorded." : result === "retry" ? "Check the exact form, its marks and order. Try again, or open the explanation." : ""}</p>

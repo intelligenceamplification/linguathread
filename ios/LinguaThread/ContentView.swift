@@ -112,8 +112,10 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         }
 
         private func notifySpeechEvent(_ name: String, requestID: String?) {
-            let payload: Any = requestID ?? NSNull()
-            guard let data = try? JSONSerialization.data(withJSONObject: payload),
+            // JSONSerialization rejects top-level scalar fragments on-device and
+            // raises an Objective-C exception before Swift can handle it. Encode
+            // the optional directly so both a String and nil become valid JSON.
+            guard let data = try? JSONEncoder().encode(requestID),
                   let json = String(data: data, encoding: .utf8) else { return }
             webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('\(name)', { detail: \(json) }))")
         }
