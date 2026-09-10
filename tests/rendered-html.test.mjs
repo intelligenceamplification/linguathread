@@ -347,6 +347,41 @@ test("defines the family sentence as structured interactive anatomy", async () =
   assert.match(page, /sentenceAnatomyForLesson/);
 });
 
+test("keeps secondary audio controls compact without reducing their touch target", async () => {
+  const [button, page, sentence, daily, styles] = await Promise.all([
+    read("../app/listen-button.tsx"),
+    read("../app/page.tsx"),
+    read("../app/sentence-anatomy.tsx"),
+    read("../app/daily-lesson.tsx"),
+    read("../app/globals.css"),
+  ]);
+  assert.match(button, /compact = false/);
+  assert.match(button, /listen-action-compact/);
+  assert.match(page, /language=\{audioLanguage\} compact/);
+  assert.match(sentence, /language=\{speechLanguage\(item\.language\)!\} compact/);
+  assert.match(daily, /language="en" compact/);
+  assert.match(styles, /\.listen-action-compact \{[^}]*width: 44px;[^}]*min-width: 44px/);
+  assert.match(styles, /\.vocab-content > \.listen-action[^}]*margin-top: 22px/);
+});
+
+test("gives compact navigation a clear glass momentum strip", async () => {
+  const styles = await read("../app/globals.css");
+  assert.match(styles, /@media \(max-width: 700px\)[\s\S]*\.header-actions \.quiet-action \{[^}]*border-radius: 999px;[^}]*background: var\(--glass-clear\)/);
+  assert.match(styles, /\.header-actions \{[^}]*overflow-x: auto;[^}]*scroll-snap-type: x proximity/);
+  assert.match(styles, /-webkit-overflow-scrolling: touch/);
+  assert.match(styles, /\.header-actions::-webkit-scrollbar \{ display: none; \}/);
+});
+
+test("constrains the application shell to the dynamic viewport", async () => {
+  const [styles, page] = await Promise.all([read("../app/globals.css"), read("../app/page.tsx")]);
+  assert.match(styles, /\.app-shell \{[^}]*height: 100vh;[^}]*height: 100svh;[^}]*overflow: hidden/);
+  assert.match(styles, /\.lesson-stage \{[^}]*min-height: 0;[^}]*align-items: flex-start;[^}]*overflow-y: auto/);
+  assert.match(styles, /\.focus-content \{[^}]*margin-block: auto/);
+  assert.match(page, /window\.addEventListener\("orientationchange", resetLessonScroll\)/);
+  assert.match(page, /window\.addEventListener\("resize", resetAfterRotation\)/);
+  assert.match(page, /ref=\{lessonStageRef\} className="lesson-stage"/);
+});
+
 test("uses sentence anatomy for every shipped curriculum lesson", async () => {
   const [curriculum, page] = await Promise.all([read("../app/curriculum.ts"), read("../app/page.tsx")]);
   assert.match(curriculum, /createInteractiveSentenceModel\(item\)/);

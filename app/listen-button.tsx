@@ -11,7 +11,7 @@ const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: {
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
 
-export default function ListenButton({ text, language, onUse, onPlayback }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void }) {
+export default function ListenButton({ text, language, onUse, onPlayback, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; compact?: boolean }) {
  const id = useId();
  const supported = useSyncExternalStore(subscribeToSpeechSupport, hasSpeechSupport, noServerSpeechSupport);
  const [speaking, setSpeaking] = useState(false);
@@ -61,8 +61,8 @@ export default function ListenButton({ text, language, onUse, onPlayback }: { te
  }
 
  if (supported === false) return <span className="audio-unavailable">Audio unavailable on this device</span>;
- return <button type="button" className="listen-action" aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}`} onClick={toggle}>
+ return <button type="button" className={`listen-action${compact ? " listen-action-compact" : ""}`} aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}`} title={compact ? `${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}` : undefined} onClick={toggle}>
   <svg aria-hidden="true" viewBox="0 0 24 24"><path d={speaking ? "M7 7h10v10H7z" : "M4 10v4h4l5 4V6L8 10H4zm12.5-1.8a5 5 0 010 7.6m2.2-9.8a8 8 0 010 12"} /></svg>
-  <span>{speaking ? "Stop" : "Listen"}</span>
+  <span className="listen-action-label">{speaking ? "Stop" : "Listen"}</span>
  </button>;
 }

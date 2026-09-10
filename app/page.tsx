@@ -105,10 +105,30 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [xrayOpen, setXrayOpen] = useState(false);
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
+  const lessonStageRef = useRef<HTMLElement>(null);
   const attemptStartedAtRef = useRef(Date.now());
 
   useEffect(() => {
     attemptStartedAtRef.current = Date.now();
+  }, [stage, wordIndex, productionLanguage, reverseIndex, dailyOpen, scriptLanguage]);
+
+  useEffect(() => {
+    const resetLessonScroll = () => lessonStageRef.current?.scrollTo({ top: 0, behavior: "auto" });
+    let portrait = window.innerHeight >= window.innerWidth;
+    const resetAfterRotation = () => {
+      const nextPortrait = window.innerHeight >= window.innerWidth;
+      if (nextPortrait !== portrait) {
+        portrait = nextPortrait;
+        resetLessonScroll();
+      }
+    };
+    resetLessonScroll();
+    window.addEventListener("orientationchange", resetLessonScroll);
+    window.addEventListener("resize", resetAfterRotation);
+    return () => {
+      window.removeEventListener("orientationchange", resetLessonScroll);
+      window.removeEventListener("resize", resetAfterRotation);
+    };
   }, [stage, wordIndex, productionLanguage, reverseIndex, dailyOpen, scriptLanguage]);
 
   useEffect(() => {
@@ -384,7 +404,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         </div>
       )}
 
-      <section className="lesson-stage" aria-live="polite">
+      <section ref={lessonStageRef} className="lesson-stage" aria-live="polite">
         {scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => setScriptLanguage(null)} onEvidence={recordScriptEvidence} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
           fromLanguage: exercise.from, toLanguage: exercise.to, fromModality: "written", toModality: exercise.to === "English" ? "meaning" : "written", retrievalType: exercise.phase === "variation" ? "transfer" : exercise.phase === "review" ? "reverse" : "production",
         }, correct ? undefined : exercise.scope === "word" ? "lexical" : "structural")} /> : <>
@@ -714,7 +734,7 @@ function ProfileLanguage({ index, role, language, detail }: { index: string; rol
 
 function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
   const audioLanguage = speechLanguage(language);
-  return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} />}</div></div>;
+  return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} compact />}</div></div>;
 }
 
 function AnswerField({ value, onChange, onEnter, placeholder, label }: { value: string; onChange: (value: string) => void; onEnter: () => void; placeholder: string; label: string }) {

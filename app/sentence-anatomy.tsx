@@ -102,7 +102,7 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
       </div>
 
       <div className="anatomy-stack" aria-label="Other expressions of the same meaning">
-        {availableRealizations.filter((item) => item.language !== activeLanguage).map((item) => <p key={item.language}><span>{item.label}</span><span className="anatomy-expression">{item.sentence}{speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} />}</span></p>)}
+        {availableRealizations.filter((item) => item.language !== activeLanguage).map((item) => <p key={item.language}><span>{item.label}</span><span className="anatomy-expression"><span className="anatomy-expression-text">{item.sentence}</span>{speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} compact />}</span></p>)}
       </div>
       <button className="primary-action" onClick={onContinue}>Continue with the lesson <span aria-hidden="true">→</span></button>
     </div>
@@ -116,7 +116,7 @@ function ComparisonChoreography({ realizations, mapping }: { realizations: Inter
     {realizations.map((item, rowIndex) => <div key={item.language} className="choreography-row" data-role={item.role} data-involved={involvedLanguages.has(item.language)}>
       <span className="choreography-label">{item.label}</span>
       <p lang={item.language === "spanish" ? "es" : item.language === "vietnamese" ? "vi" : "en"}>{item.units.map((unit, unitIndex) => <span key={unit.id} className={selectedIds.has(unit.id) ? "mapped-unit" : "stable-unit"} style={{ "--unit-order": rowIndex * 3 + unitIndex } as React.CSSProperties}>{unit.text}{unit.after}</span>)}</p>
-      {speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} />}
+      {speechLanguage(item.language) && <ListenButton text={item.sentence} language={speechLanguage(item.language)!} compact />}
     </div>)}
   </div>;
 }
