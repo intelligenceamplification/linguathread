@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
-import { DailyLesson } from "./daily-lesson";
 import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
 import ListenButton from "./listen-button";
@@ -13,13 +12,14 @@ import type { FoundationLanguage } from "./multilingual-foundation";
 import "./multilingual-preview/preview.css";
 import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
 import { loadCurriculum } from "./curriculum-cache";
-import { courseMap, outsidePracticeFor, plannedCourseLessonCount } from "./course-map";
+import { outsidePracticeFor } from "./course-map";
 import {
-  completeSession, emptyLearnerModel, languageMastery, LearnerModel, RetrievalEdge,
+  completeSession, emptyLearnerModel, LearnerModel, RetrievalEdge,
   migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
-type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "complete" | "review";
+type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "complete";
+type AppDestination = "lesson" | "path" | "writing" | "xray";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
 type ProductionLanguage = "Spanish" | "Vietnamese";
@@ -70,16 +70,20 @@ export default function Home() {
   }, []);
 
   function saveProfile(nextProfile: LanguageProfile) {
-    window.localStorage.setItem("linguathread.language-profile.v1", JSON.stringify(nextProfile));
-    fetch("/api/profile", { method: "PUT", headers: jsonHeaders, body: JSON.stringify(nextProfile), keepalive: true }).catch(() => undefined);
-    setProfile(nextProfile);
+    const second = nextProfile.second === nextProfile.native ? null : nextProfile.second;
+    const additional = [...new Set(nextProfile.additional)]
+      .filter((language) => language !== nextProfile.native && language !== second);
+    const cleaned = { ...nextProfile, second, secondConfidence: second ? nextProfile.secondConfidence : null, additional };
+    window.localStorage.setItem("linguathread.language-profile.v1", JSON.stringify(cleaned));
+    fetch("/api/profile", { method: "PUT", headers: jsonHeaders, body: JSON.stringify(cleaned), keepalive: true }).catch(() => undefined);
+    setProfile(cleaned);
     setEditingProfile(false);
   }
 
   if (!loaded || launchState === "checking") return <main className="app-shell launch-loading" aria-label="Loading LinguaThread" />;
   if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
   if (!profile) return <LanguageSetup onComplete={saveProfile} />;
-  if (editingProfile) return <LanguageSetup initialProfile={profile} onComplete={saveProfile} />;
+  if (editingProfile) return <LanguageSetup initialProfile={profile} onComplete={saveProfile} onCancel={() => setEditingProfile(false)} />;
   return <Lesson profile={profile} onEditLanguages={() => setEditingProfile(true)} />;
 }
 
@@ -88,7 +92,6 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [wordIndex, setWordIndex] = useState(0);
   const [lessonIndex, setLessonIndex] = useState(0);
   const [completedIds, setCompletedIds] = useState<string[]>([]);
-  const [reviewDueIds, setReviewDueIds] = useState<string[]>([]);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [failedAttempts, setFailedAttempts] = useState(0);
@@ -101,16 +104,17 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
   const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen">("new");
   const [course, setCourse] = useState<LessonDefinition[]>(curriculum);
-  const [dailyOpen, setDailyOpen] = useState(false);
+  const [destination, setDestination] = useState<AppDestination>("lesson");
   const [xrayOpen, setXrayOpen] = useState(false);
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
+  const [placementUnit, setPlacementUnit] = useState<{ level: string; unit: number } | null>(null);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
   const lessonStageRef = useRef<HTMLElement>(null);
   const attemptStartedAtRef = useRef(Date.now());
 
   useEffect(() => {
     attemptStartedAtRef.current = Date.now();
-  }, [stage, wordIndex, productionLanguage, reverseIndex, dailyOpen, scriptLanguage]);
+  }, [stage, wordIndex, productionLanguage, reverseIndex, destination, scriptLanguage]);
 
   useEffect(() => {
     const resetLessonScroll = () => lessonStageRef.current?.scrollTo({ top: 0, behavior: "auto" });
@@ -129,7 +133,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       window.removeEventListener("orientationchange", resetLessonScroll);
       window.removeEventListener("resize", resetAfterRotation);
     };
-  }, [stage, wordIndex, productionLanguage, reverseIndex, dailyOpen, scriptLanguage]);
+  }, [stage, wordIndex, productionLanguage, reverseIndex, destination, scriptLanguage]);
 
   useEffect(() => {
     let localCompleted: string[] = [];
@@ -162,7 +166,6 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setLearnerModel(localModel);
         window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
         setCompletedIds(completed);
-        setReviewDueIds(data.reviewDueLessonIds || []);
         const selection = selectNextLesson(loadedCourse, localModel, completed);
         setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
         setSessionMode(selection.mode);
@@ -174,13 +177,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }, []);
 
   const lesson = course[lessonIndex] || course[0];
-  const hasHistory = completedIds.length > 0;
   const activeLanguages = [profile.second, ...profile.additional]
     .filter((language): language is string => Boolean(language))
     .map((language) => language.trim().toLocaleLowerCase());
   const bridgeEnabled = activeLanguages.includes("vietnamese");
   const stageIndex = Math.max(0, stages.indexOf(stage));
-  const progress = stage === "review" ? 100 : ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
+  const progress = ((stageIndex + (stage === "vocabulary" ? wordIndex / lesson.vocabulary.length : 0)) / (stages.length - 1)) * 100;
   const currentWord = lesson.vocabulary[wordIndex];
   const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
   const reverseExercises = createReverseRecallExercises(lesson, bridgeEnabled);
@@ -188,6 +190,24 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     .filter((language): language is string => Boolean(language) && language !== profile.native)
     .map((language) => ({ name: language, id: speechLanguage(language) }))
     .filter((item): item is { name: string; id: FoundationLanguage } => item.id !== null);
+  const selectedLearningLanguages = [...new Set([profile.second, ...profile.additional])]
+    .filter((language): language is string => Boolean(language) && language !== profile.native);
+  const courseUnits = course.reduce<Array<{ key: string; level: string; unit: number; title: string; lessons: LessonDefinition[] }>>((units, item) => {
+    const key = `${item.level}-${item.unit}`;
+    const existing = units.find((unit) => unit.key === key);
+    if (existing) existing.lessons.push(item);
+    else units.push({ key, level: item.level, unit: item.unit, title: item.unitTitle, lessons: [item] });
+    return units;
+  }, []);
+  const courseLevels = [...new Set(courseUnits.map((unit) => unit.level))];
+
+  function openDestination(next: AppDestination) {
+    setDestination(next);
+    setXrayOpen(next === "xray");
+    setPlacementUnit(null);
+    if (next === "writing") setScriptLanguage((current) => current || literacyLanguages[0]?.id || null);
+    else setScriptLanguage(null);
+  }
 
   function advanceVocabulary() {
     if (wordIndex < lesson.vocabulary.length - 1) setWordIndex((value) => value + 1);
@@ -379,44 +399,99 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
   function closeXRay() {
     setXrayOpen(false);
+    setDestination("lesson");
     requestAnimationFrame(() => xrayTriggerRef.current?.focus());
+  }
+
+  function completeUnitPlacement(unitLessons: LessonDefinition[], passed: boolean) {
+    if (!passed) return;
+    const ids = unitLessons.map((item) => item.id);
+    const nextCompleted = [...new Set([...completedIds, ...ids])];
+    setCompletedIds(nextCompleted);
+    window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
+    let nextModel = learnerModel;
+    for (const item of unitLessons) {
+      nextModel = recordEvidence(nextModel, item.objectiveId || item.id, "Spanish", true, false, new Date(), {
+        fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "production",
+      });
+      fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: item.id, skill: item.skill, accelerated: true, profile }), keepalive: true }).catch(() => undefined);
+    }
+    setLearnerModel(nextModel);
+    window.localStorage.setItem(learnerModelKey, JSON.stringify(nextModel));
   }
 
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
-        <button className="wordmark" onClick={() => resetLesson()} aria-label="Restart lesson">LinguaThread</button>
+        <button className="wordmark" onClick={() => openDestination("lesson")} aria-label="Open current lesson">LinguaThread</button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
           <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
         </div>
-        <div className="header-actions">
-          <button className="quiet-action today-action" onClick={() => setDailyOpen(true)}>Today’s Lesson</button>
-          {stage !== "review" && <button className="quiet-action" onClick={() => setStage("review")}>Language Path</button>}
-          {literacyLanguages[0] && <button className="quiet-action writing-action" onClick={() => setScriptLanguage(literacyLanguages[0].id)}>Writing System</button>}
-          <button ref={xrayTriggerRef} className="quiet-action xray-action" onClick={() => setXrayOpen(true)}>Expression X-Ray</button>
-        </div>
+        <nav className="header-actions" aria-label="Learning destinations">
+          <button className="quiet-action today-action" aria-current={destination === "lesson" ? "page" : undefined} onClick={() => openDestination("lesson")}>Today’s Lesson</button>
+          <button className="quiet-action" aria-current={destination === "path" ? "page" : undefined} onClick={() => openDestination("path")}>Language Path</button>
+          {literacyLanguages[0] && <button className="quiet-action writing-action" aria-current={destination === "writing" ? "page" : undefined} onClick={() => openDestination("writing")}>Writing System</button>}
+          <button ref={xrayTriggerRef} className="quiet-action xray-action" aria-current={destination === "xray" ? "page" : undefined} onClick={() => openDestination("xray")}>Expression X-Ray</button>
+          <button className="quiet-action languages-action" onClick={onEditLanguages}>Languages</button>
+        </nav>
       </header>
 
-      {stage !== "complete" && stage !== "review" && (
+      {destination === "lesson" && stage !== "complete" && (
         <div className="progress-track" aria-label={`Lesson ${Math.round(progress)}% complete`}>
           <span style={{ width: `${Math.max(4, progress)}%` }} />
         </div>
       )}
 
       <section ref={lessonStageRef} className="lesson-stage" aria-live="polite">
-        {scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => setScriptLanguage(null)} onEvidence={recordScriptEvidence} /></div> : dailyOpen ? <DailyLesson course={course} current={lesson} dueIds={reviewDueIds} completedIds={completedIds} onClose={() => setDailyOpen(false)} onEvidence={(correct, language, lessonId, exercise) => recordAttempt("daily-translation", correct, language, course.find((item) => item.id === lessonId) || lesson, {
-          fromLanguage: exercise.from, toLanguage: exercise.to, fromModality: "written", toModality: exercise.to === "English" ? "meaning" : "written", retrievalType: exercise.phase === "variation" ? "transfer" : exercise.phase === "review" ? "reverse" : "production",
-        }, correct ? undefined : exercise.scope === "word" ? "lexical" : "structural")} /> : <>
+        {destination === "writing" && scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => openDestination("lesson")} onEvidence={recordScriptEvidence} /></div> : destination === "path" ? (
+          placementUnit ? (() => {
+            const unit = courseUnits.find((item) => item.level === placementUnit.level && item.unit === placementUnit.unit)!;
+            return <UnitPlacement unit={unit} onClose={() => setPlacementUnit(null)} onFinish={(passed) => completeUnitPlacement(unit.lessons, passed)} onStudy={() => { const index = course.findIndex((item) => item.id === unit.lessons[0].id); resetLesson(index); openDestination("lesson"); }} />;
+          })() : <div className="focus-content review-content">
+            <p className="eyebrow">Language path</p>
+            <h1>Your language course, clearly mapped.</h1>
+            <p className="review-introduction">Spanish is the reviewed communication course. Your other selected languages remain visible as independent writing paths and future stacking bridges. Authoring in progress is shown honestly. Only reviewed, publishable lessons enter your learning sequence.</p>
+            <section className="stack-overview" aria-label="Your selected language stack">
+              <div><span>Native anchor</span><strong>{profile.native}</strong></div>
+              {selectedLearningLanguages.map((language) => <div key={language}><span>{language === "Spanish" ? "Communication course" : "Selected language"}</span><strong>{language}</strong>{literacyLanguages.some((item) => item.name === language) && <button className="text-action" onClick={() => { setScriptLanguage(literacyLanguages.find((item) => item.name === language)!.id); setDestination("writing"); }}>Writing path</button>}</div>)}
+              <button className="quiet-action stack-edit-action" onClick={onEditLanguages}>Add or remove languages</button>
+            </section>
+            <div className="unit-path" aria-label="Course units">
+              {courseLevels.map((level) => {
+                const units = courseUnits.filter((unit) => unit.level === level);
+                const currentLevel = units.some((unit) => unit.lessons.some((item) => item.id === lesson.id));
+                const completed = units.flatMap((unit) => unit.lessons).filter((item) => completedIds.includes(item.id)).length;
+                const total = units.reduce((sum, unit) => sum + unit.lessons.length, 0);
+                return <details key={level} open={currentLevel} className="level-group">
+                  <summary><strong>{level}</strong><span>{completed} of {total} lessons</span></summary>
+                  {units.map((unit) => {
+                    const unitCompleted = unit.lessons.filter((item) => completedIds.includes(item.id)).length;
+                    const current = unit.lessons.some((item) => item.id === lesson.id);
+                    return <details key={unit.key} open={current} className="unit-card">
+                      <summary><span>Unit {unit.unit}</span><strong>{unit.title}</strong><em>{unitCompleted} of {unit.lessons.length}</em></summary>
+                      <div className="unit-card-actions"><button className="quiet-action" onClick={() => setPlacementUnit({ level: unit.level, unit: unit.unit })}>{unitCompleted === unit.lessons.length ? "Recheck this unit" : "Test out of this unit"}</button></div>
+                      {unit.lessons.map((item) => {
+                        const index = course.findIndex((candidate) => candidate.id === item.id);
+                        return <button className="unit-lesson-row" key={item.id} onClick={() => { resetLesson(index); openDestination("lesson"); }}><span>{String(item.lesson).padStart(2, "0")}</span><strong>{item.title}</strong><em>{completedIds.includes(item.id) ? "Complete" : index === lessonIndex ? "Next" : "Open"}</em></button>;
+                      })}
+                    </details>;
+                  })}
+                </details>;
+              })}
+            </div>
+          </div>
+        ) : <>
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
             <h1>{currentWord.word}</h1>
             <ListenButton text={currentWord.word} language="es" />
             <div className="language-stack compact-stack">
-              <StackLine role="Native anchor" language={profile.native} value={currentWord.english} />
+              <StackLine role="Meaning anchor" language="English" value={currentWord.english} />
               {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />}
             </div>
+            <button className="selected-stack-ribbon" onClick={onEditLanguages}><span>Your selected stack</span>{selectedLearningLanguages.join(" · ")}</button>
             <p className="contemplative-note">{currentWord.note}</p>
             <button className="primary-action" onClick={advanceVocabulary}>
               {wordIndex === lesson.vocabulary.length - 1 ? "Practice the foundation" : "Continue"}
@@ -461,7 +536,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <>
                 <div className={`grammar-grid language-grammar-grid ${bridgeEnabled ? "" : "two-layers"}`}>
                   <article><span className="grammar-language">Spanish · target</span><strong>{lesson.grammar.target.pattern}</strong><p>{lesson.grammar.target.explanation}</p></article>
-                  <article><span className="grammar-language">{profile.native} · anchor</span><strong>{lesson.grammar.anchor.pattern}</strong><p>{lesson.grammar.anchor.explanation}</p></article>
+                  <article><span className="grammar-language">English · meaning anchor</span><strong>{lesson.grammar.anchor.pattern}</strong><p>{lesson.grammar.anchor.explanation}</p></article>
                   {bridgeEnabled && <article><span className="grammar-language">Vietnamese · supporting bridge</span><strong>{lesson.grammar.bridge.pattern}</strong><p>{lesson.grammar.bridge.explanation}</p></article>}
                 </div>
                 <p className="insight">{lesson.grammar.insight}</p>
@@ -545,75 +620,80 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <p>{outsidePractice.prompt}</p>
             </aside>}
             <button className="primary-action" onClick={continueLearning}>Continue learning <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => setStage("review")}>Review the stack</button>
+            <button className="text-action" onClick={() => openDestination("path")}>Review the stack</button>
             <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
           </div>
         )}
 
-        {stage === "review" && (
-          <div className="focus-content review-content">
-            <button className="back-action" onClick={() => setStage(hasHistory ? "complete" : "vocabulary")} aria-label="Back">←</button>
-            <p className="eyebrow">Quiet review</p>
-            <h1>Your language course</h1>
-            <p className="review-introduction">A continuous Spanish and Vietnamese path from first foundations through precise, independent expression. Published lessons become available here as their language and X-Ray content pass review.</p>
-            <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
-            <div className="cefr-course-map" aria-label="CEFR course path">
-              {courseMap.map((stage) => {
-                const authored = course.filter((item) => item.level === stage.level).length;
-                return <section key={stage.level} className="cefr-stage">
-                  <div><strong>{stage.level}</strong><span>{stage.units.length} units</span></div>
-                  <p>{stage.outcome}</p>
-                  <em>{authored > 0 ? `${authored} authored lesson${authored === 1 ? "" : "s"} available` : "Authoring in progress"}</em>
-                </section>;
-              })}
-            </div>
-            <p className="course-authoring-note">The permanent map contains {plannedCourseLessonCount} lesson positions. Only reviewed, publishable lessons enter your learning sequence.</p>
-            <section className="literacy-paths" aria-label="Writing foundations for selected languages">
-              <p className="eyebrow">Writing foundations</p>
-              <h2>Learn the script or demonstrate what you know.</h2>
-              <p>Each selected non-native language keeps its own recognition, writing, support, and review record.</p>
-              <div>{literacyLanguages.map((item) => <button key={item.id} className="quiet-action" onClick={() => setScriptLanguage(item.id)}>{item.name} · Open writing path</button>)}</div>
-            </section>
-            <div className="review-list">
-              {courseMap.map((level) => {
-                const levelLessons = course.filter((item) => item.level === level.level);
-                const containsCurrent = levelLessons.some((item) => item.id === lesson.id);
-                const dueCount = levelLessons.filter((item) => reviewDueIds.includes(item.id)).length;
-                return <details key={level.level} className="review-level" open={containsCurrent}>
-                  <summary><span>{level.level}</span><strong>{containsCurrent ? "Current level" : `${levelLessons.length} lessons`}</strong><em>{dueCount ? `${dueCount} due` : "Explore"}</em></summary>
-                  {levelLessons.map((item) => {
-                    const index = course.findIndex((candidate) => candidate.id === item.id);
-                    return <div className="review-row stacked-review-row" key={item.id}>
-                      <span>{String(index + 1).padStart(2, "0")}</span>
-                      <strong>{item.title}</strong>
-                      <p>{item.level} · {item.unitTitle} · {item.skill}</p>
-                      <em>{reviewDueIds.includes(item.id)
-                        ? "Due"
-                        : completedIds.includes(item.id)
-                          ? languageMastery(learnerModel, item.objectiveId || item.id, "Spanish")
-                          : index === lessonIndex ? "Next" : "Waiting"}</em>
-                    </div>;
-                  })}
-                </details>;
-              })}
-            </div>
-            <button className="primary-action" onClick={() => resetLesson()}>Return to lesson</button>
-          </div>
-        )}
         </>}
       </section>
 
       {xrayOpen && <UniversalXRay key={lesson.id} lesson={lesson} showBridge={bridgeEnabled} onClose={closeXRay} />}
 
       <footer className="lesson-footer">
-        <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish target · ${profile.native} anchor · ${bridgeEnabled ? "Vietnamese active practice" : "native anchor"}`}</span>
+        <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish course · English meaning anchor · ${selectedLearningLanguages.length} selected language${selectedLearningLanguages.length === 1 ? "" : "s"}`}</span>
         <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
       </footer>
     </main>
   );
 }
 
-function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: LanguageProfile; onComplete: (profile: LanguageProfile) => void }) {
+function UnitPlacement({ unit, onClose, onFinish, onStudy }: {
+  unit: { level: string; unit: number; title: string; lessons: LessonDefinition[] };
+  onClose: () => void;
+  onFinish: (passed: boolean) => void;
+  onStudy: () => void;
+}) {
+  const [index, setIndex] = useState(0);
+  const [answer, setAnswer] = useState("");
+  const [score, setScore] = useState(0);
+  const [result, setResult] = useState<"idle" | "correct" | "gentle" | "passed" | "review">("idle");
+  const current = unit.lessons[index];
+  const required = Math.max(1, Math.ceil(unit.lessons.length * .75));
+
+  function check() {
+    const correct = current.mastery.accepted.map(normalizeAnswer).includes(normalizeAnswer(answer));
+    setResult(correct ? "correct" : "gentle");
+  }
+
+  function advance() {
+    const earned = result === "correct" ? 1 : 0;
+    const nextScore = score + earned;
+    if (index === unit.lessons.length - 1) {
+      const passed = nextScore >= required;
+      setScore(nextScore);
+      setResult(passed ? "passed" : "review");
+      onFinish(passed);
+      return;
+    }
+    setScore(nextScore);
+    setIndex((value) => value + 1);
+    setAnswer("");
+    setResult("idle");
+  }
+
+  if (result === "passed" || result === "review") return <div className="focus-content placement-content">
+    <p className="eyebrow">{unit.level} · Unit {unit.unit}</p>
+    <h1>{result === "passed" ? "This unit is already yours." : "A little focused study will help."}</h1>
+    <p className="instruction">You recalled {score} of {unit.lessons.length} independently. {result === "passed" ? "The unit is marked complete and your next available material has moved forward." : `Passing requires ${required}. No lesson was marked complete.`}</p>
+    {result === "passed" ? <button className="primary-action" onClick={onClose}>Return to the path <span aria-hidden="true">→</span></button> : <button className="primary-action" onClick={onStudy}>Begin this unit <span aria-hidden="true">→</span></button>}
+    <button className="text-action" onClick={onClose}>Return to the course map</button>
+  </div>;
+
+  return <div className="focus-content placement-content">
+    <button className="back-action" onClick={onClose} aria-label="Leave unit check">←</button>
+    <p className="eyebrow">Test out · {unit.level} Unit {unit.unit} · {index + 1} of {unit.lessons.length}</p>
+    <h1>{unit.title}</h1>
+    <p className="instruction">{current.mastery.prompt}</p>
+    <AnswerField value={answer} onChange={(value) => { setAnswer(value); setResult("idle"); }} onEnter={check} placeholder="Write in Spanish" label="Unit check answer" />
+    {result === "idle" && <button className="primary-action" disabled={!answer.trim()} onClick={check}>Check answer</button>}
+    {result === "correct" && <Feedback kind="correct" title="Independent recall confirmed." detail={current.mastery.answer} action={index === unit.lessons.length - 1 ? "Finish check" : "Next question"} onClick={advance} />}
+    {result === "gentle" && <Feedback kind="gentle" title="This pathway needs review." detail={`Model: ${current.mastery.answer}`} action={index === unit.lessons.length - 1 ? "Finish check" : "Continue check"} onClick={advance} />}
+    <p className="placement-standard">Pass with {required} of {unit.lessons.length} independent responses. The check never reveals a model before you answer.</p>
+  </div>;
+}
+
+function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfile?: LanguageProfile; onComplete: (profile: LanguageProfile) => void; onCancel?: () => void }) {
   const [step, setStep] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const [native, setNative] = useState(initialProfile?.native ?? "English");
@@ -621,8 +701,7 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
   const [secondConfidence, setSecondConfidence] = useState<Confidence>(initialProfile?.secondConfidence ?? "developing");
   const [additional, setAdditional] = useState<string[]>(initialProfile?.additional ?? ["Spanish"]);
 
-  const target = additional[additional.length - 1] || second || "a new language";
-  const publishedCommunicationTarget = target === "Spanish";
+  const selectedLearningLanguages = Array.from(new Set([...(second ? [second] : []), ...additional]));
   const totalSteps = 4;
 
   useEffect(() => {
@@ -640,7 +719,7 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
       <header className="topline setup-topline">
         <span className="wordmark static-wordmark">LinguaThread</span>
         <div className="lesson-context"><span>Your language stack</span></div>
-        <span className="setup-step-count">{step + 1} of {totalSteps}</span>
+        <div className="setup-exit">{onCancel && <button className="text-action" onClick={onCancel}>Cancel</button>}<span className="setup-step-count">{step + 1} of {totalSteps}</span></div>
       </header>
       <div className="progress-track"><span style={{ width: `${((step + 1) / totalSteps) * 100}%` }} /></div>
 
@@ -682,9 +761,9 @@ function LanguageSetup({ initialProfile, onComplete }: { initialProfile?: Langua
             <div className="profile-stack">
               <ProfileLanguage index="01" role="Native anchor" language={native} />
               {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
-              {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={index === additional.length - 1 && publishedCommunicationTarget ? "Growing edge" : "Writing path and bridge"} language={language} />)}
+              {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={language === "Spanish" ? "Communication course" : "Writing path and selected bridge"} language={language} />)}
             </div>
-            <p className="setup-description ready-description">{publishedCommunicationTarget ? `LinguaThread will begin with essential ${target} vocabulary and place it into daily conversation.` : `${target} has an independent, expanded Writing System path in this release. The reviewed communication course remains Spanish with Vietnamese active practice; LinguaThread will not substitute unreviewed ${target} lessons.`} Every explanation stays grounded in {native}; other languages appear only when they provide a useful bridge.</p>
+            <p className="setup-description ready-description">Your complete {selectedLearningLanguages.length}-language selection is retained and remains available from every primary screen. Spanish currently has the reviewed communication course; each selected language has its own independent Writing System path where applicable. Explanations remain grounded in {native}, and LinguaThread will never silently substitute an unreviewed lesson for a language you chose.</p>
             <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => goToStep(0)}>Edit my languages</button>
           </div>

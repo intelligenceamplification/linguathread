@@ -203,7 +203,8 @@ test("loads independently published curriculum packs with a last-known-good cach
   ]);
   assert.match(page, /loadCurriculum/);
   assert.match(cache, /fetch\("\/api\/curriculum"\)/);
-  assert.match(cache, /last-known-good/);
+  assert.match(cache, /reviewed-lessons:v2/);
+  assert.match(cache, /lesson\.vocabulary\.length >= 4/);
   assert.match(cache, /indexedDB/);
   assert.match(route, /raw\.githubusercontent\.com/);
   assert.match(route, /curriculum-data/);
@@ -226,7 +227,7 @@ test("records directional multimodal retrieval edges", async () => {
   assert.match(engine, /retrievalType/);
   assert.match(page, /retrievalType: "reverse"/);
   assert.match(page, /retrievalType: "reconstruction"/);
-  assert.match(page, /exercise\.phase === "variation" \? "transfer"/);
+  assert.match(page, /mode === "unseen-transfer" \? "transfer"/);
   assert.match(route, /edgeKey/);
 });
 
@@ -701,11 +702,13 @@ test("keeps the voy X-Ray specific, concise, and transformational", async () => 
 
 test("uses the approved primary navigation language", async () => {
   const [page, daily, xray] = await Promise.all([read("../app/page.tsx"), read("../app/daily-lesson.tsx"), read("../app/universal-xray.tsx")]);
-  assert.match(page, /<DailyLesson/);
   assert.match(page, /<UniversalXRay/);
   assert.match(page, />Today’s Lesson<\/button>/);
   assert.match(page, />Language Path<\/button>/);
+  assert.match(page, />Writing System<\/button>/);
   assert.match(page, />Expression X-Ray<\/button>/);
+  assert.match(page, />Languages<\/button>/);
+  assert.doesNotMatch(page, />Current Lesson<\/button>/);
   assert.doesNotMatch(page, />Today<\/button>|>Course<\/button>|>X-Ray<\/button>/);
   assert.match(daily, /Skip this part for now/);
   assert.match(daily, /The thread is in motion/);
@@ -716,6 +719,17 @@ test("uses the approved primary navigation language", async () => {
   assert.match(xray, /xray-sentence/);
   assert.match(xray, /Compare and transform/);
   assert.match(xray, /aria-modal/);
+});
+
+test("uses one destination state and offers evidence-based unit placement", async () => {
+  const page = await read("../app/page.tsx");
+  assert.match(page, /type AppDestination = "lesson" \| "path" \| "writing" \| "xray"/);
+  assert.match(page, /aria-current=\{destination === "lesson"/);
+  assert.match(page, /Test out of this unit/);
+  assert.match(page, /Math\.ceil\(unit\.lessons\.length \* \.75\)/);
+  assert.match(page, /The check never reveals a model before you answer/);
+  assert.match(page, /Add or remove languages/);
+  assert.match(page, /onCancel=\{\(\) => setEditingProfile\(false\)\}/);
 });
 
 test("uses provider-neutral outside-practice guidance", async () => {

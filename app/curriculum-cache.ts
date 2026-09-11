@@ -7,9 +7,9 @@ type CachedCurriculum = {
   lessons: LessonDefinition[];
 };
 
-const databaseName = "linguathread-content-v1";
+const databaseName = "linguathread-content-v2";
 const storeName = "curriculum";
-const recordKey = "english-spanish-vietnamese:last-known-good";
+const recordKey = "english-spanish-vietnamese:reviewed-lessons:v2";
 
 function openDatabase() {
   return new Promise<IDBDatabase>((resolve, reject) => {
@@ -43,7 +43,12 @@ async function saveCachedCurriculum(value: CachedCurriculum) {
 
 function valid(value: unknown): value is CachedCurriculum {
   const candidate = value as Partial<CachedCurriculum>;
-  return Number.isInteger(candidate?.revision) && Array.isArray(candidate.lessons) && candidate.lessons.length > 0;
+  return Number.isInteger(candidate?.revision) && Array.isArray(candidate.lessons) && candidate.lessons.length > 0
+    && candidate.lessons.every((lesson) => typeof lesson?.id === "string"
+      && typeof lesson?.title === "string"
+      && Array.isArray(lesson?.vocabulary) && lesson.vocabulary.length >= 4
+      && lesson.vocabulary.every((word) => typeof word?.word === "string" && typeof word?.english === "string" && typeof word?.vietnamese === "string")
+      && Array.isArray(lesson?.mastery?.accepted) && lesson.mastery.accepted.length > 0);
 }
 
 export async function loadCurriculum(fallback: LessonDefinition[]) {
