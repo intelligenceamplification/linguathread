@@ -27,8 +27,8 @@ export function InteractiveSentence({ model, lesson, onContinue, showBridge }: {
 
   function changeMode(nextMode: Mode) {
     setMode(nextMode);
-    if (nextMode === "changes" && availableMappings[0]) setSelection({ kind: "mapping", mapping: availableMappings[0] });
-    else closeInspector();
+    setSelection(null);
+    triggerRef.current = null;
   }
 
   function selectUnit(unit: SentenceUnit, trigger: HTMLButtonElement) {
@@ -123,7 +123,7 @@ function ComparisonChoreography({ realizations, mapping }: { realizations: Inter
 
 function Inspector({ selection, relationships, model, lesson, onXRayScope, onRelationship, onClose }: { selection: Exclude<Selection, null>; relationships: SentenceRelationship[]; model: InteractiveSentenceModel; lesson: LessonForTools; onXRayScope: (scope: XRayScope) => void; onRelationship: (relationship: SentenceRelationship) => void; onClose: () => void }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  useEffect(() => { closeButtonRef.current?.focus(); }, []);
+  useEffect(() => { closeButtonRef.current?.focus({ preventScroll: true }); }, []);
   const title = selection.kind === "unit" ? selection.unit.text : selection.kind === "xray" ? selection.analysis.title : selection.kind === "relationship" ? selection.relationship.label : selection.mapping.label;
   const body = selection.kind === "unit" ? <>
     <InspectorSection title="Meaning"><p>{selection.unit.meaning}</p>{selection.unit.literal && <p><span>Literal</span>{selection.unit.literal}</p>}{selection.unit.structural && <p><span>Structure</span>{selection.unit.structural}</p>}{selection.unit.natural && <p><span>Natural</span>{selection.unit.natural}</p>}</InspectorSection>
