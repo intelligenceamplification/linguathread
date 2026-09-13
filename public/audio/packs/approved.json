@@ -1,0 +1,216 @@
+{
+  "schemaVersion": 1,
+  "packVersion": "v1",
+  "model": "OpenBMB/VoxCPM2",
+  "approvedAt": "2026-09-13T01:27:17.759Z",
+  "clips": [
+    {
+      "id": "en-expression",
+      "language": "en",
+      "text": "I would like to understand how this works.",
+      "normalizedText": "I would like to understand how this works.",
+      "url": "/audio/packs/v1/en-expression-d3630dd81953.wav",
+      "sha256": "d3630dd81953c0c9f8558401aa619cbf33510f5083ade850a812c4062c723090"
+    },
+    {
+      "id": "en-question",
+      "language": "en",
+      "text": "Could you say that again, please?",
+      "normalizedText": "Could you say that again, please?",
+      "url": "/audio/packs/v1/en-question-71f11463e82a.wav",
+      "sha256": "71f11463e82abb8e4f0c6303f4f74215ed48a5b29c455c661ebb2536d18835e2"
+    },
+    {
+      "id": "es-expression",
+      "language": "es",
+      "text": "Me gustaría entender cómo funciona esto.",
+      "normalizedText": "Me gustaría entender cómo funciona esto.",
+      "url": "/audio/packs/v1/es-expression-cc2ff54468c3.wav",
+      "sha256": "cc2ff54468c35de72efa89e410cf91b70f8b949de5fd1b3580949c7eabe248ec"
+    },
+    {
+      "id": "es-contrast",
+      "language": "es",
+      "text": "pero, perro; caro, carro",
+      "normalizedText": "pero, perro; caro, carro",
+      "url": "/audio/packs/v1/es-contrast-0cbe996b70f8.wav",
+      "sha256": "0cbe996b70f8c67727a4d0789eee7cfa9480e57abebd6c61a41a7a86ff71d3f7"
+    },
+    {
+      "id": "vi-expression",
+      "language": "vi",
+      "text": "Tôi muốn hiểu điều này hoạt động như thế nào.",
+      "normalizedText": "Tôi muốn hiểu điều này hoạt động như thế nào.",
+      "url": "/audio/packs/v1/vi-expression-3fc63a753293.wav",
+      "sha256": "3fc63a7532937928de830ec844ad135c104d100772a2fff4212d1ae96674ff3b"
+    },
+    {
+      "id": "vi-tones",
+      "language": "vi",
+      "text": "ma, má, mà, mả, mã, mạ",
+      "normalizedText": "ma, má, mà, mả, mã, mạ",
+      "url": "/audio/packs/v1/vi-tones-7c2dc0fb223d.wav",
+      "sha256": "7c2dc0fb223d1e6dc79eac06b8d14f1b0916d02fa940c41914a91c9499d957df"
+    },
+    {
+      "id": "fr-expression",
+      "language": "fr",
+      "text": "J’aimerais comprendre comment cela fonctionne.",
+      "normalizedText": "J’aimerais comprendre comment cela fonctionne.",
+      "url": "/audio/packs/v1/fr-expression-7799f0d0416d.wav",
+      "sha256": "7799f0d0416d871bb64c6f5e287ee1e5afdf3646564fd5306c521bc445356194"
+    },
+    {
+      "id": "fr-question",
+      "language": "fr",
+      "text": "Pourriez-vous répéter, s’il vous plaît ?",
+      "normalizedText": "Pourriez-vous répéter, s’il vous plaît ?",
+      "url": "/audio/packs/v1/fr-question-b34f6d7a37ba.wav",
+      "sha256": "b34f6d7a37baa1477e342bade37a67509d17c841361a2217e1c567203b4da327"
+    },
+    {
+      "id": "pt-expression",
+      "language": "pt",
+      "text": "Eu gostaria de entender como isso funciona.",
+      "normalizedText": "Eu gostaria de entender como isso funciona.",
+      "url": "/audio/packs/v1/pt-expression-f3c406e33ac2.wav",
+      "sha256": "f3c406e33ac2549405d10b4a4887eccf3af2857d67a6a66cbfa61100138ee0d9"
+    },
+    {
+      "id": "pt-contrast",
+      "language": "pt",
+      "text": "avó, avô; pode, pôde",
+      "normalizedText": "avó, avô; pode, pôde",
+      "url": "/audio/packs/v1/pt-contrast-89072ff94ef2.wav",
+      "sha256": "89072ff94ef28126416e8de261be14b7dd0256822d1ff607415e5d944b4d0143"
+    },
+    {
+      "id": "de-expression",
+      "language": "de",
+      "text": "Ich möchte verstehen, wie das funktioniert.",
+      "normalizedText": "Ich möchte verstehen, wie das funktioniert.",
+      "url": "/audio/packs/v1/de-expression-d0b69452d27a.wav",
+      "sha256": "d0b69452d27a2a25acd129647327868da2164bab8a0cd4a8728456b4e0686ec7"
+    },
+    {
+      "id": "de-contrast",
+      "language": "de",
+      "text": "schon, schön; wurde, würde",
+      "normalizedText": "schon, schön; wurde, würde",
+      "url": "/audio/packs/v1/de-contrast-6ebca97555ae.wav",
+      "sha256": "6ebca97555ae9d9d497e24cbc70c1cb11ce81c048246b1a1d58712e2c94a5367"
+    },
+    {
+      "id": "it-expression",
+      "language": "it",
+      "text": "Vorrei capire come funziona.",
+      "normalizedText": "Vorrei capire come funziona.",
+      "url": "/audio/packs/v1/it-expression-f53c099ac68c.wav",
+      "sha256": "f53c099ac68c3ea83bea84370662f7ea5aafa7dd3a70821544eee20895248c0a"
+    },
+    {
+      "id": "it-contrast",
+      "language": "it",
+      "text": "pala, palla; sete, sette",
+      "normalizedText": "pala, palla; sete, sette",
+      "url": "/audio/packs/v1/it-contrast-277054997ac0.wav",
+      "sha256": "277054997ac0873a09ef6fecc7dc151b4d33a2a13df5d7d6ac5c0f7b1a267b36"
+    },
+    {
+      "id": "zh-expression",
+      "language": "zh",
+      "text": "我想了解这是怎么运作的。",
+      "normalizedText": "我想了解这是怎么运作的。",
+      "url": "/audio/packs/v1/zh-expression-851cdc96556d.wav",
+      "sha256": "851cdc96556dc40892142750ba7fc2bf4c1a31562eb462f87db093d5e821a4e6"
+    },
+    {
+      "id": "zh-tones",
+      "language": "zh",
+      "text": "mā, má, mǎ, mà, ma",
+      "normalizedText": "mā, má, mǎ, mà, ma",
+      "url": "/audio/packs/v1/zh-tones-cbb99bfc39f4.wav",
+      "sha256": "cbb99bfc39f4b74c6bf0482e85b03aba5e658d5ed0a4b5b3683c42736e3d51b4"
+    },
+    {
+      "id": "ja-expression",
+      "language": "ja",
+      "text": "これがどのように機能するのか理解したいです。",
+      "normalizedText": "これがどのように機能するのか理解したいです。",
+      "url": "/audio/packs/v1/ja-expression-bd35d9f924b4.wav",
+      "sha256": "bd35d9f924b4a083cbf0931796e277fbfcd4b5fc712eee5178d71b2e1745bbc7"
+    },
+    {
+      "id": "ja-contrast",
+      "language": "ja",
+      "text": "おばさん、おばあさん。きて、きって。",
+      "normalizedText": "おばさん、おばあさん。きて、きって。",
+      "url": "/audio/packs/v1/ja-contrast-37216972354b.wav",
+      "sha256": "37216972354b143eed27299026750a1be8b4333e6763e01036cf43cdeec2d5a7"
+    },
+    {
+      "id": "ko-expression",
+      "language": "ko",
+      "text": "이것이 어떻게 작동하는지 이해하고 싶어요.",
+      "normalizedText": "이것이 어떻게 작동하는지 이해하고 싶어요.",
+      "url": "/audio/packs/v1/ko-expression-5a0cc18db201.wav",
+      "sha256": "5a0cc18db2013f32c5be6aa7bc3eb0857c2514ba4238ef54ba27de4f078df8de"
+    },
+    {
+      "id": "ko-contrast",
+      "language": "ko",
+      "text": "달, 딸, 탈. 불, 풀, 뿔.",
+      "normalizedText": "달, 딸, 탈. 불, 풀, 뿔.",
+      "url": "/audio/packs/v1/ko-contrast-b3c728764582.wav",
+      "sha256": "b3c728764582dbfb6dcaa0c62310ec7444e46852d8a02e2f15ee499c5f9e58ad"
+    },
+    {
+      "id": "ar-expression",
+      "language": "ar",
+      "text": "أود أن أفهم كيف يعمل هذا.",
+      "normalizedText": "أود أن أفهم كيف يعمل هذا.",
+      "url": "/audio/packs/v1/ar-expression-3fd2b6c204cd.wav",
+      "sha256": "3fd2b6c204cdce0e8b10cf65ddd7910ce52a16e9ccee482f7a2b3bf2215c9bad"
+    },
+    {
+      "id": "ar-contrast",
+      "language": "ar",
+      "text": "قَلْب، كَلْب. سَار، صَار.",
+      "normalizedText": "قَلْب، كَلْب. سَار، صَار.",
+      "url": "/audio/packs/v1/ar-contrast-fc50f3450755.wav",
+      "sha256": "fc50f3450755e08c70962b90ff1d879419a32c71f5474ec4393dee4fac89c33d"
+    },
+    {
+      "id": "hi-expression",
+      "language": "hi",
+      "text": "मैं समझना चाहता हूँ कि यह कैसे काम करता है।",
+      "normalizedText": "मैं समझना चाहता हूँ कि यह कैसे काम करता है।",
+      "url": "/audio/packs/v1/hi-expression-ac3723eab7fe.wav",
+      "sha256": "ac3723eab7fe010e2fda2c26797bf836e1f9e1f14938aad25d7f828435b02e4b"
+    },
+    {
+      "id": "hi-contrast",
+      "language": "hi",
+      "text": "कल, खल; दाल, ढाल",
+      "normalizedText": "कल, खल; दाल, ढाल",
+      "url": "/audio/packs/v1/hi-contrast-f605c1e03e5c.wav",
+      "sha256": "f605c1e03e5ce6e6c4a972088d38dab7fed610cebc4a6e63ae43e55b1b31bc58"
+    },
+    {
+      "id": "ru-expression",
+      "language": "ru",
+      "text": "Я хотел бы понять, как это работает.",
+      "normalizedText": "Я хотел бы понять, как это работает.",
+      "url": "/audio/packs/v1/ru-expression-69e9413445d8.wav",
+      "sha256": "69e9413445d870029d025702652e49fccd0914ed96c62b87308cbaad246e93ba"
+    },
+    {
+      "id": "ru-contrast",
+      "language": "ru",
+      "text": "был, бил; угол, уголь",
+      "normalizedText": "был, бил; угол, уголь",
+      "url": "/audio/packs/v1/ru-contrast-4e5571c73d44.wav",
+      "sha256": "4e5571c73d4470752457023aa72e5a851479887a2b9c5ed26bfbe277ee776421"
+    }
+  ]
+}

@@ -67,13 +67,13 @@ test("builds LinguaThread on the standard Next.js runtime", async () => {
 });
 
 test("preserves the language setup and calm learning interface", async () => {
-  const [page, layout] = await Promise.all([read("../app/page.tsx"), read("../app/layout.tsx")]);
+  const [page, layout, profile] = await Promise.all([read("../app/page.tsx"), read("../app/layout.tsx"), read("../app/language-profile.ts")]);
   assert.match(layout, /LinguaThread/);
   assert.match(page, /Your language stack/);
   assert.match(page, /What language shaped your first thoughts/);
   assert.match(page, /placeholder="Search languages"/);
-  assert.match(page, /"Mandarin Chinese"/);
-  assert.match(page, /"Arabic"/);
+  assert.match(profile, /"Mandarin Chinese"/);
+  assert.match(profile, /"Arabic"/);
   assert.doesNotMatch(page, /"Tagalog"|"Swahili"|customLanguage/);
   assert.match(page, /Language begins from what you already know/);
 });
@@ -238,7 +238,7 @@ test("repairs legacy local progress and schedules review from the updated edge s
     read("../app/api/progress/route.ts"),
   ]);
   assert.match(engine, /function normalizeLearnerModel/);
-  assert.match(engine, /version: 2/);
+  assert.match(engine, /version: 3/);
   assert.match(page, /localStorage\.removeItem\(learnerModelKey\)/);
   assert.match(page, /localStorage\.removeItem\("linguathread\.completed-lessons\.v1"\)/);
   assert.match(progress, /existingEvidence/);
@@ -281,7 +281,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
 
 test("activates Vietnamese production from any non-native profile position", async () => {
   const source = await read("../app/page.tsx");
-  assert.match(source, /\[profile\.second, \.\.\.profile\.additional\]/);
+  assert.match(source, /activeSelections\(profile\)/);
   assert.match(source, /activeLanguages\.includes\("vietnamese"\)/);
   assert.match(source, /setProductionLanguage\("Vietnamese"\)/);
   assert.match(source, /Spanish secured/);
@@ -759,6 +759,17 @@ test("derives private ownership only from a server-issued HttpOnly session", asy
   assert.match(schema, /legacyLearnerClaims/);
   assert.match(schema, /references\(\(\) => learners\.id/);
   assert.match(migration, /FOREIGN KEY \(learner_id\) REFERENCES learners\(id\) ON DELETE CASCADE/);
+});
+
+test("only the revision-aware profile endpoint may mutate language settings", async () => {
+  const [profile, progress, page] = await Promise.all([
+    read("../app/api/profile/route.ts"), read("../app/api/progress/route.ts"), read("../app/page.tsx"),
+  ]);
+  assert.match(profile, /incoming\.revision/);
+  assert.match(profile, /status: 409/);
+  assert.doesNotMatch(progress, /learnerProfiles|profileJson|body\.profile/);
+  assert.doesNotMatch(page, /type: "complete"[^\n]+profile/);
+  assert.match(page, /chooseAuthoritativeProfile/);
 });
 
 test("fresh installs bootstrap privately and legacy state has a one-time claim path", async () => {

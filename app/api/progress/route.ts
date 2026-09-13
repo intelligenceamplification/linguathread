@@ -1,6 +1,6 @@
 import { and, asc, eq, lte, sql } from "drizzle-orm";
 import { getDb } from "../../../db";
-import { answerAttempts, learnerProfiles, lessonProgress, objectiveMastery } from "../../../db/schema";
+import { answerAttempts, lessonProgress, objectiveMastery } from "../../../db/schema";
 import { isSameOriginMutation, learnerForRequest } from "../../learner-session";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
   const body = await request.json() as {
     type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string;
-    language?: string; correct?: boolean; accelerated?: boolean; profile?: unknown;
+    language?: string; correct?: boolean; accelerated?: boolean;
     objectiveId?: string; supported?: boolean;
     edgeKey?: string; fromLanguage?: string; toLanguage?: string;
     fromModality?: string; toModality?: string; retrievalType?: string; errorType?: string; latencyMs?: number;
@@ -119,13 +119,5 @@ export async function POST(request: Request) {
       completedAt: sql`COALESCE(${lessonProgress.completedAt}, ${now})`, reviewDueAt, updatedAt: now,
     },
   });
-  if (body.profile) {
-    await db.insert(learnerProfiles).values({
-      learnerId: learner, profileJson: JSON.stringify(body.profile), updatedAt: now,
-    }).onConflictDoUpdate({
-      target: learnerProfiles.learnerId,
-      set: { profileJson: JSON.stringify(body.profile), updatedAt: now },
-    });
-  }
   return Response.json({ saved: true, mastery, reviewDueAt });
 }

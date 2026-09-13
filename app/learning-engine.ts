@@ -28,26 +28,57 @@ export type SkillEvidence = {
   errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "input" | "composition" | "unknown";
 };
 
+export type LanguageProgress = {
+  status: "active" | "paused";
+  priority: number;
+  communicationPosition: string | null;
+  writingPosition: string | null;
+  reviewHistory: string[];
+  weakSkills: string[];
+  testOutResults: Record<string, { passed: boolean; score: number; completedAt: string }>;
+};
+
 export type LearnerModel = {
-  version: 2;
+  version: 3;
   sessionsCompleted: number;
   evidence: Record<string, SkillEvidence>;
+  languages: Record<string, LanguageProgress>;
 };
 
 export const emptyLearnerModel = (): LearnerModel => ({
-  version: 2,
+  version: 3,
   sessionsCompleted: 0,
   evidence: {},
+  languages: {},
 });
 
 export function normalizeLearnerModel(value: unknown): LearnerModel {
   if (!value || typeof value !== "object") return emptyLearnerModel();
   const candidate = value as Partial<LearnerModel>;
   return {
-    version: 2,
+    version: 3,
     sessionsCompleted: Number.isFinite(candidate.sessionsCompleted) ? Math.max(0, Number(candidate.sessionsCompleted)) : 0,
     evidence: candidate.evidence && typeof candidate.evidence === "object" ? candidate.evidence : {},
+    languages: candidate.languages && typeof candidate.languages === "object" ? candidate.languages : {},
   };
+}
+
+export function coordinateLanguageProgress(
+  model: LearnerModel,
+  selections: Array<{ language: string; status: "active" | "paused"; priority: number }>,
+) {
+  const languages = { ...model.languages };
+  for (const selection of selections) {
+    const key = selection.language.toLocaleLowerCase();
+    languages[key] = languages[key]
+      ? { ...languages[key], status: selection.status, priority: selection.priority }
+      : {
+        status: selection.status, priority: selection.priority,
+        communicationPosition: null, writingPosition: null,
+        reviewHistory: [], weakSkills: [], testOutResults: {},
+      };
+  }
+  return { ...model, languages };
 }
 
 export function evidenceKey(objectiveId: string, language: LearningLanguage) {
@@ -132,11 +163,8 @@ export function completeSession(model: LearnerModel) {
   return { ...model, sessionsCompleted: model.sessionsCompleted + 1 };
 }
 
-function objectiveIsUsable(model: LearnerModel, objectiveId: string) {
-  const spanish = languageMastery(model, objectiveId, "Spanish");
-  const vietnamese = languageMastery(model, objectiveId, "Vietnamese");
-  return ["usable", "stable", "maintenance"].includes(spanish) &&
-    ["usable", "stable", "maintenance"].includes(vietnamese);
+function objectiveIsUsable(model: LearnerModel, objectiveId: string, language: LearningLanguage) {
+  return ["usable", "stable", "maintenance"].includes(languageMastery(model, objectiveId, language));
 }
 
 export function isUnlocked(
@@ -144,11 +172,12 @@ export function isUnlocked(
   model: LearnerModel,
   completedLessonIds: string[],
   curriculum: LessonDefinition[],
+  language: LearningLanguage = "Spanish",
 ) {
   return (lesson.prerequisites || []).every((id) =>
     completedLessonIds.includes(id) ||
     completedLessonIds.includes(curriculum.find((item) => item.objectiveId === id)?.id || "") ||
-    objectiveIsUsable(model, id));
+    objectiveIsUsable(model, id, language));
 }
 
 export function selectNextLesson(
@@ -156,9 +185,10 @@ export function selectNextLesson(
   model: LearnerModel,
   completedLessonIds: string[],
   now = new Date(),
+  language: LearningLanguage = "Spanish",
 ) {
   const unlockedNew = curriculum.find((lesson) =>
-    !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum));
+    !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
   const due = curriculum.find((lesson) => {
     const evidence = evidenceForObjective(model, lesson.objectiveId || lesson.id);
     return completedLessonIds.includes(lesson.id) && evidence.some((item) => new Date(item.nextReviewAt) <= now);
@@ -187,7 +217,6 @@ export function migrateCompletedLessons(completedLessonIds: string[], curriculum
     if (!lesson) return model;
     const objectiveId = lesson.objectiveId || lesson.id;
     const once = recordEvidence(model, objectiveId, "Spanish", true, false);
-    const twice = recordEvidence(once, objectiveId, "Vietnamese", true, false);
-    return completeSession(twice);
+    return completeSession(once);
   }, emptyLearnerModel());
 }

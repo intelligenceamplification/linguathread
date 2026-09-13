@@ -11,6 +11,9 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    ".voxcpm-venv/**",
+    "audio/generated/**",
     "next-env.d.ts",
   ]),
 ]);

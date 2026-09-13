@@ -77,8 +77,9 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                   let payload = message.body as? [String: Any],
                   let action = payload["action"] as? String else { return }
             if action == "stop" {
-                synthesizer.stopSpeaking(at: .immediate)
-                notifySpeechEnded()
+                if !synthesizer.stopSpeaking(at: .immediate) {
+                    notifySpeechCancelled(requestID: payload["requestID"] as? String)
+                }
                 return
             }
             guard action == "speak",
@@ -103,12 +104,17 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         }
 
         func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-            notifySpeechEnded()
+            notifySpeechCancelled(requestID: activeRequestID)
+            activeRequestID = nil
         }
 
         private func notifySpeechEnded() {
             notifySpeechEvent("linguathread:native-speech-ended", requestID: activeRequestID)
             activeRequestID = nil
+        }
+
+        private func notifySpeechCancelled(requestID: String?) {
+            notifySpeechEvent("linguathread:native-speech-cancelled", requestID: requestID)
         }
 
         private func notifySpeechEvent(_ name: String, requestID: String?) {

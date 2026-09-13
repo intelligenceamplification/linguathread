@@ -2,43 +2,68 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { languageInfo, type FoundationLanguage } from "./multilingual-foundation";
 import { speechLocales, voiceForLanguage } from "./speech";
+import { approvedAudioFor } from "./audio-pack";
 
 const speechEvent = "linguathread:speech-start";
 const nativeSpeechStartEvent = "linguathread:native-speech-started";
 const nativeSpeechEndEvent = "linguathread:native-speech-ended";
+const nativeSpeechCancelEvent = "linguathread:native-speech-cancelled";
 const subscribeToSpeechSupport = () => () => {};
 const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: { linguathreadAudio?: { postMessage: (value: unknown) => void } } }; __LINGUATHREAD_NATIVE_SPEECH__?: boolean }).webkit?.messageHandlers?.linguathreadAudio;
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
 
-export default function ListenButton({ text, language, onUse, onPlayback, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; compact?: boolean }) {
+export default function ListenButton({ text, language, onUse, onPlayback, onComplete, onError, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; onComplete?: () => void; onError?: () => void; compact?: boolean }) {
  const id = useId();
  const supported = useSyncExternalStore(subscribeToSpeechSupport, hasSpeechSupport, noServerSpeechSupport);
  const [speaking, setSpeaking] = useState(false);
  const playback = useRef(onPlayback);
+ const completion = useRef(onComplete);
+ const failure = useRef(onError);
+ const speakingRef = useRef(false);
+ const audioRef = useRef<HTMLAudioElement | null>(null);
  useEffect(() => { playback.current = onPlayback; }, [onPlayback]);
+ useEffect(() => { completion.current = onComplete; }, [onComplete]);
+ useEffect(() => { failure.current = onError; }, [onError]);
+ useEffect(() => { speakingRef.current = speaking; }, [speaking]);
 
  useEffect(() => {
-  const resetForAnother = (event: Event) => { if ((event as CustomEvent<string>).detail !== id) setSpeaking(false); };
+  const resetForAnother = (event: Event) => { if ((event as CustomEvent<string>).detail !== id) { audioRef.current?.pause(); setSpeaking(false); } };
   window.addEventListener(speechEvent, resetForAnother);
-  const nativeEnded = () => setSpeaking(false);
+  const nativeEnded = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(false); completion.current?.(); } };
   const nativeStarted = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(true); playback.current?.(); } };
+  const nativeCancelled = (event: Event) => { if ((event as CustomEvent<string>).detail === id) setSpeaking(false); };
   window.addEventListener(nativeSpeechEndEvent, nativeEnded);
   window.addEventListener(nativeSpeechStartEvent, nativeStarted);
-  return () => { window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); };
+  window.addEventListener(nativeSpeechCancelEvent, nativeCancelled);
+  return () => {
+   window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); window.removeEventListener(nativeSpeechCancelEvent, nativeCancelled);
+   if (speakingRef.current) { nativeHandler()?.postMessage({ action: "stop", requestID: id }); window.speechSynthesis?.cancel(); audioRef.current?.pause(); }
+  };
  }, [id]);
 
- function toggle() {
+ async function toggle() {
   if (!supported) return;
   if (speaking) {
     nativeHandler()?.postMessage({ action: "stop" });
     if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    audioRef.current?.pause();
     setSpeaking(false);
     return;
   }
   onUse?.();
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   window.dispatchEvent(new CustomEvent(speechEvent, { detail: id }));
+  const approved = await approvedAudioFor(text, language);
+  if (approved) {
+   const audio = new Audio(approved.url);
+   audioRef.current = audio;
+   audio.onplay = () => { setSpeaking(true); playback.current?.(); };
+   audio.onended = () => { setSpeaking(false); completion.current?.(); };
+   audio.onerror = () => { setSpeaking(false); failure.current?.(); };
+   try { await audio.play(); } catch { setSpeaking(false); failure.current?.(); }
+   return;
+  }
   const native = nativeHandler();
   if (native) {
     try {
@@ -55,8 +80,8 @@ export default function ListenButton({ text, language, onUse, onPlayback, compac
   const voice = voiceForLanguage(window.speechSynthesis.getVoices(), language);
   if (voice) utterance.voice = voice;
   utterance.onstart = () => { setSpeaking(true); playback.current?.(); };
-  utterance.onend = () => setSpeaking(false);
-  utterance.onerror = () => setSpeaking(false);
+  utterance.onend = () => { setSpeaking(false); completion.current?.(); };
+  utterance.onerror = () => { setSpeaking(false); failure.current?.(); };
   window.speechSynthesis.speak(utterance);
  }
 

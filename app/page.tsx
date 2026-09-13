@@ -13,8 +13,14 @@ import "./multilingual-preview/preview.css";
 import { createReverseRecallExercises, type LessonTranslationExercise } from "./lesson-tools";
 import { loadCurriculum } from "./curriculum-cache";
 import { outsidePracticeFor } from "./course-map";
+import { planStackSession } from "./stack-coordination";
 import {
-  completeSession, emptyLearnerModel, LearnerModel, RetrievalEdge,
+  activeSelections, chooseAuthoritativeProfile, LanguageName, LanguageProfile,
+  LanguageSelection, markProfileSynchronized, normalizeLanguageProfile,
+  supportedLanguageNames, updateSelections,
+} from "./language-profile";
+import {
+  completeSession, coordinateLanguageProgress, emptyLearnerModel, LearnerModel, RetrievalEdge,
   migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
@@ -23,16 +29,15 @@ type AppDestination = "lesson" | "path" | "writing" | "xray";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
 type ProductionLanguage = "Spanish" | "Vietnamese";
-type LanguageProfile = { native: string; second: string | null; secondConfidence: Confidence | null; additional: string[] };
 
-const commonLanguages = [
-  "English", "Spanish", "Vietnamese", "French", "Portuguese", "German",
-  "Italian", "Mandarin Chinese", "Japanese", "Korean", "Arabic", "Hindi", "Russian",
-];
+const commonLanguages = [...supportedLanguageNames];
 
 const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "complete"];
 const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
+const lessonSessionKey = "linguathread.main-lesson-session.v1";
+const legacyLanguageProfileKey = "linguathread.language-profile.v1";
+const languageProfileKey = "linguathread.language-profile.v2";
 
 const jsonHeaders = { "content-type": "application/json" };
 const ScriptCourseView = dynamic(() => import("./writing-system/view"), { loading: () => <p role="status">Opening writing foundations…</p> });
@@ -42,24 +47,28 @@ export default function Home() {
   const [editingProfile, setEditingProfile] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [launchState, setLaunchState] = useState<"checking" | "intro" | "app">("checking");
+  const [profileSaveError, setProfileSaveError] = useState<string | null>(null);
 
+  // Profile reconciliation is intentionally a one-time installation bootstrap.
   useEffect(() => {
-    const saved = window.localStorage.getItem("linguathread.language-profile.v1");
+    const saved = window.localStorage.getItem(languageProfileKey) || window.localStorage.getItem(legacyLanguageProfileKey);
     const legacyLearnerId = window.localStorage.getItem(learnerIdKey);
     let localProfile: LanguageProfile | null = null;
     if (saved) try {
-      const parsed = JSON.parse(saved) as Partial<LanguageProfile>;
-      if (parsed.native && Array.isArray(parsed.additional)) localProfile = { native: parsed.native, second: parsed.second || null, secondConfidence: parsed.second ? (parsed.secondConfidence || "developing") : null, additional: parsed.additional };
-    } catch { window.localStorage.removeItem("linguathread.language-profile.v1"); }
+      localProfile = normalizeLanguageProfile(JSON.parse(saved));
+    } catch { /* Keep the legacy record available for a future recovery attempt. */ }
 
     fetch("/api/session", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ legacyLearnerId }) })
       .then(async (response) => {
         const session = response.ok ? await response.json() as { legacyClaimed?: boolean } : {};
         if (session.legacyClaimed) window.localStorage.removeItem(learnerIdKey);
         const profileResponse = await fetch("/api/profile");
-        const data = profileResponse.ok ? await profileResponse.json() as { profile?: LanguageProfile | null } : {};
-        const nextProfile = data.profile || localProfile;
+        const data = profileResponse.ok ? await profileResponse.json() as { profile?: unknown; updatedAt?: number } : {};
+        const remoteProfile = normalizeLanguageProfile(data.profile, data.updatedAt);
+        const nextProfile = chooseAuthoritativeProfile(localProfile, remoteProfile);
+        if (nextProfile) window.localStorage.setItem(languageProfileKey, JSON.stringify(nextProfile));
         setProfile(nextProfile);
+        if (nextProfile?.syncPending) void synchronizeProfile(nextProfile);
         setLaunchState("intro");
       })
       .catch(() => {
@@ -67,24 +76,57 @@ export default function Home() {
         setLaunchState("intro");
       })
       .finally(() => setLoaded(true));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  async function synchronizeProfile(pending: LanguageProfile) {
+    try {
+      const response = await fetch("/api/profile", { method: "PUT", headers: jsonHeaders, body: JSON.stringify(pending), keepalive: true });
+      const data = await response.json().catch(() => ({})) as { profile?: unknown; localOnly?: boolean; error?: string };
+      if (response.status === 409) {
+        const current = normalizeLanguageProfile(data.profile);
+        const resolved = chooseAuthoritativeProfile(pending, current);
+        if (resolved === pending) return synchronizeProfile({ ...pending, revision: Math.max(pending.revision, current?.revision || 0) + 1, modifiedAt: Date.now() });
+        if (resolved) {
+          window.localStorage.setItem(languageProfileKey, JSON.stringify(resolved));
+          setProfile(resolved);
+        }
+        return;
+      }
+      if (!response.ok) throw new Error(data.error || "Language settings could not be synchronized.");
+      const canonical = normalizeLanguageProfile(data.profile) || (data.localOnly ? pending : markProfileSynchronized(pending));
+      window.localStorage.setItem(languageProfileKey, JSON.stringify(canonical));
+      setProfile(canonical);
+      setProfileSaveError(data.localOnly ? "Saved on this device. Cloud synchronization is unavailable." : null);
+    } catch {
+      setProfileSaveError("Saved on this device. LinguaThread will synchronize these language settings when the connection returns.");
+    }
+  }
+
   function saveProfile(nextProfile: LanguageProfile) {
-    const second = nextProfile.second === nextProfile.native ? null : nextProfile.second;
-    const additional = [...new Set(nextProfile.additional)]
-      .filter((language) => language !== nextProfile.native && language !== second);
-    const cleaned = { ...nextProfile, second, secondConfidence: second ? nextProfile.secondConfidence : null, additional };
-    window.localStorage.setItem("linguathread.language-profile.v1", JSON.stringify(cleaned));
-    fetch("/api/profile", { method: "PUT", headers: jsonHeaders, body: JSON.stringify(cleaned), keepalive: true }).catch(() => undefined);
-    setProfile(cleaned);
+    const current = profile || nextProfile;
+    const pending = updateSelections({ ...nextProfile, revision: current.revision, modifiedAt: current.modifiedAt }, nextProfile.selections);
+    window.localStorage.setItem(languageProfileKey, JSON.stringify(pending));
+    try {
+      const model = normalizeLearnerModel(JSON.parse(window.localStorage.getItem(learnerModelKey) || "null"));
+      window.localStorage.setItem(learnerModelKey, JSON.stringify(coordinateLanguageProgress(model, pending.selections)));
+    } catch { /* Language settings remain authoritative even if old progress is unreadable. */ }
+    setProfile(pending);
     setEditingProfile(false);
+    setProfileSaveError(null);
+    void synchronizeProfile(pending);
   }
 
   if (!loaded || launchState === "checking") return <main className="app-shell launch-loading" aria-label="Loading LinguaThread" />;
   if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
   if (!profile) return <LanguageSetup onComplete={saveProfile} />;
-  if (editingProfile) return <LanguageSetup initialProfile={profile} onComplete={saveProfile} onCancel={() => setEditingProfile(false)} />;
-  return <Lesson profile={profile} onEditLanguages={() => setEditingProfile(true)} />;
+  return <>
+    <div inert={editingProfile ? true : undefined} aria-hidden={editingProfile || undefined}>
+      <Lesson profile={profile} onEditLanguages={() => setEditingProfile(true)} />
+    </div>
+    {profileSaveError && <p className="profile-save-status" role="status">{profileSaveError}</p>}
+    {editingProfile && <div className="language-editor-overlay" role="dialog" aria-modal="true" aria-label="Languages"><LanguageSetup initialProfile={profile} onComplete={saveProfile} onCancel={() => setEditingProfile(false)} /></div>}
+  </>;
 }
 
 function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEditLanguages: () => void }) {
@@ -108,9 +150,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [xrayOpen, setXrayOpen] = useState(false);
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const [placementUnit, setPlacementUnit] = useState<{ level: string; unit: number } | null>(null);
+  const [sessionHydrated, setSessionHydrated] = useState(false);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
   const lessonStageRef = useRef<HTMLElement>(null);
-  const attemptStartedAtRef = useRef(Date.now());
+  const attemptStartedAtRef = useRef(0);
+  const initialScriptLanguageRef = useRef(speechLanguage(activeSelections(profile)[0]?.language || ""));
+  const lesson = course[lessonIndex] || course[0];
 
   useEffect(() => {
     attemptStartedAtRef.current = Date.now();
@@ -166,9 +211,26 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setLearnerModel(localModel);
         window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
         setCompletedIds(completed);
-        const selection = selectNextLesson(loadedCourse, localModel, completed);
-        setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
-        setSessionMode(selection.mode);
+        let restored = false;
+        try {
+          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage } | null;
+          const restoredIndex = savedSession?.lessonId ? loadedCourse.findIndex((item) => item.id === savedSession.lessonId) : -1;
+          if (savedSession && restoredIndex >= 0 && savedSession.stage && stages.includes(savedSession.stage)) {
+            setLessonIndex(restoredIndex); setStage(savedSession.stage); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
+            setAnswer(savedSession.answer || ""); setFeedback(savedSession.feedback || "idle"); setFailedAttempts(Math.max(0, savedSession.failedAttempts || 0));
+            setProductionLanguage(savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish"); setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
+            const restoredDestination = savedSession.destination && ["lesson", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
+            setDestination(restoredDestination); setXrayOpen(restoredDestination === "xray");
+            if (restoredDestination === "writing") setScriptLanguage(savedSession.scriptLanguage || initialScriptLanguageRef.current || null);
+            restored = true;
+          }
+        } catch { /* A malformed session cannot affect durable progress. */ }
+        if (!restored) {
+          const selection = selectNextLesson(loadedCourse, localModel, completed);
+          setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
+          setSessionMode(selection.mode);
+        }
+        setSessionHydrated(true);
         if (data.completedLessonIds?.length) {
           window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
         }
@@ -176,9 +238,18 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       .catch(() => undefined);
   }, []);
 
-  const lesson = course[lessonIndex] || course[0];
-  const activeLanguages = [profile.second, ...profile.additional]
-    .filter((language): language is string => Boolean(language))
+  useEffect(() => {
+    if (!sessionHydrated || !lesson) return;
+    window.localStorage.setItem(lessonSessionKey, JSON.stringify({
+      lessonId: lesson.id, stage, wordIndex, answer, feedback, failedAttempts,
+      productionLanguage, reverseIndex, destination, scriptLanguage,
+    }));
+  }, [answer, destination, failedAttempts, feedback, lesson, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, stage, wordIndex]);
+
+  const selectedLearningLanguages = activeSelections(profile).map((item) => item.language)
+    .filter((language) => language !== profile.native);
+  const stackSession = planStackSession(profile.selections, coordinateLanguageProgress(learnerModel, profile.selections));
+  const activeLanguages = selectedLearningLanguages
     .map((language) => language.trim().toLocaleLowerCase());
   const bridgeEnabled = activeLanguages.includes("vietnamese");
   const stageIndex = Math.max(0, stages.indexOf(stage));
@@ -186,12 +257,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const currentWord = lesson.vocabulary[wordIndex];
   const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
   const reverseExercises = createReverseRecallExercises(lesson, bridgeEnabled);
-  const literacyLanguages = [...new Set([profile.second, ...profile.additional])]
-    .filter((language): language is string => Boolean(language) && language !== profile.native)
+  const literacyLanguages = selectedLearningLanguages
     .map((language) => ({ name: language, id: speechLanguage(language) }))
-    .filter((item): item is { name: string; id: FoundationLanguage } => item.id !== null);
-  const selectedLearningLanguages = [...new Set([profile.second, ...profile.additional])]
-    .filter((language): language is string => Boolean(language) && language !== profile.native);
+    .filter((item): item is { name: LanguageName; id: FoundationLanguage } => item.id !== null);
   const courseUnits = course.reduce<Array<{ key: string; level: string; unit: number; title: string; lessons: LessonDefinition[] }>>((units, item) => {
     const key = `${item.level}-${item.unit}`;
     const existing = units.find((unit) => unit.key === key);
@@ -342,7 +410,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
     });
-    fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated, profile }), keepalive: true }).catch(() => undefined);
+    fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: lesson.id, skill: lesson.skill, accelerated }), keepalive: true }).catch(() => undefined);
     setStage("complete");
   }
 
@@ -414,7 +482,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       nextModel = recordEvidence(nextModel, item.objectiveId || item.id, "Spanish", true, false, new Date(), {
         fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "production",
       });
-      fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: item.id, skill: item.skill, accelerated: true, profile }), keepalive: true }).catch(() => undefined);
+      fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: item.id, skill: item.skill, accelerated: true }), keepalive: true }).catch(() => undefined);
     }
     setLearnerModel(nextModel);
     window.localStorage.setItem(learnerModelKey, JSON.stringify(nextModel));
@@ -492,6 +560,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />}
             </div>
             <button className="selected-stack-ribbon" onClick={onEditLanguages}><span>Your selected stack</span>{selectedLearningLanguages.join(" · ")}</button>
+            <p className="stack-session-note">{stackSession.explanation}</p>
             <p className="contemplative-note">{currentWord.note}</p>
             <button className="primary-action" onClick={advanceVocabulary}>
               {wordIndex === lesson.vocabulary.length - 1 ? "Practice the foundation" : "Continue"}
@@ -696,10 +765,13 @@ function UnitPlacement({ unit, onClose, onFinish, onStudy }: {
 function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfile?: LanguageProfile; onComplete: (profile: LanguageProfile) => void; onCancel?: () => void }) {
   const [step, setStep] = useState(0);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const [native, setNative] = useState(initialProfile?.native ?? "English");
-  const [second, setSecond] = useState<string | null>(initialProfile?.second ?? "Vietnamese");
+  const [native, setNative] = useState<LanguageName>(initialProfile?.native ?? "English");
+  const [second, setSecond] = useState<LanguageName | null>(initialProfile?.second ?? "Vietnamese");
   const [secondConfidence, setSecondConfidence] = useState<Confidence>(initialProfile?.secondConfidence ?? "developing");
-  const [additional, setAdditional] = useState<string[]>(initialProfile?.additional ?? ["Spanish"]);
+  const [additional, setAdditional] = useState<LanguageName[]>(initialProfile?.additional ?? ["Spanish"]);
+  const [startingChoices, setStartingChoices] = useState<Record<string, { communicationStart: "foundations" | "check"; writingStart: "foundations" | "check" }>>(() => Object.fromEntries(
+    (initialProfile?.selections || []).map((item) => [item.language, { communicationStart: item.communicationStart, writingStart: item.writingStart }]),
+  ));
 
   const selectedLearningLanguages = Array.from(new Set([...(second ? [second] : []), ...additional]));
   const totalSteps = 4;
@@ -713,6 +785,47 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
   }, [step]);
 
   const goToStep = (nextStep: number) => setStep(Math.max(0, Math.min(totalSteps - 1, nextStep)));
+
+  function setLearningOrder(next: LanguageName[]) {
+    setSecond(next[0] || null);
+    setAdditional(next.slice(1));
+  }
+
+  function moveLanguage(index: number, delta: number) {
+    const next = [...selectedLearningLanguages] as LanguageName[];
+    const target = index + delta;
+    if (target < 0 || target >= next.length) return;
+    [next[index], next[target]] = [next[target], next[index]];
+    setLearningOrder(next);
+  }
+
+  function completeSetup() {
+    // Called only by the explicit save event.
+    // eslint-disable-next-line react-hooks/purity
+    const now = Date.now();
+    const selected = selectedLearningLanguages as LanguageName[];
+    const retained = new Map((initialProfile?.selections || []).map((item) => [item.language, item]));
+    const active: LanguageSelection[] = selected.map((name, priority) => {
+      const previous = retained.get(name);
+      const choice = startingChoices[name];
+      return {
+        language: name, status: "active", priority,
+        communicationStart: choice?.communicationStart || previous?.communicationStart || "foundations",
+        writingStart: choice?.writingStart || previous?.writingStart || "foundations",
+        addedAt: previous?.addedAt || now,
+      };
+    });
+    const paused: LanguageSelection[] = [...retained.values()]
+      .filter((item) => !selected.includes(item.language) && item.language !== native)
+      .map((item, index) => ({ ...item, status: "paused", priority: active.length + index }));
+    const base = normalizeLanguageProfile({
+      ...(initialProfile || {}), schemaVersion: 2, revision: initialProfile?.revision || 0,
+      modifiedAt: initialProfile?.modifiedAt || now, native, second: active[0]?.language || null,
+      secondConfidence: active.length ? secondConfidence : null,
+      additional: active.slice(1).map((item) => item.language), selections: [...active, ...paused],
+    }, now)!;
+    onComplete(base);
+  }
 
   return (
     <main className="app-shell setup-shell">
@@ -732,16 +845,16 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
         )}
 
         {step === 1 && (
-          <SetupFrame headingRef={headingRef} onBack={() => goToStep(0)} eyebrow="Another language you know" title="What language became yours next?" description="It does not need to be fluent. LinguaThread will use it only when it makes the new language clearer.">
+          <SetupFrame headingRef={headingRef} onBack={() => goToStep(0)} eyebrow="Your first learning priority" title="Which language would you like to learn?" description="This language keeps its own curriculum position and mastery. You can add more without restarting it.">
             <LanguagePicker selected={second ? [second] : []} excluded={[native]} onSelect={(language) => setSecond(language)} />
             {second && <ConfidencePicker value={secondConfidence} onChange={setSecondConfidence} />}
             <button className="primary-action" onClick={() => goToStep(2)}>Continue <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => { setSecond(null); goToStep(2); }}>I do not have another language yet</button>
+            <button className="text-action" onClick={() => { setSecond(null); goToStep(2); }}>Choose several languages together</button>
           </SetupFrame>
         )}
 
         {step === 2 && (
-          <SetupFrame headingRef={headingRef} onBack={() => goToStep(1)} eyebrow="The rest of your language life" title="Which other languages are part of you?" description="Add as many as you need, from stronger languages toward the ones still growing.">
+          <SetupFrame headingRef={headingRef} onBack={() => goToStep(1)} eyebrow="Your complete learning stack" title="Which other languages would you like to learn?" description="Add, pause, and reorder languages without losing the independent progress already earned in any of them.">
             <LanguagePicker
               selected={additional}
               excluded={[native, ...(second ? [second] : [])]}
@@ -760,11 +873,25 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
             <h1 ref={headingRef} tabIndex={-1}>Your languages can help one another.</h1>
             <div className="profile-stack">
               <ProfileLanguage index="01" role="Native anchor" language={native} />
-              {second && <ProfileLanguage index="02" role="Supporting bridge" language={second} detail={confidenceLabels[secondConfidence]} />}
-              {additional.map((language, index) => <ProfileLanguage key={language} index={String(index + (second ? 3 : 2)).padStart(2, "0")} role={language === "Spanish" ? "Communication course" : "Writing path and selected bridge"} language={language} />)}
+              {selectedLearningLanguages.map((language, index) => <div className="profile-language-editor" key={language}>
+                <ProfileLanguage index={String(index + 2).padStart(2, "0")} role={index === 0 ? "First learning priority" : "Selected learning language"} language={language} detail={index === 0 ? confidenceLabels[secondConfidence] : undefined} />
+                <div className="profile-language-actions" aria-label={`${language} settings`}>
+                  <button disabled={index === 0} onClick={() => moveLanguage(index, -1)} aria-label={`Move ${language} earlier`}>↑</button>
+                  <button disabled={index === selectedLearningLanguages.length - 1} onClick={() => moveLanguage(index, 1)} aria-label={`Move ${language} later`}>↓</button>
+                  <button onClick={() => setLearningOrder(selectedLearningLanguages.filter((item) => item !== language) as LanguageName[])}>Pause</button>
+                </div>
+                {!initialProfile?.selections.some((item) => item.language === language) && <div className="language-starting-points">
+                  <span>{language} · communication</span>
+                  <button className={(startingChoices[language]?.communicationStart || "foundations") === "foundations" ? "selected" : ""} onClick={() => setStartingChoices((current) => ({ ...current, [language]: { communicationStart: "foundations", writingStart: current[language]?.writingStart || "foundations" } }))}>Begin foundations</button>
+                  <button className={startingChoices[language]?.communicationStart === "check" ? "selected" : ""} onClick={() => setStartingChoices((current) => ({ ...current, [language]: { communicationStart: "check", writingStart: current[language]?.writingStart || "foundations" } }))}>Check my knowledge</button>
+                  <span>{language} · writing system</span>
+                  <button className={(startingChoices[language]?.writingStart || "foundations") === "foundations" ? "selected" : ""} onClick={() => setStartingChoices((current) => ({ ...current, [language]: { communicationStart: current[language]?.communicationStart || "foundations", writingStart: "foundations" } }))}>Begin script foundations</button>
+                  <button className={startingChoices[language]?.writingStart === "check" ? "selected" : ""} onClick={() => setStartingChoices((current) => ({ ...current, [language]: { communicationStart: current[language]?.communicationStart || "foundations", writingStart: "check" } }))}>Check script knowledge</button>
+                </div>}
+              </div>)}
             </div>
             <p className="setup-description ready-description">Your complete {selectedLearningLanguages.length}-language selection is retained and remains available from every primary screen. Spanish currently has the reviewed communication course; each selected language has its own independent Writing System path where applicable. Explanations remain grounded in {native}, and LinguaThread will never silently substitute an unreviewed lesson for a language you chose.</p>
-            <button className="primary-action" onClick={() => onComplete({ native, second, secondConfidence: second ? secondConfidence : null, additional })}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
+            <button className="primary-action" onClick={completeSetup}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => goToStep(0)}>Edit my languages</button>
           </div>
         )}
@@ -792,7 +919,7 @@ function ConfidencePicker({ value, onChange }: { value: Confidence; onChange: (c
   );
 }
 
-function LanguagePicker({ selected, excluded, multiple = false, onSelect }: { selected: string[]; excluded: string[]; multiple?: boolean; onSelect: (language: string) => void }) {
+function LanguagePicker({ selected, excluded, multiple = false, onSelect }: { selected: LanguageName[]; excluded: LanguageName[]; multiple?: boolean; onSelect: (language: LanguageName) => void }) {
   const [query, setQuery] = useState("");
   const choices = commonLanguages.filter((language) => !excluded.includes(language) && language.toLowerCase().includes(query.trim().toLowerCase())).slice(0, query ? 12 : 9);
 
