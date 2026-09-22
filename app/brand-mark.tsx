@@ -1,0 +1,14 @@
+export function BrandMark({ className = "" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 512 512" fill="currentColor" aria-hidden="true" focusable="false">
+      <path d="M234 17c-13-19-8-37 10-42 8-2 15 0 23 5l46 30c17 11 21 28 11 42-10 14-27 16-44 5z" transform="translate(0 32)" />
+      <rect x="66" y="130" width="380" height="47" rx="23.5" />
+      <path d="M102 244c64 6 108-4 165-23 37-12 70-26 99-20 29 6 44 29 44 56 0 25-18 40-44 40H159c-27 0-48-5-60-22-6-8-9-18-8-27 1-4 4-5 11-4zm50 20c25 0 51-4 79-12 44-13 83-29 124-28 12 0 23 3 31 9-16-22-47-22-85-10-66 20-111 41-149 41z" fillRule="evenodd" />
+      <path d="M163 318h187c35 0 55 21 55 56v92c0 18-13 30-31 30H171c-39 0-64-24-64-60v-57c0-37 19-61 56-61zm11 48c-14 0-21 9-21 23v44c0 12 6 18 18 18h180v-72c0-9-4-13-13-13z" fillRule="evenodd" />
+    </svg>
+  );
+}
+
+export function BrandLogo({ className = "" }: { className?: string }) {
+  return <span className={`brand-logo ${className}`}><BrandMark className="brand-symbol" /><span className="brand-name">LinguaThread</span></span>;
+}

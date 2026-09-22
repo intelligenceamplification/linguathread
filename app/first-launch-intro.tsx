@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type CSSProperties, type PointerEvent } from "react";
+import { BrandMark } from "./brand-mark";
 
 type ThreadStyle = CSSProperties & {
   "--pointer-x"?: string;
@@ -69,7 +70,7 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
                 <text className="intro-fragment-italic" x="600" y="462" textAnchor="middle">imperativo</text>
               </g>
             </svg>
-            <h1 id="intro-title">LinguaThread</h1>
+            <h1 id="intro-title"><BrandMark className="intro-brand-symbol" /><span>LinguaThread</span></h1>
           </div>
           <p className="intro-title-line">How Language Is Built.</p>
           <p className="intro-invitation">Pull a thread. Follow the meaning.</p>

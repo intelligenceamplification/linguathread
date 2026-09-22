@@ -19,4 +19,4 @@ The target uses a minimum iOS version of 17.0 and stable WebKit APIs, so it is b
 
 ## App icon
 
-`AppIconSource.svg` is the canonical, editable source for the simplified LinguaThread icon derived from the completed launch composition. Xcode consumes the opaque 1024×1024 PNG in `LinguaThread/Assets.xcassets/AppIcon.appiconset`. Keep the SVG as the source of truth and regenerate the PNG when the icon design changes.
+`AppIconSource-light.svg` and `AppIconSource-dark.svg` are the editable light and dark sources for the 言 + LinguaThread mark. Xcode consumes their opaque 1024×1024 PNG counterparts in `LinguaThread/Assets.xcassets/AppIcon.appiconset` and selects the dark icon with the system appearance. `AppIconSource.svg` mirrors the light source for simple preview tools. The web versions are in `../public/linguathread-logo-light.svg` and `../public/linguathread-logo-dark.svg`.

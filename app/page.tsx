@@ -6,6 +6,7 @@ import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson
 import { InteractiveSentence } from "./sentence-anatomy";
 import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
+import { BrandLogo } from "./brand-mark";
 import ListenButton from "./listen-button";
 import { speechLanguage } from "./speech";
 import type { FoundationLanguage } from "./multilingual-foundation";
@@ -491,7 +492,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   return (
     <main className={`app-shell stage-${stage}`}>
       <header className="topline">
-        <button className="wordmark" onClick={() => openDestination("lesson")} aria-label="Open current lesson">LinguaThread</button>
+        <button className="wordmark" onClick={() => openDestination("lesson")} aria-label="Open current lesson"><BrandLogo /></button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
           <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
@@ -830,7 +831,7 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
   return (
     <main className="app-shell setup-shell">
       <header className="topline setup-topline">
-        <span className="wordmark static-wordmark">LinguaThread</span>
+        <span className="wordmark static-wordmark"><BrandLogo /></span>
         <div className="lesson-context"><span>Your language stack</span></div>
         <div className="setup-exit">{onCancel && <button className="text-action" onClick={onCancel}>Cancel</button>}<span className="setup-step-count">{step + 1} of {totalSteps}</span></div>
       </header>

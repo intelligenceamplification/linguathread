@@ -8,6 +8,7 @@ import { emptyLiteracy, type LiteracySession } from "./literacy-session";
 import { literacyCopy } from "./literacy-copy";
 import dynamic from "next/dynamic";
 import { FirstLaunchIntro } from "../first-launch-intro";
+import { BrandLogo } from "../brand-mark";
 import ListenButton from "../listen-button";
 const ScriptCourseView = dynamic(() => import("../writing-system/view"), { loading: () => <p role="status">Opening script lessons…</p> });
 
@@ -55,7 +56,7 @@ export default function MultilingualPreview() {
  }
  if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
  return <main className="app-shell pilot-shell">
-  <header className="pilot-header"><span className="wordmark">LinguaThread</span><span>Multilingual foundation · Beta</span></header>
+  <header className="pilot-header"><span className="wordmark static-wordmark"><BrandLogo /></span><span>Multilingual foundation · Beta</span></header>
   <p className="pilot-notice">An early curriculum build for personal testing. Script content and four introductory expressions are available in every offered language; the full CEFR curriculum remains in authoring and review.</p>
   {!active ? <section className="pilot-setup">
    <p className="eyebrow">Your language architecture</p><h1>Build your stack.</h1><p>Choose the languages that will anchor, support and extend your learning.</p>
