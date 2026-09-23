@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "model": "openbmb/VoxCPM2",
+  "voiceDescription": "Una profesora nativa de España. Pronunciación castellana auténtica, vocales puras del español, entonación natural y cálida, ritmo pausado y claro de una buena maestra. Sin acento inglés.",
+  "settings": {
+    "cfgValue": 2.0,
+    "inferenceTimesteps": 20,
+    "seed": 7129
+  },
+  "items": [
+    {
+      "id": "es-origin-native-castilian",
+      "language": "es",
+      "kind": "lesson",
+      "text": "Soy de Indiana."
+    }
+  ]
+}

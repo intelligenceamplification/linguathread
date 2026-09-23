@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v1",
+  "packVersion": "v2",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-13T01:27:17.759Z",
+  "approvedAt": "2026-09-23T23:39:37.326Z",
   "clips": [
     {
       "id": "en-expression",
@@ -211,6 +211,15 @@
       "normalizedText": "был, бил; угол, уголь",
       "url": "/audio/packs/v1/ru-contrast-4e5571c73d44.wav",
       "sha256": "4e5571c73d4470752457023aa72e5a851479887a2b9c5ed26bfbe277ee776421"
+    },
+    {
+      "id": "es-origin-native-castilian",
+      "language": "es",
+      "text": "Soy de Indiana.",
+      "normalizedText": "Soy de Indiana.",
+      "url": "/audio/packs/v2/es-origin-native-castilian-a3dc7d41dd38.wav",
+      "sha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109",
+      "reviewedAt": "2026-09-23T23:39:24Z"
     }
   ]
 }
