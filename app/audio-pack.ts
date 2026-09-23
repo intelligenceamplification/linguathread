@@ -7,6 +7,7 @@ export type ApprovedAudioClip = {
   normalizedText: string;
   url: string;
   sha256: string;
+  reviewedAt?: string;
 };
 
 export type ApprovedAudioPack = {

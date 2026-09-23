@@ -88,10 +88,29 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             synthesizer.stopSpeaking(at: .immediate)
             pendingRequestID = payload["requestID"] as? String
             let utterance = AVSpeechUtterance(string: text)
-            utterance.voice = AVSpeechSynthesisVoice(language: language)
-            utterance.rate = 0.46
+            utterance.voice = bestAvailableVoice(for: language)
+            utterance.rate = 0.40
             utterance.pitchMultiplier = 1
+            utterance.preUtteranceDelay = 0.08
             synthesizer.speak(utterance)
+        }
+
+        private func bestAvailableVoice(for language: String) -> AVSpeechSynthesisVoice? {
+            let requested = language.lowercased()
+            let base = requested.split(separator: "-").first.map(String.init) ?? requested
+            let candidates = AVSpeechSynthesisVoice.speechVoices().filter { voice in
+                let code = voice.language.lowercased()
+                guard code == requested || code.split(separator: "-").first.map(String.init) == base else { return false }
+                if #available(iOS 17.0, *) {
+                    return !voice.voiceTraits.contains(.isNoveltyVoice) && !voice.voiceTraits.contains(.isPersonalVoice)
+                }
+                return true
+            }
+            return candidates.max { left, right in
+                let leftScore = (left.language.lowercased() == requested ? 10 : 0) + left.quality.rawValue
+                let rightScore = (right.language.lowercased() == requested ? 10 : 0) + right.quality.rawValue
+                return leftScore < rightScore
+            } ?? AVSpeechSynthesisVoice(language: language)
         }
 
         func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {

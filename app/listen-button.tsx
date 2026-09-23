@@ -57,6 +57,9 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
   const approved = await approvedAudioFor(text, language);
   if (approved) {
    const audio = new Audio(approved.url);
+   // The reviewed source remains intact; playback has a measured teaching pace.
+   audio.playbackRate = 0.8;
+   audio.preservesPitch = true;
    audioRef.current = audio;
    audio.onplay = () => { setSpeaking(true); playback.current?.(); };
    audio.onended = () => { setSpeaking(false); completion.current?.(); };
@@ -75,7 +78,7 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
   }
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = speechLocales[language];
-  utterance.rate = 0.86;
+  utterance.rate = 0.78;
   utterance.pitch = 1;
   const voice = voiceForLanguage(window.speechSynthesis.getVoices(), language);
   if (voice) utterance.voice = voice;

@@ -8,7 +8,7 @@ VoxCPM2 is a local production dependency, never an iPhone or browser runtime dep
 2. Install `voxcpm` and `soundfile`.
 3. Run `python scripts/generate-voxcpm2.py --manifest audio/audition-manifest.json --output audio/generated/v1`.
 4. Run `python scripts/validate-voxcpm2-audio.py audio/generated/v1/metadata.jsonl`.
-5. Review `metadata.jsonl`, listen to every candidate, and mark accepted candidates in a reviewed manifest. Voice-family approval does not waive pronunciation review.
+5. Review `metadata.jsonl`, listen to every candidate, and set `approved: true` with a `reviewedAt` timestamp only after accepting its pronunciation, clarity, and pace. Generated candidates start unapproved. Voice-family approval does not waive pronunciation review.
 6. Run `node scripts/package-audio-pack.mjs audio/generated/v1/metadata.jsonl public/audio/packs/v1 public/audio/packs/approved.json`.
 
 The generator uses Voice Design only. It does not clone a real person. Each record retains source and normalized text, language, model, voice description, settings, seed, sample rate, duration, file hash, and generation time.

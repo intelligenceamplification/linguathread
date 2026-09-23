@@ -1042,7 +1042,7 @@ function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson
   const orderedChoices = [choices[1], choices[0], choices[2]].filter((item): item is string => !!item);
   useEffect(() => {
     let active = true;
-    void approvedAudioFor(lesson.sentence.target, "es").then((clip) => { if (active) setReviewedAudio(Boolean(clip)); });
+    void approvedAudioFor(lesson.sentence.target, "es").then((clip) => { if (active) setReviewedAudio(Boolean(clip?.reviewedAt)); });
     return () => { active = false; };
   }, [lesson.sentence.target]);
   return <div className="focus-content audio-first-content">
@@ -1050,7 +1050,7 @@ function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson
     <h1>What does the speaker mean?</h1>
     <p className="instruction">Play the Spanish first. Its written form appears after your meaning choice.</p>
     <ListenButton text={lesson.sentence.target} language="es" onComplete={() => { setPlayed(true); setPlaybacks((count) => count + 1); }} onError={() => setAudioError(true)} />
-    <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Device voice · instructional audio not reviewed"}</p>
+    <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Instructional audio · pronunciation not reviewed"}</p>
     {audioError && <p role="alert">Playback did not finish. Try Listen again before answering.</p>}
     {played && choice === null && <fieldset className="listening-choices"><legend>Choose the meaning you heard</legend>{orderedChoices.map((meaning) => <button type="button" key={meaning} className="quiet-action" onClick={() => { setChoice(meaning); onAttempt(meaning === lesson.sentence.anchor, !reviewedAudio || playbacks > 1); }}>{meaning}</button>)}</fieldset>}
     {choice !== null && <div role="status"><p>{choice === lesson.sentence.anchor ? "Meaning connected." : `The meaning is: ${lesson.sentence.anchor}`}</p><p className="instruction">The transcript is ready. This attempt stays separate from reading and writing.</p><button className="primary-action" onClick={onContinue}>Reveal the written form <span aria-hidden="true">→</span></button></div>}

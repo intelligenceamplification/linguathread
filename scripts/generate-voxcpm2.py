@@ -74,7 +74,7 @@ def main() -> None:
                 "sha256": hashlib.sha256(payload).hexdigest(),
                 "file": path.name,
                 "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "approved": True,
+                "approved": False,
             }
             metadata.write(json.dumps(record, ensure_ascii=False) + "\n")
             metadata.flush()
