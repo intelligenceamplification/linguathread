@@ -8,6 +8,7 @@ import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
 import { BrandLogo } from "./brand-mark";
 import ListenButton from "./listen-button";
+import { approvedAudioFor } from "./audio-pack";
 import { speechLanguage } from "./speech";
 import type { FoundationLanguage } from "./multilingual-foundation";
 import "./multilingual-preview/preview.css";
@@ -25,7 +26,7 @@ import {
   migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
-type Stage = "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "complete";
+type Stage = "listening" | "transcript" | "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "spoken" | "complete";
 type AppDestination = "lesson" | "path" | "writing" | "xray";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
@@ -33,7 +34,7 @@ type ProductionLanguage = "Spanish" | "Vietnamese";
 
 const commonLanguages = [...supportedLanguageNames];
 
-const stages: Stage[] = ["vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "complete"];
+const stages: Stage[] = ["listening", "transcript", "vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "spoken", "complete"];
 const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 const lessonSessionKey = "linguathread.main-lesson-session.v1";
@@ -131,7 +132,7 @@ export default function Home() {
 }
 
 function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEditLanguages: () => void }) {
-  const [stage, setStage] = useState<Stage>("vocabulary");
+  const [stage, setStage] = useState<Stage>("listening");
   const [wordIndex, setWordIndex] = useState(0);
   const [lessonIndex, setLessonIndex] = useState(0);
   const [completedIds, setCompletedIds] = useState<string[]>([]);
@@ -139,6 +140,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [failedAttempts, setFailedAttempts] = useState(0);
   const [mastery, setMastery] = useState(false);
+  const [lessonSkipped, setLessonSkipped] = useState(false);
   const [productionLanguage, setProductionLanguage] = useState<ProductionLanguage>("Spanish");
   const [spanishConfirmed, setSpanishConfirmed] = useState(false);
   const [reverseIndex, setReverseIndex] = useState(0);
@@ -214,10 +216,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setCompletedIds(completed);
         let restored = false;
         try {
-          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage } | null;
+          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage } | null;
           const restoredIndex = savedSession?.lessonId ? loadedCourse.findIndex((item) => item.id === savedSession.lessonId) : -1;
           if (savedSession && restoredIndex >= 0 && savedSession.stage && stages.includes(savedSession.stage)) {
-            setLessonIndex(restoredIndex); setStage(savedSession.stage); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
+            setLessonIndex(restoredIndex); setStage(savedSession.audioFirstVersion === 1 ? savedSession.stage : "listening"); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
+            setLessonSkipped(savedSession.lessonSkipped === true);
             setAnswer(savedSession.answer || ""); setFeedback(savedSession.feedback || "idle"); setFailedAttempts(Math.max(0, savedSession.failedAttempts || 0));
             setProductionLanguage(savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish"); setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
             const restoredDestination = savedSession.destination && ["lesson", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
@@ -242,10 +245,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   useEffect(() => {
     if (!sessionHydrated || !lesson) return;
     window.localStorage.setItem(lessonSessionKey, JSON.stringify({
-      lessonId: lesson.id, stage, wordIndex, answer, feedback, failedAttempts,
+      lessonId: lesson.id, stage, audioFirstVersion: 1, lessonSkipped, wordIndex, answer, feedback, failedAttempts,
       productionLanguage, reverseIndex, destination, scriptLanguage,
     }));
-  }, [answer, destination, failedAttempts, feedback, lesson, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, stage, wordIndex]);
+  }, [answer, destination, failedAttempts, feedback, lesson, lessonSkipped, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, stage, wordIndex]);
 
   const selectedLearningLanguages = activeSelections(profile).map((item) => item.language)
     .filter((language) => language !== profile.native);
@@ -325,6 +328,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     evidenceLesson = lesson,
     edge?: RetrievalEdge,
     errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "unknown",
+    supported = false,
   ) {
     const learningLanguage = language;
     const latencyMs = Math.max(0, Date.now() - attemptStartedAtRef.current);
@@ -335,7 +339,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         evidenceLesson.objectiveId || evidenceLesson.id,
         learningLanguage,
         correct,
-        kind === "supported-reconstruction" || kind === "transform-model",
+        supported || kind === "supported-reconstruction" || kind === "transform-model",
         new Date(),
         edge,
         latencyMs,
@@ -355,7 +359,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         kind,
         language,
         correct,
-        supported: kind === "supported-reconstruction" || kind === "transform-model",
+        supported: supported || kind === "supported-reconstruction" || kind === "transform-model",
         edgeKey: edge ? [edge.fromLanguage, edge.toLanguage, edge.fromModality, edge.toModality, edge.retrievalType].join(":") : undefined,
         fromLanguage: edge?.fromLanguage,
         toLanguage: edge?.toLanguage,
@@ -403,6 +407,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function finishLesson() {
+    if (lessonSkipped) { setStage("complete"); return; }
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
     window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
@@ -417,17 +422,20 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
   function skipLesson(language: string) {
     recordAttempt("skipped", false, language);
-    finishLesson();
+    setLessonSkipped(true);
+    setMastery(false);
+    setStage("complete");
   }
 
   function resetLesson(nextIndex = lessonIndex) {
     setLessonIndex(nextIndex);
-    setStage("vocabulary");
+    setStage("listening");
     setWordIndex(0);
     setAnswer("");
     setFeedback("idle");
     setFailedAttempts(0);
     setMastery(false);
+    setLessonSkipped(false);
     setProductionLanguage("Spanish");
     setSpanishConfirmed(false);
     setReverseIndex(0);
@@ -463,7 +471,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       return;
     }
     setFeedback("correct");
-    setMastery(true);
+    setMastery(false);
   }
 
   function closeXRay() {
@@ -551,6 +559,22 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             </div>
           </div>
         ) : <>
+        {stage === "listening" && <AudioFirstListening key={lesson.id} lesson={lesson} course={course} onAttempt={(correct, supported) => recordAttempt("sound-to-meaning", correct, "Spanish", lesson, {
+          fromLanguage: "Spanish", toLanguage: "English", fromModality: "audio", toModality: "meaning", retrievalType: "recognition",
+        }, correct ? undefined : "listening", supported)} onContinue={() => setStage("transcript")} />}
+
+        {stage === "transcript" && <div className="focus-content audio-first-content">
+          <p className="eyebrow">Written form · after listening</p>
+          <h1 lang="es">{lesson.sentence.target}</h1>
+          <ListenButton text={lesson.sentence.target} language="es" />
+          <div className="language-stack compact-stack">
+            <StackLine role="Meaning anchor" language="English" value={lesson.sentence.anchor} />
+            {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={lesson.sentence.bridge} />}
+          </div>
+          <p className="instruction">Now connect the sounds to their written form. Next, examine the words and structure.</p>
+          <button className="primary-action" onClick={() => setStage("vocabulary")}>Explore the words <span aria-hidden="true">→</span></button>
+        </div>}
+
         {stage === "vocabulary" && (
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
@@ -666,26 +690,31 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             toLanguage: reverseExercises[reverseIndex].to,
             fromModality: "written", toModality: "meaning", retrievalType: "reverse",
           }, correct ? undefined : "structural")}
-          onComplete={() => reverseIndex < reverseExercises.length - 1 ? setReverseIndex((value) => value + 1) : finishLesson()}
+          onComplete={() => reverseIndex < reverseExercises.length - 1 ? setReverseIndex((value) => value + 1) : setStage("spoken")}
           onSkip={() => {
             recordAttempt("skipped-reverse", false, reverseExercises[reverseIndex].evidenceLanguage);
+            setLessonSkipped(true);
             if (reverseIndex < reverseExercises.length - 1) setReverseIndex((value) => value + 1);
-            else finishLesson();
+            else setStage("spoken");
           }}
         />}
 
+        {stage === "spoken" && <SpokenSelfComparison lesson={lesson} onAttempt={() => recordAttempt("spoken-self-comparison", true, "Spanish", lesson, {
+          fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "sound", retrievalType: "production",
+        }, undefined, true)} onContinue={() => lessonSkipped ? setStage("complete") : finishLesson()} />}
+
         {stage === "complete" && (
           <div className="focus-content completion-content">
-            <div className="completion-mark" aria-hidden="true">✓</div>
-            <p className="eyebrow">Lesson {lesson.lesson} mapped</p>
-            <h1>{accelerated ? "This is already familiar." : lesson.title}</h1>
-            <p className="completion-copy">{accelerated ? "LinguaThread recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
-            <div className="learning-signal">
-              <span>{accelerated ? "Advance quickly" : "Becoming stable"}</span>
+            <div className="completion-mark" aria-hidden="true">{lessonSkipped ? "·" : "✓"}</div>
+            <p className="eyebrow">Lesson {lesson.lesson} {lessonSkipped ? "paused" : "mapped"}</p>
+            <h1>{lessonSkipped ? "Return to this lesson later." : accelerated ? "This is already familiar." : lesson.title}</h1>
+            <p className="completion-copy">{lessonSkipped ? "The skipped work remains open. No completion or mastery was recorded." : accelerated ? "LinguaThread recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
+            {!lessonSkipped && <div className="learning-signal">
+              <span>{accelerated ? "Advance quickly" : "Review later to stabilize"}</span>
               <strong>Spanish · {lesson.skill}</strong>
               <p>{lesson.vocabulary.map((item) => item.word).join(" · ")}</p>
-            </div>
-            {outsidePractice && lesson.lesson % 4 === 0 && <aside className="outside-practice">
+            </div>}
+            {!lessonSkipped && outsidePractice && lesson.lesson % 4 === 0 && <aside className="outside-practice">
               <span>Beyond LinguaThread · optional practice</span>
               <p>{outsidePractice.prompt}</p>
             </aside>}
@@ -702,7 +731,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
       <footer className="lesson-footer">
         <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish course · English meaning anchor · ${selectedLearningLanguages.length} selected language${selectedLearningLanguages.length === 1 ? "" : "s"}`}</span>
-        <span>{mastery ? "Level signal recorded" : "Text-first · No streaks, no scores"}</span>
+        <span>{mastery ? "Written attempt recorded" : "Sound, meaning and writing · No streaks"}</span>
       </footer>
     </main>
   );
@@ -999,6 +1028,46 @@ function TransformExercise({ lesson, onAttempt, onComplete, onSkip }: { lesson: 
       {modelVisible && <button className="text-action" onClick={onSkip}>Skip this lesson for now</button>}
     </div>
   );
+}
+
+function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson: LessonDefinition; course: LessonDefinition[]; onAttempt: (correct: boolean, supported: boolean) => void; onContinue: () => void }) {
+  const [playbacks, setPlaybacks] = useState(0);
+  const [played, setPlayed] = useState(false);
+  const [choice, setChoice] = useState<string | null>(null);
+  const [reviewedAudio, setReviewedAudio] = useState(false);
+  const [audioError, setAudioError] = useState(false);
+  const index = course.findIndex((item) => item.id === lesson.id);
+  const distractors = course.filter((item) => item.id !== lesson.id && item.sentence.anchor !== lesson.sentence.anchor);
+  const choices = [lesson.sentence.anchor, ...[distractors[(index + 1) % distractors.length], distractors[(index + 2) % distractors.length]].map((item) => item?.sentence.anchor).filter((item): item is string => !!item)];
+  const orderedChoices = [choices[1], choices[0], choices[2]].filter((item): item is string => !!item);
+  useEffect(() => {
+    let active = true;
+    void approvedAudioFor(lesson.sentence.target, "es").then((clip) => { if (active) setReviewedAudio(Boolean(clip)); });
+    return () => { active = false; };
+  }, [lesson.sentence.target]);
+  return <div className="focus-content audio-first-content">
+    <p className="eyebrow">Listen · understand</p>
+    <h1>What does the speaker mean?</h1>
+    <p className="instruction">Play the Spanish first. Its written form appears after your meaning choice.</p>
+    <ListenButton text={lesson.sentence.target} language="es" onComplete={() => { setPlayed(true); setPlaybacks((count) => count + 1); }} onError={() => setAudioError(true)} />
+    <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Device voice · instructional audio not reviewed"}</p>
+    {audioError && <p role="alert">Playback did not finish. Try Listen again before answering.</p>}
+    {played && choice === null && <fieldset className="listening-choices"><legend>Choose the meaning you heard</legend>{orderedChoices.map((meaning) => <button type="button" key={meaning} className="quiet-action" onClick={() => { setChoice(meaning); onAttempt(meaning === lesson.sentence.anchor, !reviewedAudio || playbacks > 1); }}>{meaning}</button>)}</fieldset>}
+    {choice !== null && <div role="status"><p>{choice === lesson.sentence.anchor ? "Meaning connected." : `The meaning is: ${lesson.sentence.anchor}`}</p><p className="instruction">The transcript is ready. This attempt stays separate from reading and writing.</p><button className="primary-action" onClick={onContinue}>Reveal the written form <span aria-hidden="true">→</span></button></div>}
+  </div>;
+}
+
+function SpokenSelfComparison({ lesson, onAttempt, onContinue }: { lesson: LessonDefinition; onAttempt: () => void; onContinue: () => void }) {
+  const [said, setSaid] = useState(false);
+  return <div className="focus-content audio-first-content">
+    <p className="eyebrow">Produce · spoken self-check</p>
+    <h1>Say the phrase aloud.</h1>
+    <p className="instruction">Imagine saying this to someone in the situation you just studied. Speak naturally, then replay the model and compare what you heard.</p>
+    <p className="spoken-model" lang="es">{lesson.sentence.target}</p>
+    <ListenButton text={lesson.sentence.target} language="es" />
+    {!said ? <button className="primary-action" onClick={() => { setSaid(true); onAttempt(); }}>I said it aloud</button> : <div role="status"><p>Compare your rhythm, sounds and word order with the model. Repeat once if useful.</p><p className="instruction">This is a self-reported spoken attempt. LinguaThread has not graded your pronunciation.</p><button className="primary-action" onClick={onContinue}>Finish lesson <span aria-hidden="true">→</span></button></div>}
+    {!said && <button className="text-action" onClick={onContinue}>Continue without speaking</button>}
+  </div>;
 }
 
 function ReverseRecall({ exercise, position, total, onAttempt, onComplete, onSkip }: { exercise: LessonTranslationExercise; position: number; total: number; onAttempt: (correct: boolean, language: string) => void; onComplete: () => void; onSkip: () => void }) {

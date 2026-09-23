@@ -409,12 +409,4 @@ export const curriculum: LessonDefinition[] = [
   ...expandedA1.map(expandLesson),
 ];
 
-export function normalizeAnswer(value: string) {
-  return value
-    .trim()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .toLocaleLowerCase("es")
-    .replace(/[¿?¡!.,;:“”'’]/g, "")
-    .replace(/\s+/g, " ");
-}
+export { normalizeAnswer } from "./answer-assessment";

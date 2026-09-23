@@ -4,17 +4,17 @@ This document governs product, curriculum, and platform decisions across the web
 
 ## The promise
 
-LinguaThread is a quiet, text-first language practice. The learner opens it intentionally, returns to the right place, reads, recalls, compares, expresses, and leaves with progress preserved.
+LinguaThread is a quiet language practice. The learner opens it intentionally, returns to the right place, listens, reads, recalls, compares, expresses, and leaves with progress preserved.
 
 The app is a retreat from attention-seeking software. It does not depend on streak pressure, lives, leaderboards, mascots, celebratory noise, autoplay, microphone performance, or interruption-driven notifications. Notifications are absent by default. If reminders are ever introduced, they must be explicitly enabled, infrequent, silent, and easy to disable.
 
-Audio is an optional, learner-initiated companion to visible lesson text. It must never autoplay, interrupt, gamify, or require microphone access. System text-to-speech may support beta listening practice across languages, but synthetic output is not a substitute for pronunciation review by qualified speakers. If listening reveals an answer during an independent assessment, the attempt must be recorded as supported practice.
+For audio-first lessons, learner-initiated playback precedes visible text and a sound-to-meaning response precedes transcript reveal. Other audio remains an optional companion. Audio must never autoplay, interrupt, gamify, or require microphone access. System text-to-speech may support beta listening practice across languages, but synthetic output is not a substitute for pronunciation review by qualified speakers. Unreviewed synthesis and replayed or revealed answers are supported practice, never independent listening mastery.
 
 ## The learning method
 
 LinguaThread begins with meaning the learner can already express. A native language anchors the intention; a target language develops active production; known languages may provide carefully authored structural bridges. Vocabulary, grammar, sentence anatomy, transformation, reverse recall, Expression X-Ray, and spaced review remain parts of one coherent learning cycle.
 
-The Language Path is the curriculum authority. It follows CEFR from A1 through C2 as a scope and sequencing framework, but course completion alone must not be presented as proof of complete four-skill CEFR proficiency. The text-first app can gather strong evidence for reading, writing, grammatical control, mediation, translation, and deliberate production. Listening and spontaneous speaking require practice and assessment beyond the current product boundary.
+The Language Path is the curriculum authority. It follows CEFR from A1 through C2 as a scope and sequencing framework, but course completion alone must not be presented as proof of complete four-skill CEFR proficiency. The app records reading, writing, listening, and self-reported spoken attempts separately. Reviewed audio supports independent listening evidence; spoken self-comparison is practice, not pronunciation scoring.
 
 Review is forward progress. New lessons and due review should be interleaved throughout the path; the final C2 maintenance phase deepens that rhythm rather than introducing review for the first time.
 
@@ -26,6 +26,8 @@ Review is forward progress. New lessons and due review should be interleaved thr
 - Native clients must preserve the master product's content, behavior, visual system, and learner state.
 
 The current iOS app is intentionally a signed `WKWebView` host for the Vercel master. This is the correct personal-beta architecture because it prevents a premature SwiftUI rewrite from creating a second lesson engine. Native code should be added only where the operating system provides a material benefit: secure account recovery, reliable local caching, network awareness, background synchronization, accessibility integration, or distribution requirements.
+
+The iOS app is portrait-only on iPhone and iPad. Keep that project-level orientation constraint in future releases, and validate lesson controls, transcript reveal, audio playback, and the keyboard within portrait width.
 
 Do not fork the lesson experience into separately maintained web and native implementations. If a fully native presentation layer is eventually justified, it must consume the same versioned curriculum contracts and learner-state APIs as every other client.
 

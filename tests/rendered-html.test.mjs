@@ -273,7 +273,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
   assert.match(route, /mappedUnitCount/);
   assert.match(route, /plannedLessonCount/);
   assert.match(documentation, /A mapped lesson position is not a published lesson/);
-  assert.match(documentation, /Listening and spontaneous speaking require separate practice and assessment/);
+  assert.match(documentation, /Listening, reading, writing, and self-reported spoken practice remain separate evidence/);
   assert.match(mapSource, /outsidePractice/);
   assert.match(page, /Beyond LinguaThread · optional practice/);
   assert.match(page, /lesson\.lesson % 4 === 0/);

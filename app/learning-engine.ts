@@ -20,6 +20,7 @@ export type SkillEvidence = {
   attempts: number;
   independentSuccesses: number;
   supportedSuccesses: number;
+  independentReviewDays?: string[];
   score: number;
   lastPracticedAt: string;
   nextReviewAt: string;
@@ -111,8 +112,9 @@ export function languageMastery(model: LearnerModel, objectiveId: string, langua
 
 export function masteryState(evidence?: SkillEvidence): MasteryState | "waiting" {
   if (!evidence) return "waiting";
-  if (evidence.score >= 92 && evidence.independentSuccesses >= 4) return "maintenance";
-  if (evidence.score >= 78 && evidence.independentSuccesses >= 3) return "stable";
+  const laterRetrieval = (evidence.independentReviewDays?.length || 0) >= 2;
+  if (laterRetrieval && evidence.score >= 92 && evidence.independentSuccesses >= 4) return "maintenance";
+  if (laterRetrieval && evidence.score >= 78 && evidence.independentSuccesses >= 3) return "stable";
   if (evidence.score >= 58 && evidence.independentSuccesses >= 2) return "usable";
   if (evidence.attempts >= 2 || evidence.independentSuccesses >= 1) return "forming";
   return "introduced";
@@ -133,6 +135,10 @@ export function recordEvidence(
   const previous = model.evidence[key];
   const independentSuccesses = (previous?.independentSuccesses || 0) + (correct && !supported ? 1 : 0);
   const supportedSuccesses = (previous?.supportedSuccesses || 0) + (correct && supported ? 1 : 0);
+  const day = now.toISOString().slice(0, 10);
+  const independentReviewDays = correct && !supported
+    ? [...new Set([...(previous?.independentReviewDays || []), day])]
+    : (previous?.independentReviewDays || []);
   const priorScore = previous?.score || 0;
   const score = Math.max(0, Math.min(100, priorScore + (correct ? (supported ? 7 : 18) : -8)));
   const intervalDays = score >= 92 ? 30 : score >= 78 ? 14 : score >= 58 ? 7 : score >= 35 ? 3 : 1;
@@ -148,6 +154,7 @@ export function recordEvidence(
         attempts: (previous?.attempts || 0) + 1,
         independentSuccesses,
         supportedSuccesses,
+        independentReviewDays,
         score,
         lastPracticedAt: now.toISOString(),
         nextReviewAt: nextReview.toISOString(),
@@ -215,8 +222,7 @@ export function migrateCompletedLessons(completedLessonIds: string[], curriculum
   return completedLessonIds.reduce((model, lessonId) => {
     const lesson = curriculum.find((item) => item.id === lessonId);
     if (!lesson) return model;
-    const objectiveId = lesson.objectiveId || lesson.id;
-    const once = recordEvidence(model, objectiveId, "Spanish", true, false);
-    return completeSession(once);
+    // Legacy completion did not distinguish skipped work from independent answers.
+    return completeSession(model);
   }, emptyLearnerModel());
 }
