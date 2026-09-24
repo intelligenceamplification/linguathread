@@ -14,6 +14,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+SPANISH_NUMBERS = ("cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve")
+VIETNAMESE_NUMBERS = ("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín")
+SPANISH_MARKS = {
+    "¿": "signo de apertura de interrogación",
+    "?": "signo de cierre de interrogación",
+    "¡": "signo de apertura de exclamación",
+    "!": "signo de cierre de exclamación",
+}
+
+
+def spoken_form(language: str, text: str) -> str:
+    """Give orthographic symbols a pronounceable model in their own language."""
+    if len(text) == 1 and text in "0123456789":
+        names = SPANISH_NUMBERS if language == "es" else VIETNAMESE_NUMBERS
+        return names[int(text)]
+    if language == "es" and text in SPANISH_MARKS:
+        return SPANISH_MARKS[text]
+    return text.replace(" / ", ", ").replace(" · ", ", ")
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -74,8 +93,7 @@ def main():
             try:
                 torch.manual_seed(seed)
                 np.random.seed(seed)
-                # A displayed slash separates alternatives; speak it as a short pause.
-                speech_text = text.replace(" / ", ", ").replace(" · ", ", ")
+                speech_text = spoken_form(language, text)
                 wav = model.generate(text=speech_text, reference_wav_path=str(reference), cfg_value=2.0, inference_timesteps=20)
                 peak = float(np.max(np.abs(wav)))
                 rms = float(np.sqrt(np.mean(np.square(wav))))
