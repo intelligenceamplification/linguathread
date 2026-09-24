@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "packVersion": "v5",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-24T17:32:40Z",
+  "approvedAt": "2026-09-24T17:36:19Z",
   "clips": [
     {
       "id": "en-expression",
@@ -772,7 +772,8 @@
       "normalizedText": "Bây giờ tôi có thể diễn đạt tự tin hơn.",
       "url": "/audio/packs/v5/vi-female-2ec8649d4e3803f2-cd99ff270be0.m4a",
       "sha256": "cd99ff270be0daac5ea6ce4320d27e26f157d3e91b2e6cd3de9d2976be7087f9",
-      "voice": "female"
+      "voice": "female",
+      "reviewedAt": "2026-09-24T17:36:19.463830Z"
     },
     {
       "id": "es-male-2875ad43aed56d2c",
@@ -800,6 +801,114 @@
       "url": "/audio/packs/v5/es-male-ed515abe31dece9e-a21ddcea13b5.m4a",
       "sha256": "a21ddcea13b5008a87691905a11fb1a7aa3c2b01f8ba65be7cdc78b1680b4aa8",
       "voice": "male"
+    },
+    {
+      "id": "es-female-e9e09b9b7688bd2c",
+      "language": "es",
+      "text": "antes",
+      "normalizedText": "antes",
+      "url": "/audio/packs/v5/es-female-e9e09b9b7688bd2c-6c0a2ca02687.m4a",
+      "sha256": "6c0a2ca02687a8c8995ca4cb8fcc9f729170fcf4f24fdcb7e7c8cb5bd179cc70",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-d4526520ddaa6fe8",
+      "language": "es",
+      "text": "expresarme",
+      "normalizedText": "expresarme",
+      "url": "/audio/packs/v5/es-male-d4526520ddaa6fe8-c071620c2776.m4a",
+      "sha256": "c071620c27765338a3a2a99e282c9d83dda4f5327e30ba223084650990033b8b",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-b05a3c4256536c8e",
+      "language": "es",
+      "text": "expresarme",
+      "normalizedText": "expresarme",
+      "url": "/audio/packs/v5/es-female-b05a3c4256536c8e-bc0991e8540c.m4a",
+      "sha256": "bc0991e8540c812ea1339dd1dfbdcdd542ca24883c4bd07a68e1b40dd5ab2cf8",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-ff6d75148152d883",
+      "language": "es",
+      "text": "confianza",
+      "normalizedText": "confianza",
+      "url": "/audio/packs/v5/es-male-ff6d75148152d883-16abaca7f58d.m4a",
+      "sha256": "16abaca7f58d96892c3e4012b1a7f24b8b8db68b462bf0a290f40b782f3a1f46",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-bb4a957626c26a59",
+      "language": "es",
+      "text": "confianza",
+      "normalizedText": "confianza",
+      "url": "/audio/packs/v5/es-female-bb4a957626c26a59-3654b8156b81.m4a",
+      "sha256": "3654b8156b817742e913a8e10a651a63229979e3124f231bd45615e6aacaa465",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-a8f1314f58dc9a9b",
+      "language": "es",
+      "text": "ahora antes",
+      "normalizedText": "ahora antes",
+      "url": "/audio/packs/v5/es-male-a8f1314f58dc9a9b-300102d2e17a.m4a",
+      "sha256": "300102d2e17a612b598ce8f587131e988811d3a893159b8fe4fad681777b4760",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-fcee06c8c048af0e",
+      "language": "es",
+      "text": "ahora antes",
+      "normalizedText": "ahora antes",
+      "url": "/audio/packs/v5/es-female-fcee06c8c048af0e-a9caa3b48fcf.m4a",
+      "sha256": "a9caa3b48fcf309e68fc93464f2f7028eb9fac5e30c848c67541b7bb6126d214",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-dbbbc6268c0adfe3",
+      "language": "vi",
+      "text": "bây giờ",
+      "normalizedText": "bây giờ",
+      "url": "/audio/packs/v5/vi-female-dbbbc6268c0adfe3-7f1503713462.m4a",
+      "sha256": "7f1503713462bd20334a82d56a85fbfc249fe9f7410b991b93151cf62e94d849",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-c8cbb0aba049c8ab",
+      "language": "vi",
+      "text": "trước đây",
+      "normalizedText": "trước đây",
+      "url": "/audio/packs/v5/vi-female-c8cbb0aba049c8ab-72da185e2d5a.m4a",
+      "sha256": "72da185e2d5abce24026eb2fc242001d27e7730bb0db8ae93c48c892e1caa7cb",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-8f2fdbb38a8cea7b",
+      "language": "vi",
+      "text": "diễn đạt bản thân",
+      "normalizedText": "diễn đạt bản thân",
+      "url": "/audio/packs/v5/vi-female-8f2fdbb38a8cea7b-35600914f2ab.m4a",
+      "sha256": "35600914f2ab19dda82fc781aea6abe491b0e7ee0aae4c17a28edeb3256e62a3",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-0fa71949663d5d49",
+      "language": "vi",
+      "text": "sự tự tin",
+      "normalizedText": "sự tự tin",
+      "url": "/audio/packs/v5/vi-female-0fa71949663d5d49-7a3f25df5313.m4a",
+      "sha256": "7a3f25df5313020ac1ad046c643f82870c94b1463b990b3ff412190ab785cfa8",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-441ac78c4138b683",
+      "language": "vi",
+      "text": "bây giờ trước đây",
+      "normalizedText": "bây giờ trước đây",
+      "url": "/audio/packs/v5/vi-female-441ac78c4138b683-d1539ede884c.m4a",
+      "sha256": "d1539ede884caf9403837c47009eb97fdc869b2692ef05a1b400f66e4457a3b1",
+      "voice": "female"
     }
   ]
 }
