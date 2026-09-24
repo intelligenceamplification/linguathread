@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 test("chooses only reviewed voice variants when a reviewed model exists", async () => {
   const originalFetch = globalThis.fetch;
   const originalRandom = Math.random;
+  const originalNow = Date.now;
   globalThis.fetch = async () => ({ ok: true, json: async () => ({
     schemaVersion: 1,
     packVersion: "test",
@@ -22,8 +23,16 @@ test("chooses only reviewed voice variants when a reviewed model exists", async 
     Math.random = () => 0.99;
     assert.equal((await approvedAudioFor("Soy de Indiana.", "es"))?.id, "female");
     assert.equal(await approvedAudioFor("Other phrase", "es"), null);
+    const nextRefresh = Date.now() + 31_000;
+    Date.now = () => nextRefresh;
+    globalThis.fetch = async () => ({ ok: true, json: async () => ({
+      approvedAt: "2026-09-24T01:00:00Z",
+      clips: [{ id: "new", language: "es", normalizedText: "Other phrase", url: "/new.m4a" }],
+    }) });
+    assert.equal((await approvedAudioFor("Other phrase", "es"))?.id, "new");
   } finally {
     globalThis.fetch = originalFetch;
     Math.random = originalRandom;
+    Date.now = originalNow;
   }
 });

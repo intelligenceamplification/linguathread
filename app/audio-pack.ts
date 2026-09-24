@@ -20,16 +20,19 @@ export type ApprovedAudioPack = {
 };
 
 let packPromise: Promise<ApprovedAudioPack | null> | null = null;
+let packRequestedAt = 0;
 
 export function normalizeAudioText(text: string) {
   return text.normalize("NFC").trim().replace(/\s+/g, " ");
 }
 
 export function approvedAudioFor(text: string, language: FoundationLanguage) {
-  packPromise ||= fetch("/audio/packs/approved.json", { cache: "no-store" })
-    .then((response) => response.ok ? response.json() as Promise<ApprovedAudioPack> : null)
-    .catch(() => null)
-    .then((pack) => { if (!pack) packPromise = null; return pack; });
+  if (!packPromise || Date.now() - packRequestedAt > 30_000) {
+    packRequestedAt = Date.now();
+    packPromise = fetch("/audio/packs/approved.json", { cache: "no-store" })
+      .then((response) => response.ok ? response.json() as Promise<ApprovedAudioPack> : null)
+      .catch(() => null);
+  }
   return packPromise.then((pack) => {
     if (!pack?.approvedAt) return null;
     const normalized = normalizeAudioText(text);
