@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v4",
+  "packVersion": "v5",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-24T17:26:01Z",
+  "approvedAt": "2026-09-24T17:32:40Z",
   "clips": [
     {
       "id": "en-expression",
@@ -645,6 +645,161 @@
       "url": "/audio/packs/v4/vi-female-a21008f72adde4ed-37ede918e244.m4a",
       "sha256": "37ede918e24428607bc7b9a7a5706b04b1199e238f150cf9de45c77d30a72d3b",
       "voice": "female"
+    },
+    {
+      "id": "es-male-23f70b4a0be3fa99",
+      "language": "es",
+      "text": "Quiero agua, por favor.",
+      "normalizedText": "Quiero agua, por favor.",
+      "url": "/audio/packs/v5/es-male-23f70b4a0be3fa99-e2d60bc55b70.m4a",
+      "sha256": "e2d60bc55b709661b25df66188887d7f8696720aee103c2e169105434e6449cb",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-09de5b5122b9ea41",
+      "language": "es",
+      "text": "Quiero agua, por favor.",
+      "normalizedText": "Quiero agua, por favor.",
+      "url": "/audio/packs/v5/es-female-09de5b5122b9ea41-653bd4b79b87.m4a",
+      "sha256": "653bd4b79b87ce8241c4562d516fe0337b52eb0741716353357647693a99cf2d",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-30996465e4d7c4b3",
+      "language": "vi",
+      "text": "Tôi muốn nước, làm ơn.",
+      "normalizedText": "Tôi muốn nước, làm ơn.",
+      "url": "/audio/packs/v5/vi-female-30996465e4d7c4b3-55a378ae2e62.m4a",
+      "sha256": "55a378ae2e626e995135951d997ccd7bfcf3fee0faa3942ea06793cf19a298ff",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-4bf281593af95723",
+      "language": "es",
+      "text": "quiero",
+      "normalizedText": "quiero",
+      "url": "/audio/packs/v5/es-male-4bf281593af95723-c7ec2d8e5231.m4a",
+      "sha256": "c7ec2d8e5231a87e7dbf8ea4640f9098df87597d965a06482cdbfef93642c7b8",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-a62154643d0a6a51",
+      "language": "es",
+      "text": "quiero",
+      "normalizedText": "quiero",
+      "url": "/audio/packs/v5/es-female-a62154643d0a6a51-bfc2032548e1.m4a",
+      "sha256": "bfc2032548e14e5f324abd30da93b39f829868de3fdb9d8c468baa02b1ec22e7",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-d2ae6172ebbdb334",
+      "language": "vi",
+      "text": "tôi muốn",
+      "normalizedText": "tôi muốn",
+      "url": "/audio/packs/v5/vi-female-d2ae6172ebbdb334-2037b6a5ce69.m4a",
+      "sha256": "2037b6a5ce698442338661b392a1494f8372068dc1ec69925f40b103399491cf",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-9fe7f65255399aa1",
+      "language": "es",
+      "text": "agua",
+      "normalizedText": "agua",
+      "url": "/audio/packs/v5/es-male-9fe7f65255399aa1-a0c0596b97ef.m4a",
+      "sha256": "a0c0596b97efc8b6527ec7cd319cb6d1b8023a3f0df8ccbc6915853358767eea",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-843c981b9cfadd50",
+      "language": "es",
+      "text": "agua",
+      "normalizedText": "agua",
+      "url": "/audio/packs/v5/es-female-843c981b9cfadd50-d4ee88f6e073.m4a",
+      "sha256": "d4ee88f6e073a25f3af3079e5cf426c7ebb26c535478c88cdae642bbec587453",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-c0e2a72754026c1f",
+      "language": "vi",
+      "text": "nước",
+      "normalizedText": "nước",
+      "url": "/audio/packs/v5/vi-female-c0e2a72754026c1f-4a80bb5c2cb0.m4a",
+      "sha256": "4a80bb5c2cb0f9c9258145de9d01af90ddeb8f6f56308077e14e75307df8b7e0",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-2000371722e735c5",
+      "language": "es",
+      "text": "café",
+      "normalizedText": "café",
+      "url": "/audio/packs/v5/es-male-2000371722e735c5-c0449f47b93b.m4a",
+      "sha256": "c0449f47b93b98b5cf7b8559942cb1a777098af543afb020f0a06c985c4417ec",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-511e9e58bf386ac6",
+      "language": "es",
+      "text": "café",
+      "normalizedText": "café",
+      "url": "/audio/packs/v5/es-female-511e9e58bf386ac6-8ac2ee3c63da.m4a",
+      "sha256": "8ac2ee3c63da997fbe496f6cdc9e6fcad493f2fc010d4a56cde3c5b1ff3529a3",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-742018e80e2e975e",
+      "language": "es",
+      "text": "Ahora puedo expresarme con más confianza.",
+      "normalizedText": "Ahora puedo expresarme con más confianza.",
+      "url": "/audio/packs/v5/es-male-742018e80e2e975e-dcd0fbac7bcd.m4a",
+      "sha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875",
+      "voice": "male",
+      "reviewedAt": "2026-09-24T17:32:40.363012Z"
+    },
+    {
+      "id": "es-female-6a81111823816aa9",
+      "language": "es",
+      "text": "Ahora puedo expresarme con más confianza.",
+      "normalizedText": "Ahora puedo expresarme con más confianza.",
+      "url": "/audio/packs/v5/es-female-6a81111823816aa9-3f93ec4315fc.m4a",
+      "sha256": "3f93ec4315fc6cbc97ce2aa45435e61f2e6659c42ced2024daf573fc9448dbb8",
+      "voice": "female",
+      "reviewedAt": "2026-09-24T17:32:40.363012Z"
+    },
+    {
+      "id": "vi-female-2ec8649d4e3803f2",
+      "language": "vi",
+      "text": "Bây giờ tôi có thể diễn đạt tự tin hơn.",
+      "normalizedText": "Bây giờ tôi có thể diễn đạt tự tin hơn.",
+      "url": "/audio/packs/v5/vi-female-2ec8649d4e3803f2-cd99ff270be0.m4a",
+      "sha256": "cd99ff270be0daac5ea6ce4320d27e26f157d3e91b2e6cd3de9d2976be7087f9",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-2875ad43aed56d2c",
+      "language": "es",
+      "text": "ahora",
+      "normalizedText": "ahora",
+      "url": "/audio/packs/v5/es-male-2875ad43aed56d2c-b139b098dc14.m4a",
+      "sha256": "b139b098dc14267e3c118e081cc2f1c3dee8aa4ac9bb57886830b71d003a2aa3",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-41e5497b706e8c15",
+      "language": "es",
+      "text": "ahora",
+      "normalizedText": "ahora",
+      "url": "/audio/packs/v5/es-female-41e5497b706e8c15-554cc18dbb8c.m4a",
+      "sha256": "554cc18dbb8cf13a28fc011a1449fba45a20fffbdf0fcba8a4eb7a0a68e2fd55",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-ed515abe31dece9e",
+      "language": "es",
+      "text": "antes",
+      "normalizedText": "antes",
+      "url": "/audio/packs/v5/es-male-ed515abe31dece9e-a21ddcea13b5.m4a",
+      "sha256": "a21ddcea13b5008a87691905a11fb1a7aa3c2b01f8ba65be7cdc78b1680b4aa8",
+      "voice": "male"
     }
   ]
 }
