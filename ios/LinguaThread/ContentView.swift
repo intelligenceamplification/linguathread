@@ -7,7 +7,7 @@ import WebKit
 /// engine, learner persistence, and future web updates on one source of truth.
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
-    private let masterURL = URL(string: "https://linguathread.vercel.app/")!
+    private let masterURL = URL(string: "https://linguathread.vercel.app/?ios-build=4")!
 
     var body: some View {
         LinguaThreadWebView(url: masterURL)
@@ -32,7 +32,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
         configuration.userContentController.add(context.coordinator, name: "linguathreadAudio")
         configuration.userContentController.addUserScript(WKUserScript(
-            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true;",
+            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true;",
             injectionTime: .atDocumentStart,
             forMainFrameOnly: true
         ))
@@ -51,19 +51,22 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         context.coordinator.webView = webView
         webView.allowsBackForwardNavigationGestures = false
-        webView.load(URLRequest(url: url, cachePolicy: .useProtocolCachePolicy))
+        webView.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData))
         return webView
     }
 
     func updateUIView(_ webView: WKWebView, context: Context) {
         guard webView.url == nil else { return }
-        webView.load(URLRequest(url: url, cachePolicy: .useProtocolCachePolicy))
+        webView.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData))
     }
 
     @MainActor
-    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler, @preconcurrency AVSpeechSynthesizerDelegate {
+    final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler, @preconcurrency AVSpeechSynthesizerDelegate, @preconcurrency AVAudioPlayerDelegate {
         weak var webView: WKWebView?
         private let synthesizer = AVSpeechSynthesizer()
+        private var clipPlayer: AVAudioPlayer?
+        private var clipTask: Task<Void, Never>?
+        private var clipRequestID: String?
         private var pendingRequestID: String?
         private var activeRequestID: String?
 
@@ -77,14 +80,68 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                   let payload = message.body as? [String: Any],
                   let action = payload["action"] as? String else { return }
             if action == "stop" {
+                clipTask?.cancel()
+                clipTask = nil
+                if let clipPlayer {
+                    clipPlayer.stop()
+                    self.clipPlayer = nil
+                    notifySpeechCancelled(requestID: clipRequestID)
+                    clipRequestID = nil
+                }
                 if !synthesizer.stopSpeaking(at: .immediate) {
                     notifySpeechCancelled(requestID: payload["requestID"] as? String)
+                }
+                return
+            }
+            if action == "playClip" {
+                guard let path = payload["url"] as? String,
+                      path.hasPrefix("/audio/packs/"),
+                      !path.contains(".."),
+                      let requestID = payload["requestID"] as? String,
+                      let url = URL(string: "https://linguathread.vercel.app\(path)") else { return }
+                clipTask?.cancel()
+                clipPlayer?.stop()
+                clipPlayer = nil
+                synthesizer.stopSpeaking(at: .immediate)
+                clipRequestID = requestID
+                clipTask = Task { [weak self] in
+                    do {
+                        let (data, response) = try await URLSession.shared.data(from: url)
+                        guard !Task.isCancelled, let self, self.clipRequestID == requestID else { return }
+                        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+                            self.notifySpeechEvent("linguathread:native-speech-error", requestID: requestID)
+                            return
+                        }
+                        try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio)
+                        try AVAudioSession.sharedInstance().setActive(true)
+                        let player = try AVAudioPlayer(data: data)
+                        self.clipPlayer = player
+                        player.delegate = self
+                        player.prepareToPlay()
+                        if player.play() {
+                            self.notifySpeechEvent("linguathread:native-speech-started", requestID: requestID)
+                        } else {
+                            self.clipPlayer = nil
+                            self.notifySpeechEvent("linguathread:native-speech-error", requestID: requestID)
+                        }
+                    } catch {
+                        guard !Task.isCancelled, let self, self.clipRequestID == requestID else { return }
+                        self.notifySpeechEvent("linguathread:native-speech-error", requestID: requestID)
+                    }
                 }
                 return
             }
             guard action == "speak",
                   let text = payload["text"] as? String,
                   let language = payload["language"] as? String else { return }
+            if let clipPlayer {
+                clipPlayer.stop()
+                self.clipPlayer = nil
+                notifySpeechCancelled(requestID: clipRequestID)
+                clipRequestID = nil
+            }
+            clipTask?.cancel()
+            clipTask = nil
             synthesizer.stopSpeaking(at: .immediate)
             pendingRequestID = payload["requestID"] as? String
             let utterance = AVSpeechUtterance(string: text)
@@ -93,6 +150,14 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             utterance.pitchMultiplier = 1
             utterance.preUtteranceDelay = 0.08
             synthesizer.speak(utterance)
+        }
+
+        func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+            guard player === clipPlayer else { return }
+            let requestID = clipRequestID
+            clipPlayer = nil
+            clipRequestID = nil
+            notifySpeechEvent(flag ? "linguathread:native-speech-ended" : "linguathread:native-speech-cancelled", requestID: requestID)
         }
 
         private func bestAvailableVoice(for language: String) -> AVSpeechSynthesisVoice? {

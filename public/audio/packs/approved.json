@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v2",
+  "packVersion": "v4",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-23T23:39:37.326Z",
+  "approvedAt": "2026-09-24T17:26:01Z",
   "clips": [
     {
       "id": "en-expression",
@@ -19,38 +19,6 @@
       "normalizedText": "Could you say that again, please?",
       "url": "/audio/packs/v1/en-question-71f11463e82a.wav",
       "sha256": "71f11463e82abb8e4f0c6303f4f74215ed48a5b29c455c661ebb2536d18835e2"
-    },
-    {
-      "id": "es-expression",
-      "language": "es",
-      "text": "Me gustaría entender cómo funciona esto.",
-      "normalizedText": "Me gustaría entender cómo funciona esto.",
-      "url": "/audio/packs/v1/es-expression-cc2ff54468c3.wav",
-      "sha256": "cc2ff54468c35de72efa89e410cf91b70f8b949de5fd1b3580949c7eabe248ec"
-    },
-    {
-      "id": "es-contrast",
-      "language": "es",
-      "text": "pero, perro; caro, carro",
-      "normalizedText": "pero, perro; caro, carro",
-      "url": "/audio/packs/v1/es-contrast-0cbe996b70f8.wav",
-      "sha256": "0cbe996b70f8c67727a4d0789eee7cfa9480e57abebd6c61a41a7a86ff71d3f7"
-    },
-    {
-      "id": "vi-expression",
-      "language": "vi",
-      "text": "Tôi muốn hiểu điều này hoạt động như thế nào.",
-      "normalizedText": "Tôi muốn hiểu điều này hoạt động như thế nào.",
-      "url": "/audio/packs/v1/vi-expression-3fc63a753293.wav",
-      "sha256": "3fc63a7532937928de830ec844ad135c104d100772a2fff4212d1ae96674ff3b"
-    },
-    {
-      "id": "vi-tones",
-      "language": "vi",
-      "text": "ma, má, mà, mả, mã, mạ",
-      "normalizedText": "ma, má, mà, mả, mã, mạ",
-      "url": "/audio/packs/v1/vi-tones-7c2dc0fb223d.wav",
-      "sha256": "7c2dc0fb223d1e6dc79eac06b8d14f1b0916d02fa940c41914a91c9499d957df"
     },
     {
       "id": "fr-expression",
@@ -219,7 +187,464 @@
       "normalizedText": "Soy de Indiana.",
       "url": "/audio/packs/v2/es-origin-native-castilian-a3dc7d41dd38.wav",
       "sha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109",
-      "reviewedAt": "2026-09-23T23:39:24Z"
+      "reviewedAt": "2026-09-23T23:39:24Z",
+      "voice": "male"
+    },
+    {
+      "id": "spanish-male-consistency",
+      "language": "es",
+      "text": "Me llamo Desmond. Mucho gusto.",
+      "normalizedText": "Me llamo Desmond. Mucho gusto.",
+      "url": "/audio/packs/v3/spanish-male-consistency-be1592272474.wav",
+      "sha256": "be15922724744789630604409a48715d3fa779aa0a8537df250452c048635f36",
+      "reviewedAt": "2026-09-24T18:00:00Z",
+      "voice": "male"
+    },
+    {
+      "id": "spanish-female-audition",
+      "language": "es",
+      "text": "Soy de Indiana.",
+      "normalizedText": "Soy de Indiana.",
+      "url": "/audio/packs/v3/spanish-female-audition-2cd3bd7cdd5d.wav",
+      "sha256": "2cd3bd7cdd5d7334e67e1fd44652c08f11eae639f044b5eac9e55288b2e072f7",
+      "reviewedAt": "2026-09-24T18:00:00Z",
+      "voice": "female"
+    },
+    {
+      "id": "vietnamese-female-audition",
+      "language": "vi",
+      "text": "Mình đến từ Indiana. Rất vui được gặp bạn.",
+      "normalizedText": "Mình đến từ Indiana. Rất vui được gặp bạn.",
+      "url": "/audio/packs/v3/vietnamese-female-audition-ffe7c562b3c4.wav",
+      "sha256": "ffe7c562b3c4c744f4bffe76e9e594dbc83a11c9132390f86136818fbc2e8c1b",
+      "reviewedAt": "2026-09-24T18:00:00Z",
+      "voice": "female"
+    },
+    {
+      "id": "es-names-female",
+      "language": "es",
+      "text": "Me llamo Desmond. Mucho gusto.",
+      "normalizedText": "Me llamo Desmond. Mucho gusto.",
+      "url": "/audio/packs/v3/es-names-female-8c89f202bfb5.wav",
+      "sha256": "8c89f202bfb5a0fd4e55cf3ccb1d07a8481f49a3d4f7dd77d94adc5109752e89",
+      "reviewedAt": "2026-09-24T17:10:26.181404Z",
+      "voice": "female"
+    },
+    {
+      "id": "vi-origin-female",
+      "language": "vi",
+      "text": "Mình đến từ Indiana.",
+      "normalizedText": "Mình đến từ Indiana.",
+      "url": "/audio/packs/v3/vi-origin-female-1bf06d54a1c2.wav",
+      "sha256": "1bf06d54a1c265ffb8254b66f0a7c8906d62f120eeb352edcecddf7b33186287",
+      "reviewedAt": "2026-09-24T17:10:26.181753Z",
+      "voice": "female"
+    },
+    {
+      "id": "vi-names-female",
+      "language": "vi",
+      "text": "Mình tên là Desmond. Rất vui được gặp bạn.",
+      "normalizedText": "Mình tên là Desmond. Rất vui được gặp bạn.",
+      "url": "/audio/packs/v3/vi-names-female-495a7579c590.wav",
+      "sha256": "495a7579c590ad6a68fc0790395ec7f7aa637da8d1cd58a1aa5f1a5d2f62862b",
+      "reviewedAt": "2026-09-24T17:15:00.480328Z",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-7a080c250651df45",
+      "language": "es",
+      "text": "yo",
+      "normalizedText": "yo",
+      "url": "/audio/packs/v4/es-male-7a080c250651df45-ce7225e64065.m4a",
+      "sha256": "ce7225e640651af38843a9ee7960d185cee43a031862b693aafd6ac9d6758c74",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-be44525d819afe69",
+      "language": "es",
+      "text": "yo",
+      "normalizedText": "yo",
+      "url": "/audio/packs/v4/es-female-be44525d819afe69-4dd9c7c22d53.m4a",
+      "sha256": "4dd9c7c22d5395631ca6cde68d573a3196de4ddef5ce3b1602f3fcf173c32822",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-16e6c568185835c5",
+      "language": "vi",
+      "text": "mình / tôi",
+      "normalizedText": "mình / tôi",
+      "url": "/audio/packs/v4/vi-female-16e6c568185835c5-67c6e182cab4.m4a",
+      "sha256": "67c6e182cab4f9cd164596a87683b3e4405160121d584c337ce33b235d5b8f63",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-8c2d7137e2ba932b",
+      "language": "es",
+      "text": "tú",
+      "normalizedText": "tú",
+      "url": "/audio/packs/v4/es-male-8c2d7137e2ba932b-23197d0b01db.m4a",
+      "sha256": "23197d0b01db0c3cb84c229159b835757f8154482a74900d5e8e2bd1acfd3a3c",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-a5394814e18743dd",
+      "language": "es",
+      "text": "tú",
+      "normalizedText": "tú",
+      "url": "/audio/packs/v4/es-female-a5394814e18743dd-367e9fee7a34.m4a",
+      "sha256": "367e9fee7a34e24335636647d99c5b57351d368733d34994fe74024eb98c7093",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-2506237016e1b3cd",
+      "language": "vi",
+      "text": "bạn",
+      "normalizedText": "bạn",
+      "url": "/audio/packs/v4/vi-female-2506237016e1b3cd-14f46a77b6b5.m4a",
+      "sha256": "14f46a77b6b5cd9c855e3c47268e597fa76844b6202c8e4c8a8cb49f8cf688b6",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-b6ea053c833ddd77",
+      "language": "es",
+      "text": "soy",
+      "normalizedText": "soy",
+      "url": "/audio/packs/v4/es-male-b6ea053c833ddd77-1cc668522d8e.m4a",
+      "sha256": "1cc668522d8e68473ca6c00271861d362008fcba08f30ed9b443c02ec561f535",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-af48a259f55ca865",
+      "language": "es",
+      "text": "soy",
+      "normalizedText": "soy",
+      "url": "/audio/packs/v4/es-female-af48a259f55ca865-a2e8eadfbaca.m4a",
+      "sha256": "a2e8eadfbaca9fc2abaebec510769840dd733757b1514add8346feee477d084c",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-92e4c38de8999112",
+      "language": "vi",
+      "text": "mình là / tôi là",
+      "normalizedText": "mình là / tôi là",
+      "url": "/audio/packs/v4/vi-female-92e4c38de8999112-05de010f2f78.m4a",
+      "sha256": "05de010f2f78306042bd9ca1f96e373f014416a5d547a73b2847f980ada35b9f",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-c4795a2d8b32863e",
+      "language": "es",
+      "text": "eres",
+      "normalizedText": "eres",
+      "url": "/audio/packs/v4/es-male-c4795a2d8b32863e-c410090a0096.m4a",
+      "sha256": "c410090a0096e986e00d5776edccab0e12c6c541aafe9c368731b59d926b3234",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-8f07d2c284f79e5a",
+      "language": "es",
+      "text": "eres",
+      "normalizedText": "eres",
+      "url": "/audio/packs/v4/es-female-8f07d2c284f79e5a-c3cde3cd606b.m4a",
+      "sha256": "c3cde3cd606b5d8f8971990c16fdc99fa0978993cc38257f70de04ba15073537",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-4ccf06b25a2d6d84",
+      "language": "vi",
+      "text": "bạn là",
+      "normalizedText": "bạn là",
+      "url": "/audio/packs/v4/vi-female-4ccf06b25a2d6d84-6763973ffc3e.m4a",
+      "sha256": "6763973ffc3e02518ebd0e089439ec93099110318d05a9b47729541410012be6",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-7eaaccc05234ff1a",
+      "language": "es",
+      "text": "de",
+      "normalizedText": "de",
+      "url": "/audio/packs/v4/es-male-7eaaccc05234ff1a-6a76e2fb91d9.m4a",
+      "sha256": "6a76e2fb91d90c4563a03b139d2afa47042b7b18bef68a6e0aa4f68a977b8dba",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-6ab18f8a7ad9bd6d",
+      "language": "es",
+      "text": "de",
+      "normalizedText": "de",
+      "url": "/audio/packs/v4/es-female-6ab18f8a7ad9bd6d-ee68d5d777a0.m4a",
+      "sha256": "ee68d5d777a0a6263608188bd367126e1883170e5ec4efdf594936da85d86e57",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-69d4d3c9572c8e9e",
+      "language": "vi",
+      "text": "từ / của",
+      "normalizedText": "từ / của",
+      "url": "/audio/packs/v4/vi-female-69d4d3c9572c8e9e-cd532b67239a.m4a",
+      "sha256": "cd532b67239aa356df7a0c0a0878445c8d33ece4f9fb9bdca0fd8a74efdc50e1",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-cba430e323009a4e",
+      "language": "es",
+      "text": "yo tú",
+      "normalizedText": "yo tú",
+      "url": "/audio/packs/v4/es-male-cba430e323009a4e-a98b1d6ce4a6.m4a",
+      "sha256": "a98b1d6ce4a66a173b8df11300233c4c22a7d0521e86df0b2a4dc4fd98766ae8",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-fbb0325e80c11e67",
+      "language": "es",
+      "text": "yo tú",
+      "normalizedText": "yo tú",
+      "url": "/audio/packs/v4/es-female-fbb0325e80c11e67-c4a6dbd5f778.m4a",
+      "sha256": "c4a6dbd5f778a0cfca8371d5cf38722dc26e67f4098d0aeff508d5d7edcad95c",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-01e5028b29b5abc7",
+      "language": "vi",
+      "text": "mình / tôi bạn",
+      "normalizedText": "mình / tôi bạn",
+      "url": "/audio/packs/v4/vi-female-01e5028b29b5abc7-405fbdb32c25.m4a",
+      "sha256": "405fbdb32c25ce3994ce3c3d607ab11cdf5f975ec5fd4f247e6355a8c61410c6",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-490136e915107078",
+      "language": "es",
+      "text": "me",
+      "normalizedText": "me",
+      "url": "/audio/packs/v4/es-male-490136e915107078-8f9c89221367.m4a",
+      "sha256": "8f9c89221367c7a078592a150755e6125aaa1bb15a6c36181d4db4040f1ec346",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-23f1dcfa53b34f1e",
+      "language": "es",
+      "text": "me",
+      "normalizedText": "me",
+      "url": "/audio/packs/v4/es-female-23f1dcfa53b34f1e-01ee46e66a11.m4a",
+      "sha256": "01ee46e66a11fdf69147ea4b13a179e103889059ab4144e5d525a70260922063",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-90257314ea227c28",
+      "language": "es",
+      "text": "llamo",
+      "normalizedText": "llamo",
+      "url": "/audio/packs/v4/es-male-90257314ea227c28-3eb5bc2677b2.m4a",
+      "sha256": "3eb5bc2677b2e227a84a400393690f6f3f5e303993a2f4ce237d2500f40f91a4",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-731af8d5c1293af6",
+      "language": "es",
+      "text": "llamo",
+      "normalizedText": "llamo",
+      "url": "/audio/packs/v4/es-female-731af8d5c1293af6-58e4bdb984f0.m4a",
+      "sha256": "58e4bdb984f09c9cf42d63cd790869c0d19822be8a9dde70cb7f01ad01d7f0f5",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-4253d1ead57295ee",
+      "language": "vi",
+      "text": "gọi",
+      "normalizedText": "gọi",
+      "url": "/audio/packs/v4/vi-female-4253d1ead57295ee-6d4cbc37a79a.m4a",
+      "sha256": "6d4cbc37a79acbdb1168173986e432c44746fefdf747c6e3b970424d188fecc1",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-73ba19be75a9926e",
+      "language": "es",
+      "text": "nombre",
+      "normalizedText": "nombre",
+      "url": "/audio/packs/v4/es-male-73ba19be75a9926e-2c66c0d94cf3.m4a",
+      "sha256": "2c66c0d94cf35a02f3a5baccd5997e30d6552eae8ce2e6c9265d5b16d527d3fe",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-e848db535c905f6a",
+      "language": "es",
+      "text": "nombre",
+      "normalizedText": "nombre",
+      "url": "/audio/packs/v4/es-female-e848db535c905f6a-941fc8ce3917.m4a",
+      "sha256": "941fc8ce39178446d675b77a67a7c18d3ba8f044bdfa579ea1689c53fb947dea",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-d8753d5037571585",
+      "language": "vi",
+      "text": "tên",
+      "normalizedText": "tên",
+      "url": "/audio/packs/v4/vi-female-d8753d5037571585-fe08f669b528.m4a",
+      "sha256": "fe08f669b5287beb4c10faf06276135ea69deb8708261f4cf36cdb4f6896f6ba",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-a2d8b64babed5b29",
+      "language": "es",
+      "text": "mucho",
+      "normalizedText": "mucho",
+      "url": "/audio/packs/v4/es-male-a2d8b64babed5b29-a084e80a94f7.m4a",
+      "sha256": "a084e80a94f784d35b99e2a012a07cd9b01226cb1f327f02d6ff13f080956221",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-7669fcd1f47b1cb9",
+      "language": "es",
+      "text": "mucho",
+      "normalizedText": "mucho",
+      "url": "/audio/packs/v4/es-female-7669fcd1f47b1cb9-223a214b9da4.m4a",
+      "sha256": "223a214b9da480f84fb90c06763bf600498b4f1f7341831cfa9206bf28e5b47b",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-9cef7bf98fbd8a83",
+      "language": "vi",
+      "text": "rất / nhiều",
+      "normalizedText": "rất / nhiều",
+      "url": "/audio/packs/v4/vi-female-9cef7bf98fbd8a83-e4f1d132eaa0.m4a",
+      "sha256": "e4f1d132eaa0207ba720462e0ada1af963fdd0b7f0dfe09380501d32fc97ab2b",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-3ff583dfc3c6e23b",
+      "language": "es",
+      "text": "gusto",
+      "normalizedText": "gusto",
+      "url": "/audio/packs/v4/es-male-3ff583dfc3c6e23b-ad127451cc73.m4a",
+      "sha256": "ad127451cc73cbfebcb5e07f5060b6b8d25de3d2f886a2f97b9e1f39f1b055ef",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-82fd3c09e002bb5a",
+      "language": "es",
+      "text": "gusto",
+      "normalizedText": "gusto",
+      "url": "/audio/packs/v4/es-female-82fd3c09e002bb5a-0a2517410e88.m4a",
+      "sha256": "0a2517410e880c7ca479157f80a55369da13213b52ab4d7a95b666d70a007231",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-b4ae2005b4d2ebae",
+      "language": "vi",
+      "text": "hân hạnh",
+      "normalizedText": "hân hạnh",
+      "url": "/audio/packs/v4/vi-female-b4ae2005b4d2ebae-ffa64e5cee85.m4a",
+      "sha256": "ffa64e5cee859bacdd372da0df0d589470bc6e17c4512411291b8d6450c32683",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-5293da72e83529d7",
+      "language": "es",
+      "text": "Me llamo Desmond.",
+      "normalizedText": "Me llamo Desmond.",
+      "url": "/audio/packs/v4/es-male-5293da72e83529d7-27554010959a.m4a",
+      "sha256": "27554010959a999c46b3fded8415fcd8bfe4df4feb628bb210637ebdefdce248",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-6fcf888147ebee0f",
+      "language": "es",
+      "text": "Me llamo Desmond.",
+      "normalizedText": "Me llamo Desmond.",
+      "url": "/audio/packs/v4/es-female-6fcf888147ebee0f-eb083fba290b.m4a",
+      "sha256": "eb083fba290bab9fc009625259d3d5580ce76efc0d20bdc2d0018c9352c1c14e",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-1f11e2515a058ecd",
+      "language": "vi",
+      "text": "Mình tên là Desmond.",
+      "normalizedText": "Mình tên là Desmond.",
+      "url": "/audio/packs/v4/vi-female-1f11e2515a058ecd-1b2dd67c33f9.m4a",
+      "sha256": "1b2dd67c33f92737bc5916c395ffbe0f06ef51e06b18362ffd0c2982e0527137",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-6e366fcf80a5e6cc",
+      "language": "es",
+      "text": "me llamo",
+      "normalizedText": "me llamo",
+      "url": "/audio/packs/v4/es-male-6e366fcf80a5e6cc-c808fbecb58b.m4a",
+      "sha256": "c808fbecb58b4f1caf49f43c0c20872290db15e2f56852b06125b221e6a0374a",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-b72abd4182c4e68b",
+      "language": "es",
+      "text": "me llamo",
+      "normalizedText": "me llamo",
+      "url": "/audio/packs/v4/es-female-b72abd4182c4e68b-45f9e9a444a4.m4a",
+      "sha256": "45f9e9a444a41528339c2ece57957a6129c2772d084c7b4a009382c1f3550089",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-f5a89f5485fdcef4",
+      "language": "vi",
+      "text": "mình / tôi gọi",
+      "normalizedText": "mình / tôi gọi",
+      "url": "/audio/packs/v4/vi-female-f5a89f5485fdcef4-cea629e4d11d.m4a",
+      "sha256": "cea629e4d11d8507bf2295e75971531d17e503e724bb9df9230fd0cea297f9d3",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-cf8e6a81e3c0fd78",
+      "language": "es",
+      "text": "Me gustaría entender cómo funciona esto.",
+      "normalizedText": "Me gustaría entender cómo funciona esto.",
+      "url": "/audio/packs/v4/es-male-cf8e6a81e3c0fd78-cf8f87e17b66.m4a",
+      "sha256": "cf8f87e17b66b86202b61892e445600e271fb6db92a4c0d60e13a80bfa23b7f2",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-60d354a7d1827b07",
+      "language": "es",
+      "text": "Me gustaría entender cómo funciona esto.",
+      "normalizedText": "Me gustaría entender cómo funciona esto.",
+      "url": "/audio/packs/v4/es-female-60d354a7d1827b07-2cfafbb44fa6.m4a",
+      "sha256": "2cfafbb44fa695fb198d9ec70480d4fa827908a26ee105809f379beb799342bf",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-3481e48d4a60895a",
+      "language": "es",
+      "text": "pero, perro; caro, carro",
+      "normalizedText": "pero, perro; caro, carro",
+      "url": "/audio/packs/v4/es-male-3481e48d4a60895a-bf0fa0c0f24a.m4a",
+      "sha256": "bf0fa0c0f24ade4b2abb5779b6dd796e6e9cb65fba8321dede33cef8bc3e9d9b",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-dd68b0a8cf90cbdc",
+      "language": "es",
+      "text": "pero, perro; caro, carro",
+      "normalizedText": "pero, perro; caro, carro",
+      "url": "/audio/packs/v4/es-female-dd68b0a8cf90cbdc-57e3c8badd71.m4a",
+      "sha256": "57e3c8badd71fb76dfdb5d63a2a3a75f3d10a68a0e7b23416e02a3fd6ea2cd7d",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-7536d90c7f191903",
+      "language": "vi",
+      "text": "Tôi muốn hiểu điều này hoạt động như thế nào.",
+      "normalizedText": "Tôi muốn hiểu điều này hoạt động như thế nào.",
+      "url": "/audio/packs/v4/vi-female-7536d90c7f191903-f567f13da5a3.m4a",
+      "sha256": "f567f13da5a3945b4599f0e9e0acd4deab3c3923c2e33d599fdbb1bf07291d03",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-a21008f72adde4ed",
+      "language": "vi",
+      "text": "ma, má, mà, mả, mã, mạ",
+      "normalizedText": "ma, má, mà, mả, mã, mạ",
+      "url": "/audio/packs/v4/vi-female-a21008f72adde4ed-37ede918e244.m4a",
+      "sha256": "37ede918e24428607bc7b9a7a5706b04b1199e238f150cf9de45c77d30a72d3b",
+      "voice": "female"
     }
   ]
 }

@@ -2,14 +2,16 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { languageInfo, type FoundationLanguage } from "./multilingual-foundation";
 import { speechLocales, voiceForLanguage } from "./speech";
-import { approvedAudioFor } from "./audio-pack";
+import { approvedAudioFor, type ApprovedAudioClip } from "./audio-pack";
 
 const speechEvent = "linguathread:speech-start";
 const nativeSpeechStartEvent = "linguathread:native-speech-started";
 const nativeSpeechEndEvent = "linguathread:native-speech-ended";
 const nativeSpeechCancelEvent = "linguathread:native-speech-cancelled";
+const nativeSpeechErrorEvent = "linguathread:native-speech-error";
 const subscribeToSpeechSupport = () => () => {};
-const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: { linguathreadAudio?: { postMessage: (value: unknown) => void } } }; __LINGUATHREAD_NATIVE_SPEECH__?: boolean }).webkit?.messageHandlers?.linguathreadAudio;
+const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: { linguathreadAudio?: { postMessage: (value: unknown) => void } } }; __LINGUATHREAD_NATIVE_SPEECH__?: boolean; __LINGUATHREAD_NATIVE_CLIP__?: boolean }).webkit?.messageHandlers?.linguathreadAudio;
+const supportsNativeClip = () => Boolean((window as Window & { __LINGUATHREAD_NATIVE_CLIP__?: boolean }).__LINGUATHREAD_NATIVE_CLIP__);
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
 
@@ -22,6 +24,7 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
  const failure = useRef(onError);
  const speakingRef = useRef(false);
  const audioRef = useRef<HTMLAudioElement | null>(null);
+ const selectedClip = useRef<{ key: string; clip: ApprovedAudioClip | null } | null>(null);
  useEffect(() => { playback.current = onPlayback; }, [onPlayback]);
  useEffect(() => { completion.current = onComplete; }, [onComplete]);
  useEffect(() => { failure.current = onError; }, [onError]);
@@ -33,11 +36,13 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
   const nativeEnded = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(false); completion.current?.(); } };
   const nativeStarted = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(true); playback.current?.(); } };
   const nativeCancelled = (event: Event) => { if ((event as CustomEvent<string>).detail === id) setSpeaking(false); };
+  const nativeError = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(false); failure.current?.(); } };
   window.addEventListener(nativeSpeechEndEvent, nativeEnded);
   window.addEventListener(nativeSpeechStartEvent, nativeStarted);
   window.addEventListener(nativeSpeechCancelEvent, nativeCancelled);
+  window.addEventListener(nativeSpeechErrorEvent, nativeError);
   return () => {
-   window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); window.removeEventListener(nativeSpeechCancelEvent, nativeCancelled);
+   window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); window.removeEventListener(nativeSpeechCancelEvent, nativeCancelled); window.removeEventListener(nativeSpeechErrorEvent, nativeError);
    if (speakingRef.current) { nativeHandler()?.postMessage({ action: "stop", requestID: id }); window.speechSynthesis?.cancel(); audioRef.current?.pause(); }
   };
  }, [id]);
@@ -54,11 +59,20 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
   onUse?.();
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   window.dispatchEvent(new CustomEvent(speechEvent, { detail: id }));
-  const approved = await approvedAudioFor(text, language);
+  const clipKey = `${language}\u0000${text}`;
+  const approved = selectedClip.current?.key === clipKey
+   ? selectedClip.current.clip
+   : await approvedAudioFor(text, language);
+  selectedClip.current = approved ? { key: clipKey, clip: approved } : null;
   if (approved) {
+   const native = nativeHandler();
+   if (native && supportsNativeClip()) {
+    native.postMessage({ action: "playClip", url: approved.url, requestID: id });
+    return;
+   }
    const audio = new Audio(approved.url);
    // Preserve the exact timing of a clip accepted through listening review.
-   audio.playbackRate = approved.reviewedAt ? 1 : 0.8;
+   audio.playbackRate = approved.voice || approved.reviewedAt ? 1 : 0.8;
    audio.preservesPitch = true;
    audioRef.current = audio;
    audio.onplay = () => { setSpeaking(true); playback.current?.(); };
