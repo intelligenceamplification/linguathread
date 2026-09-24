@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v6",
+  "packVersion": "v7",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-24T17:54:06Z",
+  "approvedAt": "2026-09-24T17:59:11Z",
   "clips": [
     {
       "id": "en-expression",
@@ -1467,6 +1467,186 @@
       "url": "/audio/packs/v6/es-male-d543a2222fe7c2c7-63b9388c6b1f.m4a",
       "sha256": "63b9388c6b1f83b9c34f6834a5be490687c7652e9529c1673ec3c629dd0eca7d",
       "voice": "male"
+    },
+    {
+      "id": "es-female-728b6119effec6d6",
+      "language": "es",
+      "text": "Me mudé de ciudad cuando tenía veinte años.",
+      "normalizedText": "Me mudé de ciudad cuando tenía veinte años.",
+      "url": "/audio/packs/v7/es-female-728b6119effec6d6-3aacc47e8519.m4a",
+      "sha256": "3aacc47e85191c2457a147f144cd6ea16f18d985b0725e7c2f39754d02f112a7",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-5842eb1944ae97bb",
+      "language": "vi",
+      "text": "Tôi chuyển đến thành phố khác khi hai mươi tuổi.",
+      "normalizedText": "Tôi chuyển đến thành phố khác khi hai mươi tuổi.",
+      "url": "/audio/packs/v7/vi-female-5842eb1944ae97bb-53f52beb0926.m4a",
+      "sha256": "53f52beb0926a976282e7763ae40350aeb87942a471fdd61a6eaf7f238a9d65c",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-a0c033b9c41cdc77",
+      "language": "es",
+      "text": "mudé",
+      "normalizedText": "mudé",
+      "url": "/audio/packs/v7/es-male-a0c033b9c41cdc77-6552cfa42317.m4a",
+      "sha256": "6552cfa4231797678d6b75be3418cfc2058f55048d57d83c609a375bcefd1ab0",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-d8ffd006407a978a",
+      "language": "es",
+      "text": "mudé",
+      "normalizedText": "mudé",
+      "url": "/audio/packs/v7/es-female-d8ffd006407a978a-bbd7e3e1854c.m4a",
+      "sha256": "bbd7e3e1854c1bc6a43edd8dd54bbad511f9aab7b12a75fc1dc362224bd059cc",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-4fea752685f6ee1b",
+      "language": "vi",
+      "text": "tôi chuyển",
+      "normalizedText": "tôi chuyển",
+      "url": "/audio/packs/v7/vi-female-4fea752685f6ee1b-869ca4cd962b.m4a",
+      "sha256": "869ca4cd962b8274d5472e5b2a5c812a9aa6ede62fa24f5c5cd683551b355c25",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-4b579ae3e7c38703",
+      "language": "es",
+      "text": "ciudad",
+      "normalizedText": "ciudad",
+      "url": "/audio/packs/v7/es-male-4b579ae3e7c38703-1276bb653a06.m4a",
+      "sha256": "1276bb653a06e3a5dffb7d17df23d01c9c8b5f016306e9ebce55bf2a490d40d4",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-e5aebbde96248790",
+      "language": "es",
+      "text": "ciudad",
+      "normalizedText": "ciudad",
+      "url": "/audio/packs/v7/es-female-e5aebbde96248790-e6d49712a038.m4a",
+      "sha256": "e6d49712a038acca1402256021f05c224a175a729b1b8d8b07a508577f1dd107",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-345f50adf37d937e",
+      "language": "vi",
+      "text": "thành phố",
+      "normalizedText": "thành phố",
+      "url": "/audio/packs/v7/vi-female-345f50adf37d937e-e92c89406558.m4a",
+      "sha256": "e92c89406558b776c0b381e9817f8d86aa22569c4ad7857a03e72ea0e7743e78",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-7c524f6d503de30a",
+      "language": "es",
+      "text": "tenía",
+      "normalizedText": "tenía",
+      "url": "/audio/packs/v7/es-male-7c524f6d503de30a-87767e34a83c.m4a",
+      "sha256": "87767e34a83c36794ca84b53af04848b63769908bd0f36cb57d036868f084abf",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-e7f734b7af91ce03",
+      "language": "es",
+      "text": "tenía",
+      "normalizedText": "tenía",
+      "url": "/audio/packs/v7/es-female-e7f734b7af91ce03-8d3da894ecc6.m4a",
+      "sha256": "8d3da894ecc616580cdc8848d7829a3975fd346784f13945e598fcc57b193cdc",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-df9bc8bb901e98c8",
+      "language": "vi",
+      "text": "tôi",
+      "normalizedText": "tôi",
+      "url": "/audio/packs/v7/vi-female-df9bc8bb901e98c8-a754a03ea6b5.m4a",
+      "sha256": "a754a03ea6b5169be07960351da30cdbe7fb48218718f9d5a8f43131d5507f76",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-1044532f17921102",
+      "language": "es",
+      "text": "años",
+      "normalizedText": "años",
+      "url": "/audio/packs/v7/es-male-1044532f17921102-421c82c50b14.m4a",
+      "sha256": "421c82c50b14e5530430ec36eec95d1e998442dd1b40b48eb59ef94ef85d3ef3",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-d490e6abaf73d2a1",
+      "language": "es",
+      "text": "años",
+      "normalizedText": "años",
+      "url": "/audio/packs/v7/es-female-d490e6abaf73d2a1-7061c0cafaa7.m4a",
+      "sha256": "7061c0cafaa7062e9dc95249326c2bb9e97e96e7d109a28db8ad5f5eadf495f0",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-88bd524be7e256c9",
+      "language": "vi",
+      "text": "tuổi",
+      "normalizedText": "tuổi",
+      "url": "/audio/packs/v7/vi-female-88bd524be7e256c9-4f0fe1a27b76.m4a",
+      "sha256": "4f0fe1a27b76f391d441c72fa933a42f4723fee399fa686b7fc13ba3a11cf0bc",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-52392be3c3e53521",
+      "language": "es",
+      "text": "mudé ciudad",
+      "normalizedText": "mudé ciudad",
+      "url": "/audio/packs/v7/es-male-52392be3c3e53521-67f0cdf3a6b9.m4a",
+      "sha256": "67f0cdf3a6b91844d2e571b6e0a44626de0b4678ee6845390604efeea4dd487b",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-601ec390806374d7",
+      "language": "es",
+      "text": "mudé ciudad",
+      "normalizedText": "mudé ciudad",
+      "url": "/audio/packs/v7/es-female-601ec390806374d7-694b2a6e6c65.m4a",
+      "sha256": "694b2a6e6c65bb923afb32544563e9692442f0f188b6a95eb3fbb6947bb1d440",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-7b1a5868ce87213b",
+      "language": "vi",
+      "text": "tôi chuyển thành phố",
+      "normalizedText": "tôi chuyển thành phố",
+      "url": "/audio/packs/v7/vi-female-7b1a5868ce87213b-7857d26ebf13.m4a",
+      "sha256": "7857d26ebf136c861eec5c6088f8c37c2e3f496c2894cf45606b054d529d80a7",
+      "voice": "female"
+    },
+    {
+      "id": "es-male-c37db4ca37f70362",
+      "language": "es",
+      "text": "La primera vez que viajé solo, aprendí mucho.",
+      "normalizedText": "La primera vez que viajé solo, aprendí mucho.",
+      "url": "/audio/packs/v7/es-male-c37db4ca37f70362-4e5d08777ef2.m4a",
+      "sha256": "4e5d08777ef2b1d1011656f6f7f827aa015eb3e0808c0dbc63076f39a2481080",
+      "voice": "male"
+    },
+    {
+      "id": "es-female-bae2438a354d260a",
+      "language": "es",
+      "text": "La primera vez que viajé solo, aprendí mucho.",
+      "normalizedText": "La primera vez que viajé solo, aprendí mucho.",
+      "url": "/audio/packs/v7/es-female-bae2438a354d260a-b5405778d329.m4a",
+      "sha256": "b5405778d329a6b5f3521bb291450a5a8fe5ee4e5266c6b7d8f306cae7d85bd0",
+      "voice": "female"
+    },
+    {
+      "id": "vi-female-4492fa46bf7b8866",
+      "language": "vi",
+      "text": "Lần đầu tiên đi du lịch một mình, tôi học được rất nhiều.",
+      "normalizedText": "Lần đầu tiên đi du lịch một mình, tôi học được rất nhiều.",
+      "url": "/audio/packs/v7/vi-female-4492fa46bf7b8866-6db1384e658b.m4a",
+      "sha256": "6db1384e658ba357a2985836ff62d8c27735d2ebcf3537b537ae0e114064d141",
+      "voice": "female"
     }
   ]
 }
