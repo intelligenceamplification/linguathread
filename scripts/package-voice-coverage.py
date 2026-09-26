@@ -24,7 +24,7 @@ def main():
     destination.mkdir(parents=True, exist_ok=True)
     existing = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
     passing = {row["sha256"] for line in args.audit.read_text().splitlines()
-               if (row := json.loads(line))["status"] == "automated-pass"}
+               if (row := json.loads(line))["status"] == "automated-pass" and row["wordErrorRate"] == 0 and row["characterErrorRate"] == 0}
     added = 0
     for line in args.metadata.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)

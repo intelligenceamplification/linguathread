@@ -44,6 +44,7 @@ def main():
     parser.add_argument("--force", action="store_true", help="Generate replacement candidates for published keys")
     parser.add_argument("--prompt-mode", action="store_true", help="Use the approved transcript and recording as a cadence prompt")
     parser.add_argument("--attempts", type=int, default=3, help="Bounded retries for failed speech/text checks")
+    parser.add_argument("--device", default="auto", choices=("auto", "cpu", "mps"))
     args = parser.parse_args()
 
     import imageio_ffmpeg
@@ -90,7 +91,7 @@ def main():
     print(f"Generating {len(work)} new clips; {len(completed)} already generated", flush=True)
     if not work:
         return
-    model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False)
+    model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False, device=args.device, optimize=False)
     recognizer = WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     failures = args.output / "failures.jsonl"
@@ -122,7 +123,7 @@ def main():
                         wer = quality.distance(target.split(), heard.split()) / max(1, len(target.split()))
                         cer = quality.distance(target, heard) / max(1, len(target))
                         pace = len(target.split()) / max(.1, sum(segment.end - segment.start for segment in segments))
-                        mismatch = not transcript or (wer > .25 and cer > .18)
+                        mismatch = not transcript or target != heard
                         fast = len(target.split()) >= 4 and pace > (3.4 if language == "es" else 5.0)
                         problem = f"text/pace check: {transcript!r}, pace={pace:.2f}"
                         if not mismatch and not fast:

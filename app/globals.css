@@ -573,6 +573,9 @@ button { color: inherit; }
   .intro-copy h1 { max-width: calc(100vw - 44px); font-size: clamp(1.9rem, 8.8vw, 4rem); }
   .intro-mark { height: clamp(250px, 92vw, 350px); }
   .intro-thread-art { display: none; }
+  .stack-line { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 14px 0; }
+  .stack-line > div { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .stack-line .audio-controls { justify-self: start; }
   .intro-mobile-fragments { position: absolute; inset: 0; display: block; pointer-events: none; }
   .intro-mobile-command-row { position: absolute; top: -2%; left: 0; right: 0; display: flex; justify-content: center; gap: 18px; color: var(--intro-accent); font-family: var(--serif); font-size: .7rem; opacity: 0; animation: intro-fragments .35s .45s cubic-bezier(.2,.75,.25,1) both; }
   .intro-mobile-fragment { position: absolute; max-width: 44%; color: var(--intro-accent); font-family: var(--serif); font-size: clamp(.78rem, 3.5vw, 1rem); line-height: 1.2; white-space: nowrap; opacity: 0; animation: intro-fragments .35s .45s cubic-bezier(.2,.75,.25,1) both; }

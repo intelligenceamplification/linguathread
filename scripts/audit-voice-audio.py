@@ -65,7 +65,7 @@ def main():
             speech_seconds = sum(segment.end - segment.start for segment in segments)
             pace = len(words) / max(speech_seconds, .1)
             flags = []
-            if not actual or (wer > .25 and cer > .18):
+            if not actual or target != heard:
                 flags.append("text-mismatch")
             if len(words) >= 4 and pace > (3.4 if row["language"] == "es" else 5.0):
                 flags.append("fast-speech")
