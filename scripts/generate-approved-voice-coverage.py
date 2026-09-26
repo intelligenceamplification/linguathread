@@ -68,6 +68,7 @@ def main():
     }
     reference_texts = {(language, voice): next(clip["text"] for clip in pack["clips"] if ROOT / "public" / clip["url"].lstrip("/") == path) for (language, voice), path in references.items()}
     published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
+    reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt")}
     metadata = args.output / "metadata.jsonl"
     completed = set()
     if metadata.exists():
@@ -83,6 +84,7 @@ def main():
         for item in inventory
         for (language, voice), reference in references.items()
         if language == item["language"]
+        and (language, item["text"], voice) not in reviewed
         and (args.force or (language, item["text"], voice) not in published)
         and (language, item["text"], voice) not in completed
     ]
@@ -116,7 +118,8 @@ def main():
                     problem = "signal outside bounds"
                     if 0.001 < rms and 0.005 < peak < 0.999 and 0.2 < duration < 45:
                         sf.write(wav_path, wav, model.tts_model.sample_rate)
-                        segments, _ = recognizer.transcribe(str(wav_path), language=language, beam_size=5, condition_on_previous_text=False, temperature=0)
+                        subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(wav_path), "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(audio_path)], check=True)
+                        segments, _ = recognizer.transcribe(str(audio_path), language=language, beam_size=5, condition_on_previous_text=False, temperature=0)
                         segments = list(segments)
                         transcript = " ".join(segment.text.strip() for segment in segments)
                         target, heard = quality.normalize(speech_text), quality.normalize(transcript)
@@ -132,7 +135,6 @@ def main():
                     print(f"RETRY {clip_id} {attempt + 1}/{args.attempts}: {problem}", flush=True)
                 else:
                     raise ValueError(problem)
-                subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(wav_path), "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(audio_path)], check=True)
                 row = {
                     "id": clip_id, "language": language, "voice": voice,
                     "sourceText": text, "spokenText": speech_text, "normalizedText": text,
