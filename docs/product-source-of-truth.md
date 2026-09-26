@@ -18,6 +18,29 @@ The Language Path is the curriculum authority. It follows CEFR from A1 through C
 
 Review is forward progress. New lessons and due review should be interleaved throughout the path; the final C2 maintenance phase deepens that rhythm rather than introducing review for the first time.
 
+### Progression and repetition rule
+
+The learning path must advance through the existing authored A1–C2 sequence as the learner demonstrates its prerequisites. Review must consolidate learning without trapping the learner in elementary lessons they have already secured.
+
+- After three independent successful retrievals of an exact phrase across separate sessions, including later delayed recall, retire that phrase from routine repetition for the demonstrated skill. Immediate repetition, copied input, hints, revealed answers, and text-supported listening do not qualify. This is a product scheduling rule, not a claim that three successes establish universal mastery.
+- Revisit the underlying objective through authored variations: different vocabulary, situations, transformations, and sentence forms. Check transfer of the structure rather than repeatedly presenting the same elementary phrase as new learning.
+- Keep brief, targeted review alongside forward progression. Due review must not repeatedly replace the next eligible lesson, reopen completed introductory lessons, or silently reset the learner to A1.
+- Bring a retired exact phrase back when later recall or related errors indicate a deficiency. Remediation must target the affected objective and evidence type; a lapse must not erase unrelated progress.
+- Track listening, reading, writing, and spoken attempts independently. Success in translation or reading cannot retire listening or writing requirements. Preserve meaning-bearing diacritics in writing; reviewed audio is required for independent listening evidence. Spoken self-comparison remains self-reported practice, not verified pronunciation competence.
+- Use demonstrated prerequisite skills, transfer, and delayed recall to determine readiness for harder material. Completed or skipped lessons, three repetitions alone, and response latency alone must not certify CEFR proficiency or automaticity.
+- Preserve the latest valid saved learner state across navigation, refresh, relaunch, synchronization, language-stack changes, and curriculum revisions. An already-secured phrase such as “Soy de Indiana” must not recur as the default elementary lesson because of stale state or scheduling fallbacks.
+
+### Next build: locked scope, awaiting Proceed
+
+User-approved on 2026-09-26. Record these requirements now; begin implementation and resume the audio rebuild only when the user says **Proceed**. No recurring or daily task is required.
+
+1. Implement the progression and repetition rule above in the shared learning engine, using the existing authored curriculum without expanding the CEFR map. Verify retirement after qualifying successes, delayed retrieval, varied transfer practice, targeted remediation, continued advancement, independent evidence types, and persistence across sessions.
+2. Complete Spanish and Vietnamese audio replacement throughout the app using the approved Spanish male and female voices and the approved Vietnamese female voice. Randomly choose an available approved Spanish variant per control and preserve it on replay. Do not substitute old voices in remaining lesson or snippet playback paths. Additional languages remain outside this build's voice-selection scope.
+3. Reuse checked recordings and rebuild failed or missing takes efficiently with free local tools. Spoken alternatives must omit slash symbols, and each recording must match the intended words at clear teacher pace. Check the final encoded asset for text and pace; automatic checks do not grant pronunciation review. Preserve exact recordings already accepted through listening review.
+4. Keep Normal and Slow playback available throughout the shared audio controls. Verify the completed library and the same lesson sequence on responsive mobile/desktop web and the existing portrait-only iPhone app, including launch details, uncropped text, transcript reveal, keyboard state, and audio controls. Preserve branding, learner data, writing, grammar, orthography, retrieval, and language stacking.
+
+This build is complete only after the progression behavior is verified and the full required Spanish/Vietnamese audio coverage is deployed on web and usable in the existing iPhone app. Partial audio coverage or a successful build alone does not close the goal.
+
 ## One product, one master
 
 - GitHub `main` contains the canonical shared application.
