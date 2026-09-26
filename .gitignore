@@ -45,5 +45,6 @@ next-env.d.ts
 /work/
 /.voxcpm-venv/
 /audio/generated/
+/audio/models/
 __pycache__/
 *.pyc
