@@ -146,7 +146,6 @@ button { color: inherit; }
 .intro-kicker { margin: 0 0 4px; color: var(--intro-accent); font-size: .7rem; font-weight: 760; letter-spacing: .12em; text-transform: uppercase; opacity: 0; animation: intro-recognition .9s 4.4s cubic-bezier(.2,.75,.25,1) both; }
 .intro-mark { position: relative; height: clamp(260px, 37vw, 430px); display: grid; place-items: center; }
 .intro-thread-art { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px)); transition: transform .8s cubic-bezier(.2,.75,.25,1); }
-.intro-thread-art { mask-image: linear-gradient(to right, #000 0 23%, transparent 39% 61%, #000 77% 100%); }
 .intro-thread-stop { stop-color: var(--intro-thread); stop-opacity: 1; }
 .intro-thread-stop-transparent { stop-color: var(--intro-thread); stop-opacity: 0; }
 .intro-thread-single, .intro-strand { fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -157,14 +156,17 @@ button { color: inherit; }
 .intro-strand-four { stroke: var(--intro-thread); animation-delay: 1.65s; }
 .intro-language-fragments { fill: var(--intro-accent); font-family: var(--serif); font-size: 25px; opacity: 0; animation: intro-fragments 1.25s 2.9s cubic-bezier(.2,.75,.25,1) both; }
 .intro-fragment-italic { font-style: italic; }
+.intro-mobile-fragments { display: none; }
 .intro-copy h1 { position: relative; z-index: 1; width: fit-content; margin: 0 auto; color: var(--intro-ink); font-family: var(--font-geist); font-size: clamp(3rem, 9.4vw, 8rem); line-height: .94; font-weight: 320; white-space: nowrap; opacity: 0; animation: intro-title-resolve 1.25s 3.6s cubic-bezier(.2,.75,.25,1) both; }
-.intro-copy h1::before { content: ""; position: absolute; z-index: -1; inset: -16px -28px; background: var(--intro-paper); pointer-events: none; }
 .intro-copy h1 span { display: block; }
 .intro-brand-symbol { display: block; width: clamp(100px, 16vw, 180px); height: clamp(100px, 16vw, 180px); margin: 0 auto 12px; }
 .intro-title-line { width: fit-content; margin: -4px auto 0; padding: 0 14px 20px; border-bottom: 1px solid var(--intro-thread); color: var(--intro-ink); font-family: var(--serif); font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1.08; opacity: 0; animation: intro-recognition .9s 4.6s cubic-bezier(.2,.75,.25,1) both; }
 .intro-invitation { margin: 20px auto 0; color: var(--intro-muted); font-family: var(--serif); font-size: clamp(1.05rem, 2vw, 1.35rem); font-style: italic; line-height: 1.5; opacity: 0; animation: intro-recognition .9s 4.8s cubic-bezier(.2,.75,.25,1) both; }
 .intro-begin { margin-top: 28px; background: var(--intro-button-bg); color: var(--intro-button-text); opacity: 0; animation: intro-recognition .9s 5s cubic-bezier(.2,.75,.25,1) both; }
 .launch-loading { background: var(--paper); }
+.audio-controls { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; max-width: 100%; }
+.audio-speed { min-height: 44px; max-width: 90px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px; background: var(--paper); color: var(--ink); font: inherit; font-size: .72rem; }
+.audio-controls-compact .audio-speed { max-width: 78px; }
 
 @keyframes intro-single { 0% { opacity: 0; stroke-dashoffset: 1100; } 16%, 62% { opacity: .72; } 78% { stroke-dashoffset: 0; } 100% { opacity: 0; stroke-dashoffset: 0; } }
 @keyframes intro-separate { 0% { opacity: 0; stroke-dashoffset: 980; } 24% { opacity: .72; } 72%, 100% { opacity: 1; stroke-dashoffset: 0; } }
@@ -571,7 +573,14 @@ button { color: inherit; }
   .intro-copy h1 { max-width: calc(100vw - 44px); font-size: clamp(1.9rem, 8.8vw, 4rem); }
   .intro-mark { height: clamp(250px, 92vw, 350px); }
   .intro-thread-art { display: none; }
-  .intro-language-fragments { font-size: 32px; }
+  .intro-mobile-fragments { position: absolute; inset: 0; display: block; pointer-events: none; }
+  .intro-mobile-command-row { position: absolute; top: -2%; left: 0; right: 0; display: flex; justify-content: center; gap: 18px; color: var(--intro-accent); font-family: var(--serif); font-size: .7rem; opacity: 0; animation: intro-fragments 1.25s 2.9s cubic-bezier(.2,.75,.25,1) both; }
+  .intro-mobile-fragment { position: absolute; max-width: 44%; color: var(--intro-accent); font-family: var(--serif); font-size: clamp(.78rem, 3.5vw, 1rem); line-height: 1.2; white-space: nowrap; opacity: 0; animation: intro-fragments 1.25s 2.9s cubic-bezier(.2,.75,.25,1) both; }
+  .intro-mobile-top-left, .intro-mobile-top-right { top: 8%; font-size: clamp(.9rem, 4.3vw, 1.2rem); }
+  .intro-mobile-middle-left, .intro-mobile-middle-right { top: 38%; font-style: italic; }
+  .intro-mobile-bottom-left, .intro-mobile-bottom-right { bottom: 7%; font-style: italic; }
+  .intro-mobile-top-left, .intro-mobile-middle-left, .intro-mobile-bottom-left { left: 3%; text-align: left; }
+  .intro-mobile-top-right, .intro-mobile-middle-right, .intro-mobile-bottom-right { right: 3%; text-align: right; }
   .setup-content h1 { font-size: clamp(2.4rem, 12vw, 4.2rem); }
   .profile-language div { align-items: flex-start; flex-direction: column; gap: 4px; }
   .anatomy-layout { grid-template-columns: 1fr; gap: 0; }
@@ -590,6 +599,13 @@ button { color: inherit; }
   .stack-edit-action { grid-column: 1; }
   .unit-card > summary { grid-template-columns: 84px minmax(0, 1fr) auto; gap: 9px; }
   .unit-card > summary strong { font-size: 1.05rem; }
+}
+
+@media (max-width: 700px) and (max-height: 700px) and (orientation: portrait) {
+  .intro-stage { padding: 18px 22px; }
+  .intro-mark { height: 210px; }
+  .intro-invitation { margin-top: 14px; }
+  .intro-begin { margin-top: 16px; min-height: 44px; }
 }
 
 @media (orientation: landscape) and (min-height: 601px) and (max-height: 760px) {
@@ -618,7 +634,7 @@ button { color: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   .choreography-row p span { transform: none !important; }
-  .intro-copy, .intro-kicker, .intro-copy h1, .intro-title-line, .intro-invitation, .intro-begin, .intro-language-fragments { opacity: 1 !important; animation-delay: 0s !important; transform: none !important; }
+  .intro-copy, .intro-kicker, .intro-copy h1, .intro-title-line, .intro-invitation, .intro-begin, .intro-language-fragments, .intro-mobile-fragment, .intro-mobile-command-row { opacity: 1 !important; animation-delay: 0s !important; transform: none !important; }
   .intro-thread-single { opacity: 0 !important; animation-delay: 0s !important; }
   .intro-strand { opacity: .68 !important; animation-delay: 0s !important; stroke-dashoffset: 0 !important; }
 }

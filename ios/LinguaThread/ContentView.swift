@@ -7,7 +7,7 @@ import WebKit
 /// engine, learner persistence, and future web updates on one source of truth.
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
-    private let masterURL = URL(string: "https://linguathread.vercel.app/?ios-build=4")!
+    private let masterURL = URL(string: "https://linguathread.vercel.app/")!
 
     var body: some View {
         LinguaThreadWebView(url: masterURL)
@@ -51,14 +51,11 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         webView.navigationDelegate = context.coordinator
         context.coordinator.webView = webView
         webView.allowsBackForwardNavigationGestures = false
-        webView.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData))
+        webView.load(URLRequest(url: url, cachePolicy: .useProtocolCachePolicy))
         return webView
     }
 
-    func updateUIView(_ webView: WKWebView, context: Context) {
-        guard webView.url == nil else { return }
-        webView.load(URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData))
-    }
+    func updateUIView(_ webView: WKWebView, context: Context) {}
 
     @MainActor
     final class Coordinator: NSObject, WKNavigationDelegate, WKScriptMessageHandler, @preconcurrency AVSpeechSynthesizerDelegate, @preconcurrency AVAudioPlayerDelegate {
@@ -115,6 +112,8 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                         try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio)
                         try AVAudioSession.sharedInstance().setActive(true)
                         let player = try AVAudioPlayer(data: data)
+                        player.enableRate = true
+                        player.rate = (payload["rate"] as? Double) == 0.75 ? 0.75 : 1
                         self.clipPlayer = player
                         player.delegate = self
                         player.prepareToPlay()
@@ -146,7 +145,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             pendingRequestID = payload["requestID"] as? String
             let utterance = AVSpeechUtterance(string: text)
             utterance.voice = bestAvailableVoice(for: language)
-            utterance.rate = 0.40
+            utterance.rate = (payload["rate"] as? Double) == 0.75 ? 0.30 : 0.40
             utterance.pitchMultiplier = 1
             utterance.preUtteranceDelay = 0.08
             synthesizer.speak(utterance)

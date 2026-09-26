@@ -63,13 +63,22 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
                 <text x="1064" y="94">이해</text>
                 <text className="intro-fragment-italic" x="114" y="258" textAnchor="end">quan hệ</text>
                 <text className="intro-fragment-italic" x="1086" y="258">thấu hiểu</text>
-                <text className="intro-fragment-italic" x="136" y="414" textAnchor="end">relación</text>
-                <text className="intro-fragment-italic" x="1064" y="414">comprensión</text>
-                <text x="600" y="352" textAnchor="middle">명령</text>
-                <text className="intro-fragment-italic" x="600" y="408" textAnchor="middle">mệnh lệnh</text>
-                <text className="intro-fragment-italic" x="600" y="462" textAnchor="middle">imperativo</text>
+                <text className="intro-fragment-italic" x="136" y="190" textAnchor="end">relación</text>
+                <text className="intro-fragment-italic" x="1064" y="190">comprensión</text>
+                <text x="400" y="32" textAnchor="middle">명령</text>
+                <text className="intro-fragment-italic" x="600" y="32" textAnchor="middle">mệnh lệnh</text>
+                <text className="intro-fragment-italic" x="800" y="32" textAnchor="middle">imperativo</text>
               </g>
             </svg>
+            <div className="intro-mobile-fragments" aria-hidden="true">
+              <div className="intro-mobile-command-row"><span>명령</span><span>mệnh lệnh</span><span>imperativo</span></div>
+              <span className="intro-mobile-fragment intro-mobile-top-left">관계</span>
+              <span className="intro-mobile-fragment intro-mobile-top-right">이해</span>
+              <span className="intro-mobile-fragment intro-mobile-middle-left">quan hệ</span>
+              <span className="intro-mobile-fragment intro-mobile-middle-right">thấu hiểu</span>
+              <span className="intro-mobile-fragment intro-mobile-bottom-left">relación</span>
+              <span className="intro-mobile-fragment intro-mobile-bottom-right">comprensión</span>
+            </div>
             <h1 id="intro-title"><BrandMark className="intro-brand-symbol" /><span>LinguaThread</span></h1>
           </div>
           <p className="intro-title-line">How Language Is Built.</p>

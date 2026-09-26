@@ -48,7 +48,7 @@ export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
   const [editingProfile, setEditingProfile] = useState(false);
   const [loaded, setLoaded] = useState(false);
-  const [launchState, setLaunchState] = useState<"checking" | "intro" | "app">("checking");
+  const [launchState, setLaunchState] = useState<"intro" | "app">("intro");
   const [profileSaveError, setProfileSaveError] = useState<string | null>(null);
 
   // Profile reconciliation is intentionally a one-time installation bootstrap.
@@ -59,6 +59,10 @@ export default function Home() {
     if (saved) try {
       localProfile = normalizeLanguageProfile(JSON.parse(saved));
     } catch { /* Keep the legacy record available for a future recovery attempt. */ }
+
+    // The launch scene is server-rendered. Restore a valid local profile
+    // without waiting for the separate server reconciliation to finish.
+    if (localProfile) queueMicrotask(() => { setProfile(localProfile); setLoaded(true); });
 
     fetch("/api/session", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ legacyLearnerId }) })
       .then(async (response) => {
@@ -71,11 +75,9 @@ export default function Home() {
         if (nextProfile) window.localStorage.setItem(languageProfileKey, JSON.stringify(nextProfile));
         setProfile(nextProfile);
         if (nextProfile?.syncPending) void synchronizeProfile(nextProfile);
-        setLaunchState("intro");
       })
       .catch(() => {
         setProfile(localProfile);
-        setLaunchState("intro");
       })
       .finally(() => setLoaded(true));
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -119,8 +121,8 @@ export default function Home() {
     void synchronizeProfile(pending);
   }
 
-  if (!loaded || launchState === "checking") return <main className="app-shell launch-loading" aria-label="Loading LinguaThread" />;
   if (launchState === "intro") return <FirstLaunchIntro onBegin={() => setLaunchState("app")} />;
+  if (!loaded) return <main className="app-shell launch-loading" role="status">Opening your learning path…</main>;
   if (!profile) return <LanguageSetup onComplete={saveProfile} />;
   return <>
     <div inert={editingProfile ? true : undefined} aria-hidden={editingProfile || undefined}>
