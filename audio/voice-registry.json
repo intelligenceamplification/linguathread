@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "voices": [
+    { "language": "es", "voice": "male", "referenceClipId": "es-origin-native-castilian", "inferenceTimesteps": 20 },
+    { "language": "es", "voice": "female", "referenceClipId": "spanish-female-audition", "inferenceTimesteps": 20 },
+    { "language": "vi", "voice": "female", "referenceClipId": "vietnamese-female-audition", "inferenceTimesteps": 10 }
+  ]
+}

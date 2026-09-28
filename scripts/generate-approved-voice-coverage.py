@@ -28,7 +28,7 @@ SPANISH_MARKS = {
 
 def spoken_form(language: str, text: str) -> str:
     """Give orthographic symbols a pronounceable model in their own language."""
-    if len(text) == 1 and text in "0123456789":
+    if len(text) == 1 and text in "0123456789" and language in ("es", "vi"):
         names = SPANISH_NUMBERS if language == "es" else VIETNAMESE_NUMBERS
         return names[int(text)]
     if language == "es" and text in SPANISH_MARKS:
@@ -47,9 +47,14 @@ def main():
     parser.add_argument("--prompt-mode", action="store_true", help="Use the approved transcript and recording as a cadence prompt")
     parser.add_argument("--attempts", type=int, default=3, help="Bounded retries for failed speech/text checks")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "mps"))
+    parser.add_argument("--inference-timesteps", type=int, help="Override the reviewed per-voice diffusion steps for a small audition only")
+    parser.add_argument("--voice-registry", type=Path, default=ROOT / "audio/voice-registry.json")
+    parser.add_argument("--language", choices=("es", "vi"), help="Generate one reviewed language family at a time")
     args = parser.parse_args()
     if args.defer_failed and args.only_failed:
         parser.error("--defer-failed and --only-failed are mutually exclusive")
+    if args.inference_timesteps is not None and not 4 <= args.inference_timesteps <= 30:
+        parser.error("--inference-timesteps must be between 4 and 30")
 
     import imageio_ffmpeg
     import numpy as np
@@ -65,12 +70,29 @@ def main():
     inventory = json.loads(args.inventory.read_text(encoding="utf-8"))["items"]
     pack = json.loads((ROOT / "public/audio/packs/approved.json").read_text(encoding="utf-8"))
     by_id = {clip["id"]: clip for clip in pack["clips"]}
-    references = {
-        ("es", "male"): ROOT / "public" / by_id["es-origin-native-castilian"]["url"].lstrip("/"),
-        ("es", "female"): ROOT / "public" / by_id["spanish-female-audition"]["url"].lstrip("/"),
-        ("vi", "female"): ROOT / "public" / by_id["vietnamese-female-audition"]["url"].lstrip("/"),
-    }
-    reference_texts = {(language, voice): next(clip["text"] for clip in pack["clips"] if ROOT / "public" / clip["url"].lstrip("/") == path) for (language, voice), path in references.items()}
+    registry = json.loads(args.voice_registry.read_text(encoding="utf-8"))
+    references = {}
+    reference_texts = {}
+    voice_settings = {}
+    for entry in registry["voices"]:
+        key = (entry["language"], entry["voice"])
+        if key in references:
+            raise ValueError(f"Duplicate voice: {key}")
+        clip = by_id[entry["referenceClipId"]]
+        if clip["language"] != entry["language"] or not clip.get("reviewedAt"):
+            raise ValueError(f"Voice reference must be learner-reviewed in its language: {key}")
+        reference_path = ROOT / "public" / clip["url"].lstrip("/")
+        if hashlib.sha256(reference_path.read_bytes()).hexdigest() != clip["sha256"]:
+            raise ValueError(f"Voice reference changed: {reference_path}")
+        references[key] = reference_path
+        reference_texts[key] = clip["text"]
+        steps = args.inference_timesteps or entry["inferenceTimesteps"]
+        if not 4 <= steps <= 30:
+            raise ValueError(f"Invalid inference steps for {key}: {steps}")
+        voice_settings[key] = {"inferenceTimesteps": steps, "referenceSha256": clip["sha256"]}
+    unsupported = {item["language"] for item in inventory} - {language for language, _ in references}
+    if unsupported:
+        raise ValueError(f"Inventory has no approved voice family: {sorted(unsupported)}")
     published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
     reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt")}
     metadata = args.output / "metadata.jsonl"
@@ -80,29 +102,41 @@ def main():
         for line in metadata.read_text(encoding="utf-8").splitlines():
             try:
                 row = json.loads(line)
-                completed.add((row["language"], row["normalizedText"], row["voice"]))
+                if row.get("generationSignature"):
+                    completed.add((row["language"], row["normalizedText"], row["voice"], row["generationSignature"]))
             except (KeyError, json.JSONDecodeError):
                 continue
     failed_ids = set()
     if failures.exists():
         for line in failures.read_text(encoding="utf-8").splitlines():
             try:
-                failed_ids.add(json.loads(line)["id"])
+                row = json.loads(line)
+                failed_ids.add((row["id"], row.get("generationSignature")))
             except (KeyError, json.JSONDecodeError):
                 continue
 
     def was_failed(language: str, text: str, voice: str) -> bool:
         identity = hashlib.sha256(f"{language}\0{voice}\0{text}".encode()).hexdigest()[:16]
-        return f"{language}-{voice}-{identity}" in failed_ids
+        clip_id = f"{language}-{voice}-{identity}"
+        return ((clip_id, signature(language, voice)) in failed_ids
+                or (args.only_failed and args.prompt_mode and
+                    (clip_id, signature(language, voice, prompt_mode=False)) in failed_ids))
+
+    def signature(language: str, voice: str, prompt_mode=None) -> str:
+        settings = {**voice_settings[(language, voice)], "promptMode": args.prompt_mode if prompt_mode is None else prompt_mode,
+                    "pipelineVersion": 5, "model": "openbmb/VoxCPM2", "cfgValue": 2.0}
+        return hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()[:12]
 
     work = [
-        (item["language"], item["text"], voice, reference)
+        (item["language"], item["text"], voice, reference, signature(language, voice))
         for item in inventory
         for (language, voice), reference in references.items()
         if language == item["language"]
+        and (args.language is None or language == args.language)
+        and ("neededVariants" not in item or voice in item["neededVariants"])
         and (language, item["text"], voice) not in reviewed
         and (args.force or (language, item["text"], voice) not in published)
-        and (language, item["text"], voice) not in completed
+        and (language, item["text"], voice, signature(language, voice)) not in completed
         and (not args.defer_failed or not was_failed(language, item["text"], voice))
         and (not args.only_failed or was_failed(language, item["text"], voice))
     ]
@@ -114,21 +148,33 @@ def main():
     model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False, device=args.device, optimize=False)
     recognizer = WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+    prompt_caches = {}
+    for key in {(language, voice) for language, _, voice, _, _ in work}:
+        reference = references[key]
+        prompt_caches[key] = model.tts_model.build_prompt_cache(
+            reference_wav_path=str(reference),
+            prompt_wav_path=str(reference) if args.prompt_mode else None,
+            prompt_text=reference_texts[key] if args.prompt_mode else None,
+        )
     with metadata.open("a", encoding="utf-8") as log, failures.open("a", encoding="utf-8") as error_log:
-        for index, (language, text, voice, reference) in enumerate(work, 1):
+        for index, (language, text, voice, reference, generation_signature) in enumerate(work, 1):
             identity = hashlib.sha256(f"{language}\0{voice}\0{text}".encode()).hexdigest()[:16]
             clip_id = f"{language}-{voice}-{identity}"
             seed = int(identity[:8], 16) % (2**31 - 1)
-            wav_path = args.output / f"{clip_id}.wav"
-            audio_path = args.output / f"{clip_id}.m4a"
+            wav_path = args.output / f"{clip_id}-{generation_signature}.wav"
+            audio_path = args.output / f"{clip_id}-{generation_signature}.m4a"
             try:
                 speech_text = spoken_form(language, text)
-                prompt = {"prompt_wav_path": str(reference), "prompt_text": reference_texts[(language, voice)]} if args.prompt_mode else {}
                 for attempt in range(args.attempts):
                     attempt_seed = (seed + attempt * 104729) % (2**31 - 1)
                     torch.manual_seed(attempt_seed)
                     np.random.seed(attempt_seed)
-                    wav = model.generate(text=speech_text, reference_wav_path=str(reference), cfg_value=2.0, max_len=max(100, min(1125, len(speech_text) * 6)), inference_timesteps=32 if args.prompt_mode else 20, **prompt)
+                    waveform, _, _ = model.tts_model.generate_with_prompt_cache(
+                        target_text=speech_text, prompt_cache=prompt_caches[(language, voice)], cfg_value=2.0,
+                        max_len=max(100, min(1125, len(speech_text) * 6)),
+                        inference_timesteps=voice_settings[(language, voice)]["inferenceTimesteps"], retry_badcase=False,
+                    )
+                    wav = waveform.squeeze(0).cpu().numpy()
                     peak = float(np.max(np.abs(wav)))
                     rms = float(np.sqrt(np.mean(np.square(wav))))
                     duration = len(wav) / model.tts_model.sample_rate
@@ -160,14 +206,20 @@ def main():
                     "peak": peak, "rms": rms, "sha256": hashlib.sha256(audio_path.read_bytes()).hexdigest(),
                     "file": audio_path.name, "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                     "approved": False,
-                    "pipelineVersion": 3, "promptMode": args.prompt_mode,
+                    "pipelineVersion": 5, "promptMode": args.prompt_mode,
+                    "inferenceTimesteps": voice_settings[(language, voice)]["inferenceTimesteps"],
+                    "generationSignature": generation_signature,
+                    "referenceSha256": voice_settings[(language, voice)]["referenceSha256"],
+                    "referenceCache": True,
                     "qualityCheck": {"transcript": transcript, "wordErrorRate": wer, "characterErrorRate": cer, "tokensPerSecond": pace},
                 }
                 log.write(json.dumps(row, ensure_ascii=False) + "\n")
                 log.flush()
                 print(f"{index}/{len(work)} {clip_id}: {text[:60]}", flush=True)
             except Exception as exc:
-                error_log.write(json.dumps({"id": clip_id, "text": text, "error": str(exc)}, ensure_ascii=False) + "\n")
+                error_log.write(json.dumps({"id": clip_id, "language": language, "voice": voice,
+                                            "text": text, "generationSignature": generation_signature,
+                                            "error": str(exc)}, ensure_ascii=False) + "\n")
                 error_log.flush()
                 print(f"FAILED {clip_id}: {exc}", flush=True)
             finally:

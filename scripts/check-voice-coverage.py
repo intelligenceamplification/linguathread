@@ -8,18 +8,24 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 inventory = json.loads((ROOT / "audio/inventory-es-vi.json").read_text(encoding="utf-8"))["items"]
 clips = json.loads((ROOT / "public/audio/packs/approved.json").read_text(encoding="utf-8"))["clips"]
+voices = json.loads((ROOT / "audio/voice-registry.json").read_text(encoding="utf-8"))["voices"]
+voice_keys = {(entry["language"], entry["voice"]) for entry in voices}
+unsupported = {item["language"] for item in inventory} - {language for language, _ in voice_keys}
+if unsupported:
+    raise SystemExit(f"No learner-approved voice registered for: {sorted(unsupported)}")
 expected = {
     (item["language"], item["text"], voice)
     for item in inventory
-    for voice in (("male", "female") if item["language"] == "es" else ("female",))
+    for language, voice in voice_keys
+    if language == item["language"]
 }
 actual = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in clips}
 missing = sorted(expected - actual)
 invalid = []
 for clip in clips:
-    if clip["language"] not in ("es", "vi"):
+    if clip["language"] not in {language for language, _ in voice_keys}:
         continue
-    if clip.get("voice") not in (("male", "female") if clip["language"] == "es" else ("female",)):
+    if (clip["language"], clip.get("voice")) not in voice_keys:
         invalid.append(f"Unexpected voice: {clip['id']}")
     path = ROOT / "public" / clip["url"].lstrip("/")
     if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != clip["sha256"]:
