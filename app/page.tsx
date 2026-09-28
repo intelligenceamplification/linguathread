@@ -8,6 +8,7 @@ import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
 import { BrandLogo } from "./brand-mark";
 import ListenButton from "./listen-button";
+import { AnswerField } from "./answer-field";
 import { approvedAudioFor } from "./audio-pack";
 import { speechLanguage } from "./speech";
 import type { FoundationLanguage } from "./multilingual-foundation";
@@ -23,7 +24,7 @@ import {
 } from "./language-profile";
 import {
   completeSession, coordinateLanguageProgress, emptyLearnerModel, LearnerModel, RetrievalEdge,
-  migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
+  isPhraseRetired, migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
 type Stage = "listening" | "transcript" | "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "spoken" | "complete";
@@ -38,6 +39,7 @@ const stages: Stage[] = ["listening", "transcript", "vocabulary", "recall", "sen
 const learnerIdKey = "linguathread.learner-id.v1";
 const learnerModelKey = "linguathread.learner-model.v1";
 const lessonSessionKey = "linguathread.main-lesson-session.v1";
+const skippedLessonsKey = "linguathread.skipped-lessons.v1";
 const legacyLanguageProfileKey = "linguathread.language-profile.v1";
 const languageProfileKey = "linguathread.language-profile.v2";
 
@@ -138,6 +140,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [wordIndex, setWordIndex] = useState(0);
   const [lessonIndex, setLessonIndex] = useState(0);
   const [completedIds, setCompletedIds] = useState<string[]>([]);
+  const [skippedIds, setSkippedIds] = useState<string[]>([]);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<FeedbackState>("idle");
   const [failedAttempts, setFailedAttempts] = useState(0);
@@ -149,7 +152,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [accelerated, setAccelerated] = useState(false);
   const [deepGrammar, setDeepGrammar] = useState(false);
   const [learnerModel, setLearnerModel] = useState<LearnerModel>(emptyLearnerModel());
-  const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen">("new");
+  const [sessionMode, setSessionMode] = useState<"new" | "review" | "strengthen" | "complete">("new");
   const [course, setCourse] = useState<LessonDefinition[]>(curriculum);
   const [destination, setDestination] = useState<AppDestination>("lesson");
   const [xrayOpen, setXrayOpen] = useState(false);
@@ -159,6 +162,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
   const lessonStageRef = useRef<HTMLElement>(null);
   const attemptStartedAtRef = useRef(0);
+  const learningSessionIdRef = useRef("");
   const initialScriptLanguageRef = useRef(speechLanguage(activeSelections(profile)[0]?.language || ""));
   const lesson = course[lessonIndex] || course[0];
 
@@ -193,6 +197,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     } catch {
       window.localStorage.removeItem("linguathread.completed-lessons.v1");
     }
+    let localSkipped: string[] = [];
+    try {
+      const stored = JSON.parse(window.localStorage.getItem(skippedLessonsKey) || "[]");
+      localSkipped = Array.isArray(stored) ? stored.filter((item): item is string => typeof item === "string") : [];
+    } catch { window.localStorage.removeItem(skippedLessonsKey); }
     const savedModel = window.localStorage.getItem(learnerModelKey);
     Promise.all([
       loadCurriculum(curriculum).then((result) => result.lessons),
@@ -203,7 +212,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       LessonDefinition[],
       { completedLessonIds?: string[]; reviewDueLessonIds?: string[] },
     ]) => {
-        const completed = data.completedLessonIds?.length ? data.completedLessonIds : localCompleted;
+        const completed = [...new Set([...localCompleted, ...(data.completedLessonIds || [])])];
         let localModel = migrateCompletedLessons(completed, loadedCourse);
         if (savedModel) {
           try {
@@ -216,30 +225,33 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setLearnerModel(localModel);
         window.localStorage.setItem(learnerModelKey, JSON.stringify(localModel));
         setCompletedIds(completed);
+        setSkippedIds(localSkipped.filter((id) => !completed.includes(id)));
         let restored = false;
         try {
-          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage } | null;
+          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage; sessionId?: string; sessionMode?: "new" | "review" | "strengthen" } | null;
           const restoredIndex = savedSession?.lessonId ? loadedCourse.findIndex((item) => item.id === savedSession.lessonId) : -1;
-          if (savedSession && restoredIndex >= 0 && savedSession.stage && stages.includes(savedSession.stage)) {
+          if (savedSession && restoredIndex >= 0 && savedSession.stage && savedSession.stage !== "complete" && !savedSession.lessonSkipped && stages.includes(savedSession.stage) && !(completed.includes(savedSession.lessonId || "") && isPhraseRetired(loadedCourse[restoredIndex], localModel))) {
+            learningSessionIdRef.current = savedSession.sessionId || crypto.randomUUID();
             setLessonIndex(restoredIndex); setStage(savedSession.audioFirstVersion === 1 ? savedSession.stage : "listening"); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
-            setLessonSkipped(savedSession.lessonSkipped === true);
+            setLessonSkipped(false);
             setAnswer(savedSession.answer || ""); setFeedback(savedSession.feedback || "idle"); setFailedAttempts(Math.max(0, savedSession.failedAttempts || 0));
             setProductionLanguage(savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish"); setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
             const restoredDestination = savedSession.destination && ["lesson", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
             setDestination(restoredDestination); setXrayOpen(restoredDestination === "xray");
             if (restoredDestination === "writing") setScriptLanguage(savedSession.scriptLanguage || initialScriptLanguageRef.current || null);
+            setSessionMode(savedSession.sessionMode || "new");
             restored = true;
           }
         } catch { /* A malformed session cannot affect durable progress. */ }
         if (!restored) {
-          const selection = selectNextLesson(loadedCourse, localModel, completed);
-          setLessonIndex(Math.max(0, loadedCourse.findIndex((item) => item.id === selection.lesson.id)));
+          const selection = selectNextLesson(loadedCourse, localModel, completed, new Date(), "Spanish", localSkipped);
+          learningSessionIdRef.current = crypto.randomUUID();
+          if (selection.lesson) setLessonIndex(loadedCourse.findIndex((item) => item.id === selection.lesson.id));
+          else { setDestination("path"); setStage("complete"); }
           setSessionMode(selection.mode);
         }
         setSessionHydrated(true);
-        if (data.completedLessonIds?.length) {
-          window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(data.completedLessonIds));
-        }
+        window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(completed));
       })
       .catch(() => undefined);
   }, []);
@@ -248,9 +260,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     if (!sessionHydrated || !lesson) return;
     window.localStorage.setItem(lessonSessionKey, JSON.stringify({
       lessonId: lesson.id, stage, audioFirstVersion: 1, lessonSkipped, wordIndex, answer, feedback, failedAttempts,
-      productionLanguage, reverseIndex, destination, scriptLanguage,
+      productionLanguage, reverseIndex, destination, scriptLanguage, sessionId: learningSessionIdRef.current, sessionMode,
     }));
-  }, [answer, destination, failedAttempts, feedback, lesson, lessonSkipped, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, stage, wordIndex]);
+  }, [answer, destination, failedAttempts, feedback, lesson, lessonSkipped, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, sessionMode, stage, wordIndex]);
 
   const selectedLearningLanguages = activeSelections(profile).map((item) => item.language)
     .filter((language) => language !== profile.native);
@@ -346,6 +358,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         edge,
         latencyMs,
         errorType,
+        learningSessionIdRef.current || (learningSessionIdRef.current = crypto.randomUUID()),
       );
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
@@ -386,7 +399,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const retrievalType = mode === "unseen-transfer" ? "transfer" : mode.includes("reconstruction") || mode === "component-assembly" ? "reconstruction" : "recognition";
     const edge: RetrievalEdge = { fromLanguage: languageName, toLanguage: languageName, fromModality, toModality, retrievalType };
     setLearnerModel((current) => {
-      const next = recordEvidence(current, unitId, languageName, correct, supported, new Date(), edge, Math.max(0, Date.now() - attemptStartedAtRef.current), correct ? undefined : mode === "sound-to-form" ? "listening" : mode === "component-assembly" ? "composition" : mode.includes("dictation") || mode.includes("keyboard") ? "input" : "script");
+      const next = recordEvidence(current, unitId, languageName, correct, supported, new Date(), edge, Math.max(0, Date.now() - attemptStartedAtRef.current), correct ? undefined : mode === "sound-to-form" ? "listening" : mode === "component-assembly" ? "composition" : mode.includes("dictation") || mode.includes("keyboard") ? "input" : "script", learningSessionIdRef.current);
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
     });
@@ -413,6 +426,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
     window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
+    const remainingSkipped = skippedIds.filter((id) => id !== lesson.id);
+    setSkippedIds(remainingSkipped);
+    window.localStorage.setItem(skippedLessonsKey, JSON.stringify(remainingSkipped));
     setLearnerModel((current) => {
       const next = completeSession(current);
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
@@ -425,11 +441,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function skipLesson(language: string) {
     recordAttempt("skipped", false, language);
     setLessonSkipped(true);
+    const nextSkipped = [...new Set([...skippedIds, lesson.id])];
+    setSkippedIds(nextSkipped);
+    window.localStorage.setItem(skippedLessonsKey, JSON.stringify(nextSkipped));
     setMastery(false);
     setStage("complete");
   }
 
   function resetLesson(nextIndex = lessonIndex) {
+    learningSessionIdRef.current = crypto.randomUUID();
     setLessonIndex(nextIndex);
     setStage("listening");
     setWordIndex(0);
@@ -446,10 +466,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function continueLearning() {
-    const selection = selectNextLesson(course, learnerModel, completedIds);
-    const nextIndex = course.findIndex((item) => item.id === selection.lesson.id);
+    const selection = selectNextLesson(course, learnerModel, completedIds, new Date(), "Spanish", skippedIds);
     setSessionMode(selection.mode);
-    resetLesson(nextIndex);
+    if (selection.lesson) resetLesson(course.findIndex((item) => item.id === selection.lesson.id));
+    else { setDestination("path"); setStage("complete"); }
   }
 
   function completeSupportedRecall() {
@@ -484,15 +504,17 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
 
   function completeUnitPlacement(unitLessons: LessonDefinition[], passed: boolean) {
     if (!passed) return;
+    const placementSessionId = crypto.randomUUID();
     const ids = unitLessons.map((item) => item.id);
     const nextCompleted = [...new Set([...completedIds, ...ids])];
     setCompletedIds(nextCompleted);
+    setSkippedIds((current) => current.filter((id) => !ids.includes(id)));
     window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
     let nextModel = learnerModel;
     for (const item of unitLessons) {
       nextModel = recordEvidence(nextModel, item.objectiveId || item.id, "Spanish", true, false, new Date(), {
         fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "production",
-      });
+      }, undefined, undefined, placementSessionId);
       fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "complete", lessonId: item.id, skill: item.skill, accelerated: true }), keepalive: true }).catch(() => undefined);
     }
     setLearnerModel(nextModel);
@@ -505,7 +527,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         <button className="wordmark" onClick={() => openDestination("lesson")} aria-label="Open current lesson"><BrandLogo /></button>
         <div className="lesson-context">
           <span className="language-mark">ES</span>
-          <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : "Strengthen"}</span>
+          <span>{lesson.level} · {lesson.unitTitle} · {String(lesson.lesson).padStart(2, "0")} · {sessionMode === "new" ? "New" : sessionMode === "review" ? "Review" : sessionMode === "complete" ? "Complete" : "Strengthen"}</span>
         </div>
         <nav className="header-actions" aria-label="Learning destinations">
           <button className="quiet-action today-action" aria-current={destination === "lesson" ? "page" : undefined} onClick={() => openDestination("lesson")}>Today’s Lesson</button>
@@ -973,10 +995,6 @@ function ProfileLanguage({ index, role, language, detail }: { index: string; rol
 function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
   const audioLanguage = speechLanguage(language);
   return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} compact />}</div></div>;
-}
-
-function AnswerField({ value, onChange, onEnter, placeholder, label }: { value: string; onChange: (value: string) => void; onEnter: () => void; placeholder: string; label: string }) {
-  return <input className="answer-field" autoFocus value={value} onChange={(event) => onChange(event.target.value)} onKeyDown={(event) => event.key === "Enter" && onEnter()} placeholder={placeholder} aria-label={label} />;
 }
 
 function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | "gentle"; title: string; detail?: string; action: string; onClick: () => void }) {

@@ -47,7 +47,7 @@ body {
   letter-spacing: 0;
 }
 
-button, input { font: inherit; }
+button, input, textarea { font: inherit; }
 button { color: inherit; }
 :focus-visible { outline: 2px solid var(--text-accent-strong); outline-offset: 3px; }
 
@@ -216,9 +216,11 @@ button { color: inherit; }
 .production-path span.complete { color: var(--text-accent); }
 .production-path i { color: var(--faint); font-style: normal; }
 .production-confirmation { width: fit-content; margin: -16px auto 22px; padding: 8px 12px; background: var(--sage); color: var(--text-accent-strong); font-size: .76rem; }
-.answer-field { width: min(560px, 100%); height: 64px; border: 0; border-bottom: 1px solid var(--faint); background: transparent; color: var(--ink); caret-color: var(--moss); text-align: center; font-size: clamp(1.25rem, 3vw, 2rem); outline: none; border-radius: 0; }
-.answer-field:focus { border-color: var(--moss-dark); }
+.answer-field { display: block; width: min(640px, 100%); min-height: 112px; max-height: min(40svh, 320px); margin: 30px auto 0; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--control-wash); color: var(--ink); caret-color: var(--moss); text-align: left; font-size: clamp(1.1rem, 3.2vw, 1.35rem); line-height: 1.5; outline: none; resize: none; overflow-y: auto; overflow-wrap: anywhere; }
+.answer-field:focus { border-color: var(--moss-dark); box-shadow: 0 0 0 3px color-mix(in srgb, var(--moss) 12%, transparent); }
 .answer-field::placeholder { color: var(--subtle); }
+.vocab-content > h1, .audio-first-content > h1 { line-height: 1.1; overflow-wrap: anywhere; }
+.vocab-content > .audio-controls, .audio-first-content > .audio-controls, .daily-content > .audio-controls { display: flex; width: fit-content; max-width: 100%; margin: 24px auto 0; }
 .exercise-content .primary-action { display: flex; margin-left: auto; margin-right: auto; }
 
 .feedback { position: relative; margin: 36px auto 0; padding: 20px 22px; width: min(620px, 100%); display: flex; align-items: center; justify-content: space-between; gap: 24px; text-align: left; border-top: 1px solid var(--line); animation: settle .3s ease both; }
@@ -363,7 +365,7 @@ button { color: inherit; }
 .listen-action svg { width: 18px; height: 18px; overflow: visible; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .listen-action-compact { width: 44px; min-width: 44px; padding: 0; justify-content: center; border-radius: 50%; }
 .listen-action-compact .listen-action-label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.vocab-content > .listen-action, .daily-content > .listen-action, .sentence-reading > .listen-action { margin-top: 22px; }
+.sentence-reading > .audio-controls { margin-top: 22px; }
 .listen-action:hover { background: var(--control); }
 .listen-action:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .reverse-audio { margin: 18px auto 8px; }
@@ -548,9 +550,8 @@ button { color: inherit; }
   .topline { min-height: 104px; height: auto; grid-template-columns: 1fr auto; align-content: center; row-gap: 8px; padding-top: 10px; padding-bottom: 8px; }
   .lesson-context { display: none; }
   .header-balance { display: none; }
-  .header-actions { grid-column: 1 / -1; justify-self: stretch; justify-content: flex-start; max-width: 100%; gap: 8px; padding: 3px 2px 6px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch; touch-action: pan-x; }
-  .header-actions::-webkit-scrollbar { display: none; }
-  .header-actions .quiet-action { display: inline-flex; flex: 0 0 auto; align-items: center; justify-content: center; min-height: 40px; padding: 6px 11px; border: 1px solid color-mix(in srgb, var(--glass-edge) 72%, transparent); border-radius: 999px; background: var(--glass-clear); box-shadow: 0 5px 18px var(--glass-shadow), inset 0 1px 0 var(--glass-edge); font-size: .73rem; white-space: nowrap; scroll-snap-align: start; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); transition: background-color .2s ease, border-color .2s ease, transform .2s ease; }
+  .header-actions { grid-column: 1 / -1; justify-self: stretch; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 100%; gap: 8px; padding: 3px 2px 6px; }
+  .header-actions .quiet-action { display: inline-flex; min-width: 0; width: 100%; align-items: center; justify-content: center; min-height: 44px; padding: 6px 8px; border: 1px solid color-mix(in srgb, var(--glass-edge) 72%, transparent); border-radius: 999px; background: var(--glass-clear); box-shadow: 0 5px 18px var(--glass-shadow), inset 0 1px 0 var(--glass-edge); font-size: .73rem; white-space: normal; text-align: center; backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); transition: background-color .2s ease, border-color .2s ease, transform .2s ease; }
   .header-actions .quiet-action:active { transform: scale(.97); }
   .header-actions .quiet-action[aria-current="page"] { border-color: color-mix(in srgb, var(--line) 78%, transparent); background: color-mix(in srgb, var(--control) 72%, transparent); }
   .lesson-stage { padding-top: 34px; padding-bottom: 34px; }

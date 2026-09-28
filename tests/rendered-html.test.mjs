@@ -86,7 +86,7 @@ test("shows the launch intro before the unchanged onboarding on every app launch
   ]);
   assert.doesNotMatch(page, /firstLaunchKey|first-launch-intro\.v1/);
   assert.match(page, /launchState === "intro"/);
-  assert.match(page, /setLaunchState\("intro"\)/);
+  assert.match(page, /useState<"intro" \| "app">\("intro"\)/);
   assert.match(page, /FirstLaunchIntro onBegin=\{\(\) => setLaunchState\("app"\)\}/);
   assert.match(page, /<LanguageSetup onComplete=\{saveProfile\} \/>/);
   assert.match(intro, /single fine thread|intro-thread-single/);
@@ -362,7 +362,7 @@ test("keeps secondary audio controls compact without reducing their touch target
   assert.match(sentence, /language=\{speechLanguage\(item\.language\)!\} compact/);
   assert.match(daily, /language="en" compact/);
   assert.match(styles, /\.listen-action-compact \{[^}]*width: 44px;[^}]*min-width: 44px/);
-  assert.match(styles, /\.vocab-content > \.listen-action[^}]*margin-top: 22px/);
+  assert.match(styles, /\.vocab-content > \.audio-controls[^}]*margin: 24px auto 0/);
 });
 
 test("gives compact navigation a clear glass momentum strip", async () => {
@@ -780,7 +780,7 @@ test("fresh installs bootstrap privately and legacy state has a one-time claim p
   ]);
   assert.match(page, /fetch\("\/api\/session"/);
   assert.match(page, /fetch\("\/api\/profile"/);
-  assert.match(page, /if \(!loaded \|\| launchState === "checking"\)/);
+  assert.match(page, /if \(!loaded\) return <main className="app-shell launch-loading"/);
   assert.match(page, /if \(launchState === "intro"\) return <FirstLaunchIntro/);
   assert.match(page, /if \(!profile\) return <LanguageSetup/);
   assert.match(route, /onConflictDoNothing\(\)/);
@@ -853,7 +853,7 @@ test("script prompts always render the matching response control and a correct-a
   const script = await read("../app/multilingual-preview/script-course-view.tsx");
   assert.match(script, /practice\.phase === "visual" \|\| practice\.phase === "sound"/);
   assert.match(script, /className="script-choice-row"/);
-  assert.match(script, /<input className="answer-field"/);
+  assert.match(script, /<AnswerField label="Write the form requested"/);
   assert.match(script, /canAdvanceScript\(practice\)[\s\S]*>Continue</);
 });
 

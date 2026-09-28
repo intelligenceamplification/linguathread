@@ -30,14 +30,16 @@ The learning path must advance through the existing authored A1–C2 sequence as
 - Use demonstrated prerequisite skills, transfer, and delayed recall to determine readiness for harder material. Completed or skipped lessons, three repetitions alone, and response latency alone must not certify CEFR proficiency or automaticity.
 - Preserve the latest valid saved learner state across navigation, refresh, relaunch, synchronization, language-stack changes, and curriculum revisions. An already-secured phrase such as “Soy de Indiana” must not recur as the default elementary lesson because of stale state or scheduling fallbacks.
 
-### Next build: locked scope, awaiting Proceed
+### Next build: locked scope, in progress
 
-User-approved on 2026-09-26. Record these requirements now; begin implementation and resume the audio rebuild only when the user says **Proceed**. No recurring or daily task is required.
+User-approved on 2026-09-26; implementation was authorized by **Proceed** on 2026-09-27. No recurring or daily task is required.
 
 1. Implement the progression and repetition rule above in the shared learning engine, using the existing authored curriculum without expanding the CEFR map. Verify retirement after qualifying successes, delayed retrieval, varied transfer practice, targeted remediation, continued advancement, independent evidence types, and persistence across sessions.
 2. Complete Spanish and Vietnamese audio replacement throughout the app using the approved Spanish male and female voices and the approved Vietnamese female voice. Randomly choose an available approved Spanish variant per control and preserve it on replay. Do not substitute old voices in remaining lesson or snippet playback paths. Additional languages remain outside this build's voice-selection scope.
 3. Reuse checked recordings and rebuild failed or missing takes efficiently with free local tools. Spoken alternatives must omit slash symbols, and each recording must match the intended words at clear teacher pace. Check the final encoded asset for text and pace; automatic checks do not grant pronunciation review. Preserve exact recordings already accepted through listening review.
 4. Keep Normal and Slow playback available throughout the shared audio controls. Verify the completed library and the same lesson sequence on responsive mobile/desktop web and the existing portrait-only iPhone app, including launch details, uncropped text, transcript reveal, keyboard state, and audio controls. Preserve branding, learner data, writing, grammar, orthography, retrieval, and language stacking.
+
+Lesson text and audio controls must remain separate at every phone width. All answer entry for sentence production must wrap and grow within a bounded, scrollable field so the learner can see the words and caret while composing longer statements. Navigation labels must be fully visible without clipping.
 
 This build is complete only after the progression behavior is verified and the full required Spanish/Vietnamese audio coverage is deployed on web and usable in the existing iPhone app. Partial audio coverage or a successful build alone does not close the goal.
 

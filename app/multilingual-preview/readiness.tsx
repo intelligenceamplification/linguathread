@@ -3,6 +3,7 @@ import { foundationContent, foundationInstructions, foundationObjectives, langua
 import { advanceLiteracy, assessLiteracy, beginLiteracy, emptyLiteracy, literacyCounts, type LiteracySession } from "./literacy-session";
 import { literacyCopy } from "./literacy-copy";
 import ListenButton from "../listen-button";
+import { AnswerField } from "../answer-field";
 
 export default function Readiness({ language, anchor, session, onChange, onReady }: {
  language: FoundationLanguage; anchor: FoundationLanguage; session: LiteracySession;
@@ -44,7 +45,7 @@ export default function Readiness({ language, anchor, session, onChange, onReady
     </fieldset>
     <details><summary>{t.keyboard}</summary><p><a href="https://support.apple.com/guide/iphone/add-or-change-keyboards-iph73b71eb/ios" target="_blank" rel="noreferrer">iPhone</a> · <a href="https://support.google.com/gboard/answer/7068494?hl=en" target="_blank" rel="noreferrer">Android · Gboard</a></p></details>
     {session.revealed && <div className="pilot-model"><p>{target}</p><ListenButton text={foundationContent[language][objective].text} language={language}/></div>}
-    <input className="answer-field" aria-label={t.write} lang={language} dir={language === "ar" ? "rtl" : "ltr"} autoComplete="off" autoCorrect="off" spellCheck={false} maxLength={2000} value={session.answer} onChange={e => onChange({ ...session, answer: e.target.value, feedback: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && session.answer.trim()) check(); }}/>
+    <AnswerField label={t.write} placeholder={t.write} lang={language} dir={language === "ar" ? "rtl" : "ltr"} maxLength={2000} value={session.answer} onChange={value => onChange({ ...session, answer: value, feedback: "idle" })} onEnter={() => { if (session.answer.trim()) check(); }}/>
     {session.feedback !== "correct" && <button className="primary-action" disabled={!session.answer.trim()} onClick={check}>{foundationInstructions[anchor][2]}</button>}
     {!session.revealed && session.feedback !== "correct" && <button className="text-action" onClick={() => onChange({ ...session, revealed: true })}>{t.model}</button>}
    </>}

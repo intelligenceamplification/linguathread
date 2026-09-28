@@ -21,8 +21,11 @@ export type SkillEvidence = {
   independentSuccesses: number;
   supportedSuccesses: number;
   independentReviewDays?: string[];
+  independentSessionIds?: string[];
+  legacyQualified?: boolean;
   score: number;
   lastPracticedAt: string;
+  lastFailureAt?: string;
   nextReviewAt: string;
   edge?: RetrievalEdge;
   lastLatencyMs?: number;
@@ -113,8 +116,10 @@ export function languageMastery(model: LearnerModel, objectiveId: string, langua
 export function masteryState(evidence?: SkillEvidence): MasteryState | "waiting" {
   if (!evidence) return "waiting";
   const laterRetrieval = (evidence.independentReviewDays?.length || 0) >= 2;
-  if (laterRetrieval && evidence.score >= 92 && evidence.independentSuccesses >= 4) return "maintenance";
-  if (laterRetrieval && evidence.score >= 78 && evidence.independentSuccesses >= 3) return "stable";
+  const separateSessions = evidence.independentSessionIds?.length || 0;
+  const legacySessions = evidence.legacyQualified || (evidence.independentSessionIds === undefined && (evidence.independentReviewDays?.length || 0) >= 3) ? 3 : 0;
+  if (laterRetrieval && separateSessions >= 4 && evidence.score >= 92) return "maintenance";
+  if (laterRetrieval && (separateSessions >= 3 || legacySessions >= 3) && evidence.score >= 78) return "stable";
   if (evidence.score >= 58 && evidence.independentSuccesses >= 2) return "usable";
   if (evidence.attempts >= 2 || evidence.independentSuccesses >= 1) return "forming";
   return "introduced";
@@ -130,6 +135,7 @@ export function recordEvidence(
   edge?: RetrievalEdge,
   latencyMs?: number,
   errorType?: SkillEvidence["errorType"],
+  sessionId?: string,
 ): LearnerModel {
   const key = edge ? edgeEvidenceKey(objectiveId, edge) : evidenceKey(objectiveId, language);
   const previous = model.evidence[key];
@@ -139,6 +145,10 @@ export function recordEvidence(
   const independentReviewDays = correct && !supported
     ? [...new Set([...(previous?.independentReviewDays || []), day])]
     : (previous?.independentReviewDays || []);
+  const independentSessionIds = correct && !supported && sessionId
+    ? [...new Set([...(previous?.independentSessionIds || []), sessionId])]
+    : (previous?.independentSessionIds || []);
+  const legacyQualified = previous?.legacyQualified || (previous?.independentSessionIds === undefined && (previous?.independentReviewDays?.length || 0) >= 3);
   const priorScore = previous?.score || 0;
   const score = Math.max(0, Math.min(100, priorScore + (correct ? (supported ? 7 : 18) : -8)));
   const intervalDays = score >= 92 ? 30 : score >= 78 ? 14 : score >= 58 ? 7 : score >= 35 ? 3 : 1;
@@ -155,8 +165,11 @@ export function recordEvidence(
         independentSuccesses,
         supportedSuccesses,
         independentReviewDays,
+        independentSessionIds,
+        legacyQualified,
         score,
         lastPracticedAt: now.toISOString(),
+        lastFailureAt: correct ? previous?.lastFailureAt : now.toISOString(),
         nextReviewAt: nextReview.toISOString(),
         edge,
         lastLatencyMs: latencyMs,
@@ -164,6 +177,23 @@ export function recordEvidence(
       },
     },
   };
+}
+
+/** Retire an exact translation only after independent, delayed production. */
+export function isPhraseRetired(lesson: LessonDefinition, model: LearnerModel) {
+  const objectiveId = lesson.objectiveId || lesson.id;
+  const production = model.evidence[edgeEvidenceKey(objectiveId, {
+    fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "production",
+  })];
+  if (!production) return false;
+  const separateSessions = production.independentSessionIds?.length || 0;
+  const legacyDays = production.legacyQualified || (production.independentSessionIds === undefined && (production.independentReviewDays?.length || 0) >= 3) ? 3 : 0;
+  if (separateSessions < 3 && legacyDays < 3) return false;
+  if ((production.independentReviewDays?.length || 0) < 2) return false;
+  const latestFailure = evidenceForObjective(model, objectiveId)
+    .map((item) => item.lastFailureAt || (item.errorType ? item.lastPracticedAt : ""))
+    .sort().at(-1);
+  return !latestFailure || latestFailure <= production.lastPracticedAt;
 }
 
 export function completeSession(model: LearnerModel) {
@@ -193,10 +223,12 @@ export function selectNextLesson(
   completedLessonIds: string[],
   now = new Date(),
   language: LearningLanguage = "Spanish",
+  skippedLessonIds: string[] = [],
 ) {
   const unlockedNew = curriculum.find((lesson) =>
-    !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
+    !completedLessonIds.includes(lesson.id) && !skippedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
   const due = curriculum.find((lesson) => {
+    if (isPhraseRetired(lesson, model)) return false;
     const evidence = evidenceForObjective(model, lesson.objectiveId || lesson.id);
     return completedLessonIds.includes(lesson.id) && evidence.some((item) => new Date(item.nextReviewAt) <= now);
   });
@@ -207,15 +239,18 @@ export function selectNextLesson(
   }
   if (unlockedNew) return { lesson: unlockedNew, mode: "new" as const };
   if (due) return { lesson: due, mode: "review" as const };
+  const deferred = curriculum.find((lesson) => skippedLessonIds.includes(lesson.id) && !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
+  if (deferred) return { lesson: deferred, mode: "strengthen" as const };
 
   const weakest = [...curriculum]
-    .filter((lesson) => completedLessonIds.includes(lesson.id))
+    .filter((lesson) => completedLessonIds.includes(lesson.id) && !isPhraseRetired(lesson, model))
     .sort((a, b) => {
       const aScore = weakestEvidence(model, a.objectiveId || a.id)?.score || 0;
       const bScore = weakestEvidence(model, b.objectiveId || b.id)?.score || 0;
       return aScore - bScore;
     })[0];
-  return { lesson: weakest || curriculum[0], mode: "strengthen" as const };
+  if (weakest) return { lesson: weakest, mode: "strengthen" as const };
+  return { lesson: undefined, mode: "complete" as const };
 }
 
 export function migrateCompletedLessons(completedLessonIds: string[], curriculum: LessonDefinition[]) {

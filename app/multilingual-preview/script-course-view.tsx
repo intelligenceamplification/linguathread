@@ -5,6 +5,7 @@ import type { ScriptLesson } from "../script-courses";
 import type { ScriptRequirement, ScriptTaskMode } from "../script-literacy";
 import { advanceScript, appendAssembly, assessScript, canAdvanceScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, scriptInstruction, type ScriptPractice } from "../script-course-engine";
 import ListenButton from "../listen-button";
+import { AnswerField } from "../answer-field";
 
 type Index = { language: string; revision: number; convention: string; inventory: string; requirements: ScriptRequirement[]; lessons: Pick<ScriptLesson, "id" | "title" | "prerequisites" | "strand">[] };
 function validIndex(value: unknown, language: string): value is Index {
@@ -139,7 +140,7 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
     </> : <>
      <fieldset className="literacy-input-method"><legend>How will you reconstruct it?</legend><label><input type="radio" name="script-input" checked={practice.inputMode === "keyboard"} onChange={() => save({ ...practice, inputMode: "keyboard", answer: "", result: "idle" })}/>Keyboard · orthographic reconstruction</label><label><input type="radio" name="script-input" checked={practice.inputMode === "dictation"} onChange={() => save({ ...practice, inputMode: "dictation", answer: "", result: "idle" })}/>Device dictation · spoken reconstruction</label></fieldset>
      {practice.inputMode === "dictation" && <p className="dictation-guidance">Use whichever dictation system you prefer on your device. LinguaThread evaluates the resulting language; it does not provide the dictation service.</p>}
-     <label>Write the form requested<input className="answer-field" lang={language} dir={dir} maxLength={2000} autoComplete="off" autoCorrect="off" spellCheck={false} value={practice.answer} onChange={e => save({ ...practice, answer: e.target.value, result: "idle" })} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && practice.answer.trim()) assess(practice.answer); }}/></label>
+     <label>Write the form requested<AnswerField label="Write the form requested" placeholder="Write the form requested" lang={language} dir={dir} maxLength={2000} value={practice.answer} onChange={value => save({ ...practice, answer: value, result: "idle" })} onEnter={() => { if (practice.answer.trim()) assess(practice.answer); }}/></label>
      <label className="script-assistance"><input type="checkbox" checked={practice.supported} onChange={() => save({ ...practice, supported: true })}/>I used the model or another aid. Support remains attached to this attempt.</label>
      {practice.result !== "correct" && <button className="primary-action" disabled={!practice.answer.trim()} onClick={() => assess(practice.answer)}>Check reconstruction</button>}
     </>}

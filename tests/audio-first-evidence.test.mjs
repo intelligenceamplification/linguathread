@@ -25,5 +25,5 @@ test("immediate repetition cannot become stable without later retrieval", () => 
   for (let n = 0; n < 6; n++) model = recordEvidence(model, "lesson-1", "Spanish", true, false, new Date("2026-09-23T12:00:00Z"));
   assert.equal(masteryState(Object.values(model.evidence)[0]), "usable");
   model = recordEvidence(model, "lesson-1", "Spanish", true, false, new Date("2026-09-24T12:00:00Z"));
-  assert.equal(masteryState(Object.values(model.evidence)[0]), "maintenance");
+  assert.equal(masteryState(Object.values(model.evidence)[0]), "usable");
 });

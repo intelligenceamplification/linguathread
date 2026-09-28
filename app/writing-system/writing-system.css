@@ -52,7 +52,7 @@
 .writing-choices > div { display: flex; align-items: center; gap: 16px; }
 .writing-choices .quiet-action { flex: 1; min-height: 56px; font-size: 1.1rem; }
 .writing-input { display: block; margin: 28px 0; }
-.writing-input input { display: block; width: 100%; margin-top: 12px; padding: 16px; font: inherit; font-size: 1.5rem; color: inherit; background: transparent; border: 1px solid var(--line); border-radius: 14px; }
+.writing-input .answer-field { display: block; width: 100%; margin-top: 12px; padding: 16px; font: inherit; font-size: 1.5rem; color: inherit; background: transparent; border: 1px solid var(--line); border-radius: 14px; }
 .writing-method { border: 0; padding: 0; margin: 24px 0; display: flex; flex-wrap: wrap; gap: 20px; }
 .writing-method legend { color: var(--muted); margin-bottom: 12px; }
 .writing-method label { display: flex; gap: 8px; align-items: center; min-height: 44px; }

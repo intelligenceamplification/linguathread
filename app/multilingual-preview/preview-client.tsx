@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import { FirstLaunchIntro } from "../first-launch-intro";
 import { BrandLogo } from "../brand-mark";
 import ListenButton from "../listen-button";
+import { AnswerField } from "../answer-field";
 const ScriptCourseView = dynamic(() => import("../writing-system/view"), { loading: () => <p role="status">Opening script lessons…</p> });
 
 const direction = (id: FoundationLanguage) => id === "ar" ? "rtl" : "ltr";
@@ -84,7 +85,7 @@ export default function MultilingualPreview() {
      </> : <>
       <p><bdi>{languageInfo(output).native}</bdi></p>
       {revealed && <div className="pilot-model"><p>{expression(output)}</p><ListenButton text={foundationContent[output][objective].text} language={output}/></div>}
-      <input className="answer-field" aria-label="Practice answer" lang={output} dir={direction(output)} autoComplete="off" autoCorrect="off" spellCheck={false} value={answer} onChange={e => { setAnswer(e.target.value); save({ ...progress, draftAnswer: e.target.value }); setResult("idle"); }} onKeyDown={e => { if (e.key === "Enter" && !e.nativeEvent.isComposing && result !== "correct") check(); }} />
+      <AnswerField label="Practice answer" placeholder="Write your answer" lang={output} dir={direction(output)} value={answer} onChange={value => { setAnswer(value); save({ ...progress, draftAnswer: value }); setResult("idle"); }} onEnter={() => { if (result !== "correct") check(); }} />
       <p role="status" className="pilot-feedback">{result === "correct" ? t[3] : result === "retry" ? t[4] : "\u00a0"}</p>
       {result === "correct" ? <button className="primary-action" onClick={advance}>{t[6]}</button> : <>
        <button className="primary-action" disabled={!answer.trim()} onClick={check}>{t[2]}</button>
