@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v8",
+  "packVersion": "v9",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-26T13:58:48Z",
+  "approvedAt": "2026-09-28T00:16:00Z",
   "clips": [
     {
       "id": "en-expression",
@@ -794,15 +794,6 @@
       "voice": "female"
     },
     {
-      "id": "es-male-d4526520ddaa6fe8",
-      "language": "es",
-      "text": "expresarme",
-      "normalizedText": "expresarme",
-      "url": "/audio/packs/v5/es-male-d4526520ddaa6fe8-c071620c2776.m4a",
-      "sha256": "c071620c27765338a3a2a99e282c9d83dda4f5327e30ba223084650990033b8b",
-      "voice": "male"
-    },
-    {
       "id": "es-female-b05a3c4256536c8e",
       "language": "es",
       "text": "expresarme",
@@ -1325,15 +1316,6 @@
       "voice": "male"
     },
     {
-      "id": "es-female-33f88e2fb4614f56",
-      "language": "es",
-      "text": "era",
-      "normalizedText": "era",
-      "url": "/audio/packs/v6/es-female-33f88e2fb4614f56-d7f525b1302f.m4a",
-      "sha256": "d7f525b1302f3e95e585762a7c202d52cbc857481922420a44afcfedd51228f3",
-      "voice": "female"
-    },
-    {
       "id": "vi-female-7b38c321f38c965e",
       "language": "vi",
       "text": "tôi còn",
@@ -1350,15 +1332,6 @@
       "url": "/audio/packs/v6/es-male-f5321772ca901af5-d536fc77e789.m4a",
       "sha256": "d536fc77e789216f406dfeccfd46c15875638e7f93715b580b33debe1f14dfde",
       "voice": "male"
-    },
-    {
-      "id": "es-female-bf16c026b1183389",
-      "language": "es",
-      "text": "vivía",
-      "normalizedText": "vivía",
-      "url": "/audio/packs/v6/es-female-bf16c026b1183389-d0424e03aa6e.m4a",
-      "sha256": "d0424e03aa6e07cc42a83b5b02cf0537e0a6b3115cc08511f3f44a7d2b5afd51",
-      "voice": "female"
     },
     {
       "id": "es-male-a733fbfd73c7b79e",
@@ -1496,33 +1469,6 @@
       "voice": "male"
     },
     {
-      "id": "es-female-e7f734b7af91ce03",
-      "language": "es",
-      "text": "tenía",
-      "normalizedText": "tenía",
-      "url": "/audio/packs/v7/es-female-e7f734b7af91ce03-8d3da894ecc6.m4a",
-      "sha256": "8d3da894ecc616580cdc8848d7829a3975fd346784f13945e598fcc57b193cdc",
-      "voice": "female"
-    },
-    {
-      "id": "vi-female-df9bc8bb901e98c8",
-      "language": "vi",
-      "text": "tôi",
-      "normalizedText": "tôi",
-      "url": "/audio/packs/v7/vi-female-df9bc8bb901e98c8-a754a03ea6b5.m4a",
-      "sha256": "a754a03ea6b5169be07960351da30cdbe7fb48218718f9d5a8f43131d5507f76",
-      "voice": "female"
-    },
-    {
-      "id": "es-male-1044532f17921102",
-      "language": "es",
-      "text": "años",
-      "normalizedText": "años",
-      "url": "/audio/packs/v7/es-male-1044532f17921102-421c82c50b14.m4a",
-      "sha256": "421c82c50b14e5530430ec36eec95d1e998442dd1b40b48eb59ef94ef85d3ef3",
-      "voice": "male"
-    },
-    {
       "id": "es-female-d490e6abaf73d2a1",
       "language": "es",
       "text": "años",
@@ -1593,16 +1539,6 @@
       "url": "/audio/packs/v7/vi-female-4492fa46bf7b8866-6db1384e658b.m4a",
       "sha256": "6db1384e658ba357a2985836ff62d8c27735d2ebcf3537b537ae0e114064d141",
       "voice": "female"
-    },
-    {
-      "id": "vi-female-16e6c568185835c5",
-      "language": "vi",
-      "text": "mình / tôi",
-      "normalizedText": "mình / tôi",
-      "url": "/audio/packs/v8/vi-female-16e6c568185835c5-1f22ca54b468.m4a",
-      "sha256": "1f22ca54b4683ec5bea991bce652cab78370e884b049f89e273f40b8beacdb5e",
-      "voice": "female",
-      "qualityCheck": "automated-text-and-pace"
     },
     {
       "id": "es-male-4bf281593af95723",
@@ -4422,6 +4358,726 @@
       "url": "/audio/packs/v8/es-female-7c24d819191ba250-a57f28225f79.m4a",
       "sha256": "a57f28225f7982304aefb500526f7b6b36895a229b1b4f53d69f15287330fe7f",
       "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-16e6c568185835c5",
+      "language": "vi",
+      "text": "mình / tôi",
+      "normalizedText": "mình / tôi",
+      "url": "/audio/packs/v9/vi-female-16e6c568185835c5-56d831dc15bc.m4a",
+      "sha256": "56d831dc15bc63048467079cced3102fcf7dd30a732cd67034207806d8124a21",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-d4526520ddaa6fe8",
+      "language": "es",
+      "text": "expresarme",
+      "normalizedText": "expresarme",
+      "url": "/audio/packs/v9/es-male-d4526520ddaa6fe8-17a5dcd5a36a.m4a",
+      "sha256": "17a5dcd5a36aebb82d97a45ed21cab84986b329cd5f7fcc3d1d96eab2fd13776",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-33f88e2fb4614f56",
+      "language": "es",
+      "text": "era",
+      "normalizedText": "era",
+      "url": "/audio/packs/v9/es-female-33f88e2fb4614f56-60bc145f45f9.m4a",
+      "sha256": "60bc145f45f968f3e382670945890c0eb39c1c168a8b63b924bf01b710dea674",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-bf16c026b1183389",
+      "language": "es",
+      "text": "vivía",
+      "normalizedText": "vivía",
+      "url": "/audio/packs/v9/es-female-bf16c026b1183389-1c4e9cf6932d.m4a",
+      "sha256": "1c4e9cf6932d9b7cd651521b0516ee15db133d75702420206c393da70fd283ab",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-e7f734b7af91ce03",
+      "language": "es",
+      "text": "tenía",
+      "normalizedText": "tenía",
+      "url": "/audio/packs/v9/es-female-e7f734b7af91ce03-4a75296cc42e.m4a",
+      "sha256": "4a75296cc42ed79eaea3f52ace0c69e26f4c0da22e60005f5cce3f8fdadbee39",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-df9bc8bb901e98c8",
+      "language": "vi",
+      "text": "tôi",
+      "normalizedText": "tôi",
+      "url": "/audio/packs/v9/vi-female-df9bc8bb901e98c8-c03bc8c860d6.m4a",
+      "sha256": "c03bc8c860d6c0d3e084ad5b8dbfa95dbfd59110de73de9dabc2b735e6cd24c2",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-1044532f17921102",
+      "language": "es",
+      "text": "años",
+      "normalizedText": "años",
+      "url": "/audio/packs/v9/es-male-1044532f17921102-18296ee81c14.m4a",
+      "sha256": "18296ee81c145bfa09d902ba3cb8e0c77f3164b46ac7c21c9be7ae29857228ac",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-bf62cd73b2e0f5e8",
+      "language": "es",
+      "text": "solo",
+      "normalizedText": "solo",
+      "url": "/audio/packs/v9/es-male-bf62cd73b2e0f5e8-c513483aff35.m4a",
+      "sha256": "c513483aff35523218e83ae4a7ddaf95b21a06b99a981971bd4f38fc64814d7e",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-7b95e16ab29b9e87",
+      "language": "es",
+      "text": "primera vez viajé",
+      "normalizedText": "primera vez viajé",
+      "url": "/audio/packs/v9/es-male-7b95e16ab29b9e87-9e98181fcc8d.m4a",
+      "sha256": "9e98181fcc8d602ae18953fb7bffe4ee817fdf2ac0f4965ba0a573c0061aa1d5",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-4bf3c036336ea0b0",
+      "language": "es",
+      "text": "primera vez viajé",
+      "normalizedText": "primera vez viajé",
+      "url": "/audio/packs/v9/es-female-4bf3c036336ea0b0-564dc5581b01.m4a",
+      "sha256": "564dc5581b01e30dc4c652833010a116553f52b794276c7c7eea3e6bebf7d1d0",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-9b8b0ae546363eb8",
+      "language": "es",
+      "text": "solía",
+      "normalizedText": "solía",
+      "url": "/audio/packs/v9/es-male-9b8b0ae546363eb8-a4b2e151c4f4.m4a",
+      "sha256": "a4b2e151c4f49b23a35bae350e6c327b0531e9114d033772c64cd6e82305f0f5",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-a3943e896b6cf156",
+      "language": "es",
+      "text": "sigo",
+      "normalizedText": "sigo",
+      "url": "/audio/packs/v9/es-male-a3943e896b6cf156-b0c09d59e632.m4a",
+      "sha256": "b0c09d59e632bafb53da7615873913167659048e448d39f2b79b09b076749187",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-e9a3a166e6b38b2e",
+      "language": "es",
+      "text": "sigo",
+      "normalizedText": "sigo",
+      "url": "/audio/packs/v9/es-female-e9a3a166e6b38b2e-1f1ee2f985d1.m4a",
+      "sha256": "1f1ee2f985d19a17d5bd999f8d126f6cb4c2b11fe8b9690146f603eeef2215d1",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-da92e76eb6c40bab",
+      "language": "es",
+      "text": "antes ahora",
+      "normalizedText": "antes ahora",
+      "url": "/audio/packs/v9/es-female-da92e76eb6c40bab-75e1dab0a0e9.m4a",
+      "sha256": "75e1dab0a0e96d392cf35a144aae3857eebee2e53cc114b30e06c2e8f1198e73",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-5f59158fd768c7ff",
+      "language": "es",
+      "text": "De niño, siempre cenaba con mi familia.",
+      "normalizedText": "De niño, siempre cenaba con mi familia.",
+      "url": "/audio/packs/v9/es-female-5f59158fd768c7ff-dbb5546dbf07.m4a",
+      "sha256": "dbb5546dbf07d79b782818fdd971c0bc6e1f82a268d62c7d2d9c28db91617f81",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-cba41e1291e59ef9",
+      "language": "es",
+      "text": "con mi familia",
+      "normalizedText": "con mi familia",
+      "url": "/audio/packs/v9/es-male-cba41e1291e59ef9-217b4d0079a6.m4a",
+      "sha256": "217b4d0079a6d633d7b8c82711a044f85d5b2ea786b2c8fbf3746208a8604e2d",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-eddfd20fff9f121c",
+      "language": "es",
+      "text": "De niño siempre",
+      "normalizedText": "De niño siempre",
+      "url": "/audio/packs/v9/es-female-eddfd20fff9f121c-f16b90c29999.m4a",
+      "sha256": "f16b90c29999b8bff75593e611843721960c28f0d18c9b0327c67c25e26034be",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-190d12ffb90f8d66",
+      "language": "es",
+      "text": "caminar",
+      "normalizedText": "caminar",
+      "url": "/audio/packs/v9/es-male-190d12ffb90f8d66-08cfba1b868e.m4a",
+      "sha256": "08cfba1b868e7429f633fd9258dfa3fbb1eb8f606e263481fdcb04dd6cb43fa1",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-c15c7aab69f323af",
+      "language": "es",
+      "text": "caminar",
+      "normalizedText": "caminar",
+      "url": "/audio/packs/v9/es-female-c15c7aab69f323af-c5a8684889c4.m4a",
+      "sha256": "c5a8684889c4ea5071dce4c0236381247c658a72f1c6b7c253786ea0f572cbc5",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-683740b8e769aa37",
+      "language": "vi",
+      "text": "tôi thường đi bộ",
+      "normalizedText": "tôi thường đi bộ",
+      "url": "/audio/packs/v9/vi-female-683740b8e769aa37-35736e4c73ee.m4a",
+      "sha256": "35736e4c73ee0a7efac9c58fcd62273d37feda1faae640f233b77521bb8001f4",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-e0bcac9b3bb663c4",
+      "language": "es",
+      "text": "del trabajo",
+      "normalizedText": "del trabajo",
+      "url": "/audio/packs/v9/es-female-e0bcac9b3bb663c4-16b002436876.m4a",
+      "sha256": "16b0024368760dd85ac920ce9acfe471ddc33e9076cf785e04a120f90028c7fc",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-d05d152ea5107338",
+      "language": "es",
+      "text": "Leía",
+      "normalizedText": "Leía",
+      "url": "/audio/packs/v9/es-female-d05d152ea5107338-cca0faf4de08.m4a",
+      "sha256": "cca0faf4de08c35d33a95589e24262474061707c52253bd33b426c5979d73fd9",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-7198e02b800471c8",
+      "language": "es",
+      "text": "el teléfono",
+      "normalizedText": "el teléfono",
+      "url": "/audio/packs/v9/es-male-7198e02b800471c8-8c6d4c915cca.m4a",
+      "sha256": "8c6d4c915cca979b847b071d8ae7d757d9bf7798728edd022e1c9bad4d8595f8",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-9db53dfdd2ffc4d2",
+      "language": "es",
+      "text": "el teléfono",
+      "normalizedText": "el teléfono",
+      "url": "/audio/packs/v9/es-female-9db53dfdd2ffc4d2-fbc79755730e.m4a",
+      "sha256": "fbc79755730e45d7732843fa78ce5f2faa1c9ffce354c99fd1c48147fe506902",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-993f776ff11d05df",
+      "language": "es",
+      "text": "Antes",
+      "normalizedText": "Antes",
+      "url": "/audio/packs/v9/es-male-993f776ff11d05df-59887d539fa4.m4a",
+      "sha256": "59887d539fa4213b25434782d46ad2bf9a75c1d91e334d4469cc03e3daef0c34",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-ff1f1e1a1f51e2b4",
+      "language": "es",
+      "text": "prefiero el día",
+      "normalizedText": "prefiero el día",
+      "url": "/audio/packs/v9/es-male-ff1f1e1a1f51e2b4-2ec04afd118e.m4a",
+      "sha256": "2ec04afd118e87c4fcff2cc85556e499257b59412f98781b86a757de4ba37a7d",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-5a11e6f2223fc4e7",
+      "language": "es",
+      "text": "Antes trabajaba de noche",
+      "normalizedText": "Antes trabajaba de noche",
+      "url": "/audio/packs/v9/es-male-5a11e6f2223fc4e7-a8703f56cff7.m4a",
+      "sha256": "a8703f56cff7a75c3f98c1fdf9f4254ccb83a6386403d3416de6fa6405d37817",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-b0a6130cc57dec2d",
+      "language": "es",
+      "text": "veces",
+      "normalizedText": "veces",
+      "url": "/audio/packs/v9/es-female-b0a6130cc57dec2d-fbeb4eb3e7ef.m4a",
+      "sha256": "fbeb4eb3e7ef7196beae4c664a152f5ab0febc64cae425bd67b1a18547664c9a",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-c8bb14120ec91294",
+      "language": "es",
+      "text": "He viajado solo",
+      "normalizedText": "He viajado solo",
+      "url": "/audio/packs/v9/es-male-c8bb14120ec91294-20359f248909.m4a",
+      "sha256": "20359f248909648946ddc0ac64f31efb873a7f504c3146aeb72459e49c8fdb37",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-d61c6d9998e36b33",
+      "language": "es",
+      "text": "Perdí el tren porque llegué tarde.",
+      "normalizedText": "Perdí el tren porque llegué tarde.",
+      "url": "/audio/packs/v9/es-male-d61c6d9998e36b33-ce5df911ca44.m4a",
+      "sha256": "ce5df911ca44827cc68208160ece7f4468130a9e13c68c62bcbe5b6da5483de4",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-1e8f660ac4126735",
+      "language": "vi",
+      "text": "Tôi lỡ",
+      "normalizedText": "Tôi lỡ",
+      "url": "/audio/packs/v9/vi-female-1e8f660ac4126735-e7896e7d1f9b.m4a",
+      "sha256": "e7896e7d1f9b530bcb98e8310bfb466485ba09f25191c0f97299c8b36033ff06",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-e679e122bd4f0107",
+      "language": "es",
+      "text": "el tren",
+      "normalizedText": "el tren",
+      "url": "/audio/packs/v9/es-female-e679e122bd4f0107-497d16c4aee1.m4a",
+      "sha256": "497d16c4aee132e1fe5243a68b134482ed7a523e4709e6da6f7351c02964ead0",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-eca9f5e72ba4f70e",
+      "language": "vi",
+      "text": "vì",
+      "normalizedText": "vì",
+      "url": "/audio/packs/v9/vi-female-eca9f5e72ba4f70e-aba46462cdb3.m4a",
+      "sha256": "aba46462cdb31b94c3f702727bb08a5e85b2eb6316ff9a1740aa8412be2a6592",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-e9df2175c35d3c33",
+      "language": "es",
+      "text": "llegué tarde",
+      "normalizedText": "llegué tarde",
+      "url": "/audio/packs/v9/es-male-e9df2175c35d3c33-79a1a2bc9813.m4a",
+      "sha256": "79a1a2bc9813386d88c803edcfbbf7c3ee81f99228d6026881b2de8babc32c91",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-b3e833da7dce1dbf",
+      "language": "vi",
+      "text": "đến muộn",
+      "normalizedText": "đến muộn",
+      "url": "/audio/packs/v9/vi-female-b3e833da7dce1dbf-3e3e2277a03c.m4a",
+      "sha256": "3e3e2277a03c3ebf845951072b326e2c3e4b79a53109b1f3f1cb8d2022283ae4",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-b790f8f30dc7f531",
+      "language": "es",
+      "text": "Perdí el tren",
+      "normalizedText": "Perdí el tren",
+      "url": "/audio/packs/v9/es-male-b790f8f30dc7f531-c980681b1440.m4a",
+      "sha256": "c980681b1440a5fe391b7f2bcf1627641fea0cdfb1b96ed369c2274c303ba21f",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-9a4896e4f52af338",
+      "language": "es",
+      "text": "Perdí el tren",
+      "normalizedText": "Perdí el tren",
+      "url": "/audio/packs/v9/es-female-9a4896e4f52af338-4ca42c932a7b.m4a",
+      "sha256": "4ca42c932a7ba4d44a609221f000b97b15c013aa3bf7cc05e6a381d018639d4d",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-1146f4191a3de529",
+      "language": "vi",
+      "text": "Tôi lỡ chuyến tàu",
+      "normalizedText": "Tôi lỡ chuyến tàu",
+      "url": "/audio/packs/v9/vi-female-1146f4191a3de529-1a0ab195f668.m4a",
+      "sha256": "1a0ab195f668620ea5489400b21f12df6aa8224dfcf587ea25e1ccec6d282976",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-5f05a33ae620e474",
+      "language": "es",
+      "text": "Quisiera cambiar",
+      "normalizedText": "Quisiera cambiar",
+      "url": "/audio/packs/v9/es-male-5f05a33ae620e474-1a0e48593621.m4a",
+      "sha256": "1a0e48593621a2e3c6fbdad022442e8a8c23219137aeb42ebc52ff9cc557575e",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-9c5593650913322a",
+      "language": "es",
+      "text": "reserva",
+      "normalizedText": "reserva",
+      "url": "/audio/packs/v9/es-female-9c5593650913322a-037d11fc198d.m4a",
+      "sha256": "037d11fc198d2546846d1689263f7beb91e77bdd450cf45b214602fdef606015",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-c7b4368690015d77",
+      "language": "vi",
+      "text": "sang ngày mai",
+      "normalizedText": "sang ngày mai",
+      "url": "/audio/packs/v9/vi-female-c7b4368690015d77-b7698560796d.m4a",
+      "sha256": "b7698560796d5b9df5418dcd24a3b444d0d76494ffe1f1084da883fcdb193ef8",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-029902e9b9cd6c7d",
+      "language": "es",
+      "text": "Quisiera cambiar mi",
+      "normalizedText": "Quisiera cambiar mi",
+      "url": "/audio/packs/v9/es-female-029902e9b9cd6c7d-e5bea3588022.m4a",
+      "sha256": "e5bea35880228c4130532b00360ea8d861d14548c7c8d121c7bc51ee758a5627",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-b4c23c3005ab532c",
+      "language": "es",
+      "text": "Después del viaje",
+      "normalizedText": "Después del viaje",
+      "url": "/audio/packs/v9/es-male-b4c23c3005ab532c-55bed5821cd1.m4a",
+      "sha256": "55bed5821cd157e2d2a6fb25e0f6c267c10afa136d58d32a66b196a744ad629e",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-a9b4fc5393656b74",
+      "language": "vi",
+      "text": "Sau chuyến đi",
+      "normalizedText": "Sau chuyến đi",
+      "url": "/audio/packs/v9/vi-female-a9b4fc5393656b74-51bb98dfeb98.m4a",
+      "sha256": "51bb98dfeb9874ab9a2ef91fb754568a834eb6ca0c761c333dec81084ad6f737",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-d4d6160437b44347",
+      "language": "es",
+      "text": "que necesitaba",
+      "normalizedText": "que necesitaba",
+      "url": "/audio/packs/v9/es-female-d4d6160437b44347-65506e93a27e.m4a",
+      "sha256": "65506e93a27e36007c8bbbb53642407e1849e9e83d99104d39ab3d4da216f63b",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-ffc6f9956cfd841f",
+      "language": "es",
+      "text": "Después del viaje entendí",
+      "normalizedText": "Después del viaje entendí",
+      "url": "/audio/packs/v9/es-male-ffc6f9956cfd841f-85a4ff76c4fa.m4a",
+      "sha256": "85a4ff76c4faa1b9fbb0a4a131638d88bb03287c56ab66b58672390637634f01",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-e0418bd0345ba846",
+      "language": "es",
+      "text": "Después del viaje entendí",
+      "normalizedText": "Después del viaje entendí",
+      "url": "/audio/packs/v9/es-female-e0418bd0345ba846-0f8967d4a9fc.m4a",
+      "sha256": "0f8967d4a9fc110d66db7be1875b44ef2bb23ec174774a399b42b8dfe11eed16",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-32b7fdda4b35dd36",
+      "language": "vi",
+      "text": "Sau chuyến đi tôi hiểu",
+      "normalizedText": "Sau chuyến đi tôi hiểu",
+      "url": "/audio/packs/v9/vi-female-32b7fdda4b35dd36-e6e60e89bf8c.m4a",
+      "sha256": "e6e60e89bf8c54b62abec155b95941a4bde7d308c0ddc9c0febef51c34aa914d",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-f718f037d9d8eb9a",
+      "language": "vi",
+      "text": "tôi phải hoàn thành",
+      "normalizedText": "tôi phải hoàn thành",
+      "url": "/audio/packs/v9/vi-female-f718f037d9d8eb9a-ef561dd5513a.m4a",
+      "sha256": "ef561dd5513ab253fd9179fdf0280e1835dd35ae28f9d4059ba3b2b431bb546d",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-e0c7c89bc82af77e",
+      "language": "es",
+      "text": "este",
+      "normalizedText": "este",
+      "url": "/audio/packs/v9/es-male-e0c7c89bc82af77e-44b37fc6f8c4.m4a",
+      "sha256": "44b37fc6f8c4c45dc2a00d0a4056edc1011928409d2c4b52023c95e51dc02cca",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-6e1ab79d8cd6086f",
+      "language": "es",
+      "text": "informe",
+      "normalizedText": "informe",
+      "url": "/audio/packs/v9/es-male-6e1ab79d8cd6086f-39778a9a3db0.m4a",
+      "sha256": "39778a9a3db0893973df2e2a77bcf685445b68142122ccccee78c46eb7f75b17",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-32047fdf3a1e37bb",
+      "language": "vi",
+      "text": "báo cáo",
+      "normalizedText": "báo cáo",
+      "url": "/audio/packs/v9/vi-female-32047fdf3a1e37bb-487b9fef13bd.m4a",
+      "sha256": "487b9fef13bd8249676277594fe26e3a3398ad6298299a8909f7e73e28abdcf3",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-2ff358af5886753e",
+      "language": "es",
+      "text": "Tengo que terminar este",
+      "normalizedText": "Tengo que terminar este",
+      "url": "/audio/packs/v9/es-male-2ff358af5886753e-4d4437ffc170.m4a",
+      "sha256": "4d4437ffc170209807156abc9942f14e0df050f67ce93ece9a29a2203ef9cd10",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-f7cb3627a220fac1",
+      "language": "es",
+      "text": "¿Podrías revisar el documento esta tarde?",
+      "normalizedText": "¿Podrías revisar el documento esta tarde?",
+      "url": "/audio/packs/v9/es-male-f7cb3627a220fac1-4b02ab0027fe.m4a",
+      "sha256": "4b02ab0027fe4b7e15564b7bc9e7ad236d38b9291d870af96817c3ce21c0037b",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-73918e8462a7fc6b",
+      "language": "es",
+      "text": "Podrías revisar",
+      "normalizedText": "Podrías revisar",
+      "url": "/audio/packs/v9/es-male-73918e8462a7fc6b-91dbf2a7a1c2.m4a",
+      "sha256": "91dbf2a7a1c2f89ed588e8d4a440c219c73c21a5656c97f49add110feab5b938",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-2e07cc55dc3367f4",
+      "language": "es",
+      "text": "esta tarde",
+      "normalizedText": "esta tarde",
+      "url": "/audio/packs/v9/es-male-2e07cc55dc3367f4-94343a655ba1.m4a",
+      "sha256": "94343a655ba16ab3e10bfc32837e11a784ba4d33a706b8feb73843d0f3a54183",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-d6d50ac84b158e71",
+      "language": "es",
+      "text": "Ya hemos completado la primera parte.",
+      "normalizedText": "Ya hemos completado la primera parte.",
+      "url": "/audio/packs/v9/es-male-d6d50ac84b158e71-cea480118304.m4a",
+      "sha256": "cea4801183049847ada8338d45db4c5b3b9aa24616fc714fd22d697fb144c55a",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-fa93b29024db596f",
+      "language": "es",
+      "text": "Ya",
+      "normalizedText": "Ya",
+      "url": "/audio/packs/v9/es-male-fa93b29024db596f-604923054e62.m4a",
+      "sha256": "604923054e62677ee510332e640787db776aca68273f22484a2e3a8daafd987b",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-7b3df280b65435a6",
+      "language": "es",
+      "text": "Ya",
+      "normalizedText": "Ya",
+      "url": "/audio/packs/v9/es-female-7b3df280b65435a6-4e4618df033b.m4a",
+      "sha256": "4e4618df033bb5a67759727adafa7155944af08f97f43a7924f9d3035b3e1d1e",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-8fcb312e6a53d21a",
+      "language": "vi",
+      "text": "rồi",
+      "normalizedText": "rồi",
+      "url": "/audio/packs/v9/vi-female-8fcb312e6a53d21a-440c19d5445d.m4a",
+      "sha256": "440c19d5445d2e35ac3720d6efbef8aec4d0bf3920f79aad471cb338ad69ff0b",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-82610445c01f5644",
+      "language": "es",
+      "text": "la primera",
+      "normalizedText": "la primera",
+      "url": "/audio/packs/v9/es-female-82610445c01f5644-a348e1680af4.m4a",
+      "sha256": "a348e1680af415bc36aeede469d29bb6ad22837f62f66e8d7af2b92719a0e2f7",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-1e531ea22e71ece5",
+      "language": "es",
+      "text": "parte",
+      "normalizedText": "parte",
+      "url": "/audio/packs/v9/es-male-1e531ea22e71ece5-d3aac72f2a51.m4a",
+      "sha256": "d3aac72f2a51127b9aa8bbd5568df4f13f4b0b05551da3474174a0b27cc98616",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-8fec16344388166c",
+      "language": "es",
+      "text": "parte",
+      "normalizedText": "parte",
+      "url": "/audio/packs/v9/es-female-8fec16344388166c-511bee16a255.m4a",
+      "sha256": "511bee16a255fc9d7833059c631f6544e22846336793838ba59fb0f3a5771984",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-c3289620de22e917",
+      "language": "es",
+      "text": "Ya hemos completado",
+      "normalizedText": "Ya hemos completado",
+      "url": "/audio/packs/v9/es-female-c3289620de22e917-8bb37b0b26da.m4a",
+      "sha256": "8bb37b0b26da7f5aed93186f8a96a4fdfe68cfb2a1ab08bc301fc7fc55f86ceb",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-23831fe0fc526224",
+      "language": "es",
+      "text": "estaba en una reunión",
+      "normalizedText": "estaba en una reunión",
+      "url": "/audio/packs/v9/es-male-23831fe0fc526224-54403cff6548.m4a",
+      "sha256": "54403cff65487c071f02958c01010c11159bc5c9c52bacf96cb1cb300e04ba7e",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-4989b89adcbf83d1",
+      "language": "es",
+      "text": "estaba en una reunión",
+      "normalizedText": "estaba en una reunión",
+      "url": "/audio/packs/v9/es-female-4989b89adcbf83d1-976d36104c03.m4a",
+      "sha256": "976d36104c0375a6cd874f3d22bf761a0e701107a6448e44f24ce1421b0b321e",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-73b1e847777c95df",
+      "language": "es",
+      "text": "No pude responder antes",
+      "normalizedText": "No pude responder antes",
+      "url": "/audio/packs/v9/es-male-73b1e847777c95df-b1a0e00ef675.m4a",
+      "sha256": "b1a0e00ef6752ed1c5b0ef05174ce3d05ca21450a2a59d686fd4ffd2fea8cc7b",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-df478229df9095a0",
+      "language": "es",
+      "text": "No pude responder antes",
+      "normalizedText": "No pude responder antes",
+      "url": "/audio/packs/v9/es-female-df478229df9095a0-41f89637f06f.m4a",
+      "sha256": "41f89637f06ff8ea9684dfc1029721a6ad2ce112e0e1b2b1b1873f489136d1cc",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-241d2c360bdb5e17",
+      "language": "vi",
+      "text": "học",
+      "normalizedText": "học",
+      "url": "/audio/packs/v9/vi-female-241d2c360bdb5e17-5a4d3a4652e9.m4a",
+      "sha256": "5a4d3a4652e9c3c89e3b90f7e2f3ae97f69206f5a2a8421ff926b2fc68e90e36",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-90e8f5e5e3ffb33d",
+      "language": "es",
+      "text": "Llevo",
+      "normalizedText": "Llevo",
+      "url": "/audio/packs/v9/es-male-90e8f5e5e3ffb33d-131a37e93b26.m4a",
+      "sha256": "131a37e93b26ef222f498f879bb21a5fb1c4d079ffc4e183b8ed9c51711d5299",
+      "voice": "male",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "vi-female-c548c55af5e01908",
+      "language": "vi",
+      "text": "Tôi đã",
+      "normalizedText": "Tôi đã",
+      "url": "/audio/packs/v9/vi-female-c548c55af5e01908-478578ffacd2.m4a",
+      "sha256": "478578ffacd29d4a7243f45949155204710c58e525c20f4bab8f1053d2f143a5",
+      "voice": "female",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-83cacc1e128a491d",
+      "language": "es",
+      "text": "Llevo seis meses",
+      "normalizedText": "Llevo seis meses",
+      "url": "/audio/packs/v9/es-male-83cacc1e128a491d-3d595994285d.m4a",
+      "sha256": "3d595994285d007e2fc3fc5fd5ebdd00d2057029b2e82f5437aeec0803c396ba",
+      "voice": "male",
       "qualityCheck": "automated-text-and-pace"
     }
   ]
