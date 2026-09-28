@@ -23,6 +23,7 @@ export function AnswerField({ value, onChange, onEnter, placeholder, label, lang
     if (!element) return;
     element.style.height = "auto";
     element.style.height = `${Math.max(112, element.scrollHeight)}px`;
+    if (document.activeElement === element) element.scrollIntoView({ block: "nearest", inline: "nearest" });
   }, [value]);
 
   return <textarea

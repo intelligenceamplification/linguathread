@@ -42,10 +42,14 @@ def main():
     parser.add_argument("--output", type=Path, default=ROOT / "audio/generated/voice-coverage")
     parser.add_argument("--limit", type=int, default=0, help="Maximum number of new clips in this run; 0 means all")
     parser.add_argument("--force", action="store_true", help="Generate replacement candidates for published keys")
+    parser.add_argument("--defer-failed", action="store_true", help="Skip previously failed keys until a dedicated retry pass")
+    parser.add_argument("--only-failed", action="store_true", help="Retry only previously failed keys")
     parser.add_argument("--prompt-mode", action="store_true", help="Use the approved transcript and recording as a cadence prompt")
     parser.add_argument("--attempts", type=int, default=3, help="Bounded retries for failed speech/text checks")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "mps"))
     args = parser.parse_args()
+    if args.defer_failed and args.only_failed:
+        parser.error("--defer-failed and --only-failed are mutually exclusive")
 
     import imageio_ffmpeg
     import numpy as np
@@ -70,6 +74,7 @@ def main():
     published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
     reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt")}
     metadata = args.output / "metadata.jsonl"
+    failures = args.output / "failures.jsonl"
     completed = set()
     if metadata.exists():
         for line in metadata.read_text(encoding="utf-8").splitlines():
@@ -78,6 +83,17 @@ def main():
                 completed.add((row["language"], row["normalizedText"], row["voice"]))
             except (KeyError, json.JSONDecodeError):
                 continue
+    failed_ids = set()
+    if failures.exists():
+        for line in failures.read_text(encoding="utf-8").splitlines():
+            try:
+                failed_ids.add(json.loads(line)["id"])
+            except (KeyError, json.JSONDecodeError):
+                continue
+
+    def was_failed(language: str, text: str, voice: str) -> bool:
+        identity = hashlib.sha256(f"{language}\0{voice}\0{text}".encode()).hexdigest()[:16]
+        return f"{language}-{voice}-{identity}" in failed_ids
 
     work = [
         (item["language"], item["text"], voice, reference)
@@ -87,6 +103,8 @@ def main():
         and (language, item["text"], voice) not in reviewed
         and (args.force or (language, item["text"], voice) not in published)
         and (language, item["text"], voice) not in completed
+        and (not args.defer_failed or not was_failed(language, item["text"], voice))
+        and (not args.only_failed or was_failed(language, item["text"], voice))
     ]
     if args.limit:
         work = work[: args.limit]
@@ -96,7 +114,6 @@ def main():
     model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False, device=args.device, optimize=False)
     recognizer = WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
-    failures = args.output / "failures.jsonl"
     with metadata.open("a", encoding="utf-8") as log, failures.open("a", encoding="utf-8") as error_log:
         for index, (language, text, voice, reference) in enumerate(work, 1):
             identity = hashlib.sha256(f"{language}\0{voice}\0{text}".encode()).hexdigest()[:16]

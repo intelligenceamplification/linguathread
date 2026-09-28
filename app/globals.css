@@ -216,7 +216,7 @@ button { color: inherit; }
 .production-path span.complete { color: var(--text-accent); }
 .production-path i { color: var(--faint); font-style: normal; }
 .production-confirmation { width: fit-content; margin: -16px auto 22px; padding: 8px 12px; background: var(--sage); color: var(--text-accent-strong); font-size: .76rem; }
-.answer-field { display: block; width: min(640px, 100%); min-height: 112px; max-height: min(40svh, 320px); margin: 30px auto 0; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--control-wash); color: var(--ink); caret-color: var(--moss); text-align: left; font-size: clamp(1.1rem, 3.2vw, 1.35rem); line-height: 1.5; outline: none; resize: none; overflow-y: auto; overflow-wrap: anywhere; }
+.answer-field { display: block; width: min(640px, 100%); min-height: 112px; max-height: min(40svh, 320px); margin: 30px auto 0; padding: 18px 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--control-wash); color: var(--ink); caret-color: var(--moss); text-align: left; font-size: clamp(1.1rem, 3.2vw, 1.35rem); line-height: 1.5; outline: none; resize: none; overflow-y: auto; overflow-wrap: anywhere; scroll-margin-block: 16px 84px; }
 .answer-field:focus { border-color: var(--moss-dark); box-shadow: 0 0 0 3px color-mix(in srgb, var(--moss) 12%, transparent); }
 .answer-field::placeholder { color: var(--subtle); }
 .vocab-content > h1, .audio-first-content > h1 { line-height: 1.1; overflow-wrap: anywhere; }
