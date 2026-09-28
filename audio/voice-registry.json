@@ -1,7 +1,16 @@
 {
   "schemaVersion": 1,
   "voices": [
-    { "language": "es", "voice": "male", "referenceClipId": "es-origin-native-castilian", "inferenceTimesteps": 20 },
+    {
+      "language": "es", "voice": "male", "referenceClipId": "es-origin-native-castilian",
+      "sourceReference": {
+        "language": "es", "text": "Soy de Indiana.",
+        "url": "/audio/packs/v2/es-origin-native-castilian-a3dc7d41dd38.wav",
+        "sha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109",
+        "reviewedAt": "2026-09-23T23:39:24Z"
+      },
+      "inferenceTimesteps": 20, "normalTempo": 0.85
+    },
     { "language": "es", "voice": "female", "referenceClipId": "spanish-female-audition", "inferenceTimesteps": 20 },
     { "language": "vi", "voice": "female", "referenceClipId": "vietnamese-female-audition", "inferenceTimesteps": 10 }
   ]

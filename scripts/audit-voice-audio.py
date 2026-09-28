@@ -9,8 +9,15 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-def normalize(text):
-    return " ".join(re.findall(r"[^\W_]+", unicodedata.normalize("NFC", text).casefold()))
+SPOKEN_NUMBERS = {
+    "es": {**dict(enumerate(("cero", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"))), 20: "veinte"},
+    "vi": {**dict(enumerate(("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"))), 20: "hai mươi"},
+}
+
+def normalize(text, language=None):
+    words = re.findall(r"[^\W_]+", unicodedata.normalize("NFC", text).casefold())
+    numbers = SPOKEN_NUMBERS.get(language, {})
+    return " ".join(numbers.get(int(word), word) if word.isascii() and word.isdigit() else word for word in words)
 
 def distance(left, right):
     row = list(range(len(right) + 1))
@@ -58,7 +65,7 @@ def main():
             segments, info = model.transcribe(str(row["path"]), language=row["language"], beam_size=5, condition_on_previous_text=False, temperature=0)
             segments = list(segments)
             actual = " ".join(segment.text.strip() for segment in segments)
-            target, heard = normalize(expected), normalize(actual)
+            target, heard = normalize(expected, row["language"]), normalize(actual, row["language"])
             words = target.split()
             wer = distance(words, heard.split()) / max(1, len(words))
             cer = distance(target, heard) / max(1, len(target))

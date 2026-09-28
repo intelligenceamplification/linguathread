@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v9",
+  "packVersion": "v13",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-28T00:16:00Z",
+  "approvedAt": "2026-09-28T18:51:54Z",
   "clips": [
     {
       "id": "en-expression",
@@ -185,20 +185,24 @@
       "language": "es",
       "text": "Soy de Indiana.",
       "normalizedText": "Soy de Indiana.",
-      "url": "/audio/packs/v2/es-origin-native-castilian-a3dc7d41dd38.wav",
-      "sha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109",
+      "url": "/audio/packs/v10/es-origin-native-castilian-a3dc7d41dd38-tempo85.m4a",
+      "sha256": "9d6279e21be5ff27967eec0e9c9caea62b49220464f166e7cbcfe76f62a81ded",
       "reviewedAt": "2026-09-23T23:39:24Z",
-      "voice": "male"
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109"
     },
     {
       "id": "spanish-male-consistency",
       "language": "es",
       "text": "Me llamo Desmond. Mucho gusto.",
       "normalizedText": "Me llamo Desmond. Mucho gusto.",
-      "url": "/audio/packs/v3/spanish-male-consistency-be1592272474.wav",
-      "sha256": "be15922724744789630604409a48715d3fa779aa0a8537df250452c048635f36",
+      "url": "/audio/packs/v10/spanish-male-consistency-be1592272474-tempo85.m4a",
+      "sha256": "0c018b33b939fc402ae630eb9ad50a29b646b220d6f12102ea8c94b4eced280f",
       "reviewedAt": "2026-09-24T18:00:00Z",
-      "voice": "male"
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "be15922724744789630604409a48715d3fa779aa0a8537df250452c048635f36"
     },
     {
       "id": "spanish-female-audition",
@@ -255,9 +259,11 @@
       "language": "es",
       "text": "yo",
       "normalizedText": "yo",
-      "url": "/audio/packs/v4/es-male-7a080c250651df45-ce7225e64065.m4a",
-      "sha256": "ce7225e640651af38843a9ee7960d185cee43a031862b693aafd6ac9d6758c74",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-7a080c250651df45-ce7225e64065-tempo85.m4a",
+      "sha256": "c07d164060d058d90d377b7b7dd2c885308fc6a1408a8ee7496cafefbca4a4c2",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "ce7225e640651af38843a9ee7960d185cee43a031862b693aafd6ac9d6758c74"
     },
     {
       "id": "es-female-be44525d819afe69",
@@ -273,9 +279,12 @@
       "language": "es",
       "text": "tú",
       "normalizedText": "tú",
-      "url": "/audio/packs/v4/es-male-8c2d7137e2ba932b-23197d0b01db.m4a",
-      "sha256": "23197d0b01db0c3cb84c229159b835757f8154482a74900d5e8e2bd1acfd3a3c",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-8c2d7137e2ba932b-23197d0b01db-tempo85.m4a",
+      "sha256": "d39488a142336768c29b1d2e7dd10686c0cfb8f4e3f06965486dcd135c6e5648",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "23197d0b01db0c3cb84c229159b835757f8154482a74900d5e8e2bd1acfd3a3c",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-a5394814e18743dd",
@@ -300,9 +309,12 @@
       "language": "es",
       "text": "soy",
       "normalizedText": "soy",
-      "url": "/audio/packs/v4/es-male-b6ea053c833ddd77-1cc668522d8e.m4a",
-      "sha256": "1cc668522d8e68473ca6c00271861d362008fcba08f30ed9b443c02ec561f535",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-b6ea053c833ddd77-1cc668522d8e-tempo85.m4a",
+      "sha256": "3e7af4571f2562e979d170aba2fa6d23e14d429ffce7f7a429c7d4f486c4f156",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1cc668522d8e68473ca6c00271861d362008fcba08f30ed9b443c02ec561f535",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-af48a259f55ca865",
@@ -327,9 +339,11 @@
       "language": "es",
       "text": "eres",
       "normalizedText": "eres",
-      "url": "/audio/packs/v4/es-male-c4795a2d8b32863e-c410090a0096.m4a",
-      "sha256": "c410090a0096e986e00d5776edccab0e12c6c541aafe9c368731b59d926b3234",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-c4795a2d8b32863e-c410090a0096-tempo85.m4a",
+      "sha256": "09323afe087f951a8abfbd812884b6b04b95d42b52a7210e21d27b9338936c0f",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c410090a0096e986e00d5776edccab0e12c6c541aafe9c368731b59d926b3234"
     },
     {
       "id": "es-female-8f07d2c284f79e5a",
@@ -354,9 +368,12 @@
       "language": "es",
       "text": "de",
       "normalizedText": "de",
-      "url": "/audio/packs/v4/es-male-7eaaccc05234ff1a-6a76e2fb91d9.m4a",
-      "sha256": "6a76e2fb91d90c4563a03b139d2afa47042b7b18bef68a6e0aa4f68a977b8dba",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-7eaaccc05234ff1a-6a76e2fb91d9-tempo85.m4a",
+      "sha256": "297b3063bdd839f8727b3bef3ca3f3c054460e1e90d65eaf803a8156906ed600",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6a76e2fb91d90c4563a03b139d2afa47042b7b18bef68a6e0aa4f68a977b8dba",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-6ab18f8a7ad9bd6d",
@@ -381,9 +398,11 @@
       "language": "es",
       "text": "yo tú",
       "normalizedText": "yo tú",
-      "url": "/audio/packs/v4/es-male-cba430e323009a4e-a98b1d6ce4a6.m4a",
-      "sha256": "a98b1d6ce4a66a173b8df11300233c4c22a7d0521e86df0b2a4dc4fd98766ae8",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-cba430e323009a4e-a98b1d6ce4a6-tempo85.m4a",
+      "sha256": "ca2e0328e3aa1e7f73f9003563875d7c6f8612b5a815a7e8263bfe6b16b815fb",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a98b1d6ce4a66a173b8df11300233c4c22a7d0521e86df0b2a4dc4fd98766ae8"
     },
     {
       "id": "es-female-fbb0325e80c11e67",
@@ -408,9 +427,12 @@
       "language": "es",
       "text": "me",
       "normalizedText": "me",
-      "url": "/audio/packs/v4/es-male-490136e915107078-8f9c89221367.m4a",
-      "sha256": "8f9c89221367c7a078592a150755e6125aaa1bb15a6c36181d4db4040f1ec346",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-490136e915107078-8f9c89221367-tempo85.m4a",
+      "sha256": "2d3e42dfa036a28bbbadadf5715f5cdc37892710052a0997df148acb72248f64",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "8f9c89221367c7a078592a150755e6125aaa1bb15a6c36181d4db4040f1ec346",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-23f1dcfa53b34f1e",
@@ -426,9 +448,11 @@
       "language": "es",
       "text": "llamo",
       "normalizedText": "llamo",
-      "url": "/audio/packs/v4/es-male-90257314ea227c28-3eb5bc2677b2.m4a",
-      "sha256": "3eb5bc2677b2e227a84a400393690f6f3f5e303993a2f4ce237d2500f40f91a4",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-90257314ea227c28-3eb5bc2677b2-tempo85.m4a",
+      "sha256": "f6c3cfd86bb918646d8748da64d606ca5f9064388c0ac01c5d93d07d120af8eb",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "3eb5bc2677b2e227a84a400393690f6f3f5e303993a2f4ce237d2500f40f91a4"
     },
     {
       "id": "es-female-731af8d5c1293af6",
@@ -453,9 +477,11 @@
       "language": "es",
       "text": "nombre",
       "normalizedText": "nombre",
-      "url": "/audio/packs/v4/es-male-73ba19be75a9926e-2c66c0d94cf3.m4a",
-      "sha256": "2c66c0d94cf35a02f3a5baccd5997e30d6552eae8ce2e6c9265d5b16d527d3fe",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-73ba19be75a9926e-2c66c0d94cf3-tempo85.m4a",
+      "sha256": "780d5d2f26116395f11bc5504b8e2c545ac260fdf2692781dbb2b320987f2718",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2c66c0d94cf35a02f3a5baccd5997e30d6552eae8ce2e6c9265d5b16d527d3fe"
     },
     {
       "id": "es-female-e848db535c905f6a",
@@ -480,9 +506,11 @@
       "language": "es",
       "text": "mucho",
       "normalizedText": "mucho",
-      "url": "/audio/packs/v4/es-male-a2d8b64babed5b29-a084e80a94f7.m4a",
-      "sha256": "a084e80a94f784d35b99e2a012a07cd9b01226cb1f327f02d6ff13f080956221",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-a2d8b64babed5b29-a084e80a94f7-tempo85.m4a",
+      "sha256": "71de35a1c79b83a01ca1af39a0cc0bc07918aee9558428270b8079a4f7670356",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a084e80a94f784d35b99e2a012a07cd9b01226cb1f327f02d6ff13f080956221"
     },
     {
       "id": "es-female-7669fcd1f47b1cb9",
@@ -507,9 +535,11 @@
       "language": "es",
       "text": "gusto",
       "normalizedText": "gusto",
-      "url": "/audio/packs/v4/es-male-3ff583dfc3c6e23b-ad127451cc73.m4a",
-      "sha256": "ad127451cc73cbfebcb5e07f5060b6b8d25de3d2f886a2f97b9e1f39f1b055ef",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-3ff583dfc3c6e23b-ad127451cc73-tempo85.m4a",
+      "sha256": "5582b1a916b1b295401d2e35cb7d014c96f279adbd15f0e6c733a12b65e4e4ac",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "ad127451cc73cbfebcb5e07f5060b6b8d25de3d2f886a2f97b9e1f39f1b055ef"
     },
     {
       "id": "es-female-82fd3c09e002bb5a",
@@ -534,9 +564,11 @@
       "language": "es",
       "text": "Me llamo Desmond.",
       "normalizedText": "Me llamo Desmond.",
-      "url": "/audio/packs/v4/es-male-5293da72e83529d7-27554010959a.m4a",
-      "sha256": "27554010959a999c46b3fded8415fcd8bfe4df4feb628bb210637ebdefdce248",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-5293da72e83529d7-27554010959a-tempo85.m4a",
+      "sha256": "6873e1c1a84d28f0c14b4ed519671fc2df2fde18bc4dcefbab469330c86e9813",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "27554010959a999c46b3fded8415fcd8bfe4df4feb628bb210637ebdefdce248"
     },
     {
       "id": "es-female-6fcf888147ebee0f",
@@ -561,9 +593,12 @@
       "language": "es",
       "text": "me llamo",
       "normalizedText": "me llamo",
-      "url": "/audio/packs/v4/es-male-6e366fcf80a5e6cc-c808fbecb58b.m4a",
-      "sha256": "c808fbecb58b4f1caf49f43c0c20872290db15e2f56852b06125b221e6a0374a",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-6e366fcf80a5e6cc-c808fbecb58b-tempo85.m4a",
+      "sha256": "0dc9c01e210976fc5548ece9a4143894f851259239fff32b44ae558a3d5a6c80",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c808fbecb58b4f1caf49f43c0c20872290db15e2f56852b06125b221e6a0374a",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-b72abd4182c4e68b",
@@ -588,9 +623,11 @@
       "language": "es",
       "text": "Me gustaría entender cómo funciona esto.",
       "normalizedText": "Me gustaría entender cómo funciona esto.",
-      "url": "/audio/packs/v4/es-male-cf8e6a81e3c0fd78-cf8f87e17b66.m4a",
-      "sha256": "cf8f87e17b66b86202b61892e445600e271fb6db92a4c0d60e13a80bfa23b7f2",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-cf8e6a81e3c0fd78-cf8f87e17b66-tempo85.m4a",
+      "sha256": "4f2062bb8f22f0dcbd03bcd3a523a65d09327e236a891f2a30161b77f69c30be",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "cf8f87e17b66b86202b61892e445600e271fb6db92a4c0d60e13a80bfa23b7f2"
     },
     {
       "id": "es-female-60d354a7d1827b07",
@@ -606,9 +643,11 @@
       "language": "es",
       "text": "pero, perro; caro, carro",
       "normalizedText": "pero, perro; caro, carro",
-      "url": "/audio/packs/v4/es-male-3481e48d4a60895a-bf0fa0c0f24a.m4a",
-      "sha256": "bf0fa0c0f24ade4b2abb5779b6dd796e6e9cb65fba8321dede33cef8bc3e9d9b",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-3481e48d4a60895a-bf0fa0c0f24a-tempo85.m4a",
+      "sha256": "64d5a816e153d6c9661bfd2ec39c870ffd20d72e4cddb5b5796c81161c82ea37",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "bf0fa0c0f24ade4b2abb5779b6dd796e6e9cb65fba8321dede33cef8bc3e9d9b"
     },
     {
       "id": "es-female-dd68b0a8cf90cbdc",
@@ -642,9 +681,11 @@
       "language": "es",
       "text": "Quiero agua, por favor.",
       "normalizedText": "Quiero agua, por favor.",
-      "url": "/audio/packs/v5/es-male-23f70b4a0be3fa99-e2d60bc55b70.m4a",
-      "sha256": "e2d60bc55b709661b25df66188887d7f8696720aee103c2e169105434e6449cb",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-23f70b4a0be3fa99-e2d60bc55b70-tempo85.m4a",
+      "sha256": "f08a4632fe41071b380211198b66d3c89c96316926d9dba6ed38b7cb3324b480",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "e2d60bc55b709661b25df66188887d7f8696720aee103c2e169105434e6449cb"
     },
     {
       "id": "es-female-09de5b5122b9ea41",
@@ -687,9 +728,11 @@
       "language": "es",
       "text": "agua",
       "normalizedText": "agua",
-      "url": "/audio/packs/v5/es-male-9fe7f65255399aa1-a0c0596b97ef.m4a",
-      "sha256": "a0c0596b97efc8b6527ec7cd319cb6d1b8023a3f0df8ccbc6915853358767eea",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-9fe7f65255399aa1-a0c0596b97ef-tempo85.m4a",
+      "sha256": "21b8088cc1316705ac68f9c65c47780f5871dd3b40779290cfa2c31390d4fdd9",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a0c0596b97efc8b6527ec7cd319cb6d1b8023a3f0df8ccbc6915853358767eea"
     },
     {
       "id": "es-female-843c981b9cfadd50",
@@ -714,9 +757,12 @@
       "language": "es",
       "text": "café",
       "normalizedText": "café",
-      "url": "/audio/packs/v5/es-male-2000371722e735c5-c0449f47b93b.m4a",
-      "sha256": "c0449f47b93b98b5cf7b8559942cb1a777098af543afb020f0a06c985c4417ec",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-2000371722e735c5-c0449f47b93b-tempo85.m4a",
+      "sha256": "2a85d0b3ca5adbe65172f9d43e6d769fc34361659f6279d33ef09d0f5328f6b5",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c0449f47b93b98b5cf7b8559942cb1a777098af543afb020f0a06c985c4417ec",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-511e9e58bf386ac6",
@@ -732,10 +778,12 @@
       "language": "es",
       "text": "Ahora puedo expresarme con más confianza.",
       "normalizedText": "Ahora puedo expresarme con más confianza.",
-      "url": "/audio/packs/v5/es-male-742018e80e2e975e-dcd0fbac7bcd.m4a",
-      "sha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875",
+      "url": "/audio/packs/v10/es-male-742018e80e2e975e-dcd0fbac7bcd-tempo85.m4a",
+      "sha256": "6224e2232d5bf2080ba383415de7dcc31d3e68738e17fa2e785a494788dac7d7",
       "voice": "male",
-      "reviewedAt": "2026-09-24T17:32:40.363012Z"
+      "reviewedAt": "2026-09-24T17:32:40.363012Z",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875"
     },
     {
       "id": "es-female-6a81111823816aa9",
@@ -762,9 +810,11 @@
       "language": "es",
       "text": "ahora",
       "normalizedText": "ahora",
-      "url": "/audio/packs/v5/es-male-2875ad43aed56d2c-b139b098dc14.m4a",
-      "sha256": "b139b098dc14267e3c118e081cc2f1c3dee8aa4ac9bb57886830b71d003a2aa3",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-2875ad43aed56d2c-b139b098dc14-tempo85.m4a",
+      "sha256": "7e6522fe058f03f01c9bb17f92730d68cf625233b073c30e18f78b910963b284",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b139b098dc14267e3c118e081cc2f1c3dee8aa4ac9bb57886830b71d003a2aa3"
     },
     {
       "id": "es-female-41e5497b706e8c15",
@@ -780,9 +830,11 @@
       "language": "es",
       "text": "antes",
       "normalizedText": "antes",
-      "url": "/audio/packs/v5/es-male-ed515abe31dece9e-a21ddcea13b5.m4a",
-      "sha256": "a21ddcea13b5008a87691905a11fb1a7aa3c2b01f8ba65be7cdc78b1680b4aa8",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-ed515abe31dece9e-a21ddcea13b5-tempo85.m4a",
+      "sha256": "b2710850353dcccd9cca75f3bb87c31eda10fe777da0d5a0cc88fd9f3e4a4ada",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a21ddcea13b5008a87691905a11fb1a7aa3c2b01f8ba65be7cdc78b1680b4aa8"
     },
     {
       "id": "es-female-e9e09b9b7688bd2c",
@@ -807,18 +859,22 @@
       "language": "es",
       "text": "confianza",
       "normalizedText": "confianza",
-      "url": "/audio/packs/v5/es-male-ff6d75148152d883-16abaca7f58d.m4a",
-      "sha256": "16abaca7f58d96892c3e4012b1a7f24b8b8db68b462bf0a290f40b782f3a1f46",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-ff6d75148152d883-16abaca7f58d-tempo85.m4a",
+      "sha256": "6f26a8c225ac549d52a526bb4fca9fdc2efef106aaf0ecf04064b551b88ee915",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "16abaca7f58d96892c3e4012b1a7f24b8b8db68b462bf0a290f40b782f3a1f46"
     },
     {
       "id": "es-male-a8f1314f58dc9a9b",
       "language": "es",
       "text": "ahora antes",
       "normalizedText": "ahora antes",
-      "url": "/audio/packs/v5/es-male-a8f1314f58dc9a9b-300102d2e17a.m4a",
-      "sha256": "300102d2e17a612b598ce8f587131e988811d3a893159b8fe4fad681777b4760",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-a8f1314f58dc9a9b-300102d2e17a-tempo85.m4a",
+      "sha256": "6c7a83bb75d59d84ac5cc795d85c0d687033fa65c99c27cc1db02a600b737067",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "300102d2e17a612b598ce8f587131e988811d3a893159b8fe4fad681777b4760"
     },
     {
       "id": "es-female-fcee06c8c048af0e",
@@ -888,9 +944,11 @@
       "language": "es",
       "text": "por favor",
       "normalizedText": "por favor",
-      "url": "/audio/packs/v6/es-male-4303ec88a819ce3d-1467d24b52de.m4a",
-      "sha256": "1467d24b52de1184acabae96ae1cde30d103c0dc57dd02c1fba993107e0b94ae",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-4303ec88a819ce3d-1467d24b52de-tempo85.m4a",
+      "sha256": "18a85690458a5398b0d93a8300f1aba7af99cbad5d79adc626479237657383f6",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1467d24b52de1184acabae96ae1cde30d103c0dc57dd02c1fba993107e0b94ae"
     },
     {
       "id": "es-female-682c92de61da1ad0",
@@ -906,9 +964,11 @@
       "language": "es",
       "text": "gracias",
       "normalizedText": "gracias",
-      "url": "/audio/packs/v6/es-male-88dc97c4b8b4cf93-dca582597ea7.m4a",
-      "sha256": "dca582597ea7668472165a287ed9c4bf30d7d25722aaf97c1649d2c803836c06",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-88dc97c4b8b4cf93-dca582597ea7-tempo85.m4a",
+      "sha256": "3c0de9780e26f17d374d794e987d01f1e618fbe27898c07c53694e0bc0309a0f",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "dca582597ea7668472165a287ed9c4bf30d7d25722aaf97c1649d2c803836c06"
     },
     {
       "id": "es-female-2a9e79f354131b01",
@@ -933,9 +993,11 @@
       "language": "es",
       "text": "quiero agua",
       "normalizedText": "quiero agua",
-      "url": "/audio/packs/v6/es-male-572fb4ad5f456637-848d3bb87c19.m4a",
-      "sha256": "848d3bb87c19327ca9f37596a58f75a1febc938328a03e67874585f4d260618c",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-572fb4ad5f456637-848d3bb87c19-tempo85.m4a",
+      "sha256": "69f27f600c64339d67257176c24fcc718687dec459d688d05b1d714ee02fe863",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "848d3bb87c19327ca9f37596a58f75a1febc938328a03e67874585f4d260618c"
     },
     {
       "id": "es-female-bc5d912bee4814db",
@@ -960,9 +1022,11 @@
       "language": "es",
       "text": "Estoy aquí. ¿Dónde está el baño?",
       "normalizedText": "Estoy aquí. ¿Dónde está el baño?",
-      "url": "/audio/packs/v6/es-male-689dbe9f0ef00c12-cf21c24707a8.m4a",
-      "sha256": "cf21c24707a89d2bd0f828177cdce14a9790a62f7a5914771bdaecd70edf11d5",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-689dbe9f0ef00c12-cf21c24707a8-tempo85.m4a",
+      "sha256": "cf10fede6c74a9adac59266cf1ecce35cdd7e6743ee2b6b71d3a18dbd7b52ad1",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "cf21c24707a89d2bd0f828177cdce14a9790a62f7a5914771bdaecd70edf11d5"
     },
     {
       "id": "es-female-3437eae626e54f3c",
@@ -987,9 +1051,12 @@
       "language": "es",
       "text": "estoy",
       "normalizedText": "estoy",
-      "url": "/audio/packs/v6/es-male-c267b30c55bcd029-d6de5faa0c7a.m4a",
-      "sha256": "d6de5faa0c7a6ccb39f44c38b2a31fdf3d638cd11e6a6afe47a7fa96a828a99d",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-c267b30c55bcd029-d6de5faa0c7a-tempo85.m4a",
+      "sha256": "d7b400ddcf0a932e800becc805080464b1e6e974bca899b406065d3ad3fa5fde",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d6de5faa0c7a6ccb39f44c38b2a31fdf3d638cd11e6a6afe47a7fa96a828a99d",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-1485dd9398d81d19",
@@ -1014,9 +1081,11 @@
       "language": "es",
       "text": "aquí",
       "normalizedText": "aquí",
-      "url": "/audio/packs/v6/es-male-4a44640feaf47cd4-b774baa71786.m4a",
-      "sha256": "b774baa71786025da6b17bf693571ee9461418d3627b5186e83d3573ab313286",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-4a44640feaf47cd4-b774baa71786-tempo85.m4a",
+      "sha256": "d3e8376398dcce053e9da1d1146f2b55cc2cac861163e378c4ec36a41fdd66b9",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b774baa71786025da6b17bf693571ee9461418d3627b5186e83d3573ab313286"
     },
     {
       "id": "es-female-ec4e8f611f7cd73b",
@@ -1041,9 +1110,11 @@
       "language": "es",
       "text": "dónde",
       "normalizedText": "dónde",
-      "url": "/audio/packs/v6/es-male-f80c05137d3d0ca2-fba8e7cfd3f9.m4a",
-      "sha256": "fba8e7cfd3f9d37381ed9fa81ba341cad0c76ab9a346a38991a48a134b102c7f",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-f80c05137d3d0ca2-fba8e7cfd3f9-tempo85.m4a",
+      "sha256": "d04a200a61d56314fcf217f4f07050f2d8c3329e570d505d92a9b9086f8522e1",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "fba8e7cfd3f9d37381ed9fa81ba341cad0c76ab9a346a38991a48a134b102c7f"
     },
     {
       "id": "es-female-12206083d5664a31",
@@ -1068,9 +1139,12 @@
       "language": "es",
       "text": "está",
       "normalizedText": "está",
-      "url": "/audio/packs/v6/es-male-dd87093c539fdf11-36a1ec92003b.m4a",
-      "sha256": "36a1ec92003bebfff64f5d3857351917116687dad6ab3a1493e64ca0ed87aefc",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-dd87093c539fdf11-36a1ec92003b-tempo85.m4a",
+      "sha256": "db803c0083971e3eaebcde7880bead87562e0fa3b5878da3226bb61d3e2bd1e0",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "36a1ec92003bebfff64f5d3857351917116687dad6ab3a1493e64ca0ed87aefc",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-2eb8742569cc9a29",
@@ -1095,9 +1169,11 @@
       "language": "es",
       "text": "baño",
       "normalizedText": "baño",
-      "url": "/audio/packs/v6/es-male-d6af50c39bda5df5-85f737686dfa.m4a",
-      "sha256": "85f737686dfa271bcfc99b055ac7eab02c39794724c621a81d03ae256b444208",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-d6af50c39bda5df5-85f737686dfa-tempo85.m4a",
+      "sha256": "4c5d99fdc1811e9f31fa925cf9041689394c3d80fde388224fb6ad343c93f238",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "85f737686dfa271bcfc99b055ac7eab02c39794724c621a81d03ae256b444208"
     },
     {
       "id": "es-female-80006354a4c037ed",
@@ -1131,9 +1207,11 @@
       "language": "es",
       "text": "¿Dónde está el baño?",
       "normalizedText": "¿Dónde está el baño?",
-      "url": "/audio/packs/v6/es-male-0690459c32bef22c-3affc355a556.m4a",
-      "sha256": "3affc355a556ecdf502e9d114ca4ac83ab8d7bcd7da188f407f6722dc2139ddf",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-0690459c32bef22c-3affc355a556-tempo85.m4a",
+      "sha256": "3faa583509585026cf0a6338a011db41a4a99007a0dd885b248544b4a9fe4f8e",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "3affc355a556ecdf502e9d114ca4ac83ab8d7bcd7da188f407f6722dc2139ddf"
     },
     {
       "id": "es-female-bbf90f28bea10242",
@@ -1158,9 +1236,11 @@
       "language": "es",
       "text": "estoy aquí",
       "normalizedText": "estoy aquí",
-      "url": "/audio/packs/v6/es-male-1eb7aad3e845bc4a-54b648ccdd72.m4a",
-      "sha256": "54b648ccdd72c49e081d8b84ed6e9844c0ce463053ac65536beee647c6455745",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-1eb7aad3e845bc4a-54b648ccdd72-tempo85.m4a",
+      "sha256": "f1dfe7105b9ef25bd7bacb5270a6dabad0f978fb7ade559e5d04ab0cf79b0307",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "54b648ccdd72c49e081d8b84ed6e9844c0ce463053ac65536beee647c6455745"
     },
     {
       "id": "es-female-5d1059048382ff74",
@@ -1185,9 +1265,11 @@
       "language": "es",
       "text": "Hoy trabajo. Después descanso en casa.",
       "normalizedText": "Hoy trabajo. Después descanso en casa.",
-      "url": "/audio/packs/v6/es-male-9c4af32dc3942060-799c8bd1a468.m4a",
-      "sha256": "799c8bd1a468edae91917b37553faccf734ec8d3e59df61474e95b3a1299e0c8",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-9c4af32dc3942060-799c8bd1a468-tempo85.m4a",
+      "sha256": "12866525f93db20ff4e00372297b86662faa8c824d1d86710faecdacb8a2c222",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "799c8bd1a468edae91917b37553faccf734ec8d3e59df61474e95b3a1299e0c8"
     },
     {
       "id": "es-female-e2676baf999c3ba6",
@@ -1212,9 +1294,12 @@
       "language": "es",
       "text": "hoy",
       "normalizedText": "hoy",
-      "url": "/audio/packs/v6/es-male-9176864a499fc1bf-6d2d709edd31.m4a",
-      "sha256": "6d2d709edd310db81d0344e71c96828d1269f2b247c2ebe3f12427dcad7bb5ca",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-9176864a499fc1bf-6d2d709edd31-tempo85.m4a",
+      "sha256": "981965859a65d17b4d0593805e64171408e5151b362bb0ee08c0acb911b5aebd",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6d2d709edd310db81d0344e71c96828d1269f2b247c2ebe3f12427dcad7bb5ca",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-64481c463bd078b8",
@@ -1239,9 +1324,12 @@
       "language": "es",
       "text": "trabajo",
       "normalizedText": "trabajo",
-      "url": "/audio/packs/v6/es-male-9e45f576cd74d925-f89f0afddaa7.m4a",
-      "sha256": "f89f0afddaa780f7276cd37230e9d29a9b28e5ac95136fe0692e467667b58508",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-9e45f576cd74d925-f89f0afddaa7-tempo85.m4a",
+      "sha256": "617df2ab4800174b0b2c5b55c3ab1e77ee2c02a33b255b492127f5995192800b",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "f89f0afddaa780f7276cd37230e9d29a9b28e5ac95136fe0692e467667b58508",
+      "needsAudioTextReview": true
     },
     {
       "id": "vi-female-c7b9689a9e1447aa",
@@ -1257,9 +1345,11 @@
       "language": "es",
       "text": "Cuando era pequeño, vivía cerca del río.",
       "normalizedText": "Cuando era pequeño, vivía cerca del río.",
-      "url": "/audio/packs/v6/es-male-4aba13ff32291909-984633e9fe35.m4a",
-      "sha256": "984633e9fe35066d5c9d23f3c72e213480565a51ce7a30dc162667f31dacd509",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-4aba13ff32291909-984633e9fe35-tempo85.m4a",
+      "sha256": "0e4d8b26657f134452a1449734e52d8bb8e0b641385896628491d574a65487e5",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "984633e9fe35066d5c9d23f3c72e213480565a51ce7a30dc162667f31dacd509"
     },
     {
       "id": "es-female-a456e0d84f0fed5a",
@@ -1284,9 +1374,11 @@
       "language": "es",
       "text": "cuando",
       "normalizedText": "cuando",
-      "url": "/audio/packs/v6/es-male-e4e91836cf15aaac-374179c8076a.m4a",
-      "sha256": "374179c8076a339e47250db02a0a3b236ed2664fbee8aecc78ee6f3b772c59c1",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-e4e91836cf15aaac-374179c8076a-tempo85.m4a",
+      "sha256": "5af2f6783258a4ef319d738dbc9ed6c7865b284d005faf9491d592daa9915292",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "374179c8076a339e47250db02a0a3b236ed2664fbee8aecc78ee6f3b772c59c1"
     },
     {
       "id": "es-female-1462de7da5d167ea",
@@ -1311,9 +1403,11 @@
       "language": "es",
       "text": "era",
       "normalizedText": "era",
-      "url": "/audio/packs/v6/es-male-1abe2952c843ce4c-0c41a7513cc2.m4a",
-      "sha256": "0c41a7513cc24166c7199f0868416f8847f02ebea6455d68cd451ed172847127",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-1abe2952c843ce4c-0c41a7513cc2-tempo85.m4a",
+      "sha256": "e48e9a9a323e720ced6297601b3b33a1c555990e2cb6409059d0df85ab90372f",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "0c41a7513cc24166c7199f0868416f8847f02ebea6455d68cd451ed172847127"
     },
     {
       "id": "vi-female-7b38c321f38c965e",
@@ -1329,18 +1423,22 @@
       "language": "es",
       "text": "vivía",
       "normalizedText": "vivía",
-      "url": "/audio/packs/v6/es-male-f5321772ca901af5-d536fc77e789.m4a",
-      "sha256": "d536fc77e789216f406dfeccfd46c15875638e7f93715b580b33debe1f14dfde",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-f5321772ca901af5-d536fc77e789-tempo85.m4a",
+      "sha256": "bdc0ff4f38d1333d77880f0fcb1cf752e0229d91ade9ac42908df214f969d5c4",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d536fc77e789216f406dfeccfd46c15875638e7f93715b580b33debe1f14dfde"
     },
     {
       "id": "es-male-a733fbfd73c7b79e",
       "language": "es",
       "text": "pequeño",
       "normalizedText": "pequeño",
-      "url": "/audio/packs/v6/es-male-a733fbfd73c7b79e-749842cc2a27.m4a",
-      "sha256": "749842cc2a27f27ebf5ef39c91c570d75156de458e1046f2acf904d14d626bb3",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-a733fbfd73c7b79e-749842cc2a27-tempo85.m4a",
+      "sha256": "5c331efdc12f1546094110f03bea5e3c29a8667a047dcea00a57e1913ae0135c",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "749842cc2a27f27ebf5ef39c91c570d75156de458e1046f2acf904d14d626bb3"
     },
     {
       "id": "es-female-e370cf8a8c5d0c12",
@@ -1365,9 +1463,12 @@
       "language": "es",
       "text": "cuando era",
       "normalizedText": "cuando era",
-      "url": "/audio/packs/v6/es-male-035fb05520e21049-58073daf9858.m4a",
-      "sha256": "58073daf98584a304ad55a46ca44283061565ba13d135f39bac4c0a8e2a13ca9",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-035fb05520e21049-58073daf9858-tempo85.m4a",
+      "sha256": "46f76d77e21623c383f2d943f400145f711f7c39d3eea9013130da1cd96fefd7",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "58073daf98584a304ad55a46ca44283061565ba13d135f39bac4c0a8e2a13ca9",
+      "needsAudioTextReview": true
     },
     {
       "id": "vi-female-ea3619354e61c335",
@@ -1377,15 +1478,6 @@
       "url": "/audio/packs/v6/vi-female-ea3619354e61c335-d1a9d470bb2b.m4a",
       "sha256": "d1a9d470bb2bd0739a8a7130d2886e5c026336c00363976ea8ffff36bfb97141",
       "voice": "female"
-    },
-    {
-      "id": "es-male-d543a2222fe7c2c7",
-      "language": "es",
-      "text": "Me mudé de ciudad cuando tenía veinte años.",
-      "normalizedText": "Me mudé de ciudad cuando tenía veinte años.",
-      "url": "/audio/packs/v6/es-male-d543a2222fe7c2c7-63b9388c6b1f.m4a",
-      "sha256": "63b9388c6b1f83b9c34f6834a5be490687c7652e9529c1673ec3c629dd0eca7d",
-      "voice": "male"
     },
     {
       "id": "es-female-728b6119effec6d6",
@@ -1410,9 +1502,11 @@
       "language": "es",
       "text": "mudé",
       "normalizedText": "mudé",
-      "url": "/audio/packs/v7/es-male-a0c033b9c41cdc77-6552cfa42317.m4a",
-      "sha256": "6552cfa4231797678d6b75be3418cfc2058f55048d57d83c609a375bcefd1ab0",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-a0c033b9c41cdc77-6552cfa42317-tempo85.m4a",
+      "sha256": "d9dffd248cb623226c0a52897d9744a75041f90824057e1851ab45a0d4d89378",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6552cfa4231797678d6b75be3418cfc2058f55048d57d83c609a375bcefd1ab0"
     },
     {
       "id": "es-female-d8ffd006407a978a",
@@ -1437,9 +1531,12 @@
       "language": "es",
       "text": "ciudad",
       "normalizedText": "ciudad",
-      "url": "/audio/packs/v7/es-male-4b579ae3e7c38703-1276bb653a06.m4a",
-      "sha256": "1276bb653a06e3a5dffb7d17df23d01c9c8b5f016306e9ebce55bf2a490d40d4",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-4b579ae3e7c38703-1276bb653a06-tempo85.m4a",
+      "sha256": "6742ee4943bb7443612dc46a9569662003b237f0adc0d0ad0b46d99df656dcfe",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1276bb653a06e3a5dffb7d17df23d01c9c8b5f016306e9ebce55bf2a490d40d4",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-e5aebbde96248790",
@@ -1464,9 +1561,12 @@
       "language": "es",
       "text": "tenía",
       "normalizedText": "tenía",
-      "url": "/audio/packs/v7/es-male-7c524f6d503de30a-87767e34a83c.m4a",
-      "sha256": "87767e34a83c36794ca84b53af04848b63769908bd0f36cb57d036868f084abf",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-7c524f6d503de30a-87767e34a83c-tempo85.m4a",
+      "sha256": "434eac3ca90896db19eb521097ea4723e8cef5a9bd6868be9c08ad0a34f2a830",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "87767e34a83c36794ca84b53af04848b63769908bd0f36cb57d036868f084abf",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-d490e6abaf73d2a1",
@@ -1491,9 +1591,12 @@
       "language": "es",
       "text": "mudé ciudad",
       "normalizedText": "mudé ciudad",
-      "url": "/audio/packs/v7/es-male-52392be3c3e53521-67f0cdf3a6b9.m4a",
-      "sha256": "67f0cdf3a6b91844d2e571b6e0a44626de0b4678ee6845390604efeea4dd487b",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-52392be3c3e53521-67f0cdf3a6b9-tempo85.m4a",
+      "sha256": "cf458f61db0575e97f196d0e74402f46220e6cdd1cb974770d1eee0107bd3665",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "67f0cdf3a6b91844d2e571b6e0a44626de0b4678ee6845390604efeea4dd487b",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-601ec390806374d7",
@@ -1518,9 +1621,11 @@
       "language": "es",
       "text": "La primera vez que viajé solo, aprendí mucho.",
       "normalizedText": "La primera vez que viajé solo, aprendí mucho.",
-      "url": "/audio/packs/v7/es-male-c37db4ca37f70362-4e5d08777ef2.m4a",
-      "sha256": "4e5d08777ef2b1d1011656f6f7f827aa015eb3e0808c0dbc63076f39a2481080",
-      "voice": "male"
+      "url": "/audio/packs/v10/es-male-c37db4ca37f70362-4e5d08777ef2-tempo85.m4a",
+      "sha256": "3e2f72712f03a0e07ca4b511a6e2b6ddef98f3518bcbd6da2b9a0eb7001042a8",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "4e5d08777ef2b1d1011656f6f7f827aa015eb3e0808c0dbc63076f39a2481080"
     },
     {
       "id": "es-female-bae2438a354d260a",
@@ -1545,10 +1650,13 @@
       "language": "es",
       "text": "quiero",
       "normalizedText": "quiero",
-      "url": "/audio/packs/v8/es-male-4bf281593af95723-2742c7cceacf.m4a",
-      "sha256": "2742c7cceacfa2441349578306d823fdbe9e314a7eeb430e27a13dc20fa097fb",
+      "url": "/audio/packs/v10/es-male-4bf281593af95723-2742c7cceacf-tempo85.m4a",
+      "sha256": "747d024ec70a7d5e9c01afe6d1a87046548896a231deeb2b3f708c2e7a8a3283",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2742c7cceacfa2441349578306d823fdbe9e314a7eeb430e27a13dc20fa097fb",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-bb4a957626c26a59",
@@ -1575,10 +1683,13 @@
       "language": "es",
       "text": "Estoy aquí.",
       "normalizedText": "Estoy aquí.",
-      "url": "/audio/packs/v8/es-male-ccb31c8a43082e4f-560947054867.m4a",
-      "sha256": "560947054867ec873ec59c5d08ad0ac0ab9b9fb1ab73fd7591eb8eb15f8da691",
+      "url": "/audio/packs/v10/es-male-ccb31c8a43082e4f-560947054867-tempo85.m4a",
+      "sha256": "02a05fc6f5442c4385c72357a5075d6472aae3e4acd6e143338c2f00572791d5",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "560947054867ec873ec59c5d08ad0ac0ab9b9fb1ab73fd7591eb8eb15f8da691",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-a806e86fe6e6823d",
@@ -1595,10 +1706,12 @@
       "language": "es",
       "text": "primera vez",
       "normalizedText": "primera vez",
-      "url": "/audio/packs/v8/es-male-1d28157c2061dc9b-4ae90f8014d0.m4a",
-      "sha256": "4ae90f8014d0b1d2e65429129fcec0c4bd65eaa2d184388361f9ffb7092473f0",
+      "url": "/audio/packs/v10/es-male-1d28157c2061dc9b-4ae90f8014d0-tempo85.m4a",
+      "sha256": "316f1e41647ba8e3c82ca24ed238e25358916d1b33d692f4e4de498c31f683f1",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "4ae90f8014d0b1d2e65429129fcec0c4bd65eaa2d184388361f9ffb7092473f0"
     },
     {
       "id": "es-female-91efbfa5102ffc5e",
@@ -1625,10 +1738,12 @@
       "language": "es",
       "text": "viajé",
       "normalizedText": "viajé",
-      "url": "/audio/packs/v8/es-male-6fc10caae2f52b5b-e76d147cc956.m4a",
-      "sha256": "e76d147cc956456a5e67e1844677d0b8c2834a5ccc102da2d4b1861e4e7e9dbf",
+      "url": "/audio/packs/v10/es-male-6fc10caae2f52b5b-e76d147cc956-tempo85.m4a",
+      "sha256": "79ba1bb8817764f6cea7ea932562cee0b30e3cd090d54a0fb2c9949d30d02b83",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "e76d147cc956456a5e67e1844677d0b8c2834a5ccc102da2d4b1861e4e7e9dbf"
     },
     {
       "id": "es-female-b507d93f329c93f7",
@@ -1675,10 +1790,12 @@
       "language": "es",
       "text": "aprendí",
       "normalizedText": "aprendí",
-      "url": "/audio/packs/v8/es-male-710a3d3ca82629f6-3f7d6ed1e9fc.m4a",
-      "sha256": "3f7d6ed1e9fc10f7a31ad05f4c3380b17a113dddeacaba2a446dc11d5fb33998",
+      "url": "/audio/packs/v10/es-male-710a3d3ca82629f6-3f7d6ed1e9fc-tempo85.m4a",
+      "sha256": "457c331d4b552853c88378b6a79f34f982c65c40f844a74c0e44853dbc6151a6",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "3f7d6ed1e9fc10f7a31ad05f4c3380b17a113dddeacaba2a446dc11d5fb33998"
     },
     {
       "id": "es-female-f0eca8173b5292ef",
@@ -1715,10 +1832,12 @@
       "language": "es",
       "text": "Antes viajaba poco, pero ahora viajo más.",
       "normalizedText": "Antes viajaba poco, pero ahora viajo más.",
-      "url": "/audio/packs/v8/es-male-cfeb492fe404fcb7-5d97ac54100c.m4a",
-      "sha256": "5d97ac54100c330bed6f5d0b0036710b7e66725833f686cf9bb84f320e4ec0b4",
+      "url": "/audio/packs/v10/es-male-cfeb492fe404fcb7-5d97ac54100c-tempo85.m4a",
+      "sha256": "8bef10460d2731f8f6f3f796e2303964a00b032ab87288710bafcf47fa01a07e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "5d97ac54100c330bed6f5d0b0036710b7e66725833f686cf9bb84f320e4ec0b4"
     },
     {
       "id": "es-female-4b38dab9493b549b",
@@ -1765,10 +1884,12 @@
       "language": "es",
       "text": "antes ahora",
       "normalizedText": "antes ahora",
-      "url": "/audio/packs/v8/es-male-705b7098521ba3b2-dce61632ad2d.m4a",
-      "sha256": "dce61632ad2d166f531505ed4eadb1fb3710128270fea04f60d7dd62ee61320f",
+      "url": "/audio/packs/v10/es-male-705b7098521ba3b2-dce61632ad2d-tempo85.m4a",
+      "sha256": "128fe5a5d2faf6a0f31598582d0196b7e14537da84ffa1ccf9da3d2060bb4791",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "dce61632ad2d166f531505ed4eadb1fb3710128270fea04f60d7dd62ee61320f"
     },
     {
       "id": "vi-female-7fb1f917ae89e12c",
@@ -1785,10 +1906,12 @@
       "language": "es",
       "text": "siempre",
       "normalizedText": "siempre",
-      "url": "/audio/packs/v8/es-male-ad25698ff2c64704-1e2f65bd5c2e.m4a",
-      "sha256": "1e2f65bd5c2ee3c65d257b85d85d6f3ce351f8498b2a135d318977ef40287a50",
+      "url": "/audio/packs/v10/es-male-ad25698ff2c64704-1e2f65bd5c2e-tempo85.m4a",
+      "sha256": "cf607dfbc372979d2ce569894e272b66c3701f58f2469859795713dd84e18daf",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1e2f65bd5c2ee3c65d257b85d85d6f3ce351f8498b2a135d318977ef40287a50"
     },
     {
       "id": "es-female-73c32ac64f9229f4",
@@ -1805,10 +1928,12 @@
       "language": "es",
       "text": "De niño, siempre cenaba con mi familia.",
       "normalizedText": "De niño, siempre cenaba con mi familia.",
-      "url": "/audio/packs/v8/es-male-57ec25479a2689b1-c60eb6f6e779.m4a",
-      "sha256": "c60eb6f6e779126bd5f11bed632c3d11fd19e51cb84814848b3f4d24836e0ed7",
+      "url": "/audio/packs/v10/es-male-57ec25479a2689b1-c60eb6f6e779-tempo85.m4a",
+      "sha256": "f6009f29d46154c7dbf5b199d4a19c5420f8348b9ba96c58a4b4908bc401081a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c60eb6f6e779126bd5f11bed632c3d11fd19e51cb84814848b3f4d24836e0ed7"
     },
     {
       "id": "vi-female-3e56a7c1c94fb2da",
@@ -1825,10 +1950,12 @@
       "language": "es",
       "text": "De niño",
       "normalizedText": "De niño",
-      "url": "/audio/packs/v8/es-male-e5d1dffc51b062f6-f8890d3ecb00.m4a",
-      "sha256": "f8890d3ecb00291af6e0c501f1130e871d0d1500bc2f116f51fb5c262c432040",
+      "url": "/audio/packs/v10/es-male-e5d1dffc51b062f6-f8890d3ecb00-tempo85.m4a",
+      "sha256": "9b5b52cb33324e1751db1fc3b00c7a2bc8c599affbfe7279b1a1097c18e171ed",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "f8890d3ecb00291af6e0c501f1130e871d0d1500bc2f116f51fb5c262c432040"
     },
     {
       "id": "es-female-89124e01230600cc",
@@ -1875,10 +2002,12 @@
       "language": "es",
       "text": "De niño siempre",
       "normalizedText": "De niño siempre",
-      "url": "/audio/packs/v8/es-male-2d4bfb11de3433ca-82d82faaf159.m4a",
-      "sha256": "82d82faaf159d4f6e680adbfe8afdd16eea93b31aaac6aef1fb92c2827d283e4",
+      "url": "/audio/packs/v10/es-male-2d4bfb11de3433ca-82d82faaf159-tempo85.m4a",
+      "sha256": "4df78820211f5d71704d473203aa117220f69a7905d45a9d2e7d26305b3d5bac",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "82d82faaf159d4f6e680adbfe8afdd16eea93b31aaac6aef1fb92c2827d283e4"
     },
     {
       "id": "vi-female-a35f0cf9a8219a37",
@@ -1895,10 +2024,12 @@
       "language": "es",
       "text": "Solía caminar después del trabajo.",
       "normalizedText": "Solía caminar después del trabajo.",
-      "url": "/audio/packs/v8/es-male-a9d21aa93468c8cb-0ef306d5f244.m4a",
-      "sha256": "0ef306d5f24407541087215cdad9177e4bf6a6b9a31a7c8a6fc620155da18f35",
+      "url": "/audio/packs/v10/es-male-a9d21aa93468c8cb-0ef306d5f244-tempo85.m4a",
+      "sha256": "3b9b681a855c0e1a2ad30ae5a456f3cc6426c1b4f6c4b27074715694f39afdc6",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "0ef306d5f24407541087215cdad9177e4bf6a6b9a31a7c8a6fc620155da18f35"
     },
     {
       "id": "es-female-3caa39e3627b7488",
@@ -1925,10 +2056,12 @@
       "language": "es",
       "text": "Solía",
       "normalizedText": "Solía",
-      "url": "/audio/packs/v8/es-male-c7c43f80ffd71e99-2b80392bbb85.m4a",
-      "sha256": "2b80392bbb850782e9e2ac15362cdb53609e6944210f1d8afab170e57087ea6a",
+      "url": "/audio/packs/v10/es-male-c7c43f80ffd71e99-2b80392bbb85-tempo85.m4a",
+      "sha256": "7f93d0922778cc5f2100ab05a360623f6cbbe586e04f0993d8d79a55a58f1bf5",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2b80392bbb850782e9e2ac15362cdb53609e6944210f1d8afab170e57087ea6a"
     },
     {
       "id": "es-female-ed636ccc84970508",
@@ -1955,10 +2088,12 @@
       "language": "es",
       "text": "después de",
       "normalizedText": "después de",
-      "url": "/audio/packs/v8/es-male-ee3f084e09b9188f-0d0a309dc2b5.m4a",
-      "sha256": "0d0a309dc2b5850f6eb5581978a4829ef5c950d0d4e94c72baa6559554796e0e",
+      "url": "/audio/packs/v10/es-male-ee3f084e09b9188f-0d0a309dc2b5-tempo85.m4a",
+      "sha256": "d34c067823564d234333d6eb3c194a60833252ecc1b3ff05d1dd892d17176853",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "0d0a309dc2b5850f6eb5581978a4829ef5c950d0d4e94c72baa6559554796e0e"
     },
     {
       "id": "es-female-c1e300cf380857b6",
@@ -1975,10 +2110,12 @@
       "language": "es",
       "text": "del trabajo",
       "normalizedText": "del trabajo",
-      "url": "/audio/packs/v8/es-male-2a2503de13af25f1-b35c655c66b5.m4a",
-      "sha256": "b35c655c66b58739e4ec13ba31d5057ae60e27aa5c927e96a6fa23bd1defe154",
+      "url": "/audio/packs/v10/es-male-2a2503de13af25f1-b35c655c66b5-tempo85.m4a",
+      "sha256": "c818a57d39c18c56088f257346f79437d26ae30c96772dcbba4e411440a65bc6",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b35c655c66b58739e4ec13ba31d5057ae60e27aa5c927e96a6fa23bd1defe154"
     },
     {
       "id": "vi-female-dc31decd69083583",
@@ -1995,10 +2132,12 @@
       "language": "es",
       "text": "Solía caminar",
       "normalizedText": "Solía caminar",
-      "url": "/audio/packs/v8/es-male-d65452b41be55ce2-064e71071ec5.m4a",
-      "sha256": "064e71071ec5e93360ea494aead11e345a2a7b63a6b35ffea896ac1293a92300",
+      "url": "/audio/packs/v10/es-male-d65452b41be55ce2-064e71071ec5-tempo85.m4a",
+      "sha256": "51d35ab40cf6ecb8651429e21fea7348119da7e16a09c3e939f44652fafe2a87",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "064e71071ec5e93360ea494aead11e345a2a7b63a6b35ffea896ac1293a92300"
     },
     {
       "id": "es-female-01e75ac9890df5bc",
@@ -2025,10 +2164,12 @@
       "language": "es",
       "text": "Leía cuando sonó el teléfono.",
       "normalizedText": "Leía cuando sonó el teléfono.",
-      "url": "/audio/packs/v8/es-male-fbd61be4228fd3c6-a56960b6a121.m4a",
-      "sha256": "a56960b6a1212bd9b54c4ddda448340bcac03d9bf80e792c89fb67f852269ee7",
+      "url": "/audio/packs/v10/es-male-fbd61be4228fd3c6-a56960b6a121-tempo85.m4a",
+      "sha256": "d8379e74e7f2f7a12d58bdaf95c9e5eeaad5970cdbb4c802d7439725dc00656a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a56960b6a1212bd9b54c4ddda448340bcac03d9bf80e792c89fb67f852269ee7"
     },
     {
       "id": "es-female-0670ede4be4a700d",
@@ -2065,10 +2206,12 @@
       "language": "es",
       "text": "Leía cuando",
       "normalizedText": "Leía cuando",
-      "url": "/audio/packs/v8/es-male-b019e5ef2b661a3a-8a2b4cca4f0b.m4a",
-      "sha256": "8a2b4cca4f0b3d37048d7dd08ab394b00b8d153e619172fdbe8dc51ed240956d",
+      "url": "/audio/packs/v10/es-male-b019e5ef2b661a3a-8a2b4cca4f0b-tempo85.m4a",
+      "sha256": "b314140cfe05203a171b4c07913f9ad9a2b5987cb045d24895c08554ec41c058",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "8a2b4cca4f0b3d37048d7dd08ab394b00b8d153e619172fdbe8dc51ed240956d"
     },
     {
       "id": "es-female-0fc995f9755810f0",
@@ -2095,10 +2238,12 @@
       "language": "es",
       "text": "Antes trabajaba de noche, pero ahora prefiero el día.",
       "normalizedText": "Antes trabajaba de noche, pero ahora prefiero el día.",
-      "url": "/audio/packs/v8/es-male-f483b64aaac5ebe7-d78bdbe71efb.m4a",
-      "sha256": "d78bdbe71efb4801427f219592ee48b896e6609bf49fe462a0221848c5a09a0f",
+      "url": "/audio/packs/v10/es-male-f483b64aaac5ebe7-d78bdbe71efb-tempo85.m4a",
+      "sha256": "85bd0e0fada6c44e600e260eb1faac7dc240a599127fbb9985583637065e0208",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d78bdbe71efb4801427f219592ee48b896e6609bf49fe462a0221848c5a09a0f"
     },
     {
       "id": "es-female-888032dc0f896303",
@@ -2135,10 +2280,12 @@
       "language": "es",
       "text": "trabajaba de noche",
       "normalizedText": "trabajaba de noche",
-      "url": "/audio/packs/v8/es-male-a78fe05b9d3b05d7-6b77c50ce11c.m4a",
-      "sha256": "6b77c50ce11c8c349cf0e28a7975db03b743052f28124b8f0307c821e09f0a10",
+      "url": "/audio/packs/v10/es-male-a78fe05b9d3b05d7-6b77c50ce11c-tempo85.m4a",
+      "sha256": "cb754b904c8d6a7b82439bf0006a926ec4e483128c26a9a1faff15c3f8cf8b06",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6b77c50ce11c8c349cf0e28a7975db03b743052f28124b8f0307c821e09f0a10"
     },
     {
       "id": "es-female-d716ea2a32e8d919",
@@ -2165,10 +2312,12 @@
       "language": "es",
       "text": "pero ahora",
       "normalizedText": "pero ahora",
-      "url": "/audio/packs/v8/es-male-5ca605a1e91325f5-5b6d0a45f9d4.m4a",
-      "sha256": "5b6d0a45f9d4de5e548ecbe0ad15117f480278fb3bc14636683c1222b17d25be",
+      "url": "/audio/packs/v10/es-male-5ca605a1e91325f5-5b6d0a45f9d4-tempo85.m4a",
+      "sha256": "dccab2f8d753400845911cd2e078452729d4aecfe856652dc3a3714fc22e7774",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "5b6d0a45f9d4de5e548ecbe0ad15117f480278fb3bc14636683c1222b17d25be"
     },
     {
       "id": "es-female-720231924a23066e",
@@ -2285,10 +2434,12 @@
       "language": "es",
       "text": "porque",
       "normalizedText": "porque",
-      "url": "/audio/packs/v8/es-male-9b759715c8b7740b-04ea5f9fc4dd.m4a",
-      "sha256": "04ea5f9fc4dda628989fb98c04b823ba1b3979db40ff816f295181a6af2ecf1b",
+      "url": "/audio/packs/v10/es-male-9b759715c8b7740b-04ea5f9fc4dd-tempo85.m4a",
+      "sha256": "459736f2970be8ac810720ea9a513eb38f120eeaaf62d6574fdb26221a93e887",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "04ea5f9fc4dda628989fb98c04b823ba1b3979db40ff816f295181a6af2ecf1b"
     },
     {
       "id": "es-female-6589fd204f542250",
@@ -2325,20 +2476,24 @@
       "language": "es",
       "text": "el tren",
       "normalizedText": "el tren",
-      "url": "/audio/packs/v8/es-male-d8e66f4ec30aa5dc-0aa1247aab57.m4a",
-      "sha256": "0aa1247aab575c06c0a3fd37e89ecbcf4b15d670e192caa9a6cee329b12c10a6",
+      "url": "/audio/packs/v10/es-male-d8e66f4ec30aa5dc-0aa1247aab57-tempo85.m4a",
+      "sha256": "a3e59174354cea14c5d7a6cb321e4cb154113dd9b74ddc4e037b0b29c8575e6a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "0aa1247aab575c06c0a3fd37e89ecbcf4b15d670e192caa9a6cee329b12c10a6"
     },
     {
       "id": "es-male-56352a7e2d89b456",
       "language": "es",
       "text": "Quisiera cambiar mi reserva para mañana.",
       "normalizedText": "Quisiera cambiar mi reserva para mañana.",
-      "url": "/audio/packs/v8/es-male-56352a7e2d89b456-43bba516c0c3.m4a",
-      "sha256": "43bba516c0c3a5c992743d9425d23caca82d3dd677eec7ce16b0f53a8d811ace",
+      "url": "/audio/packs/v10/es-male-56352a7e2d89b456-43bba516c0c3-tempo85.m4a",
+      "sha256": "756d68d66614e8f6517c8a85b123cc9e7268d5746136abe0ef3faf73b9f42765",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "43bba516c0c3a5c992743d9425d23caca82d3dd677eec7ce16b0f53a8d811ace"
     },
     {
       "id": "es-female-ccc33a00584adaa0",
@@ -2395,20 +2550,24 @@
       "language": "es",
       "text": "reserva",
       "normalizedText": "reserva",
-      "url": "/audio/packs/v8/es-male-0c135eaac0a5acaf-204d0bed77de.m4a",
-      "sha256": "204d0bed77deb1b84a10f3db9b507e3af1a90148ca084cf2b2588209c6f1e191",
+      "url": "/audio/packs/v10/es-male-0c135eaac0a5acaf-204d0bed77de-tempo85.m4a",
+      "sha256": "6a22041dad9b5701f8545be7d108c59252bd9c1967829146c2e5e7c66543d249",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "204d0bed77deb1b84a10f3db9b507e3af1a90148ca084cf2b2588209c6f1e191"
     },
     {
       "id": "es-male-99bf75db79e2d498",
       "language": "es",
       "text": "para mañana",
       "normalizedText": "para mañana",
-      "url": "/audio/packs/v8/es-male-99bf75db79e2d498-d067f79aa996.m4a",
-      "sha256": "d067f79aa996810935a09481d9612cbbcb0bda3d041d93f12ec5788fcd169441",
+      "url": "/audio/packs/v10/es-male-99bf75db79e2d498-d067f79aa996-tempo85.m4a",
+      "sha256": "9d5285d21ada5fa2b0fd6228e337514a77a04aa0d6c1af33687b5ea39f8d1178",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d067f79aa996810935a09481d9612cbbcb0bda3d041d93f12ec5788fcd169441"
     },
     {
       "id": "es-female-b24b16521e4f031a",
@@ -2425,10 +2584,12 @@
       "language": "es",
       "text": "Quisiera cambiar mi",
       "normalizedText": "Quisiera cambiar mi",
-      "url": "/audio/packs/v8/es-male-9a7ffe7e29c821f4-61373c852df5.m4a",
-      "sha256": "61373c852df5d9cc8e730085f99a507a65072b9d4daf9cbcc2934c73c800feb9",
+      "url": "/audio/packs/v10/es-male-9a7ffe7e29c821f4-61373c852df5-tempo85.m4a",
+      "sha256": "d3192b690022fbae304eb25d741c06ff2966cc6999bcd7e205ca0fabab39d283",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "61373c852df5d9cc8e730085f99a507a65072b9d4daf9cbcc2934c73c800feb9"
     },
     {
       "id": "vi-female-3cb07faf5758333c",
@@ -2455,10 +2616,12 @@
       "language": "es",
       "text": "Después del viaje, entendí que necesitaba más tiempo.",
       "normalizedText": "Después del viaje, entendí que necesitaba más tiempo.",
-      "url": "/audio/packs/v8/es-male-98711601c04685f3-268cb026636e.m4a",
-      "sha256": "268cb026636e0e584beb30b23ff37cd818e16f902fec38298fab3ab25eba78e2",
+      "url": "/audio/packs/v10/es-male-98711601c04685f3-268cb026636e-tempo85.m4a",
+      "sha256": "19be4711f0db1c7115c1003f3136f615789aaa77effd968f510987043acd6b45",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "268cb026636e0e584beb30b23ff37cd818e16f902fec38298fab3ab25eba78e2"
     },
     {
       "id": "es-female-715a65f29ce520f2",
@@ -2495,10 +2658,12 @@
       "language": "es",
       "text": "entendí",
       "normalizedText": "entendí",
-      "url": "/audio/packs/v8/es-male-c13cbfc8a82efe31-74432d36e837.m4a",
-      "sha256": "74432d36e83711872d9024adfd52c698aeb9dbeba1b5e6f26b63b889bb30c6c3",
+      "url": "/audio/packs/v10/es-male-c13cbfc8a82efe31-74432d36e837-tempo85.m4a",
+      "sha256": "38ce47a78f0f76d96d6dde559414193c1414666e084b386638bbe9b2ee4c295d",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "74432d36e83711872d9024adfd52c698aeb9dbeba1b5e6f26b63b889bb30c6c3"
     },
     {
       "id": "es-female-f4543aca7a76d0bf",
@@ -2515,10 +2680,12 @@
       "language": "es",
       "text": "que necesitaba",
       "normalizedText": "que necesitaba",
-      "url": "/audio/packs/v8/es-male-8e2ecfb98fc07d42-80a22139127e.m4a",
-      "sha256": "80a22139127e528178f07320a50a8d6d87bfa09a9582319f90afd2eb9b3b320a",
+      "url": "/audio/packs/v10/es-male-8e2ecfb98fc07d42-80a22139127e-tempo85.m4a",
+      "sha256": "ffd06baed04cb72f5829d5b3806e7ce4ba1dfda398f1e9f9b762c70bcd881f13",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "80a22139127e528178f07320a50a8d6d87bfa09a9582319f90afd2eb9b3b320a"
     },
     {
       "id": "vi-female-a0e197c2a2340a36",
@@ -2535,10 +2702,12 @@
       "language": "es",
       "text": "más tiempo",
       "normalizedText": "más tiempo",
-      "url": "/audio/packs/v8/es-male-7396162c2d7bf598-92e8a52dea4c.m4a",
-      "sha256": "92e8a52dea4cf323bf2d48dcf59175d30796dfc3fb5dcf1a5674de2378db135a",
+      "url": "/audio/packs/v10/es-male-7396162c2d7bf598-92e8a52dea4c-tempo85.m4a",
+      "sha256": "770cd30edc6306db3f092ca4bbbe1c9d9a390233daadf32dc0ab8f61c19d7a29",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "92e8a52dea4cf323bf2d48dcf59175d30796dfc3fb5dcf1a5674de2378db135a"
     },
     {
       "id": "es-female-838b9aca291d4b89",
@@ -2565,10 +2734,12 @@
       "language": "es",
       "text": "Tengo que terminar este informe hoy.",
       "normalizedText": "Tengo que terminar este informe hoy.",
-      "url": "/audio/packs/v8/es-male-7caabdb1dbbfca2b-8a5f3eaf6a14.m4a",
-      "sha256": "8a5f3eaf6a14adeb7f0faed79b6913c7e008205e4eb2643c825293dc34fb2e4e",
+      "url": "/audio/packs/v10/es-male-7caabdb1dbbfca2b-8a5f3eaf6a14-tempo85.m4a",
+      "sha256": "9b6c77f632f1d009e0b55d80dcce4bb8307b4a21156182d5feec993249b3b3e3",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "8a5f3eaf6a14adeb7f0faed79b6913c7e008205e4eb2643c825293dc34fb2e4e"
     },
     {
       "id": "es-female-f59a70c62a899795",
@@ -2595,10 +2766,12 @@
       "language": "es",
       "text": "Tengo que terminar",
       "normalizedText": "Tengo que terminar",
-      "url": "/audio/packs/v8/es-male-8f754b473d04304e-a8b444804db0.m4a",
-      "sha256": "a8b444804db0da65ac15bb1b7c7526cd3013521a155805ebc720a690b5e98bc3",
+      "url": "/audio/packs/v10/es-male-8f754b473d04304e-a8b444804db0-tempo85.m4a",
+      "sha256": "667c896a8f32330a1c21e2c96ceff7e4001e137c7ad541aad210ad23fdb66c1b",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a8b444804db0da65ac15bb1b7c7526cd3013521a155805ebc720a690b5e98bc3"
     },
     {
       "id": "es-female-580e0a60a9a1a97b",
@@ -2705,10 +2878,12 @@
       "language": "es",
       "text": "el documento",
       "normalizedText": "el documento",
-      "url": "/audio/packs/v8/es-male-211e96c3b8f5466c-9d8ccacd6874.m4a",
-      "sha256": "9d8ccacd6874d769a743d35b51815ca7af58fb5c2908c321eeaed6b6ccce73a0",
+      "url": "/audio/packs/v10/es-male-211e96c3b8f5466c-9d8ccacd6874-tempo85.m4a",
+      "sha256": "d663bdbc1eee29df43f3e0d5e168450897a50478b98b93fff1e3253ac73cffef",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "9d8ccacd6874d769a743d35b51815ca7af58fb5c2908c321eeaed6b6ccce73a0"
     },
     {
       "id": "es-female-47ad2ae90c25d01a",
@@ -2805,10 +2980,13 @@
       "language": "es",
       "text": "hemos completado",
       "normalizedText": "hemos completado",
-      "url": "/audio/packs/v8/es-male-44d1dfe22e1cdd19-7ea40b1323f0.m4a",
-      "sha256": "7ea40b1323f076739ad269a1405aecb9172969e44530e802258f20de08727cad",
+      "url": "/audio/packs/v10/es-male-44d1dfe22e1cdd19-7ea40b1323f0-tempo85.m4a",
+      "sha256": "53afaa33b00f210a4dd21ee1f39f98fbb3b20557d7e0c76505dd1cc57e7c1584",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "7ea40b1323f076739ad269a1405aecb9172969e44530e802258f20de08727cad",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-9643c6fcc070bd73",
@@ -2835,10 +3013,12 @@
       "language": "es",
       "text": "la primera",
       "normalizedText": "la primera",
-      "url": "/audio/packs/v8/es-male-abee2a7ea65dba5f-c54555165340.m4a",
-      "sha256": "c54555165340395f3e17099b7232164ca53713b785c5791d16e373b468564709",
+      "url": "/audio/packs/v10/es-male-abee2a7ea65dba5f-c54555165340-tempo85.m4a",
+      "sha256": "b596e94df4349be867095148aa42695918df4598d7f58c91a384797de0b29ddd",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c54555165340395f3e17099b7232164ca53713b785c5791d16e373b468564709"
     },
     {
       "id": "vi-female-8aa2c53b96817df2",
@@ -2848,16 +3028,6 @@
       "url": "/audio/packs/v8/vi-female-8aa2c53b96817df2-fcaec1fd5a8d.m4a",
       "sha256": "fcaec1fd5a8debda0276e0e93b5706820d457fa29170e2ff98678f84080c081b",
       "voice": "female",
-      "qualityCheck": "automated-text-and-pace"
-    },
-    {
-      "id": "es-male-ba0579d8db17057a",
-      "language": "es",
-      "text": "Ya hemos completado",
-      "normalizedText": "Ya hemos completado",
-      "url": "/audio/packs/v8/es-male-ba0579d8db17057a-5025d9cdf4dc.m4a",
-      "sha256": "5025d9cdf4dc5fd865a0f897c713a5e788e417d5d0750914d1b23ab70594ffb5",
-      "voice": "male",
       "qualityCheck": "automated-text-and-pace"
     },
     {
@@ -2875,10 +3045,12 @@
       "language": "es",
       "text": "No pude responder antes porque estaba en una reunión.",
       "normalizedText": "No pude responder antes porque estaba en una reunión.",
-      "url": "/audio/packs/v8/es-male-18860acc4dbf77b2-379b6694fbd1.m4a",
-      "sha256": "379b6694fbd1f766fa2032b5ec92918e72457a5b03a39d58224783fd3b35d4cf",
+      "url": "/audio/packs/v10/es-male-18860acc4dbf77b2-379b6694fbd1-tempo85.m4a",
+      "sha256": "b630fa1b97818717b6445048e9404386eff875ab3c0d6861560fd23c0ed582db",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "379b6694fbd1f766fa2032b5ec92918e72457a5b03a39d58224783fd3b35d4cf"
     },
     {
       "id": "es-female-fcd63466deb9631d",
@@ -2905,10 +3077,12 @@
       "language": "es",
       "text": "No pude responder",
       "normalizedText": "No pude responder",
-      "url": "/audio/packs/v8/es-male-478334cc05679be6-d00d5a248c68.m4a",
-      "sha256": "d00d5a248c688ba7aa1d5c561d696055ce949b64d0c7c67b959a215d8a0d705b",
+      "url": "/audio/packs/v10/es-male-478334cc05679be6-d00d5a248c68-tempo85.m4a",
+      "sha256": "63f703b28009713dfbaf275cf6491ee36c7476500fb91ecedc7bbaf0c20b62d0",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d00d5a248c688ba7aa1d5c561d696055ce949b64d0c7c67b959a215d8a0d705b"
     },
     {
       "id": "es-female-3f7d1fac8d426cde",
@@ -2955,10 +3129,12 @@
       "language": "es",
       "text": "Llevo seis meses estudiando español.",
       "normalizedText": "Llevo seis meses estudiando español.",
-      "url": "/audio/packs/v8/es-male-1e2ce0f29ce19067-cdfb4908f938.m4a",
-      "sha256": "cdfb4908f938e5ba67c26548691d6bb1ee1efde5ebb2d20e373afbdf8209a77b",
+      "url": "/audio/packs/v10/es-male-1e2ce0f29ce19067-cdfb4908f938-tempo85.m4a",
+      "sha256": "2807a8ede562a18c84fa7609f6ea25e921e1dc7903b355b16796aec4e349b181",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "cdfb4908f938e5ba67c26548691d6bb1ee1efde5ebb2d20e373afbdf8209a77b"
     },
     {
       "id": "es-female-3a6179969bd4ef97",
@@ -2985,10 +3161,12 @@
       "language": "es",
       "text": "estudiando",
       "normalizedText": "estudiando",
-      "url": "/audio/packs/v8/es-male-aed61c1b3a76f0ff-ea0ca8b75805.m4a",
-      "sha256": "ea0ca8b75805b13c6773c381c9a1ef071517b943d80def277fa9a90c9e4ebbba",
+      "url": "/audio/packs/v10/es-male-aed61c1b3a76f0ff-ea0ca8b75805-tempo85.m4a",
+      "sha256": "83df19654b2d8818553d5d3caa5b22d39fa03cb7e06b1dad862c5dfd41ef4ec0",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "ea0ca8b75805b13c6773c381c9a1ef071517b943d80def277fa9a90c9e4ebbba"
     },
     {
       "id": "es-female-fb322c617fb138d5",
@@ -3005,10 +3183,12 @@
       "language": "es",
       "text": "español",
       "normalizedText": "español",
-      "url": "/audio/packs/v8/es-male-7f6c53dc1117a29c-11c60d099a03.m4a",
-      "sha256": "11c60d099a03b4cc80d75022e41bce16ddd10bf91aa7ec2f543b445e097704cf",
+      "url": "/audio/packs/v10/es-male-7f6c53dc1117a29c-11c60d099a03-tempo85.m4a",
+      "sha256": "b28d5972b63f6d49046b26642cb7b96f4c1f6bf732a7d1852d1211b77f004324",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "11c60d099a03b4cc80d75022e41bce16ddd10bf91aa7ec2f543b445e097704cf"
     },
     {
       "id": "es-female-b5074d7181dad8b3",
@@ -3065,10 +3245,12 @@
       "language": "es",
       "text": "Ya sé",
       "normalizedText": "Ya sé",
-      "url": "/audio/packs/v8/es-male-f45d95cb5876be4f-9192d7737850.m4a",
-      "sha256": "9192d77378504647f86d8893a3c7b93d44007306cdbdeea3e631f397eb6eedee",
+      "url": "/audio/packs/v10/es-male-f45d95cb5876be4f-9192d7737850-tempo85.m4a",
+      "sha256": "d3001042f6424dafcfe2728ff406d2ff01fdf0573a090c8e89744379b86957db",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "9192d77378504647f86d8893a3c7b93d44007306cdbdeea3e631f397eb6eedee"
     },
     {
       "id": "es-female-0905d6401dd0cbe5",
@@ -3095,10 +3277,12 @@
       "language": "es",
       "text": "con claridad",
       "normalizedText": "con claridad",
-      "url": "/audio/packs/v8/es-male-44082f26b958026d-94f888a3e24c.m4a",
-      "sha256": "94f888a3e24c00adcd3d8859d0338275e6156ef05537f35a51ba2a96ed194580",
+      "url": "/audio/packs/v10/es-male-44082f26b958026d-94f888a3e24c-tempo85.m4a",
+      "sha256": "f7ce0c375fe94ce20fe9681dc66cab0589441bf960936913565e009cc7f54d82",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "94f888a3e24c00adcd3d8859d0338275e6156ef05537f35a51ba2a96ed194580"
     },
     {
       "id": "vi-female-a5bf93e5c389507e",
@@ -3108,16 +3292,6 @@
       "url": "/audio/packs/v8/vi-female-a5bf93e5c389507e-e5e89f5db82d.m4a",
       "sha256": "e5e89f5db82dcef6928328e1e073767c47a80f3ac920acaa7f568afb51f5aeb4",
       "voice": "female",
-      "qualityCheck": "automated-text-and-pace"
-    },
-    {
-      "id": "es-male-1883076d1b0c384f",
-      "language": "es",
-      "text": "Ya sé explicar",
-      "normalizedText": "Ya sé explicar",
-      "url": "/audio/packs/v8/es-male-1883076d1b0c384f-58720b128de1.m4a",
-      "sha256": "58720b128de159dfce3b0667f76b65e23a293fd76c13b09c8262f54ad1b658f2",
-      "voice": "male",
       "qualityCheck": "automated-text-and-pace"
     },
     {
@@ -3135,10 +3309,12 @@
       "language": "es",
       "text": "Aprendí mucho al corregir mis errores.",
       "normalizedText": "Aprendí mucho al corregir mis errores.",
-      "url": "/audio/packs/v8/es-male-e7dd435f830ebb00-9e690b700d8d.m4a",
-      "sha256": "9e690b700d8dcc11dbbfbc9585f727737012220223ed2fd80e7be8c1510b4293",
+      "url": "/audio/packs/v10/es-male-e7dd435f830ebb00-9e690b700d8d-tempo85.m4a",
+      "sha256": "14b5611e49acf360e889d9c3d70e72d16c29b0872418259dd28825739836bb86",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "9e690b700d8dcc11dbbfbc9585f727737012220223ed2fd80e7be8c1510b4293"
     },
     {
       "id": "es-female-fc95937670598917",
@@ -3185,10 +3361,12 @@
       "language": "es",
       "text": "corregir",
       "normalizedText": "corregir",
-      "url": "/audio/packs/v8/es-male-f3ddd754ac1e8897-9a6aa1e6aab6.m4a",
-      "sha256": "9a6aa1e6aab6fff337f52c458fa20c5a477e88f4a2d13c2068868d7738a36fd9",
+      "url": "/audio/packs/v10/es-male-f3ddd754ac1e8897-9a6aa1e6aab6-tempo85.m4a",
+      "sha256": "6879d7d694c7af24411aed71803a034b2ce430561303e58fda3f22b87e049612",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "9a6aa1e6aab6fff337f52c458fa20c5a477e88f4a2d13c2068868d7738a36fd9"
     },
     {
       "id": "es-female-d26b308b10087a77",
@@ -3245,20 +3423,24 @@
       "language": "es",
       "text": "descanso",
       "normalizedText": "descanso",
-      "url": "/audio/packs/v8/es-male-9ff0a6c171bcb30b-bf0bd9003a07.m4a",
-      "sha256": "bf0bd9003a07c3f613e22c3aaa9be6bd882ad3db514225e622796af14907ea62",
+      "url": "/audio/packs/v10/es-male-9ff0a6c171bcb30b-bf0bd9003a07-tempo85.m4a",
+      "sha256": "7e012503231f0c5242c7402ec4005a185cc4df8799916856849db6a8e068d705",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "bf0bd9003a07c3f613e22c3aaa9be6bd882ad3db514225e622796af14907ea62"
     },
     {
       "id": "es-male-73f4f98ddd5227df",
       "language": "es",
       "text": "después",
       "normalizedText": "después",
-      "url": "/audio/packs/v8/es-male-73f4f98ddd5227df-74659e0228c3.m4a",
-      "sha256": "74659e0228c3158f7010800a8b43b8b9ff21390cbe77fb717efebc433386c405",
+      "url": "/audio/packs/v10/es-male-73f4f98ddd5227df-74659e0228c3-tempo85.m4a",
+      "sha256": "cc5870e7ae9218413e4fb24ec044e6a0aaf26a81398f97d448687d4f3ef7c328",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "74659e0228c3158f7010800a8b43b8b9ff21390cbe77fb717efebc433386c405"
     },
     {
       "id": "es-female-07c8f08275872e23",
@@ -3285,30 +3467,36 @@
       "language": "es",
       "text": "casa",
       "normalizedText": "casa",
-      "url": "/audio/packs/v8/es-male-9c203def4e67529a-560bc8b6c34a.m4a",
-      "sha256": "560bc8b6c34a2de8f42bc641b8d7b71f1f9ca0f59ac6d515e4f5c0701a23c507",
+      "url": "/audio/packs/v10/es-male-9c203def4e67529a-560bc8b6c34a-tempo85.m4a",
+      "sha256": "088367d3a7c6b8126fbd780fa9d6d9412965d987cdd2712fc862cc47c5b718ef",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "560bc8b6c34a2de8f42bc641b8d7b71f1f9ca0f59ac6d515e4f5c0701a23c507"
     },
     {
       "id": "es-male-edd9b6387709f6f9",
       "language": "es",
       "text": "Después descanso en casa.",
       "normalizedText": "Después descanso en casa.",
-      "url": "/audio/packs/v8/es-male-edd9b6387709f6f9-08c4a1f3757a.m4a",
-      "sha256": "08c4a1f3757a165fcba284dcd591376ff74e3cde56085d0f6d84b4df9ff05e30",
+      "url": "/audio/packs/v10/es-male-edd9b6387709f6f9-08c4a1f3757a-tempo85.m4a",
+      "sha256": "ff9d4e80cb3697317bbff0fc1ca2163e5e5afefa582176fd00aabce362e251b8",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "08c4a1f3757a165fcba284dcd591376ff74e3cde56085d0f6d84b4df9ff05e30"
     },
     {
       "id": "es-male-950ba7fc6c8d113e",
       "language": "es",
       "text": "Hoy trabajo.",
       "normalizedText": "Hoy trabajo.",
-      "url": "/audio/packs/v8/es-male-950ba7fc6c8d113e-d6ff84ab6477.m4a",
-      "sha256": "d6ff84ab647738c93395e5857dd886ac91f1a7523696bd3f55fe906d57b0eae0",
+      "url": "/audio/packs/v10/es-male-950ba7fc6c8d113e-d6ff84ab6477-tempo85.m4a",
+      "sha256": "a4c013a0f0c58a76a85fa5404364da2e0ca9c6fa28f235c7e7a11706b19ae135",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d6ff84ab647738c93395e5857dd886ac91f1a7523696bd3f55fe906d57b0eae0"
     },
     {
       "id": "es-female-d3cd2733d42a2d6a",
@@ -3325,10 +3513,12 @@
       "language": "es",
       "text": "hoy trabajo",
       "normalizedText": "hoy trabajo",
-      "url": "/audio/packs/v8/es-male-cd2991958238f43d-361096ac2fde.m4a",
-      "sha256": "361096ac2fdec35690daf25cbab1ccca0c77a81f940852092e57e6a39e5421f3",
+      "url": "/audio/packs/v10/es-male-cd2991958238f43d-361096ac2fde-tempo85.m4a",
+      "sha256": "7f9b810fbe2e1d7faf7790a8738d1d28912958292a6920ff72b433b7a689372d",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "361096ac2fdec35690daf25cbab1ccca0c77a81f940852092e57e6a39e5421f3"
     },
     {
       "id": "es-female-ee28a54b3045b670",
@@ -3355,10 +3545,12 @@
       "language": "es",
       "text": "Ahora estoy escuchando con atención.",
       "normalizedText": "Ahora estoy escuchando con atención.",
-      "url": "/audio/packs/v8/es-male-3be920a7d8fc3712-250b285452d3.m4a",
-      "sha256": "250b285452d3603fb2092246b6d72bfeaa41a78f24f8a30e57ca0e24c4f6c65c",
+      "url": "/audio/packs/v10/es-male-3be920a7d8fc3712-250b285452d3-tempo85.m4a",
+      "sha256": "229fe92e4948b9a38fae5cb1407502daa80802e1789ff2426d88d7b8e2874f24",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "250b285452d3603fb2092246b6d72bfeaa41a78f24f8a30e57ca0e24c4f6c65c"
     },
     {
       "id": "es-female-f60b879d3ea0745a",
@@ -3395,10 +3587,12 @@
       "language": "es",
       "text": "atención",
       "normalizedText": "atención",
-      "url": "/audio/packs/v8/es-male-d8e6f4bf2557f9cf-43b1804fb6ba.m4a",
-      "sha256": "43b1804fb6ba209f4b8dd13f04dfc90ce7787e3dab90bfc87ec457fa5a46112f",
+      "url": "/audio/packs/v10/es-male-d8e6f4bf2557f9cf-43b1804fb6ba-tempo85.m4a",
+      "sha256": "0415513c1d2580b8af38c03d60275a3629f62e8ea6ee4bf33e49c252d299fd41",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "43b1804fb6ba209f4b8dd13f04dfc90ce7787e3dab90bfc87ec457fa5a46112f"
     },
     {
       "id": "es-female-f0cb055853cd6537",
@@ -3425,10 +3619,12 @@
       "language": "es",
       "text": "Ahora estoy escuchando.",
       "normalizedText": "Ahora estoy escuchando.",
-      "url": "/audio/packs/v8/es-male-eef8ba32d8ba1567-789bd9fd2dc7.m4a",
-      "sha256": "789bd9fd2dc7af060eec660631aeec43e891b9b0ddd4920060def962a119f6e9",
+      "url": "/audio/packs/v10/es-male-eef8ba32d8ba1567-789bd9fd2dc7-tempo85.m4a",
+      "sha256": "14110ca1c1befef7927684d5c1eb5b3c4c4b260365971955c8f507b15713fee0",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "789bd9fd2dc7af060eec660631aeec43e891b9b0ddd4920060def962a119f6e9"
     },
     {
       "id": "es-female-fbc9a77e37a29649",
@@ -3455,10 +3651,12 @@
       "language": "es",
       "text": "ahora estoy",
       "normalizedText": "ahora estoy",
-      "url": "/audio/packs/v8/es-male-f63f94327f3ccc88-1204dd749ca7.m4a",
-      "sha256": "1204dd749ca722fc6893a1661edb1008c0e0d091ad19749dab31f8c5fc0f10d6",
+      "url": "/audio/packs/v10/es-male-f63f94327f3ccc88-1204dd749ca7-tempo85.m4a",
+      "sha256": "47f3a186a9b199e77ea8d3e496e48f3dfad251cc54bf1ccc1cee28efefc54b64",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1204dd749ca722fc6893a1661edb1008c0e0d091ad19749dab31f8c5fc0f10d6"
     },
     {
       "id": "es-female-1bc03bb0c4d3ef8f",
@@ -3485,10 +3683,12 @@
       "language": "es",
       "text": "Me siento cansado porque necesito descansar.",
       "normalizedText": "Me siento cansado porque necesito descansar.",
-      "url": "/audio/packs/v8/es-male-20a7cdd84b5f74a0-d74ca174ad8e.m4a",
-      "sha256": "d74ca174ad8e6766fb6dd3b2208c76bb645ab02c6e98121c3e976fc654c800b5",
+      "url": "/audio/packs/v10/es-male-20a7cdd84b5f74a0-d74ca174ad8e-tempo85.m4a",
+      "sha256": "31a8c739e63436ca1d4e10016e3bda02a20185ba570dabec5530b2c393941ab3",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d74ca174ad8e6766fb6dd3b2208c76bb645ab02c6e98121c3e976fc654c800b5"
     },
     {
       "id": "es-female-04d6dd0bc58bc4aa",
@@ -3505,20 +3705,24 @@
       "language": "es",
       "text": "me siento",
       "normalizedText": "me siento",
-      "url": "/audio/packs/v8/es-male-a45f0b8f7516389d-01e41cd0968c.m4a",
-      "sha256": "01e41cd0968cdce7ae129c3a1df1ff8e3ba0d129280668538951d7223ab0821d",
+      "url": "/audio/packs/v10/es-male-a45f0b8f7516389d-01e41cd0968c-tempo85.m4a",
+      "sha256": "4734c42034705dddf8e658ef4c3ff265bebe9bf94c4a238ab3a684d5066ee2d6",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "01e41cd0968cdce7ae129c3a1df1ff8e3ba0d129280668538951d7223ab0821d"
     },
     {
       "id": "es-male-9ac46a798b4b4fda",
       "language": "es",
       "text": "tranquilo",
       "normalizedText": "tranquilo",
-      "url": "/audio/packs/v8/es-male-9ac46a798b4b4fda-edab1de9f8b5.m4a",
-      "sha256": "edab1de9f8b51c0dba0b9b96b33deffb7d8675b125fba0568eb874bb1fef31fb",
+      "url": "/audio/packs/v10/es-male-9ac46a798b4b4fda-edab1de9f8b5-tempo85.m4a",
+      "sha256": "c270ea5e523090db5f5dbe8e347b1e6e7ed83faa604418d387e90f7519c902e1",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "edab1de9f8b51c0dba0b9b96b33deffb7d8675b125fba0568eb874bb1fef31fb"
     },
     {
       "id": "es-female-b9ab65316c62aa4f",
@@ -3555,10 +3759,12 @@
       "language": "es",
       "text": "necesito",
       "normalizedText": "necesito",
-      "url": "/audio/packs/v8/es-male-99c52b67451ed130-6d7df9914463.m4a",
-      "sha256": "6d7df9914463a5c9c46ca57fa05582fa49c01ed986c1930e6599f1b1f6de6243",
+      "url": "/audio/packs/v10/es-male-99c52b67451ed130-6d7df9914463-tempo85.m4a",
+      "sha256": "6549fef3d46eea7d5d41280db35e33219c1ec6e1ff1631ad499e23f4112ec3b5",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6d7df9914463a5c9c46ca57fa05582fa49c01ed986c1930e6599f1b1f6de6243"
     },
     {
       "id": "es-female-3cb5aa7b2c65e65e",
@@ -3585,10 +3791,12 @@
       "language": "es",
       "text": "Necesito descansar.",
       "normalizedText": "Necesito descansar.",
-      "url": "/audio/packs/v8/es-male-7b0d72e9687f27c4-040c1288d5f6.m4a",
-      "sha256": "040c1288d5f65a14438acdd5b653ecc4b5a9e404c84aedcd7abb237738ac5f76",
+      "url": "/audio/packs/v10/es-male-7b0d72e9687f27c4-040c1288d5f6-tempo85.m4a",
+      "sha256": "affeb4b13c39bece9f279bbe5b30af98133990a2542137bec94f34c8fb63d80e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "040c1288d5f65a14438acdd5b653ecc4b5a9e404c84aedcd7abb237738ac5f76"
     },
     {
       "id": "es-female-47e70aa9eb3e9cd5",
@@ -3625,10 +3833,12 @@
       "language": "es",
       "text": "¿Cómo estás? Me alegra verte.",
       "normalizedText": "¿Cómo estás? Me alegra verte.",
-      "url": "/audio/packs/v8/es-male-8616eb7cbc1f08ea-1c467460d6a5.m4a",
-      "sha256": "1c467460d6a53097a5c96358c159f8ceb7d3c24336261a3854011564fa3e7d1f",
+      "url": "/audio/packs/v10/es-male-8616eb7cbc1f08ea-1c467460d6a5-tempo85.m4a",
+      "sha256": "9285cf049cff507c1116f6535aac9210fe8c44dd09a3e61e40df7e910edcd088",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1c467460d6a53097a5c96358c159f8ceb7d3c24336261a3854011564fa3e7d1f"
     },
     {
       "id": "es-female-942f4243c2973cc7",
@@ -3665,20 +3875,24 @@
       "language": "es",
       "text": "bien",
       "normalizedText": "bien",
-      "url": "/audio/packs/v8/es-male-399c8b8ecc377e61-ab32c8f5a845.m4a",
-      "sha256": "ab32c8f5a84596e62a9c649b283292ab604fe2d6fd85a30f9cf71e437d7c77fd",
+      "url": "/audio/packs/v10/es-male-399c8b8ecc377e61-ab32c8f5a845-tempo85.m4a",
+      "sha256": "685d710045d05ec3ae2c640225791414e3fcb44eb0792c190df9e9e486994f6c",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "ab32c8f5a84596e62a9c649b283292ab604fe2d6fd85a30f9cf71e437d7c77fd"
     },
     {
       "id": "es-male-1e7cfc4dc5295cab",
       "language": "es",
       "text": "también",
       "normalizedText": "también",
-      "url": "/audio/packs/v8/es-male-1e7cfc4dc5295cab-2009a05efa93.m4a",
-      "sha256": "2009a05efa934e5ea4df617a9afb692627c0065ee838fb2f6f899adc222f3d29",
+      "url": "/audio/packs/v10/es-male-1e7cfc4dc5295cab-2009a05efa93-tempo85.m4a",
+      "sha256": "8346b1f2f6b3e634801a955b593d8c7aec84af00f5038b187d94a334f18166ea",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2009a05efa934e5ea4df617a9afb692627c0065ee838fb2f6f899adc222f3d29"
     },
     {
       "id": "vi-female-459a6e20d8a9b6f9",
@@ -3695,10 +3909,12 @@
       "language": "es",
       "text": "¿Cómo estás?",
       "normalizedText": "¿Cómo estás?",
-      "url": "/audio/packs/v8/es-male-be5877dbf1a7770b-3d10565255e1.m4a",
-      "sha256": "3d10565255e1dc1d9429f1ecdbc6f1cfcea639979c51ca3f1336b12e7c66eb89",
+      "url": "/audio/packs/v10/es-male-be5877dbf1a7770b-3d10565255e1-tempo85.m4a",
+      "sha256": "29d2d952afb199aed9d82d7f616328489ccf3702264f909a908bdc073e45ac3e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "3d10565255e1dc1d9429f1ecdbc6f1cfcea639979c51ca3f1336b12e7c66eb89"
     },
     {
       "id": "es-female-ecb971666f3c3e12",
@@ -3715,10 +3931,12 @@
       "language": "es",
       "text": "Me alegra verte.",
       "normalizedText": "Me alegra verte.",
-      "url": "/audio/packs/v8/es-male-5b54f0561a7df7a0-77c25abbb407.m4a",
-      "sha256": "77c25abbb407db8e2856dbfcfe9d4f770280501e7eea3e9fffebacf7e02f0ce5",
+      "url": "/audio/packs/v10/es-male-5b54f0561a7df7a0-77c25abbb407-tempo85.m4a",
+      "sha256": "a19e427e5e358fdb67c4b5057649329a2c6c3deb7f90227f7839971d5ddbdebf",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "77c25abbb407db8e2856dbfcfe9d4f770280501e7eea3e9fffebacf7e02f0ce5"
     },
     {
       "id": "vi-female-49576eb0748ccc29",
@@ -3735,10 +3953,12 @@
       "language": "es",
       "text": "cómo estás",
       "normalizedText": "cómo estás",
-      "url": "/audio/packs/v8/es-male-edf4430fe6958ab2-fa834d082ebd.m4a",
-      "sha256": "fa834d082ebdd814337153a6b35d82b19ae4760754ff9c29ee9cfd21ee4721bf",
+      "url": "/audio/packs/v10/es-male-edf4430fe6958ab2-fa834d082ebd-tempo85.m4a",
+      "sha256": "3236612afd84cd2ccaea4d349759d8516ec7729b16a7e835f39fa2542f8c7f0a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "fa834d082ebdd814337153a6b35d82b19ae4760754ff9c29ee9cfd21ee4721bf"
     },
     {
       "id": "vi-female-6aa016eeafd5c436",
@@ -3755,10 +3975,12 @@
       "language": "es",
       "text": "Mi familia vive cerca.",
       "normalizedText": "Mi familia vive cerca.",
-      "url": "/audio/packs/v8/es-male-65a628bb2d21794d-b531d906f20b.m4a",
-      "sha256": "b531d906f20bd2f4b976b859c31ac4b0e14641c8d3044ce11a4d3c5fe53f1d6f",
+      "url": "/audio/packs/v10/es-male-65a628bb2d21794d-b531d906f20b-tempo85.m4a",
+      "sha256": "5cec436f4a7b7414155b7369a4fa4ab4f0c07ef3dc89f2ad93737a158617d2f4",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b531d906f20bd2f4b976b859c31ac4b0e14641c8d3044ce11a4d3c5fe53f1d6f"
     },
     {
       "id": "es-female-62b1bc341c60073d",
@@ -3795,10 +4017,12 @@
       "language": "es",
       "text": "familia",
       "normalizedText": "familia",
-      "url": "/audio/packs/v8/es-male-7790522e6ec30419-1fd0684426f8.m4a",
-      "sha256": "1fd0684426f8c63550f37b7cbaeaf8cd228eb85ed67ef906753366578c2f3801",
+      "url": "/audio/packs/v10/es-male-7790522e6ec30419-1fd0684426f8-tempo85.m4a",
+      "sha256": "02f71b53c5d7d61bda7ddc4a96f58c9ca40750f6320894fb2f44d745bf748a88",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1fd0684426f8c63550f37b7cbaeaf8cd228eb85ed67ef906753366578c2f3801"
     },
     {
       "id": "es-female-168a1c736ec60580",
@@ -3915,10 +4139,12 @@
       "language": "es",
       "text": "Bienvenido a casa. Pasa y siéntate.",
       "normalizedText": "Bienvenido a casa. Pasa y siéntate.",
-      "url": "/audio/packs/v8/es-male-7ed852689af0cfa6-016dbd5aaa40.m4a",
-      "sha256": "016dbd5aaa405fc52425b178343b13c7ff0bf4ccf8a11746a989013b430eb239",
+      "url": "/audio/packs/v10/es-male-7ed852689af0cfa6-016dbd5aaa40-tempo85.m4a",
+      "sha256": "2cd4fbe97b16aae36a9484029f2029e22ca3b37162c3822f4b511d7b077aa8f1",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "016dbd5aaa405fc52425b178343b13c7ff0bf4ccf8a11746a989013b430eb239"
     },
     {
       "id": "es-female-e7f31d23c739cfc6",
@@ -3965,10 +4191,12 @@
       "language": "es",
       "text": "bienvenido",
       "normalizedText": "bienvenido",
-      "url": "/audio/packs/v8/es-male-07e2004dddefe8ec-527f23f692b6.m4a",
-      "sha256": "527f23f692b68fa3d66a5f833b37fa92c269e0c45602341e59915d77163cd016",
+      "url": "/audio/packs/v10/es-male-07e2004dddefe8ec-527f23f692b6-tempo85.m4a",
+      "sha256": "ffb66417e5ba06e85df51f42f31d7186f611a2c35b539bea80525bda71093a40",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "527f23f692b68fa3d66a5f833b37fa92c269e0c45602341e59915d77163cd016"
     },
     {
       "id": "es-female-18fba6767744c0f9",
@@ -3995,10 +4223,12 @@
       "language": "es",
       "text": "pasa casa",
       "normalizedText": "pasa casa",
-      "url": "/audio/packs/v8/es-male-07432fbf8137c4af-4000906683e0.m4a",
-      "sha256": "4000906683e016d70bab08ebcb998df136c74cfaf1026675642837f61a840ddf",
+      "url": "/audio/packs/v10/es-male-07432fbf8137c4af-4000906683e0-tempo85.m4a",
+      "sha256": "3db87568692db414dadf9f310a557e94e172a7f7c2ff67604d579cd3ca5a6375",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "4000906683e016d70bab08ebcb998df136c74cfaf1026675642837f61a840ddf"
     },
     {
       "id": "es-female-86bf011dd4b7d6e3",
@@ -4025,10 +4255,12 @@
       "language": "es",
       "text": "Me gusta la comida sencilla.",
       "normalizedText": "Me gusta la comida sencilla.",
-      "url": "/audio/packs/v8/es-male-49c3c312fde5dc6f-304d4671d84a.m4a",
-      "sha256": "304d4671d84a7f4d283b2da7dfbe92a03b72342d87c848726b1bee9da75580a2",
+      "url": "/audio/packs/v10/es-male-49c3c312fde5dc6f-304d4671d84a-tempo85.m4a",
+      "sha256": "a4a40dfa2f3f4c59bbe00fa7add775fc0e58f9fe09f813ea449a6470d8421ec2",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "304d4671d84a7f4d283b2da7dfbe92a03b72342d87c848726b1bee9da75580a2"
     },
     {
       "id": "es-female-053d6ded1e99812f",
@@ -4075,10 +4307,12 @@
       "language": "es",
       "text": "arroz",
       "normalizedText": "arroz",
-      "url": "/audio/packs/v8/es-male-36c2291de1577a59-5db921e71b58.m4a",
-      "sha256": "5db921e71b58d96aa148e6a8216a061ff52071ebb3da3654df54dcd15bbeb8e1",
+      "url": "/audio/packs/v10/es-male-36c2291de1577a59-5db921e71b58-tempo85.m4a",
+      "sha256": "864e458e3347663e8fd7b766edeb36e38f2b701e76e9131c9997b309514cfdb5",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "5db921e71b58d96aa148e6a8216a061ff52071ebb3da3654df54dcd15bbeb8e1"
     },
     {
       "id": "vi-female-5ae67ae6827f3cf8",
@@ -4095,20 +4329,24 @@
       "language": "es",
       "text": "verduras",
       "normalizedText": "verduras",
-      "url": "/audio/packs/v8/es-male-3fcb0af989092126-79453bff202f.m4a",
-      "sha256": "79453bff202f4f9ba9d79f9187ae9494306de536e5617a451dee783c9fe3ac75",
+      "url": "/audio/packs/v10/es-male-3fcb0af989092126-79453bff202f-tempo85.m4a",
+      "sha256": "bce11871f1b818da26e40d537d0c23a69dda3622ba63604c21bb14dfb3693c2d",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "79453bff202f4f9ba9d79f9187ae9494306de536e5617a451dee783c9fe3ac75"
     },
     {
       "id": "es-male-5573979f48ac6bf0",
       "language": "es",
       "text": "gusta comida",
       "normalizedText": "gusta comida",
-      "url": "/audio/packs/v8/es-male-5573979f48ac6bf0-b962780a383b.m4a",
-      "sha256": "b962780a383bc456a7212284fde7645ebc2ad16dd33df9a197b7eb751a68cc54",
+      "url": "/audio/packs/v10/es-male-5573979f48ac6bf0-b962780a383b-tempo85.m4a",
+      "sha256": "38d3758a5586ce28235d1742609c9ef64129b540ae6ca77ddbf6553d869bc352",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b962780a383bc456a7212284fde7645ebc2ad16dd33df9a197b7eb751a68cc54"
     },
     {
       "id": "es-female-5a97fff538b9a45a",
@@ -4165,20 +4403,24 @@
       "language": "es",
       "text": "cuenta",
       "normalizedText": "cuenta",
-      "url": "/audio/packs/v8/es-male-0b89f60de05b4108-de30fdf3e277.m4a",
-      "sha256": "de30fdf3e27747769daece903aa7b4cd5dafac2c12ce3c3299bb057f1237c6b8",
+      "url": "/audio/packs/v10/es-male-0b89f60de05b4108-de30fdf3e277-tempo85.m4a",
+      "sha256": "a7724a26c37e2378be03a1fb829c6c762987b030d8397be01ed93cb3001dd09e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "de30fdf3e27747769daece903aa7b4cd5dafac2c12ce3c3299bb057f1237c6b8"
     },
     {
       "id": "es-male-c9ed6e6b15faa89c",
       "language": "es",
       "text": "quisiera pedir",
       "normalizedText": "quisiera pedir",
-      "url": "/audio/packs/v8/es-male-c9ed6e6b15faa89c-2b064eb75540.m4a",
-      "sha256": "2b064eb755403fea7f55ed19c47c55997aa18c207972a31a2052bcdf60429c39",
+      "url": "/audio/packs/v10/es-male-c9ed6e6b15faa89c-2b064eb75540-tempo85.m4a",
+      "sha256": "d73206bdb1ca803fa0af4a2147498d9594b8c2ee91ae3ef0f08167e5e5500a36",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2b064eb755403fea7f55ed19c47c55997aa18c207972a31a2052bcdf60429c39"
     },
     {
       "id": "es-female-a73ec14c7e1e7fa0",
@@ -4205,10 +4447,12 @@
       "language": "es",
       "text": "¿Cuánto cuesta esto?",
       "normalizedText": "¿Cuánto cuesta esto?",
-      "url": "/audio/packs/v8/es-male-7cfae654dbce42a7-99103584d3df.m4a",
-      "sha256": "99103584d3df99acea209ae148bec797b4ed60337dd18cc461b5fcadd0a1699f",
+      "url": "/audio/packs/v10/es-male-7cfae654dbce42a7-99103584d3df-tempo85.m4a",
+      "sha256": "0964d6f9890b1b9b56684c76dd13c8838355113102df0d90ef766d00cf1743af",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "99103584d3df99acea209ae148bec797b4ed60337dd18cc461b5fcadd0a1699f"
     },
     {
       "id": "es-female-38a1bc815ed5be2a",
@@ -4255,10 +4499,12 @@
       "language": "es",
       "text": "cuesta",
       "normalizedText": "cuesta",
-      "url": "/audio/packs/v8/es-male-9d1a3eeac5dcef00-6ca1411fb16a.m4a",
-      "sha256": "6ca1411fb16aef9102d3dbb2503a2a4d81e364eb8bc6d84a17be661b148e7fd7",
+      "url": "/audio/packs/v10/es-male-9d1a3eeac5dcef00-6ca1411fb16a-tempo85.m4a",
+      "sha256": "9adcd1a3b69e68b3f31d16bac943151e88abcae9692379bae1bf924aaffc8ea1",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "6ca1411fb16aef9102d3dbb2503a2a4d81e364eb8bc6d84a17be661b148e7fd7"
     },
     {
       "id": "es-female-0dff3ceb0544fd7d",
@@ -4275,10 +4521,12 @@
       "language": "es",
       "text": "cuánto cuesta",
       "normalizedText": "cuánto cuesta",
-      "url": "/audio/packs/v8/es-male-a48ec5d87e50407e-a60fe5b5aee6.m4a",
-      "sha256": "a60fe5b5aee6231aab4ded4ebbc69f89f5d53de8fc3e9e8ef7ce4f4ba20692f5",
+      "url": "/audio/packs/v10/es-male-a48ec5d87e50407e-a60fe5b5aee6-tempo85.m4a",
+      "sha256": "eab82890af66e6449ac2eca3fce0cdfa39bd3d1a2a5b4e26c2332b431e2d8f00",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a60fe5b5aee6231aab4ded4ebbc69f89f5d53de8fc3e9e8ef7ce4f4ba20692f5"
     },
     {
       "id": "es-female-15f0058a00f74bf6",
@@ -4305,10 +4553,12 @@
       "language": "es",
       "text": "pagar",
       "normalizedText": "pagar",
-      "url": "/audio/packs/v8/es-male-5f4974b23189e526-c816d67c5088.m4a",
-      "sha256": "c816d67c50886a5a98f30222d5bf11694eb6763718936920c1ec27b1b197ffd9",
+      "url": "/audio/packs/v10/es-male-5f4974b23189e526-c816d67c5088-tempo85.m4a",
+      "sha256": "424788f3869a6ae15ee1cf2067e08d74dd283be556d7ba8a795a1fb7df8b5c08",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c816d67c50886a5a98f30222d5bf11694eb6763718936920c1ec27b1b197ffd9"
     },
     {
       "id": "es-female-54515951ff76b461",
@@ -4325,20 +4575,24 @@
       "language": "es",
       "text": "tarjeta",
       "normalizedText": "tarjeta",
-      "url": "/audio/packs/v8/es-male-094193bd6871e7ad-a2e95f873ccf.m4a",
-      "sha256": "a2e95f873ccf3fff355045c7702808223a7f8ee5d584d5453132f7727db3d424",
+      "url": "/audio/packs/v10/es-male-094193bd6871e7ad-a2e95f873ccf-tempo85.m4a",
+      "sha256": "bf124e991c47e5222959770fde8bd757d93d2c47bea23e1aac312c74ca6aa9f7",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a2e95f873ccf3fff355045c7702808223a7f8ee5d584d5453132f7727db3d424"
     },
     {
       "id": "es-male-fdb9bcdfac8dfc8e",
       "language": "es",
       "text": "efectivo",
       "normalizedText": "efectivo",
-      "url": "/audio/packs/v8/es-male-fdb9bcdfac8dfc8e-b482c1e3d5c5.m4a",
-      "sha256": "b482c1e3d5c5ed841160ce8f93a4f35ab6fdecbf084d4d5dbc9ccd7156cc161a",
+      "url": "/audio/packs/v10/es-male-fdb9bcdfac8dfc8e-b482c1e3d5c5-tempo85.m4a",
+      "sha256": "7f9c9b67eb3039980da791b6b7a32e3f8e1f66c2dfe3d32692b609b66f809e68",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b482c1e3d5c5ed841160ce8f93a4f35ab6fdecbf084d4d5dbc9ccd7156cc161a"
     },
     {
       "id": "es-female-fbf5a9ac58f03c73",
@@ -4375,10 +4629,12 @@
       "language": "es",
       "text": "expresarme",
       "normalizedText": "expresarme",
-      "url": "/audio/packs/v9/es-male-d4526520ddaa6fe8-17a5dcd5a36a.m4a",
-      "sha256": "17a5dcd5a36aebb82d97a45ed21cab84986b329cd5f7fcc3d1d96eab2fd13776",
+      "url": "/audio/packs/v10/es-male-d4526520ddaa6fe8-17a5dcd5a36a-tempo85.m4a",
+      "sha256": "96a694fe554ce8a4b06bf97b197ee12c8b5b37d6888b5b6f0bd28e0439e74392",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "17a5dcd5a36aebb82d97a45ed21cab84986b329cd5f7fcc3d1d96eab2fd13776"
     },
     {
       "id": "es-female-33f88e2fb4614f56",
@@ -4425,30 +4681,36 @@
       "language": "es",
       "text": "años",
       "normalizedText": "años",
-      "url": "/audio/packs/v9/es-male-1044532f17921102-18296ee81c14.m4a",
-      "sha256": "18296ee81c145bfa09d902ba3cb8e0c77f3164b46ac7c21c9be7ae29857228ac",
+      "url": "/audio/packs/v10/es-male-1044532f17921102-18296ee81c14-tempo85.m4a",
+      "sha256": "a22d9eb11a5affec2d9e49dc4706a73bd67f33afdf2231bf53fd7860bc10da19",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "18296ee81c145bfa09d902ba3cb8e0c77f3164b46ac7c21c9be7ae29857228ac"
     },
     {
       "id": "es-male-bf62cd73b2e0f5e8",
       "language": "es",
       "text": "solo",
       "normalizedText": "solo",
-      "url": "/audio/packs/v9/es-male-bf62cd73b2e0f5e8-c513483aff35.m4a",
-      "sha256": "c513483aff35523218e83ae4a7ddaf95b21a06b99a981971bd4f38fc64814d7e",
+      "url": "/audio/packs/v10/es-male-bf62cd73b2e0f5e8-c513483aff35-tempo85.m4a",
+      "sha256": "8f97236cf1c3f4ca758708f5760f605a70df4e0a777a779087bfad43a76ff98e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "c513483aff35523218e83ae4a7ddaf95b21a06b99a981971bd4f38fc64814d7e"
     },
     {
       "id": "es-male-7b95e16ab29b9e87",
       "language": "es",
       "text": "primera vez viajé",
       "normalizedText": "primera vez viajé",
-      "url": "/audio/packs/v9/es-male-7b95e16ab29b9e87-9e98181fcc8d.m4a",
-      "sha256": "9e98181fcc8d602ae18953fb7bffe4ee817fdf2ac0f4965ba0a573c0061aa1d5",
+      "url": "/audio/packs/v10/es-male-7b95e16ab29b9e87-9e98181fcc8d-tempo85.m4a",
+      "sha256": "90721879d1ff397152d0753470de4f3a76a28b8f46ffb42a75c7cd90858e9031",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "9e98181fcc8d602ae18953fb7bffe4ee817fdf2ac0f4965ba0a573c0061aa1d5"
     },
     {
       "id": "es-female-4bf3c036336ea0b0",
@@ -4465,20 +4727,26 @@
       "language": "es",
       "text": "solía",
       "normalizedText": "solía",
-      "url": "/audio/packs/v9/es-male-9b8b0ae546363eb8-a4b2e151c4f4.m4a",
-      "sha256": "a4b2e151c4f49b23a35bae350e6c327b0531e9114d033772c64cd6e82305f0f5",
+      "url": "/audio/packs/v10/es-male-9b8b0ae546363eb8-a4b2e151c4f4-tempo85.m4a",
+      "sha256": "a32b13cdf08addb4723f4676874f82ea354d4e27947f4b8f57c611d09d8be88f",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a4b2e151c4f49b23a35bae350e6c327b0531e9114d033772c64cd6e82305f0f5",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-male-a3943e896b6cf156",
       "language": "es",
       "text": "sigo",
       "normalizedText": "sigo",
-      "url": "/audio/packs/v9/es-male-a3943e896b6cf156-b0c09d59e632.m4a",
-      "sha256": "b0c09d59e632bafb53da7615873913167659048e448d39f2b79b09b076749187",
+      "url": "/audio/packs/v10/es-male-a3943e896b6cf156-b0c09d59e632-tempo85.m4a",
+      "sha256": "17b693cc46027eb76f4dad8a9631e178fd3e793e146accc46816f46cfd6ffac7",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b0c09d59e632bafb53da7615873913167659048e448d39f2b79b09b076749187",
+      "needsAudioTextReview": true
     },
     {
       "id": "es-female-e9a3a166e6b38b2e",
@@ -4515,10 +4783,12 @@
       "language": "es",
       "text": "con mi familia",
       "normalizedText": "con mi familia",
-      "url": "/audio/packs/v9/es-male-cba41e1291e59ef9-217b4d0079a6.m4a",
-      "sha256": "217b4d0079a6d633d7b8c82711a044f85d5b2ea786b2c8fbf3746208a8604e2d",
+      "url": "/audio/packs/v10/es-male-cba41e1291e59ef9-217b4d0079a6-tempo85.m4a",
+      "sha256": "ae9a6a2c3ad69ebe0dce00e58794d4cf5263d0a37bee6bc5d9bd078b91fed6cf",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "217b4d0079a6d633d7b8c82711a044f85d5b2ea786b2c8fbf3746208a8604e2d"
     },
     {
       "id": "es-female-eddfd20fff9f121c",
@@ -4535,10 +4805,12 @@
       "language": "es",
       "text": "caminar",
       "normalizedText": "caminar",
-      "url": "/audio/packs/v9/es-male-190d12ffb90f8d66-08cfba1b868e.m4a",
-      "sha256": "08cfba1b868e7429f633fd9258dfa3fbb1eb8f606e263481fdcb04dd6cb43fa1",
+      "url": "/audio/packs/v10/es-male-190d12ffb90f8d66-08cfba1b868e-tempo85.m4a",
+      "sha256": "7fb3670083c33e2da0a8c8a4e2c8a023f996fc9d503caf47347c40b749685fe0",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "08cfba1b868e7429f633fd9258dfa3fbb1eb8f606e263481fdcb04dd6cb43fa1"
     },
     {
       "id": "es-female-c15c7aab69f323af",
@@ -4585,10 +4857,12 @@
       "language": "es",
       "text": "el teléfono",
       "normalizedText": "el teléfono",
-      "url": "/audio/packs/v9/es-male-7198e02b800471c8-8c6d4c915cca.m4a",
-      "sha256": "8c6d4c915cca979b847b071d8ae7d757d9bf7798728edd022e1c9bad4d8595f8",
+      "url": "/audio/packs/v10/es-male-7198e02b800471c8-8c6d4c915cca-tempo85.m4a",
+      "sha256": "365fa63f54764494a7a9a9a34c290fef0a555c4bd0025cbc7e7bae1d3f602cca",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "8c6d4c915cca979b847b071d8ae7d757d9bf7798728edd022e1c9bad4d8595f8"
     },
     {
       "id": "es-female-9db53dfdd2ffc4d2",
@@ -4605,30 +4879,36 @@
       "language": "es",
       "text": "Antes",
       "normalizedText": "Antes",
-      "url": "/audio/packs/v9/es-male-993f776ff11d05df-59887d539fa4.m4a",
-      "sha256": "59887d539fa4213b25434782d46ad2bf9a75c1d91e334d4469cc03e3daef0c34",
+      "url": "/audio/packs/v10/es-male-993f776ff11d05df-59887d539fa4-tempo85.m4a",
+      "sha256": "7a3bb868d56ce55deef8be9964eb05c5d47aeebf075ea5f3a4676384bdf73042",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "59887d539fa4213b25434782d46ad2bf9a75c1d91e334d4469cc03e3daef0c34"
     },
     {
       "id": "es-male-ff1f1e1a1f51e2b4",
       "language": "es",
       "text": "prefiero el día",
       "normalizedText": "prefiero el día",
-      "url": "/audio/packs/v9/es-male-ff1f1e1a1f51e2b4-2ec04afd118e.m4a",
-      "sha256": "2ec04afd118e87c4fcff2cc85556e499257b59412f98781b86a757de4ba37a7d",
+      "url": "/audio/packs/v10/es-male-ff1f1e1a1f51e2b4-2ec04afd118e-tempo85.m4a",
+      "sha256": "e99f30e885732af03dba43abb16b1a9198e99745cbe48491b86d6d670f220d46",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "2ec04afd118e87c4fcff2cc85556e499257b59412f98781b86a757de4ba37a7d"
     },
     {
       "id": "es-male-5a11e6f2223fc4e7",
       "language": "es",
       "text": "Antes trabajaba de noche",
       "normalizedText": "Antes trabajaba de noche",
-      "url": "/audio/packs/v9/es-male-5a11e6f2223fc4e7-a8703f56cff7.m4a",
-      "sha256": "a8703f56cff7a75c3f98c1fdf9f4254ccb83a6386403d3416de6fa6405d37817",
+      "url": "/audio/packs/v10/es-male-5a11e6f2223fc4e7-a8703f56cff7-tempo85.m4a",
+      "sha256": "5c978529e7ec9be2877c2e0f72b1a237a2a988423a8c2386bee70cb6979af587",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "a8703f56cff7a75c3f98c1fdf9f4254ccb83a6386403d3416de6fa6405d37817"
     },
     {
       "id": "es-female-b0a6130cc57dec2d",
@@ -4645,20 +4925,24 @@
       "language": "es",
       "text": "He viajado solo",
       "normalizedText": "He viajado solo",
-      "url": "/audio/packs/v9/es-male-c8bb14120ec91294-20359f248909.m4a",
-      "sha256": "20359f248909648946ddc0ac64f31efb873a7f504c3146aeb72459e49c8fdb37",
+      "url": "/audio/packs/v10/es-male-c8bb14120ec91294-20359f248909-tempo85.m4a",
+      "sha256": "e980c4f4d3a864d47e731ab49978691f000b354e9a58edf66f5fe7a684ca0f17",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "20359f248909648946ddc0ac64f31efb873a7f504c3146aeb72459e49c8fdb37"
     },
     {
       "id": "es-male-d61c6d9998e36b33",
       "language": "es",
       "text": "Perdí el tren porque llegué tarde.",
       "normalizedText": "Perdí el tren porque llegué tarde.",
-      "url": "/audio/packs/v9/es-male-d61c6d9998e36b33-ce5df911ca44.m4a",
-      "sha256": "ce5df911ca44827cc68208160ece7f4468130a9e13c68c62bcbe5b6da5483de4",
+      "url": "/audio/packs/v10/es-male-d61c6d9998e36b33-ce5df911ca44-tempo85.m4a",
+      "sha256": "cff3b3d07e1c1d28aff6536a3c364424359906398236bb44e98be6160a2207cd",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "ce5df911ca44827cc68208160ece7f4468130a9e13c68c62bcbe5b6da5483de4"
     },
     {
       "id": "vi-female-1e8f660ac4126735",
@@ -4695,10 +4979,12 @@
       "language": "es",
       "text": "llegué tarde",
       "normalizedText": "llegué tarde",
-      "url": "/audio/packs/v9/es-male-e9df2175c35d3c33-79a1a2bc9813.m4a",
-      "sha256": "79a1a2bc9813386d88c803edcfbbf7c3ee81f99228d6026881b2de8babc32c91",
+      "url": "/audio/packs/v10/es-male-e9df2175c35d3c33-79a1a2bc9813-tempo85.m4a",
+      "sha256": "092c0f0ec234212f238b00136bb8a36ffdd3a740b7c5f198b7de3e5a9cd5d4e3",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "79a1a2bc9813386d88c803edcfbbf7c3ee81f99228d6026881b2de8babc32c91"
     },
     {
       "id": "vi-female-b3e833da7dce1dbf",
@@ -4708,16 +4994,6 @@
       "url": "/audio/packs/v9/vi-female-b3e833da7dce1dbf-3e3e2277a03c.m4a",
       "sha256": "3e3e2277a03c3ebf845951072b326e2c3e4b79a53109b1f3f1cb8d2022283ae4",
       "voice": "female",
-      "qualityCheck": "automated-text-and-pace"
-    },
-    {
-      "id": "es-male-b790f8f30dc7f531",
-      "language": "es",
-      "text": "Perdí el tren",
-      "normalizedText": "Perdí el tren",
-      "url": "/audio/packs/v9/es-male-b790f8f30dc7f531-c980681b1440.m4a",
-      "sha256": "c980681b1440a5fe391b7f2bcf1627641fea0cdfb1b96ed369c2274c303ba21f",
-      "voice": "male",
       "qualityCheck": "automated-text-and-pace"
     },
     {
@@ -4745,10 +5021,12 @@
       "language": "es",
       "text": "Quisiera cambiar",
       "normalizedText": "Quisiera cambiar",
-      "url": "/audio/packs/v9/es-male-5f05a33ae620e474-1a0e48593621.m4a",
-      "sha256": "1a0e48593621a2e3c6fbdad022442e8a8c23219137aeb42ebc52ff9cc557575e",
+      "url": "/audio/packs/v10/es-male-5f05a33ae620e474-1a0e48593621-tempo85.m4a",
+      "sha256": "8f50ddb3407bbdf0f15c6225c00f0ee5628cc675db89aba94439349934c3794a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "1a0e48593621a2e3c6fbdad022442e8a8c23219137aeb42ebc52ff9cc557575e"
     },
     {
       "id": "es-female-9c5593650913322a",
@@ -4785,10 +5063,12 @@
       "language": "es",
       "text": "Después del viaje",
       "normalizedText": "Después del viaje",
-      "url": "/audio/packs/v9/es-male-b4c23c3005ab532c-55bed5821cd1.m4a",
-      "sha256": "55bed5821cd157e2d2a6fb25e0f6c267c10afa136d58d32a66b196a744ad629e",
+      "url": "/audio/packs/v10/es-male-b4c23c3005ab532c-55bed5821cd1-tempo85.m4a",
+      "sha256": "98f120656f788932a8ff1e91e3855ffdf2477d4915ac7ad99144e2773f2ee109",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "55bed5821cd157e2d2a6fb25e0f6c267c10afa136d58d32a66b196a744ad629e"
     },
     {
       "id": "vi-female-a9b4fc5393656b74",
@@ -4815,10 +5095,12 @@
       "language": "es",
       "text": "Después del viaje entendí",
       "normalizedText": "Después del viaje entendí",
-      "url": "/audio/packs/v9/es-male-ffc6f9956cfd841f-85a4ff76c4fa.m4a",
-      "sha256": "85a4ff76c4faa1b9fbb0a4a131638d88bb03287c56ab66b58672390637634f01",
+      "url": "/audio/packs/v10/es-male-ffc6f9956cfd841f-85a4ff76c4fa-tempo85.m4a",
+      "sha256": "43fce355fbe8811abb79f3d9b273ca4ebecf265c8ff5a899cf5e1448a8186806",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "85a4ff76c4faa1b9fbb0a4a131638d88bb03287c56ab66b58672390637634f01"
     },
     {
       "id": "es-female-e0418bd0345ba846",
@@ -4855,20 +5137,25 @@
       "language": "es",
       "text": "este",
       "normalizedText": "este",
-      "url": "/audio/packs/v9/es-male-e0c7c89bc82af77e-44b37fc6f8c4.m4a",
-      "sha256": "44b37fc6f8c4c45dc2a00d0a4056edc1011928409d2c4b52023c95e51dc02cca",
+      "url": "/audio/packs/v10/es-male-e0c7c89bc82af77e-44b37fc6f8c4-tempo85.m4a",
+      "sha256": "132d752d5915e6bb3b852caa17183e3aa9d2bba939a39d2e592a760a6d23723f",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "44b37fc6f8c4c45dc2a00d0a4056edc1011928409d2c4b52023c95e51dc02cca"
     },
     {
       "id": "es-male-6e1ab79d8cd6086f",
       "language": "es",
       "text": "informe",
       "normalizedText": "informe",
-      "url": "/audio/packs/v9/es-male-6e1ab79d8cd6086f-39778a9a3db0.m4a",
-      "sha256": "39778a9a3db0893973df2e2a77bcf685445b68142122ccccee78c46eb7f75b17",
+      "url": "/audio/packs/v10/es-male-6e1ab79d8cd6086f-39778a9a3db0-tempo85.m4a",
+      "sha256": "7a290804471b961dc4e0741763b7b3924c9c604e211f22d48229d4f629a893fe",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "39778a9a3db0893973df2e2a77bcf685445b68142122ccccee78c46eb7f75b17",
+      "needsAudioTextReview": true
     },
     {
       "id": "vi-female-32047fdf3a1e37bb",
@@ -4885,60 +5172,72 @@
       "language": "es",
       "text": "Tengo que terminar este",
       "normalizedText": "Tengo que terminar este",
-      "url": "/audio/packs/v9/es-male-2ff358af5886753e-4d4437ffc170.m4a",
-      "sha256": "4d4437ffc170209807156abc9942f14e0df050f67ce93ece9a29a2203ef9cd10",
+      "url": "/audio/packs/v10/es-male-2ff358af5886753e-4d4437ffc170-tempo85.m4a",
+      "sha256": "4c3be7c5f196724760ab74434ab785e434c1baa166b65493dec36db62501a61a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "4d4437ffc170209807156abc9942f14e0df050f67ce93ece9a29a2203ef9cd10"
     },
     {
       "id": "es-male-f7cb3627a220fac1",
       "language": "es",
       "text": "¿Podrías revisar el documento esta tarde?",
       "normalizedText": "¿Podrías revisar el documento esta tarde?",
-      "url": "/audio/packs/v9/es-male-f7cb3627a220fac1-4b02ab0027fe.m4a",
-      "sha256": "4b02ab0027fe4b7e15564b7bc9e7ad236d38b9291d870af96817c3ce21c0037b",
+      "url": "/audio/packs/v10/es-male-f7cb3627a220fac1-4b02ab0027fe-tempo85.m4a",
+      "sha256": "31b7e2f647e97b1c65028ac139e8bd2929d69cc5ee87f0945e16e0c2345a411a",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "4b02ab0027fe4b7e15564b7bc9e7ad236d38b9291d870af96817c3ce21c0037b"
     },
     {
       "id": "es-male-73918e8462a7fc6b",
       "language": "es",
       "text": "Podrías revisar",
       "normalizedText": "Podrías revisar",
-      "url": "/audio/packs/v9/es-male-73918e8462a7fc6b-91dbf2a7a1c2.m4a",
-      "sha256": "91dbf2a7a1c2f89ed588e8d4a440c219c73c21a5656c97f49add110feab5b938",
+      "url": "/audio/packs/v10/es-male-73918e8462a7fc6b-91dbf2a7a1c2-tempo85.m4a",
+      "sha256": "044f70e998a9972bc7c76367fff3af87470f4815a92330d0876a133a34c2da1e",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "91dbf2a7a1c2f89ed588e8d4a440c219c73c21a5656c97f49add110feab5b938"
     },
     {
       "id": "es-male-2e07cc55dc3367f4",
       "language": "es",
       "text": "esta tarde",
       "normalizedText": "esta tarde",
-      "url": "/audio/packs/v9/es-male-2e07cc55dc3367f4-94343a655ba1.m4a",
-      "sha256": "94343a655ba16ab3e10bfc32837e11a784ba4d33a706b8feb73843d0f3a54183",
+      "url": "/audio/packs/v10/es-male-2e07cc55dc3367f4-94343a655ba1-tempo85.m4a",
+      "sha256": "4501aff3f01aba75ca0b283c912350443531bb3f23917a014d84e3f299a74f47",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "94343a655ba16ab3e10bfc32837e11a784ba4d33a706b8feb73843d0f3a54183"
     },
     {
       "id": "es-male-d6d50ac84b158e71",
       "language": "es",
       "text": "Ya hemos completado la primera parte.",
       "normalizedText": "Ya hemos completado la primera parte.",
-      "url": "/audio/packs/v9/es-male-d6d50ac84b158e71-cea480118304.m4a",
-      "sha256": "cea4801183049847ada8338d45db4c5b3b9aa24616fc714fd22d697fb144c55a",
+      "url": "/audio/packs/v10/es-male-d6d50ac84b158e71-cea480118304-tempo85.m4a",
+      "sha256": "9e7b3dd87026d5968c7cda4c26400f19741a744ff195237ed8b5be446f5cf70c",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "cea4801183049847ada8338d45db4c5b3b9aa24616fc714fd22d697fb144c55a"
     },
     {
       "id": "es-male-fa93b29024db596f",
       "language": "es",
       "text": "Ya",
       "normalizedText": "Ya",
-      "url": "/audio/packs/v9/es-male-fa93b29024db596f-604923054e62.m4a",
-      "sha256": "604923054e62677ee510332e640787db776aca68273f22484a2e3a8daafd987b",
+      "url": "/audio/packs/v10/es-male-fa93b29024db596f-604923054e62-tempo85.m4a",
+      "sha256": "d959bbb04824c618c58dc58928b75d78ab57db23c3b4694affe8d7b8ecacc83d",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "604923054e62677ee510332e640787db776aca68273f22484a2e3a8daafd987b"
     },
     {
       "id": "es-female-7b3df280b65435a6",
@@ -4975,10 +5274,12 @@
       "language": "es",
       "text": "parte",
       "normalizedText": "parte",
-      "url": "/audio/packs/v9/es-male-1e531ea22e71ece5-d3aac72f2a51.m4a",
-      "sha256": "d3aac72f2a51127b9aa8bbd5568df4f13f4b0b05551da3474174a0b27cc98616",
+      "url": "/audio/packs/v10/es-male-1e531ea22e71ece5-d3aac72f2a51-tempo85.m4a",
+      "sha256": "be4bdfdc78466e244fe24d35620c8bf0fecfa0b9c97c48cff09905c12a27a463",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "d3aac72f2a51127b9aa8bbd5568df4f13f4b0b05551da3474174a0b27cc98616"
     },
     {
       "id": "es-female-8fec16344388166c",
@@ -5005,10 +5306,12 @@
       "language": "es",
       "text": "estaba en una reunión",
       "normalizedText": "estaba en una reunión",
-      "url": "/audio/packs/v9/es-male-23831fe0fc526224-54403cff6548.m4a",
-      "sha256": "54403cff65487c071f02958c01010c11159bc5c9c52bacf96cb1cb300e04ba7e",
+      "url": "/audio/packs/v10/es-male-23831fe0fc526224-54403cff6548-tempo85.m4a",
+      "sha256": "0f22150707008f1c460b904b6fd1d7199771dc7fc48108cca65a25e1f3cdcad9",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "54403cff65487c071f02958c01010c11159bc5c9c52bacf96cb1cb300e04ba7e"
     },
     {
       "id": "es-female-4989b89adcbf83d1",
@@ -5025,10 +5328,12 @@
       "language": "es",
       "text": "No pude responder antes",
       "normalizedText": "No pude responder antes",
-      "url": "/audio/packs/v9/es-male-73b1e847777c95df-b1a0e00ef675.m4a",
-      "sha256": "b1a0e00ef6752ed1c5b0ef05174ce3d05ca21450a2a59d686fd4ffd2fea8cc7b",
+      "url": "/audio/packs/v10/es-male-73b1e847777c95df-b1a0e00ef675-tempo85.m4a",
+      "sha256": "76bd438d794c427d454962f30c39fbb00af35c7fb883d9b831a833f56a842257",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "b1a0e00ef6752ed1c5b0ef05174ce3d05ca21450a2a59d686fd4ffd2fea8cc7b"
     },
     {
       "id": "es-female-df478229df9095a0",
@@ -5055,10 +5360,12 @@
       "language": "es",
       "text": "Llevo",
       "normalizedText": "Llevo",
-      "url": "/audio/packs/v9/es-male-90e8f5e5e3ffb33d-131a37e93b26.m4a",
-      "sha256": "131a37e93b26ef222f498f879bb21a5fb1c4d079ffc4e183b8ed9c51711d5299",
+      "url": "/audio/packs/v10/es-male-90e8f5e5e3ffb33d-131a37e93b26-tempo85.m4a",
+      "sha256": "d1f4446a2b6dab00f0133d3df988bff6199770dd44dccab521341ce6d9ca5e68",
       "voice": "male",
-      "qualityCheck": "automated-text-and-pace"
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "131a37e93b26ef222f498f879bb21a5fb1c4d079ffc4e183b8ed9c51711d5299"
     },
     {
       "id": "vi-female-c548c55af5e01908",
@@ -5075,9 +5382,59 @@
       "language": "es",
       "text": "Llevo seis meses",
       "normalizedText": "Llevo seis meses",
-      "url": "/audio/packs/v9/es-male-83cacc1e128a491d-3d595994285d.m4a",
-      "sha256": "3d595994285d007e2fc3fc5fd5ebdd00d2057029b2e82f5437aeec0803c396ba",
+      "url": "/audio/packs/v10/es-male-83cacc1e128a491d-3d595994285d-tempo85.m4a",
+      "sha256": "4014b5a3d6ef586b74db896999ed4b89fb6178d921d33281a2fea6305ca2f641",
       "voice": "male",
+      "qualityCheck": "automated-text-and-pace",
+      "normalTempo": 0.85,
+      "tempoAdjustedFromSha256": "3d595994285d007e2fc3fc5fd5ebdd00d2057029b2e82f5437aeec0803c396ba"
+    },
+    {
+      "id": "es-male-d543a2222fe7c2c7",
+      "language": "es",
+      "text": "Me mudé de ciudad cuando tenía veinte años.",
+      "normalizedText": "Me mudé de ciudad cuando tenía veinte años.",
+      "url": "/audio/packs/v11/es-male-d543a2222fe7c2c7-ac351b6e21bf.m4a",
+      "sha256": "ac351b6e21bf20ef75f0665ca21680e84798a7ce92ec7b642580b2c29dc28a97",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "generationSignature": "d8e26af9123b",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-ba0579d8db17057a",
+      "language": "es",
+      "text": "Ya hemos completado",
+      "normalizedText": "Ya hemos completado",
+      "url": "/audio/packs/v11/es-male-ba0579d8db17057a-6f0865da2d57.m4a",
+      "sha256": "6f0865da2d571d05d075cd54a5c4f58b22fe612c3a4c3a27e20051eb25742969",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "generationSignature": "d8e26af9123b",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-b790f8f30dc7f531",
+      "language": "es",
+      "text": "Perdí el tren",
+      "normalizedText": "Perdí el tren",
+      "url": "/audio/packs/v11/es-male-b790f8f30dc7f531-200a08cb86a6.m4a",
+      "sha256": "200a08cb86a6548211cf7821253155244add1b470cd84994533fe7e5b6e020ef",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "generationSignature": "d8e26af9123b",
+      "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-female-15fdd8707a01b9c0",
+      "language": "es",
+      "text": "Ya sé explicar",
+      "normalizedText": "Ya sé explicar",
+      "url": "/audio/packs/v12/es-female-15fdd8707a01b9c0-d76aca22306d.m4a",
+      "sha256": "d76aca22306d0d29008f3cf1cca6844b332d7596e47b59857452af42c5a11aed",
+      "voice": "female",
+      "normalTempo": 1.0,
+      "generationSignature": "154729ef26c6",
       "qualityCheck": "automated-text-and-pace"
     }
   ]

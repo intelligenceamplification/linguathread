@@ -49,7 +49,7 @@ def main():
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "mps"))
     parser.add_argument("--inference-timesteps", type=int, help="Override the reviewed per-voice diffusion steps for a small audition only")
     parser.add_argument("--voice-registry", type=Path, default=ROOT / "audio/voice-registry.json")
-    parser.add_argument("--language", choices=("es", "vi"), help="Generate one reviewed language family at a time")
+    parser.add_argument("--language", help="Generate one reviewed language family at a time")
     args = parser.parse_args()
     if args.defer_failed and args.only_failed:
         parser.error("--defer-failed and --only-failed are mutually exclusive")
@@ -78,7 +78,7 @@ def main():
         key = (entry["language"], entry["voice"])
         if key in references:
             raise ValueError(f"Duplicate voice: {key}")
-        clip = by_id[entry["referenceClipId"]]
+        clip = entry.get("sourceReference") or by_id[entry["referenceClipId"]]
         if clip["language"] != entry["language"] or not clip.get("reviewedAt"):
             raise ValueError(f"Voice reference must be learner-reviewed in its language: {key}")
         reference_path = ROOT / "public" / clip["url"].lstrip("/")
@@ -89,10 +89,15 @@ def main():
         steps = args.inference_timesteps or entry["inferenceTimesteps"]
         if not 4 <= steps <= 30:
             raise ValueError(f"Invalid inference steps for {key}: {steps}")
-        voice_settings[key] = {"inferenceTimesteps": steps, "referenceSha256": clip["sha256"]}
+        tempo = float(entry.get("normalTempo", 1.0))
+        if not 0.5 <= tempo <= 1.25:
+            raise ValueError(f"Invalid Normal tempo for {key}: {tempo}")
+        voice_settings[key] = {"inferenceTimesteps": steps, "referenceSha256": clip["sha256"], "normalTempo": tempo}
     unsupported = {item["language"] for item in inventory} - {language for language, _ in references}
     if unsupported:
         raise ValueError(f"Inventory has no approved voice family: {sorted(unsupported)}")
+    if args.language and args.language not in {language for language, _ in references}:
+        raise ValueError(f"No learner-approved voice for {args.language}")
     published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
     reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt")}
     metadata = args.output / "metadata.jsonl"
@@ -181,11 +186,16 @@ def main():
                     problem = "signal outside bounds"
                     if 0.001 < rms and 0.005 < peak < 0.999 and 0.2 < duration < 45:
                         sf.write(wav_path, wav, model.tts_model.sample_rate)
-                        subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(wav_path), "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(audio_path)], check=True)
+                        command = [ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(wav_path)]
+                        tempo = voice_settings[(language, voice)]["normalTempo"]
+                        if tempo != 1.0:
+                            command += ["-filter:a", f"atempo={tempo}"]
+                        command += ["-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(audio_path)]
+                        subprocess.run(command, check=True)
                         segments, _ = recognizer.transcribe(str(audio_path), language=language, beam_size=5, condition_on_previous_text=False, temperature=0)
                         segments = list(segments)
                         transcript = " ".join(segment.text.strip() for segment in segments)
-                        target, heard = quality.normalize(speech_text), quality.normalize(transcript)
+                        target, heard = quality.normalize(speech_text, language), quality.normalize(transcript, language)
                         wer = quality.distance(target.split(), heard.split()) / max(1, len(target.split()))
                         cer = quality.distance(target, heard) / max(1, len(target))
                         pace = len(target.split()) / max(.1, sum(segment.end - segment.start for segment in segments))
@@ -202,12 +212,13 @@ def main():
                     "id": clip_id, "language": language, "voice": voice,
                     "sourceText": text, "spokenText": speech_text, "normalizedText": text,
                     "reference": str(reference.relative_to(ROOT)), "seed": seed,
-                    "sampleRate": int(model.tts_model.sample_rate), "durationSeconds": duration,
+                    "sampleRate": int(model.tts_model.sample_rate), "durationSeconds": duration / voice_settings[(language, voice)]["normalTempo"],
                     "peak": peak, "rms": rms, "sha256": hashlib.sha256(audio_path.read_bytes()).hexdigest(),
                     "file": audio_path.name, "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                     "approved": False,
                     "pipelineVersion": 5, "promptMode": args.prompt_mode,
                     "inferenceTimesteps": voice_settings[(language, voice)]["inferenceTimesteps"],
+                    "normalTempo": voice_settings[(language, voice)]["normalTempo"],
                     "generationSignature": generation_signature,
                     "referenceSha256": voice_settings[(language, voice)]["referenceSha256"],
                     "referenceCache": True,

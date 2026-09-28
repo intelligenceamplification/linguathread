@@ -9,6 +9,31 @@ import tempfile
 import unittest
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts/package-voice-coverage.py"
+AUDITOR = Path(__file__).resolve().parents[1] / "scripts/audit-voice-audio.py"
+QUARANTINE = Path(__file__).resolve().parents[1] / "scripts/quarantine-voice-clips.py"
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class PublishedSpanishPace(unittest.TestCase):
+    def test_every_selectable_spanish_male_clip_has_approved_normal_pace(self):
+        pack = json.loads((ROOT / "public/audio/packs/approved.json").read_text(encoding="utf-8"))
+        clips = [clip for clip in pack["clips"] if clip["language"] == "es" and clip.get("voice") == "male"]
+        self.assertGreater(len(clips), 100)
+        self.assertTrue(all(clip.get("normalTempo") == 0.85 for clip in clips))
+        self.assertFalse(any(clip["id"] == "es-male-1883076d1b0c384f" for clip in clips))
+        self.assertTrue(any(clip["normalizedText"] == "Ya sé explicar" and clip.get("voice") == "female"
+                            for clip in pack["clips"]))
+
+
+class TranscriptionNormalization(unittest.TestCase):
+    def test_spoken_digit_equivalence_preserves_diacritic_distinctions(self):
+        spec = importlib.util.spec_from_file_location("auditor", AUDITOR)
+        auditor = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(auditor)
+        self.assertEqual(auditor.normalize("1 món", "vi"), auditor.normalize("một món", "vi"))
+        self.assertEqual(auditor.normalize("20 años", "es"), auditor.normalize("veinte años", "es"))
+        self.assertNotEqual(auditor.normalize("má", "vi"), auditor.normalize("ma", "vi"))
+        self.assertNotEqual(auditor.normalize("sí", "es"), auditor.normalize("si", "es"))
 
 class PublicationGate(unittest.TestCase):
     def test_failed_or_changed_recordings_cannot_replace_reviewed_audio(self):
@@ -45,6 +70,29 @@ class PublicationGate(unittest.TestCase):
             self.assertEqual([clip["id"] for clip in clips], ["reviewed", "3"])
             self.assertEqual(clips[0]["sha256"], "protected")
             self.assertNotIn("reviewedAt", clips[1])
+
+
+class QuarantineGate(unittest.TestCase):
+    def test_requires_same_text_audio_before_removing_a_bad_take(self):
+        spec = importlib.util.spec_from_file_location("quarantine", QUARANTINE)
+        quarantine = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(quarantine)
+        with tempfile.TemporaryDirectory() as directory:
+            quarantine.ROOT = Path(directory)
+            female = Path(directory) / "public/female.m4a"
+            female.parent.mkdir(parents=True)
+            female.write_bytes(b"clear alternate")
+            male_clip = {"id": "bad-male", "language": "es", "voice": "male", "normalizedText": "Ya sé explicar"}
+            female_clip = {"id": "female", "language": "es", "voice": "female",
+                           "normalizedText": "Ya sé explicar", "url": "/female.m4a",
+                           "sha256": hashlib.sha256(female.read_bytes()).hexdigest()}
+            pack = {"clips": [male_clip]}
+            with self.assertRaisesRegex(ValueError, "No exact-text alternate"):
+                quarantine.quarantine(pack, ["bad-male"])
+            pack["clips"].append(female_clip)
+            removed = quarantine.quarantine(pack, ["bad-male"])
+            self.assertEqual([clip["id"] for clip in removed], ["bad-male"])
+            self.assertEqual([clip["id"] for clip in pack["clips"]], ["female"])
 
 if __name__ == "__main__":
     unittest.main()

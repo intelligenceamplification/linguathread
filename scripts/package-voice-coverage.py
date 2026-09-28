@@ -46,6 +46,8 @@ def main():
             "id": row["id"], "language": row["language"], "text": row["sourceText"],
             "normalizedText": row["normalizedText"], "url": f"/audio/packs/{args.version}/{name}",
             "sha256": digest, "voice": row["voice"],
+            "normalTempo": row.get("normalTempo", 1.0),
+            "generationSignature": row.get("generationSignature"),
             "qualityCheck": "automated-text-and-pace",
         })
         existing.add(key)

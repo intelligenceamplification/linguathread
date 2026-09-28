@@ -35,9 +35,14 @@ class VoicePlan(unittest.TestCase):
         stale_plan = planner.build_plan(inventory, registry, pack, stale, failures)
         self.assertEqual(stale_plan["report"]["states"]["missing"], 2)
         current = [{**stale[0], "pipelineVersion": 5, "referenceSha256": "reference-hash",
-                    "inferenceTimesteps": 20, "promptMode": False, "generationSignature": signature}]
+                    "inferenceTimesteps": 20, "normalTempo": 1.0,
+                    "promptMode": False, "generationSignature": signature}]
         current_plan = planner.build_plan(inventory, registry, pack, current, failures)
         self.assertEqual(current_plan["report"]["states"]["generated-unpublished"], 1)
+        registry["voices"][0]["sourceReference"] = {"language": "es", "sha256": "reference-hash", "reviewedAt": "today"}
+        pack["clips"][0]["sha256"] = "tempo-adjusted-hash"
+        pinned_plan = planner.build_plan(inventory, registry, pack, current, failures)
+        self.assertEqual(pinned_plan["report"]["states"]["generated-unpublished"], 1)
 
 
 if __name__ == "__main__":
