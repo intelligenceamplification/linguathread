@@ -31,7 +31,7 @@ def prepare(pack, language, voice, tempo, output):
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     rows = []
     for index, clip in enumerate(candidates(pack, language, voice), 1):
-        if clip.get("normalTempo"):
+        if clip.get("normalTempo", 1.0) != 1.0:
             raise ValueError(f"Refusing to retime an already adjusted clip: {clip['id']}")
         source = ROOT / "public" / clip["url"].lstrip("/")
         if digest(source) != clip["sha256"]:

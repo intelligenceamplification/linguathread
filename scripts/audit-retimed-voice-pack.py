@@ -10,6 +10,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def comparison_status(expected, original, revised, reviewed):
+    if expected == revised or (reviewed and original == revised):
+        return "pass"
+    if len(expected.split()) <= 2 and not reviewed:
+        return "transform-pass"
+    return "review"
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("folder", type=Path)
@@ -58,14 +66,7 @@ def main():
             expected = quality.normalize(row["sourceText"], row["language"])
             heard_original = quality.normalize(original, row["language"])
             heard_revised = quality.normalize(revised, row["language"])
-            if heard_original == heard_revised or expected == heard_revised:
-                status = "pass"
-            elif len(expected.split()) <= 2 and not row.get("sourceReviewedAt"):
-                # ASR is unstable on isolated sounds. Preserve the provisional
-                # status and keep this item on the listening-review queue.
-                status = "transform-pass"
-            else:
-                status = "review"
+            status = comparison_status(expected, heard_original, heard_revised, bool(row.get("sourceReviewedAt")))
             report = {"id": row["id"], "sourceSha256": row["sourceSha256"], "sha256": row["sha256"],
                       "status": status, "expected": expected, "original": original, "revised": revised,
                       "originalMatch": expected == heard_original, "revisedMatch": expected == heard_revised}

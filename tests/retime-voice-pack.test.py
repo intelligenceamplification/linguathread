@@ -10,6 +10,15 @@ SCRIPT = Path(__file__).resolve().parents[1] / "scripts/retime-voice-pack.py"
 
 
 class RetimePublication(unittest.TestCase):
+    def test_unchanged_wrong_transcript_is_not_text_validation(self):
+        spec = importlib.util.spec_from_file_location("comparison", SCRIPT.with_name("audit-retimed-voice-pack.py"))
+        comparison = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(comparison)
+        self.assertEqual(comparison.comparison_status("eres", "bye", "bye", False), "transform-pass")
+        self.assertEqual(comparison.comparison_status("después del viaje", "otra frase", "otra frase", False), "review")
+        self.assertEqual(comparison.comparison_status("eres", "bye", "eres", False), "pass")
+        self.assertEqual(comparison.comparison_status("eres", "bye", "bye", True), "pass")
+
     def test_requires_hash_bound_audit_and_preserves_source_review(self):
         spec = importlib.util.spec_from_file_location("retimer", SCRIPT)
         retimer = importlib.util.module_from_spec(spec)

@@ -38,3 +38,9 @@ Use the Mac GPU where available (VoxCPM selects MPS with float32); record the ac
 ## Licensing
 
 VoxCPM2 code and weights are provided by OpenBMB under Apache License 2.0. Keep `audio/THIRD_PARTY_NOTICES.md` with distributed production materials and preserve upstream notices. LinguaThread-generated voice designs are original synthetic voices, not imitations of identifiable people.
+
+## Spanish female teaching pace
+
+The learner approved the Spanish female voice at 10 generation steps and pitch-preserving Normal tempo 0.70 on 2026-09-29: deliberate, mindful teaching speech. Pin the original approved reference in the registry; never clone from a retimed derivative. Normal playback remains rate 1, with the separate Slow option at 0.75.
+
+A tempo comparison only proves preservation of the source, not correctness of its pronunciation. The reported `eres` defect affected both provisional variants despite stable source-versus-derivative ASR. User-reported defective variants must be replaced and checked against their exact target text. Isolated words and phonetic contrasts need extra scrutiny; batch sampling cannot establish that every assessed utterance is reviewed.
