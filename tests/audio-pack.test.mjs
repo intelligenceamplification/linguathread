@@ -27,7 +27,11 @@ test("chooses only reviewed voice variants when a reviewed model exists", async 
     Date.now = () => nextRefresh;
     globalThis.fetch = async () => ({ ok: true, json: async () => ({
       approvedAt: "2026-09-24T01:00:00Z",
-      clips: [{ id: "new", language: "es", normalizedText: "Other phrase", url: "/new.m4a" }],
+      blockedAudioSha256: ["known-bad"],
+      clips: [
+        { id: "blocked", language: "es", normalizedText: "Other phrase", sha256: "known-bad", reviewedAt: "2026-09-29", url: "/bad.m4a" },
+        { id: "new", language: "es", normalizedText: "Other phrase", url: "/new.m4a" },
+      ],
     }) });
     assert.equal((await approvedAudioFor("Other phrase", "es"))?.id, "new");
   } finally {

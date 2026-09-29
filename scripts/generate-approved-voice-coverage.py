@@ -36,6 +36,10 @@ def spoken_form(language: str, text: str) -> str:
     return re.sub(r"\s*[\/／·]\s*", ", ", text).strip()
 
 
+def speech_segments(language, text):
+    return [spoken_form(language, part.strip()) for part in re.split(r"[/／·]", text) if part.strip()]
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--inventory", type=Path, default=ROOT / "audio/inventory-es-vi.json")
@@ -98,8 +102,9 @@ def main():
         raise ValueError(f"Inventory has no approved voice family: {sorted(unsupported)}")
     if args.language and args.language not in {language for language, _ in references}:
         raise ValueError(f"No learner-approved voice for {args.language}")
-    published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
-    reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt")}
+    blocked = set(pack.get("blockedAudioSha256", []))
+    published = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip["sha256"] not in blocked}
+    reviewed = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"] if clip.get("reviewedAt") and clip["sha256"] not in blocked}
     metadata = args.output / "metadata.jsonl"
     failures = args.output / "failures.jsonl"
     completed = set()
@@ -129,7 +134,7 @@ def main():
 
     def signature(language: str, voice: str, prompt_mode=None) -> str:
         settings = {**voice_settings[(language, voice)], "promptMode": args.prompt_mode if prompt_mode is None else prompt_mode,
-                    "pipelineVersion": 5, "model": "openbmb/VoxCPM2", "cfgValue": 2.0}
+                    "pipelineVersion": 6, "model": "openbmb/VoxCPM2", "cfgValue": 2.0}
         return hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()[:12]
 
     work = [
@@ -174,12 +179,19 @@ def main():
                     attempt_seed = (seed + attempt * 104729) % (2**31 - 1)
                     torch.manual_seed(attempt_seed)
                     np.random.seed(attempt_seed)
-                    waveform, _, _ = model.tts_model.generate_with_prompt_cache(
-                        target_text=speech_text, prompt_cache=prompt_caches[(language, voice)], cfg_value=2.0,
-                        max_len=max(100, min(1125, len(speech_text) * 6)),
-                        inference_timesteps=voice_settings[(language, voice)]["inferenceTimesteps"], retry_badcase=False,
-                    )
-                    wav = waveform.squeeze(0).cpu().numpy()
+                    # Generate alternatives independently: never send their separator to TTS.
+                    alternatives = speech_segments(language, text)
+                    pieces = []
+                    for part in alternatives:
+                        waveform, _, _ = model.tts_model.generate_with_prompt_cache(
+                            target_text=part, prompt_cache=prompt_caches[(language, voice)], cfg_value=2.0,
+                            max_len=max(100, min(1125, len(part) * 6)),
+                            inference_timesteps=voice_settings[(language, voice)]["inferenceTimesteps"], retry_badcase=False,
+                        )
+                        if pieces:
+                            pieces.append(np.zeros(round(model.tts_model.sample_rate * 0.4), dtype=np.float32))
+                        pieces.append(waveform.squeeze(0).cpu().numpy())
+                    wav = np.concatenate(pieces)
                     peak = float(np.max(np.abs(wav)))
                     rms = float(np.sqrt(np.mean(np.square(wav))))
                     duration = len(wav) / model.tts_model.sample_rate
@@ -216,7 +228,7 @@ def main():
                     "peak": peak, "rms": rms, "sha256": hashlib.sha256(audio_path.read_bytes()).hexdigest(),
                     "file": audio_path.name, "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                     "approved": False,
-                    "pipelineVersion": 5, "promptMode": args.prompt_mode,
+                    "pipelineVersion": 6, "promptMode": args.prompt_mode,
                     "inferenceTimesteps": voice_settings[(language, voice)]["inferenceTimesteps"],
                     "normalTempo": voice_settings[(language, voice)]["normalTempo"],
                     "generationSignature": generation_signature,

@@ -34,7 +34,7 @@ class VoicePlan(unittest.TestCase):
                   "file": "old.m4a", "pipelineVersion": 4}]
         stale_plan = planner.build_plan(inventory, registry, pack, stale, failures)
         self.assertEqual(stale_plan["report"]["states"]["missing"], 2)
-        current = [{**stale[0], "pipelineVersion": 5, "referenceSha256": "reference-hash",
+        current = [{**stale[0], "pipelineVersion": 6, "referenceSha256": "reference-hash",
                     "inferenceTimesteps": 20, "normalTempo": 1.0,
                     "promptMode": False, "generationSignature": signature}]
         current_plan = planner.build_plan(inventory, registry, pack, current, failures)

@@ -44,3 +44,11 @@ VoxCPM2 code and weights are provided by OpenBMB under Apache License 2.0. Keep 
 The learner approved the Spanish female voice at 10 generation steps and pitch-preserving Normal tempo 0.70 on 2026-09-29: deliberate, mindful teaching speech. Pin the original approved reference in the registry; never clone from a retimed derivative. Normal playback remains rate 1, with the separate Slow option at 0.75.
 
 A tempo comparison only proves preservation of the source, not correctness of its pronunciation. The reported `eres` defect affected both provisional variants despite stable source-versus-derivative ASR. User-reported defective variants must be replaced and checked against their exact target text. Isolated words and phonetic contrasts need extra scrutiny; batch sampling cannot establish that every assessed utterance is reviewed.
+
+## Reported defects and alternative forms
+
+`audio/known-audio-defects.json` records rejected audio hashes and the reason for each rejection. Publication carries the blocked hashes into the manifest; web and iOS playback exclude these files. The incremental planner and generator treat their coverage as missing, and the packager refuses to republish them. Missing accepted replacements use the existing clearly unreviewed fallback playback, which cannot establish independent listening mastery.
+
+Pipeline version 6 synthesizes each slash or middle-dot alternative independently, then joins the recordings with 400 ms silence before applying the voice's Normal tempo and final AAC checks. Literal separators never reach the speech model. Preserve diacritics and the displayed authored alternatives.
+
+Exact transcription does not certify native vowels or consonants. Flagged isolated sounds and words require focused listening approval; failed synthesis remains unpublished. Voice/pacing approval and utterance review remain separate.

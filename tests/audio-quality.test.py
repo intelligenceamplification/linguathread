@@ -25,6 +25,16 @@ class PublishedSpanishPace(unittest.TestCase):
                             for clip in pack["clips"]))
 
 
+class AlternativeSpeech(unittest.TestCase):
+    def test_alternatives_are_separate_synthesis_inputs(self):
+        spec = importlib.util.spec_from_file_location("generator", ROOT / "scripts/generate-approved-voice-coverage.py")
+        generator = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(generator)
+        self.assertEqual(generator.speech_segments("vi", "từ / của"), ["từ", "của"])
+        self.assertEqual(generator.speech_segments("vi", "Mình ／ Tôi"), ["Mình", "Tôi"])
+        self.assertEqual(generator.speech_segments("es", "sí"), ["sí"])
+
+
 class TranscriptionNormalization(unittest.TestCase):
     def test_spoken_digit_equivalence_preserves_diacritic_distinctions(self):
         spec = importlib.util.spec_from_file_location("auditor", AUDITOR)

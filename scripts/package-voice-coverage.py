@@ -20,6 +20,10 @@ def main():
     args = parser.parse_args()
     manifest = ROOT / "public/audio/packs/approved.json"
     pack = json.loads(manifest.read_text(encoding="utf-8"))
+    defects_file = ROOT / "audio/known-audio-defects.json"
+    defects = json.loads(defects_file.read_text())["defects"] if defects_file.exists() else []
+    blocked = {row["sha256"] for row in defects if row["status"] == "blocked"}
+    pack["blockedAudioSha256"] = sorted(blocked)
     destination = ROOT / "public/audio/packs" / args.version
     destination.mkdir(parents=True, exist_ok=True)
     existing = {(clip["language"], clip["normalizedText"], clip.get("voice")) for clip in pack["clips"]}
@@ -28,6 +32,8 @@ def main():
     added = 0
     for line in args.metadata.read_text(encoding="utf-8").splitlines():
         row = json.loads(line)
+        if row["sha256"] in blocked:
+            raise ValueError(f"Known defective audio cannot be republished: {row['id']}")
         if row["sha256"] not in passing:
             continue
         key = (row["language"], row["normalizedText"], row["voice"])

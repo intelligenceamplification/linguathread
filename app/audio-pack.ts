@@ -17,6 +17,7 @@ export type ApprovedAudioPack = {
   model: string;
   approvedAt: string | null;
   clips: ApprovedAudioClip[];
+  blockedAudioSha256?: string[];
 };
 
 let packPromise: Promise<ApprovedAudioPack | null> | null = null;
@@ -36,7 +37,8 @@ export function approvedAudioFor(text: string, language: FoundationLanguage) {
   return packPromise.then((pack) => {
     if (!pack?.approvedAt) return null;
     const normalized = normalizeAudioText(text);
-    const matches = pack.clips.filter((clip) => clip.language === language && clip.normalizedText === normalized);
+    const blocked = new Set(pack.blockedAudioSha256 ?? []);
+    const matches = pack.clips.filter((clip) => clip.language === language && clip.normalizedText === normalized && !blocked.has(clip.sha256));
     const reviewed = matches.filter((clip) => Boolean(clip.reviewedAt));
     const candidates = reviewed.length ? reviewed : matches;
     return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : null;

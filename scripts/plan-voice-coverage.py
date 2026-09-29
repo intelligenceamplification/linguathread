@@ -33,7 +33,7 @@ def generation_signature(settings):
     material = {"inferenceTimesteps": settings["inferenceTimesteps"],
                 "referenceSha256": settings["referenceSha256"],
                 "normalTempo": float(settings.get("normalTempo", 1.0)),
-                "promptMode": False, "pipelineVersion": 5,
+                "promptMode": False, "pipelineVersion": 6,
                 "model": "openbmb/VoxCPM2", "cfgValue": 2.0}
     return hashlib.sha256(json.dumps(material, sort_keys=True).encode()).hexdigest()[:12]
 
@@ -50,13 +50,14 @@ def build_plan(inventory, registry, pack, metadata, failures, mode="first-pass")
             raise ValueError(f"Voice reference needs learner review: {language}/{voice}")
         voices[(language, voice)] = {**entry, "referenceSha256": reference["sha256"]}
 
+    blocked = set(pack.get("blockedAudioSha256", []))
     published = {key(clip["language"], clip["normalizedText"], clip.get("voice")):
                  "published-reviewed" if clip.get("reviewedAt") else "published-provisional"
-                 for clip in pack["clips"] if clip.get("voice")}
+                 for clip in pack["clips"] if clip.get("voice") and clip.get("sha256") not in blocked}
     generated = set()
     for row in metadata:
         settings = voices.get((row.get("language"), row.get("voice")))
-        if (settings and row.get("file") and row.get("pipelineVersion") == 5
+        if (settings and row.get("file") and row.get("pipelineVersion") == 6
                 and row.get("referenceSha256") == settings["referenceSha256"]
                 and row.get("inferenceTimesteps") == settings["inferenceTimesteps"]
                 and row.get("normalTempo", 1.0) == float(settings.get("normalTempo", 1.0))
