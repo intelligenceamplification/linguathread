@@ -155,12 +155,23 @@ def main():
     print(f"Generating {len(work)} new clips; {len(completed)} already generated", flush=True)
     if not work:
         return
+    # Decode reviewed AAC references once before the expensive model load.
+    ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+    prompt_references = {}
+    for key in {(language, voice) for language, _, voice, _, _ in work}:
+        reference = references[key]
+        if reference.suffix.lower() not in (".wav", ".flac"):
+            decoded = args.output / f"reference-{voice_settings[key]['referenceSha256'][:16]}.wav"
+            if not decoded.exists():
+                subprocess.run([ffmpeg, "-hide_banner", "-loglevel", "error", "-y", "-i", str(reference), str(decoded)], check=True)
+            reference = decoded
+        prompt_references[key] = reference
     model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False, device=args.device, optimize=False)
     recognizer = WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     prompt_caches = {}
     for key in {(language, voice) for language, _, voice, _, _ in work}:
-        reference = references[key]
+        reference = prompt_references[key]
         prompt_caches[key] = model.tts_model.build_prompt_cache(
             reference_wav_path=str(reference),
             prompt_wav_path=str(reference) if args.prompt_mode else None,

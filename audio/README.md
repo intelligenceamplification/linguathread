@@ -52,3 +52,9 @@ A tempo comparison only proves preservation of the source, not correctness of it
 Pipeline version 6 synthesizes each slash or middle-dot alternative independently, then joins the recordings with 400 ms silence before applying the voice's Normal tempo and final AAC checks. Literal separators never reach the speech model. Preserve diacritics and the displayed authored alternatives.
 
 Exact transcription does not certify native vowels or consonants. Flagged isolated sounds and words require focused listening approval; failed synthesis remains unpublished. Voice/pacing approval and utterance review remain separate.
+
+## Native pronunciation benchmark
+
+An approved Spanish voice establishes native pronunciation as well as speaker identity. Timbre similarity and exact ASR transcription do not qualify a take with an English-like r or a schwa in `de`. In `eres`, require the Spanish intervocalic tap; in `de`, require a clear Spanish e vowel. Dialect variation remains acceptable. Use sufficiently varied approved Spanish reference speech and focused checks on reported consonants/vowels before releasing repaired utterances.
+
+Reported Spanish pronunciation defects require a fresh, hash-bound listening approval before a replacement may publish, even if ASR passes. Supply `--listening-review` with a JSON `reviews` array containing each accepted candidate's SHA, language, exact text, voice, `approved: true`, reviewer, review time, and evidence of the human acceptance. Generation never creates this approval. Known rejected hashes remain permanently blocked.

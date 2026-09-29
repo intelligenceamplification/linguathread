@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "packVersion": "v18",
+  "packVersion": "v19",
   "model": "OpenBMB/VoxCPM2",
-  "approvedAt": "2026-09-29T22:24:56Z",
+  "approvedAt": "2026-09-29T22:44:46Z",
   "clips": [
     {
       "id": "en-expression",
@@ -7031,18 +7031,6 @@
       "qualityCheck": "automated-text-and-pace"
     },
     {
-      "id": "es-male-c4795a2d8b32863e",
-      "language": "es",
-      "text": "eres",
-      "normalizedText": "eres",
-      "url": "/audio/packs/v17/es-male-c4795a2d8b32863e-67531f6b0e96.m4a",
-      "sha256": "67531f6b0e96ebb2fe0b2c12c3eb1d5c5e55e2b6d5cbd5ea3847985ae99ee6d7",
-      "voice": "male",
-      "normalTempo": 0.85,
-      "generationSignature": "3586ae05980a",
-      "qualityCheck": "automated-text-and-pace"
-    },
-    {
       "id": "vi-female-69d4d3c9572c8e9e",
       "language": "vi",
       "text": "từ / của",
@@ -7053,11 +7041,28 @@
       "normalTempo": 1.0,
       "generationSignature": "3dccae0618d5",
       "qualityCheck": "automated-text-and-pace"
+    },
+    {
+      "id": "es-male-c4795a2d8b32863e",
+      "language": "es",
+      "text": "eres",
+      "normalizedText": "eres",
+      "url": "/audio/packs/v19/es-male-c4795a2d8b32863e-c4911376b2ed.wav",
+      "sha256": "c4911376b2edd6df17d3c36fd34b9061266e8b61f1b29ca60bf7285d536863ee",
+      "voice": "male",
+      "normalTempo": 0.85,
+      "generationSignature": "b326e865c6f1",
+      "qualityCheck": "human-listening-review",
+      "reviewedAt": "2026-09-29T22:44:07Z",
+      "reviewEvidence": "User confirmed trimmed WAV retains correct Spanish r and removes extra sound: Yes, use it (call_NyYUHjYcxoiPat2aVIPC1Ljz)"
     }
   ],
   "blockedAudioSha256": [
     "297b3063bdd839f8727b3bef3ca3f3c054460e1e90d65eaf803a8156906ed600",
+    "3a813b7b7974ba52bc959dc7a95e1af539cf37b8f5819a16444bee7ad8a524b8",
     "67531f6b0e96ebb2fe0b2c12c3eb1d5c5e55e2b6d5cbd5ea3847985ae99ee6d7",
+    "716662d7feb435e7474e475ebd620e14ce2b84f5ea17e9c1059279fc8fa43f65",
+    "b2427c0c2f1703f27b40f9402db69085f8b1692cc0e377a2f453394533d58331",
     "b813959df865ed1b6f6d6b9822870e39b8812cefaa0d42299e3660ea78eb53af",
     "cd532b67239aa356df7a0c0a0878445c8d33ece4f9fb9bdca0fd8a74efdc50e1"
   ]

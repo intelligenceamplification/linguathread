@@ -8,7 +8,8 @@
       "sha256": "297b3063bdd839f8727b3bef3ca3f3c054460e1e90d65eaf803a8156906ed600",
       "reason": "Schwa-like vowel reported; requires clear Spanish e",
       "reportedAt": "2026-09-29",
-      "status": "blocked"
+      "status": "blocked",
+      "requiresPronunciationReview": true
     },
     {
       "language": "es",
@@ -17,7 +18,8 @@
       "sha256": "b813959df865ed1b6f6d6b9822870e39b8812cefaa0d42299e3660ea78eb53af",
       "reason": "Schwa-like vowel reported; requires clear Spanish e",
       "reportedAt": "2026-09-29",
-      "status": "blocked"
+      "status": "blocked",
+      "requiresPronunciationReview": true
     },
     {
       "language": "vi",
@@ -35,7 +37,38 @@
       "sha256": "67531f6b0e96ebb2fe0b2c12c3eb1d5c5e55e2b6d5cbd5ea3847985ae99ee6d7",
       "reason": "English-like r reported; text screening did not establish pronunciation",
       "reportedAt": "2026-09-29",
-      "status": "blocked"
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "eres",
+      "voice": "male",
+      "sha256": "716662d7feb435e7474e475ebd620e14ce2b84f5ea17e9c1059279fc8fa43f65",
+      "reason": "Learner rejected repaired candidate: Spanish tap remains English-like",
+      "reportedAt": "2026-09-29",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "eres",
+      "voice": "male",
+      "sha256": "b2427c0c2f1703f27b40f9402db69085f8b1692cc0e377a2f453394533d58331",
+      "reason": "Correct Spanish r but unwanted trailing audio; reviewed trim replaces it",
+      "reportedAt": "2026-09-29",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "eres",
+      "voice": "female",
+      "sha256": "3a813b7b7974ba52bc959dc7a95e1af539cf37b8f5819a16444bee7ad8a524b8",
+      "reason": "Learner rejected richer-reference female pronunciation",
+      "reportedAt": "2026-09-29",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

@@ -43,6 +43,11 @@ class VoicePlan(unittest.TestCase):
         pack["clips"][0]["sha256"] = "tempo-adjusted-hash"
         pinned_plan = planner.build_plan(inventory, registry, pack, current, failures)
         self.assertEqual(pinned_plan["report"]["states"]["generated-unpublished"], 1)
+        pack["blockedAudioSha256"] = ["tempo-adjusted-hash"]
+        blocked_plan = planner.build_plan(inventory, registry, pack, current, failures)
+        self.assertEqual(blocked_plan["report"]["publishedVariants"], 0)
+        self.assertIn("Hola.", [item["text"] for item in blocked_plan["items"]])
+
 
 
 if __name__ == "__main__":

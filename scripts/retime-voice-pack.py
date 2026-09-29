@@ -29,8 +29,12 @@ def prepare(pack, language, voice, tempo, output):
 
     output.mkdir(parents=True, exist_ok=True)
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
+    defects_file = ROOT / "audio/known-audio-defects.json"
+    blocked = {row["sha256"] for row in json.loads(defects_file.read_text())["defects"] if row["status"] == "blocked"} if defects_file.exists() else set()
     rows = []
     for index, clip in enumerate(candidates(pack, language, voice), 1):
+        if clip["sha256"] in blocked:
+            raise ValueError(f"Known defective source cannot be retimed: {clip['id']}")
         if clip.get("normalTempo", 1.0) != 1.0:
             raise ValueError(f"Refusing to retime an already adjusted clip: {clip['id']}")
         source = ROOT / "public" / clip["url"].lstrip("/")

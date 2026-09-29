@@ -78,6 +78,34 @@ class PublicationGate(unittest.TestCase):
                 sys.argv = previous
             clips = json.loads(manifest.read_text())["clips"]
             self.assertEqual([clip["id"] for clip in clips], ["reviewed", "3"])
+            (root / "audio").mkdir()
+            (root / "audio/known-audio-defects.json").write_text(json.dumps({"defects": [{"sha256": candidates[3]["sha256"], "status": "blocked"}]}))
+            previous = sys.argv
+            try:
+                sys.argv = [str(SCRIPT), str(metadata), "--audit", str(report), "--version", "test", "--replace"]
+                with self.assertRaisesRegex(ValueError, "Known defective audio"):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        packager.main()
+            finally:
+                sys.argv = previous
+
+            (root / "audio/known-audio-defects.json").write_text(json.dumps({"defects": [{"sha256": "older-rejected-file", "status": "blocked", "language": "es", "text": "clear", "voice": "male", "requiresPronunciationReview": True}]}))
+            previous = sys.argv
+            try:
+                sys.argv = [str(SCRIPT), str(metadata), "--audit", str(report), "--version", "test", "--replace"]
+                with self.assertRaisesRegex(ValueError, "requires listening review"):
+                    with contextlib.redirect_stdout(io.StringIO()):
+                        packager.main()
+                review = root / "human-review.json"
+                review.write_text(json.dumps({"reviews": [{"sha256": candidates[3]["sha256"], "language": "es", "text": "clear", "voice": "male", "approved": True, "reviewedAt": "human-review-time", "reviewedBy": "reviewer", "evidence": "explicit listening approval fixture"}]}))
+                sys.argv += ["--listening-review", str(review)]
+                with contextlib.redirect_stdout(io.StringIO()):
+                    packager.main()
+                repaired = next(c for c in json.loads(manifest.read_text())["clips"] if c["id"] == "3")
+                self.assertEqual(repaired["reviewedAt"], "human-review-time")
+            finally:
+                sys.argv = previous
+
             self.assertEqual(clips[0]["sha256"], "protected")
             self.assertNotIn("reviewedAt", clips[1])
 
