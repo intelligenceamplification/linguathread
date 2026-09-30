@@ -296,7 +296,7 @@ test("offers typed model recovery after three failed attempts in every language"
   assert.match(page, /Here is the model/);
   assert.match(page, /Type the model/);
   assert.match(page, /Skip this lesson for now/);
-  assert.match(page, /recordAttempt\("skipped", false, language\)/);
+  assert.doesNotMatch(page, /recordAttempt\("skipped", false, language\)/);
   assert.doesNotMatch(page, /Continue with model/);
   assert.match(page, /supported-reconstruction/);
   assert.doesNotMatch(page, /sentence-builder/);

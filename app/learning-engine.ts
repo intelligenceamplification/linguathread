@@ -26,6 +26,7 @@ export type SkillEvidence = {
   score: number;
   lastPracticedAt: string;
   lastFailureAt?: string;
+  lastIndependentSuccessAt?: string;
   nextReviewAt: string;
   edge?: RetrievalEdge;
   lastLatencyMs?: number;
@@ -169,6 +170,7 @@ export function recordEvidence(
         legacyQualified,
         score,
         lastPracticedAt: now.toISOString(),
+        lastIndependentSuccessAt: correct && !supported ? now.toISOString() : previous?.lastIndependentSuccessAt,
         lastFailureAt: correct ? previous?.lastFailureAt : now.toISOString(),
         nextReviewAt: nextReview.toISOString(),
         edge,
@@ -186,14 +188,16 @@ export function isPhraseRetired(lesson: LessonDefinition, model: LearnerModel) {
     fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "written", retrievalType: "production",
   })];
   if (!production) return false;
-  const separateSessions = production.independentSessionIds?.length || 0;
-  const legacyDays = production.legacyQualified || (production.independentSessionIds === undefined && (production.independentReviewDays?.length || 0) >= 3) ? 3 : 0;
-  if (separateSessions < 3 && legacyDays < 3) return false;
-  if ((production.independentReviewDays?.length || 0) < 2) return false;
-  const latestFailure = evidenceForObjective(model, objectiveId)
-    .map((item) => item.lastFailureAt || (item.errorType ? item.lastPracticedAt : ""))
-    .sort().at(-1);
-  return !latestFailure || latestFailure <= production.lastPracticedAt;
+  return isEvidenceRetired(production);
+}
+
+/** Retirement is specific to the demonstrated retrieval edge. */
+export function isEvidenceRetired(evidence: SkillEvidence) {
+  const sessions = evidence.independentSessionIds?.length || 0;
+  const legacy = evidence.legacyQualified || (evidence.independentSessionIds === undefined && (evidence.independentReviewDays?.length || 0) >= 3);
+  return (sessions >= 3 || legacy) && (evidence.independentReviewDays?.length || 0) >= 2
+    && !evidence.errorType
+    && (!evidence.lastFailureAt || evidence.lastFailureAt < (evidence.lastIndependentSuccessAt || ""));
 }
 
 export function completeSession(model: LearnerModel) {
@@ -227,29 +231,25 @@ export function selectNextLesson(
 ) {
   const unlockedNew = curriculum.find((lesson) =>
     !completedLessonIds.includes(lesson.id) && !skippedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
-  const due = curriculum.find((lesson) => {
-    if (isPhraseRetired(lesson, model)) return false;
-    const evidence = evidenceForObjective(model, lesson.objectiveId || lesson.id);
-    return completedLessonIds.includes(lesson.id) && evidence.some((item) => new Date(item.nextReviewAt) <= now);
-  });
-
-  // New material remains the normal flow; every fourth session gives a due skill priority.
-  if (due && model.sessionsCompleted > 0 && model.sessionsCompleted % 4 === 0) {
-    return { lesson: due, mode: "review" as const };
+  const due = curriculum.flatMap((lesson) => {
+    if (!completedLessonIds.includes(lesson.id)) return [];
+    return evidenceForObjective(model, lesson.objectiveId || lesson.id)
+      .filter((item) => item.language.toLocaleLowerCase() === language.toLocaleLowerCase()
+        && Boolean(item.edge) && (item.edge?.toModality === "written" || item.edge?.toModality === "meaning")
+        && (item.independentSuccesses > 0 || Boolean(item.errorType))
+        && !isEvidenceRetired(item) && new Date(item.nextReviewAt) <= now)
+      .map((evidence) => ({ lesson, evidence }));
+  }).sort((a, b) => a.evidence.nextReviewAt.localeCompare(b.evidence.nextReviewAt)
+    || a.evidence.lastPracticedAt.localeCompare(b.evidence.lastPracticedAt))[0];
+  // One brief edge check per four completed sessions; never restart the lesson cycle.
+  if (due && (!unlockedNew || (model.sessionsCompleted > 0 && model.sessionsCompleted % 4 === 0))) {
+    return { lesson: due.lesson, mode: "review" as const, reviewEdge: due.evidence.edge };
   }
   if (unlockedNew) return { lesson: unlockedNew, mode: "new" as const };
-  if (due) return { lesson: due, mode: "review" as const };
+
   const deferred = curriculum.find((lesson) => skippedLessonIds.includes(lesson.id) && !completedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
   if (deferred) return { lesson: deferred, mode: "strengthen" as const };
 
-  const weakest = [...curriculum]
-    .filter((lesson) => completedLessonIds.includes(lesson.id) && !isPhraseRetired(lesson, model))
-    .sort((a, b) => {
-      const aScore = weakestEvidence(model, a.objectiveId || a.id)?.score || 0;
-      const bScore = weakestEvidence(model, b.objectiveId || b.id)?.score || 0;
-      return aScore - bScore;
-    })[0];
-  if (weakest) return { lesson: weakest, mode: "strengthen" as const };
   return { lesson: undefined, mode: "complete" as const };
 }
 

@@ -24,7 +24,7 @@ The learning path must advance through the existing authored A1–C2 sequence as
 
 - After three independent successful retrievals of an exact phrase across separate sessions, including later delayed recall, retire that phrase from routine repetition for the demonstrated skill. Immediate repetition, copied input, hints, revealed answers, and text-supported listening do not qualify. This is a product scheduling rule, not a claim that three successes establish universal mastery.
 - Revisit the underlying objective through authored variations: different vocabulary, situations, transformations, and sentence forms. Check transfer of the structure rather than repeatedly presenting the same elementary phrase as new learning.
-- Keep brief, targeted review alongside forward progression. Due review must not repeatedly replace the next eligible lesson, reopen completed introductory lessons, or silently reset the learner to A1.
+- Keep brief, targeted review alongside forward progression. The next eligible authored lesson is the normal flow. After every four completed sessions, allow one brief due evidence check, ordered by due date, then continue forward. Open review directly at the affected listening, reading, translation, or reverse-recall exercise and finish there. When no new eligible lesson remains, schedule only due checks. Never select completed content merely because it has the lowest score; do not reopen completed introductory lessons without due evidence or silently reset the learner to A1.
 - Bring a retired exact phrase back when later recall or related errors indicate a deficiency. Remediation must target the affected objective and evidence type; a lapse must not erase unrelated progress.
 - Track listening, reading, writing, and spoken attempts independently. Success in translation or reading cannot retire listening or writing requirements. Preserve meaning-bearing diacritics in writing; reviewed audio is required for independent listening evidence. Spoken self-comparison remains self-reported practice, not verified pronunciation competence.
 - Use demonstrated prerequisite skills, transfer, and delayed recall to determine readiness for harder material. Completed or skipped lessons, three repetitions alone, and response latency alone must not certify CEFR proficiency or automaticity.
@@ -147,3 +147,7 @@ A language course is ready only when:
 - [Duolingo 2025 Language Report](https://blog.duolingo.com/2025-duolingo-language-report/)
 - [United Nations official languages](https://www.un.org/en/our-work/official-languages)
 - [U.S. State Department language training estimates](https://2009-2017.state.gov/documents/organization/247092.pdf)
+
+## Progression persistence (2026-09-30)
+
+Legacy completed-session snapshots cannot reopen completed lessons on launch. Newly scheduled targeted reviews can resume across reloads. Skips are navigation events, not failed responses. A corrected answer after a failed attempt is supported practice; only subsequent independent recall resolves a demonstrated lapse. Exact-phrase retirement applies per retrieval edge, so a bridge-language or reading failure does not invalidate demonstrated Spanish writing. Saved completion unlocks the existing authored path without certifying CEFR proficiency.
