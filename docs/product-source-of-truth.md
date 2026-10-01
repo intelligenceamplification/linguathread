@@ -151,3 +151,7 @@ A language course is ready only when:
 ## Progression persistence (2026-09-30)
 
 Legacy completed-session snapshots cannot reopen completed lessons on launch. Newly scheduled targeted reviews can resume across reloads. Skips are navigation events, not failed responses. A corrected answer after a failed attempt is supported practice; only subsequent independent recall resolves a demonstrated lapse. Exact-phrase retirement applies per retrieval edge, so a bridge-language or reading failure does not invalidate demonstrated Spanish writing. Saved completion unlocks the existing authored path without certifying CEFR proficiency.
+
+### Progression recovery (2026-10-01)
+
+Every skip path must persist deferral so the scheduler cannot restart the same unfinished lesson automatically. Independent target-language production permits studying the next authored prerequisite-dependent lesson, while skipped bridge or other skill work remains incomplete. This readiness decision does not certify stable mastery or CEFR proficiency. A checked independent answer in the current session must survive process reloads: resume the pending bridge or the continuation control, not the same empty target-language question.

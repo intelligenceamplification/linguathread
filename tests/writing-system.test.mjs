@@ -76,13 +76,17 @@ test("orthographic assessment retains meaningful marks and accepts canonical Uni
  const e = { answer: "tiếng" }; assert.ok(model.assess(e, "tiếng".normalize("NFD"))); assert.equal(model.assess(e, "tieng"), false);
  assert.equal(model.assess({ answer: "р" }, "p"), false);
 });
-test("finite foundation inventory is taught, rather than listed only", () => {
- for (const [language, expected] of [["vi",29],["ko",40],["ar",28],["ru",33],["ja",92]]) {
-  const units = writingCourses[language].units.filter(u => u.stage === "forms");
-  const forms = new Set(units.flatMap(u => u.exercises.filter(e => e.direction === "recognize").map(e => e.answer)));
-  assert.equal(forms.size, expected, language);
+test("each published inventory form is taught in its own prerequisite unit", () => {
+ for (const course of Object.values(writingCourses)) for (const section of course.inventory) for (const item of section.items) {
+  const unit = course.units.find(u => u.id === item.unitId);
+  assert.ok(unit, `${course.language}: ${item.form}`);
+  assert.ok(unit.exercises.some(e => e.direction === "recognize" && e.answer === item.form));
+  assert.ok(unit.exercises.some(e => e.direction === "input" && (e.answer === item.form || e.accepted?.includes(item.form))));
  }
+ const letters = writingCourses.vi.inventory.filter(section => section.track === "alphabet").flatMap(section => section.items);
+ assert.equal(new Set(letters.map(item => item.form)).size, 29);
 });
+
 test("review targets a due edge without requiring a full lesson restart", () => {
  const course = writingCourses.vi, unit = course.units[0], exercise = unit.exercises[0], now = Date.UTC(2026,8,7);
  const p = model.recordAttempt(model.emptyProgress(), exercise, false, false, now, 800);
@@ -101,7 +105,11 @@ test("replaying a transfer item cannot manufacture fresh unseen-transfer evidenc
 test("Vietnamese word prerequisites include their actual letters and written tones", () => {
  const grandmother = writingCourses.vi.units.find(u => u.title === "bà" && u.stage === "words");
  assert.ok(grandmother.prerequisites.includes("vi-architecture-tone-huyền"));
- assert.ok(grandmother.prerequisites.includes("vi-literacy-forms-0"));
+ for (const letter of ["b", "a"]) {
+  const item = writingCourses.vi.inventory.filter(section => section.track === "alphabet").flatMap(section => section.items).find(item => item.form === letter);
+  assert.ok(item);
+  assert.ok(grandmother.prerequisites.includes(item.unitId), `missing prerequisite for ${letter}`);
+ }
  assert.equal(model.unlocked(grandmother, model.emptyProgress()), false);
 });
 test("main-course links never substitute an unrelated language for missing content", () => {

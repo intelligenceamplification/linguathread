@@ -24,7 +24,7 @@ import {
 } from "./language-profile";
 import {
   completeSession, coordinateLanguageProgress, emptyLearnerModel, LearnerModel, RetrievalEdge,
-  migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
+  hasSessionProduction, migrateCompletedLessons, normalizeLearnerModel, recordEvidence, selectNextLesson,
 } from "./learning-engine";
 
 type Stage = "listening" | "transcript" | "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "spoken" | "complete";
@@ -228,14 +228,27 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         setSkippedIds(localSkipped.filter((id) => !completed.includes(id)));
         let restored = false;
         try {
-          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; progressionVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage; sessionId?: string; sessionMode?: "new" | "review" | "strengthen" } | null;
+          const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; progressionVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; spanishConfirmed?: boolean; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage; sessionId?: string; sessionMode?: "new" | "review" | "strengthen" } | null;
           const restoredIndex = savedSession?.lessonId ? loadedCourse.findIndex((item) => item.id === savedSession.lessonId) : -1;
           if (savedSession && restoredIndex >= 0 && savedSession.stage && savedSession.stage !== "complete" && !savedSession.lessonSkipped && stages.includes(savedSession.stage) && (!completed.includes(savedSession.lessonId || "") || (savedSession.progressionVersion === 1 && savedSession.sessionMode === "review"))) {
             learningSessionIdRef.current = savedSession.sessionId || crypto.randomUUID();
             setLessonIndex(restoredIndex); setStage(savedSession.audioFirstVersion === 1 ? savedSession.stage : "listening"); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
             setLessonSkipped(false);
             setAnswer(savedSession.answer || ""); setFeedback(savedSession.feedback || "idle"); setFailedAttempts(Math.max(0, savedSession.failedAttempts || 0));
-            setProductionLanguage(savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish"); setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
+            const restoredLesson = loadedCourse[restoredIndex];
+            const resumedLanguage = savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish";
+            const spanishDone = hasSessionProduction(localModel, restoredLesson.objectiveId || restoredLesson.id, "Spanish", learningSessionIdRef.current);
+            const currentProductionDone = hasSessionProduction(localModel, restoredLesson.objectiveId || restoredLesson.id, resumedLanguage, learningSessionIdRef.current);
+            const resumeBridge = savedSession.stage === "mastery" && resumedLanguage === "Spanish" && spanishDone && savedSession.sessionMode !== "review"
+              && activeSelections(profile).some(item => item.language === "Vietnamese");
+            setSpanishConfirmed(Boolean(savedSession.spanishConfirmed || spanishDone || resumedLanguage === "Vietnamese"));
+            setProductionLanguage(resumeBridge ? "Vietnamese" : resumedLanguage);
+            if (resumeBridge) { setAnswer(""); setFeedback("idle"); setFailedAttempts(0); }
+            else if (savedSession.stage === "mastery" && currentProductionDone) {
+              setFeedback("correct");
+              setAnswer(savedSession.answer || (resumedLanguage === "Spanish" ? restoredLesson.mastery.answer : restoredLesson.bridgeMastery.answer));
+            }
+            setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
             const restoredDestination = savedSession.destination && ["lesson", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
             setDestination(restoredDestination); setXrayOpen(restoredDestination === "xray");
             if (restoredDestination === "writing") setScriptLanguage(savedSession.scriptLanguage || initialScriptLanguageRef.current || null);
@@ -269,9 +282,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     if (!sessionHydrated || !lesson) return;
     window.localStorage.setItem(lessonSessionKey, JSON.stringify({
       lessonId: lesson.id, stage, audioFirstVersion: 1, progressionVersion: 1, lessonSkipped, wordIndex, answer, feedback, failedAttempts,
-      productionLanguage, reverseIndex, destination, scriptLanguage, sessionId: learningSessionIdRef.current, sessionMode,
+      productionLanguage, spanishConfirmed, reverseIndex, destination, scriptLanguage, sessionId: learningSessionIdRef.current, sessionMode,
     }));
-  }, [answer, destination, failedAttempts, feedback, lesson, lessonSkipped, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, sessionMode, stage, wordIndex]);
+  }, [answer, destination, failedAttempts, feedback, lesson, lessonSkipped, productionLanguage, reverseIndex, scriptLanguage, sessionHydrated, sessionMode, spanishConfirmed, stage, wordIndex]);
 
   const selectedLearningLanguages = activeSelections(profile).map((item) => item.language)
     .filter((language) => language !== profile.native);
@@ -431,7 +444,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }
 
   function finishLesson() {
-    if (lessonSkipped) { setStage("complete"); return; }
+    if (lessonSkipped) { markLessonDeferred(); setStage("complete"); return; }
     const nextCompleted = completedIds.includes(lesson.id) ? completedIds : [...completedIds, lesson.id];
     setCompletedIds(nextCompleted);
     window.localStorage.setItem("linguathread.completed-lessons.v1", JSON.stringify(nextCompleted));
@@ -447,14 +460,18 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setStage("complete");
   }
 
-  function skipLesson(language: string) {
-    // Skipping is navigation, not evidence of an attempted response.
-    void language;
+  function markLessonDeferred() {
     setLessonSkipped(true);
     const nextSkipped = [...new Set([...skippedIds, lesson.id])];
     setSkippedIds(nextSkipped);
     window.localStorage.setItem(skippedLessonsKey, JSON.stringify(nextSkipped));
     setMastery(false);
+  }
+
+  function skipLesson(language: string) {
+    // Skipping is navigation, not evidence of an attempted response.
+    void language;
+    markLessonDeferred();
     setStage("complete");
   }
 
@@ -738,7 +755,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           onComplete={() => sessionMode === "review" ? finishLesson() : reverseIndex < reverseExercises.length - 1 ? setReverseIndex((value) => value + 1) : setStage("spoken")}
           onSkip={() => {
             // A skipped reverse prompt supplies no competence or failure evidence.
-            setLessonSkipped(true);
+            markLessonDeferred();
             if (reverseIndex < reverseExercises.length - 1) setReverseIndex((value) => value + 1);
             else setStage("spoken");
           }}

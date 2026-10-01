@@ -191,6 +191,15 @@ export function isPhraseRetired(lesson: LessonDefinition, model: LearnerModel) {
   return isEvidenceRetired(production);
 }
 
+/** Recover a checked production after a process reload without asking it again. */
+export function hasSessionProduction(model: LearnerModel, objectiveId: string, language: string, sessionId: string) {
+  const evidence = model.evidence[edgeEvidenceKey(objectiveId, {
+    fromLanguage: "English", toLanguage: language, fromModality: "meaning", toModality: "written", retrievalType: "production",
+  })];
+  return Boolean(sessionId && evidence?.independentSessionIds?.includes(sessionId)
+    && !evidence.errorType && (!evidence.lastFailureAt || evidence.lastFailureAt < (evidence.lastIndependentSuccessAt || "")));
+}
+
 /** Retirement is specific to the demonstrated retrieval edge. */
 export function isEvidenceRetired(evidence: SkillEvidence) {
   const sessions = evidence.independentSessionIds?.length || 0;
@@ -208,6 +217,18 @@ function objectiveIsUsable(model: LearnerModel, objectiveId: string, language: L
   return ["usable", "stable", "maintenance"].includes(languageMastery(model, objectiveId, language));
 }
 
+/** A successful target-language production permits studying the next authored step.
+ * This does not complete skipped work or certify stable mastery in other skills. */
+function objectiveHasIndependentProduction(model: LearnerModel, objectiveId: string, language: LearningLanguage) {
+  return evidenceForObjective(model, objectiveId).some(item =>
+    item.language.toLocaleLowerCase() === language.toLocaleLowerCase()
+    && item.edge?.toLanguage.toLocaleLowerCase() === language.toLocaleLowerCase()
+    && item.edge?.toModality === "written" && item.edge?.retrievalType === "production"
+    && item.independentSuccesses > 0
+    && !item.errorType
+    && (!item.lastFailureAt || item.lastFailureAt < (item.lastIndependentSuccessAt || "")));
+}
+
 export function isUnlocked(
   lesson: LessonDefinition,
   model: LearnerModel,
@@ -218,7 +239,7 @@ export function isUnlocked(
   return (lesson.prerequisites || []).every((id) =>
     completedLessonIds.includes(id) ||
     completedLessonIds.includes(curriculum.find((item) => item.objectiveId === id)?.id || "") ||
-    objectiveIsUsable(model, id, language));
+    objectiveIsUsable(model, id, language) || objectiveHasIndependentProduction(model, id, language));
 }
 
 export function selectNextLesson(
