@@ -1,0 +1,14 @@
+{
+  "reviews": [
+    {
+      "language": "vi",
+      "text": "từ / của",
+      "voice": "female",
+      "sha256": "41271d7f008bfaefa11f07376c6dcb4095f8ec2c4e668b4e48516f69594748ce",
+      "approved": true,
+      "reviewedAt": "2026-10-01T16:08:44.808384Z",
+      "reviewedBy": "user",
+      "evidence": "User confirmed in this task: “The Vietnamese slash fix has been confirmed.” Exact existing từ / của replacement asset retained; no new voice or recording substituted."
+    }
+  ]
+}

@@ -58,3 +58,9 @@ Exact transcription does not certify native vowels or consonants. Flagged isolat
 An approved Spanish voice establishes native pronunciation as well as speaker identity. Timbre similarity and exact ASR transcription do not qualify a take with an English-like r or a schwa in `de`. In `eres`, require the Spanish intervocalic tap; in `de`, require a clear Spanish e vowel. Dialect variation remains acceptable. Use sufficiently varied approved Spanish reference speech and focused checks on reported consonants/vowels before releasing repaired utterances.
 
 Reported Spanish pronunciation defects require a fresh, hash-bound listening approval before a replacement may publish, even if ASR passes. Supply `--listening-review` with a JSON `reviews` array containing each accepted candidate's SHA, language, exact text, voice, `approved: true`, reviewer, review time, and evidence of the human acceptance. Generation never creates this approval. Known rejected hashes remain permanently blocked.
+
+## Replacement detection
+
+The incremental planner queues provisional clips at outdated Normal tempo and alternative-form clips without the current segmented-speech generation signature. Its per-item replacement list lets the generator repair only affected variants; exact human-reviewed recordings remain protected. A published file is not automatically current just because its language and text match. Failed replacements stay in the retry queue and cannot silently restore rejected recordings.
+
+Reported rejected variants are prioritized ahead of the bulk backlog and marked for focused listening review in the work plan. Their ASR transcript alone cannot establish pronunciation approval.

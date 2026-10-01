@@ -6,6 +6,7 @@ The plan is data only. Generation and publication remain separate quality gates.
 import argparse
 import hashlib
 import json
+import re
 import unicodedata
 from collections import Counter
 from pathlib import Path
@@ -38,7 +39,7 @@ def generation_signature(settings):
     return hashlib.sha256(json.dumps(material, sort_keys=True).encode()).hexdigest()[:12]
 
 
-def build_plan(inventory, registry, pack, metadata, failures, mode="first-pass"):
+def build_plan(inventory, registry, pack, metadata, failures, mode="first-pass", defects=None):
     voices = {}
     clips_by_id = {clip["id"]: clip for clip in pack["clips"]}
     for entry in registry["voices"]:
@@ -51,9 +52,23 @@ def build_plan(inventory, registry, pack, metadata, failures, mode="first-pass")
         voices[(language, voice)] = {**entry, "referenceSha256": reference["sha256"]}
 
     blocked = set(pack.get("blockedAudioSha256", []))
-    published = {key(clip["language"], clip["normalizedText"], clip.get("voice")):
-                 "published-reviewed" if clip.get("reviewedAt") else "published-provisional"
-                 for clip in pack["clips"] if clip.get("voice") and clip.get("sha256") not in blocked}
+    reported_keys = {key(clip["language"], clip["normalizedText"], clip.get("voice"))
+                     for clip in pack["clips"] if clip.get("sha256") in blocked}
+    reported_keys.update(key(row["language"], row["text"], row.get("voice"))
+                         for row in (defects or []) if row.get("requiresPronunciationReview"))
+    published = {}
+    for clip in pack["clips"]:
+        settings = voices.get((clip["language"], clip.get("voice")))
+        if not settings or clip.get("sha256") in blocked:
+            continue
+        state = "published-reviewed" if clip.get("reviewedAt") else "published-provisional"
+        if not clip.get("reviewedAt") and (
+            float(clip.get("normalTempo", 1.0)) != float(settings.get("normalTempo", 1.0))
+            or (re.search(r"[/／·]", clip.get("text", clip["normalizedText"]))
+                and clip.get("generationSignature") != generation_signature(settings))
+        ):
+            state = "replacement-needed"
+        published[key(clip["language"], clip["normalizedText"], clip["voice"])] = state
     generated = set()
     for row in metadata:
         settings = voices.get((row.get("language"), row.get("voice")))
@@ -83,17 +98,29 @@ def build_plan(inventory, registry, pack, metadata, failures, mode="first-pass")
         if not variants:
             raise ValueError(f"No learner-approved voice for {language}: {text}")
         needed = []
+        replacements = []
         for voice in variants:
             identity = key(language, text, voice)
             state = published.get(identity) or ("generated-unpublished" if identity in generated else "failed" if identity in failed else "missing")
+            if state == "replacement-needed":
+                replacements.append(voice)
+                if identity in generated:
+                    state = "generated-unpublished"
+                elif identity in failed:
+                    state = "failed"
             counts[state] += 1
-            if state in ("missing", "failed") and (mode == "all" or mode == "first-pass" and state == "missing" or mode == "retry" and state == "failed"):
+            if state in ("missing", "replacement-needed", "failed") and (mode == "all" or mode == "first-pass" and state in ("missing", "replacement-needed") or mode == "retry" and state == "failed"):
                 needed.append(voice)
         if needed:
             sources = item.get("sources", [])
             order = min((lesson_order[source.rsplit(":", 1)[0]] for source in sources), default=index)
             stage = min((SOURCE_PRIORITY.get(source.rsplit(":", 1)[-1], 3) for source in sources), default=3)
-            queue.append((stage, order, index, {**item, "neededVariants": needed}))
+            focused = any(key(language, text, voice) in reported_keys for voice in needed)
+            if focused:
+                stage = -1
+            queue.append((stage, order, index, {**item, "neededVariants": needed,
+                **({"replacementVariants": replacements} if replacements else {}),
+                **({"needsFocusedListeningReview": True} if focused else {})}))
 
     queue.sort(key=lambda value: value[:3])
     expected = sum(counts.values())
@@ -115,7 +142,8 @@ def main():
     plan = build_plan(json.loads(args.inventory.read_text(encoding="utf-8")),
                       json.loads(args.voice_registry.read_text(encoding="utf-8")),
                       json.loads(args.pack.read_text(encoding="utf-8")),
-                      read_jsonl(args.generated / "metadata.jsonl"), read_jsonl(args.generated / "failures.jsonl"), args.mode)
+                      read_jsonl(args.generated / "metadata.jsonl"), read_jsonl(args.generated / "failures.jsonl"), args.mode,
+                      json.loads((ROOT / "audio/known-audio-defects.json").read_text())["defects"])
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(plan["report"], ensure_ascii=False))

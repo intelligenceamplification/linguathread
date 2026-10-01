@@ -145,7 +145,7 @@ def main():
         and (args.language is None or language == args.language)
         and ("neededVariants" not in item or voice in item["neededVariants"])
         and (language, item["text"], voice) not in reviewed
-        and (args.force or (language, item["text"], voice) not in published)
+        and (args.force or voice in item.get("replacementVariants", []) or (language, item["text"], voice) not in published)
         and (language, item["text"], voice, signature(language, voice)) not in completed
         and (not args.defer_failed or not was_failed(language, item["text"], voice))
         and (not args.only_failed or was_failed(language, item["text"], voice))

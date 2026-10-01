@@ -47,6 +47,32 @@ class VoicePlan(unittest.TestCase):
         blocked_plan = planner.build_plan(inventory, registry, pack, current, failures)
         self.assertEqual(blocked_plan["report"]["publishedVariants"], 0)
         self.assertIn("Hola.", [item["text"] for item in blocked_plan["items"]])
+        pack["clips"].append({"id": "bad", "language": "es", "voice": "male", "normalizedText": "palabra", "sha256": "bad-hash"})
+        pack["blockedAudioSha256"].append("bad-hash")
+        focused = planner.build_plan(inventory, registry, pack, current, failures)
+        self.assertTrue(focused["items"][0]["needsFocusedListeningReview"])
+        self.assertIn("palabra", [item["text"] for item in focused["items"] if item.get("needsFocusedListeningReview")])
+        removed = planner.build_plan(inventory, registry, {"clips": pack["clips"][:1]}, [], [], defects=[{"language": "es", "text": "palabra", "voice": "male", "requiresPronunciationReview": True}])
+        self.assertEqual(removed["items"][0]["text"], "palabra")
+        self.assertTrue(removed["items"][0]["needsFocusedListeningReview"])
+
+    def test_old_alternative_and_wrong_pace_clips_need_incremental_replacement(self):
+        spec = importlib.util.spec_from_file_location("voice_plan", SCRIPT)
+        planner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(planner)
+        registry = {"voices": [{"language": "vi", "voice": "female", "referenceClipId": "ref", "inferenceTimesteps": 10}]}
+        pack = {"clips": [
+            {"id": "ref", "language": "vi", "voice": "female", "normalizedText": "Tôi là.", "sha256": "ref-hash", "reviewedAt": "today"},
+            {"id": "old", "language": "vi", "voice": "female", "normalizedText": "mình / tôi", "sha256": "old-hash"},
+            {"id": "fast", "language": "vi", "voice": "female", "normalizedText": "Xin chào.", "sha256": "fast-hash", "normalTempo": 1.2},
+        ]}
+        inventory = {"items": [{"language": "vi", "text": text, "sources": ["lesson:vocabulary"]} for text in ["Tôi là.", "mình / tôi", "Xin chào."]]}
+        plan = planner.build_plan(inventory, registry, pack, [], [])
+        self.assertEqual(plan["report"]["states"]["replacement-needed"], 2)
+        self.assertTrue(all(item["replacementVariants"] == ["female"] for item in plan["items"]))
+        pack["clips"][1]["reviewedAt"] = "accepted-exact-clip"
+        plan = planner.build_plan(inventory, registry, pack, [], [])
+        self.assertNotIn("mình / tôi", [item["text"] for item in plan["items"]])
 
 
 
