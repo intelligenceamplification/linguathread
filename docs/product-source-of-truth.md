@@ -1,3 +1,7 @@
+## Light palette correction and future naming — 2026-10-04
+
+Build 7 retains the approved multilingual design and dark appearance, with the light background corrected to the app’s exact `--paper: #ffffff`. Current canonical artwork is in `public/brand/v3/`. A future rename changes the visible app title and its occurrences (including metadata and platform display labels); it must preserve the icon artwork, established behavior, learner data, and the rest of the approved build. The title remains separate from the icon pixels.
+
 # LinguaThread product source of truth
 
 This document governs product, curriculum, and platform decisions across the web master, iOS, macOS, Android, and future clients. When implementations differ, resolve them toward these principles rather than allowing each platform to become a separate product.

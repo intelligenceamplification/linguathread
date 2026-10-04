@@ -19,6 +19,8 @@ The target uses a minimum iOS version of 17.0 and stable WebKit APIs, so it is b
 
 ## App icon
 
-The approved icon baseline (2026-10-04, build 6) combines traditional Chinese 語, Korean 말, Vietnamese tiếng, and a connecting ribbon. The app name remains outside the icon as the system label. Canonical opaque 1024×1024 artwork lives in `../public/brand/v2/icon-light-1024.png` and `icon-dark-1024.png`; the asset catalog uses byte-identical copies. The SVG files are embedded-raster preview wrappers, not editable vector originals. Do not regenerate the icon from the previous single-character design.
+The approved icon baseline (2026-10-04, build 7) combines traditional Chinese 語, Korean 말, Vietnamese tiếng, and a connecting ribbon. The app name remains outside the icon as the system label. Canonical opaque 1024×1024 artwork lives in `../public/brand/v3/icon-light-1024.png` and `icon-dark-1024.png`; the asset catalog uses byte-identical copies. The SVG files are embedded-raster preview wrappers, not editable vector originals. Do not regenerate the icon from the previous single-character design.
 
 The asset catalog declares default light and dark luminosity variants for iOS appearance selection. The web mark and favicon follow `prefers-color-scheme`; the 1200×630 sharing preview uses the light artwork with the name beneath it. Home Screen appearance can be overridden by the user's iOS customization settings.
+
+The light icon uses the exact app paper color `#ffffff`; the dark artwork is retained. Future renames update title occurrences and platform display labels without altering the icon or established behavior.

@@ -15,18 +15,18 @@ export const metadata: Metadata = {
   openGraph: {
     title: "LinguaThread · How Language Is Built",
     description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
-    images: [{ url: "/brand/v2/social-preview.png", width: 1200, height: 630, alt: "LinguaThread · 語 · 말 · tiếng · How Language Is Built" }],
+    images: [{ url: "/brand/v3/social-preview.png", width: 1200, height: 630, alt: "LinguaThread · 語 · 말 · tiếng · How Language Is Built" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "LinguaThread · How Language Is Built",
     description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
-    images: ["/brand/v2/social-preview.png"],
+    images: ["/brand/v3/social-preview.png"],
   },
   icons: {
-    icon: "/favicon.svg?v=2",
-    shortcut: "/favicon.svg?v=2",
-    apple: "/brand/v2/icon-light-192.png",
+    icon: "/favicon.svg?v=3",
+    shortcut: "/favicon.svg?v=3",
+    apple: "/brand/v3/icon-light-192.png",
   },
   manifest: "/manifest.webmanifest",
 };
