@@ -155,3 +155,6 @@ Legacy completed-session snapshots cannot reopen completed lessons on launch. Ne
 ### Progression recovery (2026-10-01)
 
 Every skip path must persist deferral so the scheduler cannot restart the same unfinished lesson automatically. Independent target-language production permits studying the next authored prerequisite-dependent lesson, while skipped bridge or other skill work remains incomplete. This readiness decision does not certify stable mastery or CEFR proficiency. A checked independent answer in the current session must survive process reloads: resume the pending bridge or the continuation control, not the same empty target-language question.
+# Approved multilingual icon baseline — 2026-10-04
+
+The user approved the sculpted multilingual icon containing traditional Chinese 語, Korean 말, Vietnamese tiếng, and a connecting ribbon. The name LinguaThread sits beneath the icon and is not baked into its artwork. Preserve the correct character strokes and Vietnamese diacritics. Canonical light and dark assets are `public/brand/v2/icon-{light,dark}-1024.png`, copied identically into the existing iOS asset catalog. The web uses the same artwork in responsive sizes, an appearance-aware favicon, and a 1200×630 sharing preview. iOS build 6 locks in this baseline; later builds must retain these assets unless the user approves another design.
