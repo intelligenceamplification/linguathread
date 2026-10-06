@@ -96,12 +96,15 @@ test("handoff adds no API endpoint, keys, audio permission or duplicate initiati
 });
 
 
-test("one lesson handoff remains available through reverse recall, spoken practice and completion", () => {
+test("one current-lesson handoff wraps every lesson activity without a stage restriction", () => {
   const page = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
   assert.equal((page.match(/<LivePractice /g) || []).length, 1);
-  assert.match(page, /\(stage === "reverse" \|\| stage === "spoken" \|\| stage === "complete"\) && <LivePractice/);
+  assert.doesNotMatch(page, /stage === [^\n]+&& <LivePractice/);
   const start = page.indexOf("<LivePractice ");
   const end = page.indexOf("</LivePractice>", start);
-  assert.ok(end > page.indexOf('stage === "complete" && (', start));
+  for (const stage of ["listening", "transcript", "vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "spoken", "complete"]) {
+    const activity = page.indexOf(`{stage === "${stage}" &&`, start);
+    assert.ok(activity > start && activity < end, `${stage} keeps the same Live Practice entry`);
+  }
   assert.match(page.slice(start, end), /prepareContext=\{\(\) => livePracticePrompt\(practiceCapsule\(lesson, profile, learnerModel, course, stage\)\)\}/);
 });

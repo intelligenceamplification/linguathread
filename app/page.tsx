@@ -622,7 +622,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               })}
             </div>
           </div>
-        ) : <>
+        ) : <LivePractice key={lesson.id} languages={selectedLearningLanguages} focus={`${lesson.title} · ${lesson.skill}`} prepareContext={() => livePracticePrompt(practiceCapsule(lesson, profile, learnerModel, course, stage))}>
         {stage === "listening" && <AudioFirstListening key={lesson.id} lesson={lesson} course={course} onAttempt={(correct, supported) => recordAttempt("sound-to-meaning", correct, "Spanish", lesson, {
           fromLanguage: "Spanish", toLanguage: "English", fromModality: "audio", toModality: "meaning", retrievalType: "recognition",
         }, correct ? undefined : "listening", supported)} onContinue={() => sessionMode === "review" ? finishLesson() : setStage("transcript")} />}
@@ -744,7 +744,6 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {(stage === "reverse" || stage === "spoken" || stage === "complete") && <LivePractice key={lesson.id} languages={selectedLearningLanguages} focus={`${lesson.title} · ${lesson.skill}`} prepareContext={() => livePracticePrompt(practiceCapsule(lesson, profile, learnerModel, course, stage))}>
         {stage === "reverse" && <ReverseRecall
           key={reverseExercises[reverseIndex]?.id}
           exercise={reverseExercises[reverseIndex]}
@@ -790,8 +789,6 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         )}
 
         </LivePractice>}
-
-        </>}
       </section>
 
       {xrayOpen && <UniversalXRay key={lesson.id} lesson={lesson} showBridge={bridgeEnabled} onClose={closeXRay} />}

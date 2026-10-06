@@ -1,6 +1,6 @@
 # Live Practice: ChatGPT handoff
 
-Live Practice is a zero-additional-API-cost extension of the current lesson. Its single entry is beneath the current lesson activity in Today’s Lesson from Reverse Recall through spoken self-comparison and completion, matching the supplied entry mockup. There is no new navigation destination.
+Live Practice is a zero-additional-API-cost extension of the current lesson. Its single entry is beneath the current lesson activity in Today’s Lesson at every lesson stage, including initial listening and completion, matching the supplied entry mockup. There is no new navigation destination.
 
 ## Flow
 
@@ -42,7 +42,7 @@ The mockup’s connecting copy changes to preparation copy. Its active embedded 
 
 ## Changed files and scope
 
-- app/page.tsx: two imports and one wrapper around the existing Reverse Recall, spoken self-comparison and completion states.
+- app/page.tsx: two imports and one wrapper around all existing current-lesson activity states.
 - app/live-practice.tsx: entry, preparation, ready and error states; keeps the exercise mounted.
 - app/live-practice.css: feature-scoped layout using existing tokens.
 - app/live-practice-context.ts: compact dynamic selection and conversational prompt.
@@ -67,3 +67,7 @@ ChatGPT login, paste/send and starting Voice remain learner actions. App opening
 Physical-device placement correction: the original entry was restricted to Reverse Recall and disappeared when the learner completed the lesson. The same single component now remains available through spoken self-comparison and completion; no progression or assessment behavior changed.
 
 Placement-fix validation: production build passed; 66 combined existing/source and Live Practice tests passed, including the new completion placement regression. Twelve rendered checks covered reverse, spoken and completion states in mobile light, mobile dark, desktop and clipboard-denied recovery. Success cases wrote and read the actual browser clipboard, preserving Spanish and Vietnamese diacritics; copied content and learner state remained stable on return. The external ChatGPT destination was intercepted to verify routing without account interaction. Physical-device checks remain with the learner.
+
+All-lesson availability: the single Live Practice component now wraps every current-lesson stage, including listening, transcript, vocabulary, recall, sentence inspection, grammar, target production, mastery, reverse recall, spoken practice and completion. It remains a lesson action, with no new navigation destination. The current stage and lesson still supply dynamic context; returning preserves the mounted activity.
+
+All-stage validation: production build and 80 automated checks passed. Forty-four rendered web scenarios covered all eleven lesson stages across mobile light, mobile dark, desktop and clipboard-denied recovery. Success cases used real clipboard writes/reads, retained meaningful diacritics, preserved learner state and restored the activity after returning. One Start Live Practice entry and one ready-state Open ChatGPT action were verified in every scenario.
