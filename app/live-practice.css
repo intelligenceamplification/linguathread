@@ -1,0 +1,25 @@
+.live-practice-flow { width: min(100%, 720px); min-width: 0; margin-block: auto; }
+.live-practice-entry { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 20px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--line); text-align: left; max-width: 570px; }
+.live-practice-entry > svg { width: 32px; height: 32px; margin-top: 14px; color: var(--text-accent); }
+.live-practice-entry .eyebrow { margin-bottom: 7px; }
+.live-practice-entry p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: .88rem; line-height: 1.55; }
+.live-practice-entry .primary-action { margin-top: 12px; width: min(100%, 320px); min-width: 0; }
+.live-practice-content { max-width: 570px; margin-inline: auto; }
+.live-practice-content .exercise-title { font-size: clamp(2.4rem, 6vw, 4.2rem) !important; line-height: 1.1 !important; }
+.live-practice-content .instruction { margin: 22px auto 26px; max-width: 440px; }
+.practice-mark-wash { width: clamp(112px, 28vw, 180px); aspect-ratio: 1; margin: 24px auto; display: grid; place-items: center; border-radius: 50%; background: var(--model-bg); box-shadow: 0 0 0 18px color-mix(in srgb, var(--model-bg) 48%, transparent); }
+.practice-mark-wash svg { width: 38px; height: 38px; color: var(--text-accent-strong); }
+.live-practice-content a.primary-action { margin-top: 24px; text-decoration: none; }
+.practice-status, .practice-handoff-note { color: var(--muted); font-size: .86rem; line-height: 1.55; }
+.practice-handoff-note { margin: 18px 0 0; }
+.live-practice-content .text-action { display: block; margin: 18px auto 0; }
+.practice-focus { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--line); text-align: left; }
+.practice-focus .eyebrow { margin-bottom: 8px; }
+.practice-focus p:not(.eyebrow) { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.55; }
+.practice-manual-copy { margin-top: 24px; color: var(--muted); text-align: left; font-size: .86rem; }
+.practice-manual-copy summary { cursor: pointer; padding: 12px 0; }
+.practice-manual-copy textarea { width: 100%; min-height: 180px; padding: 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--control); color: var(--ink); font-size: .85rem; }
+@media (max-width: 700px) {
+  .live-practice-entry { margin-top: 28px; gap: 16px; }
+  .live-practice-content .eyebrow { line-height: 1.6; }
+}

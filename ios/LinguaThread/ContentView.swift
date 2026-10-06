@@ -31,6 +31,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         let configuration = WKWebViewConfiguration()
         configuration.defaultWebpagePreferences.allowsContentJavaScript = true
         configuration.userContentController.add(context.coordinator, name: "linguathreadAudio")
+        configuration.userContentController.add(context.coordinator, name: "linguathreadPractice")
         configuration.userContentController.addUserScript(WKUserScript(
             source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true;",
             injectionTime: .atDocumentStart,
@@ -73,6 +74,10 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+            if message.name == "linguathreadPractice" {
+                handlePractice(message)
+                return
+            }
             guard message.name == "linguathreadAudio",
                   let payload = message.body as? [String: Any],
                   let action = payload["action"] as? String else { return }
@@ -209,11 +214,45 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('\(name)', { detail: \(json) }))")
         }
 
+        private func handlePractice(_ message: WKScriptMessage) {
+            // Only the hosted LinguaThread main frame can use this narrow bridge.
+            guard message.frameInfo.isMainFrame,
+                  message.frameInfo.securityOrigin.protocol == "https",
+                  message.frameInfo.securityOrigin.host == "linguathread.vercel.app",
+                  let payload = message.body as? [String: Any],
+                  let action = payload["action"] as? String else { return }
+            if action == "copy",
+               let text = payload["text"] as? String, !text.isEmpty, text.utf8.count <= 40_000,
+               let requestID = payload["requestID"] as? String, UUID(uuidString: requestID) != nil {
+                UIPasteboard.general.string = text
+                let result: [String: Any] = ["requestID": requestID, "copied": true]
+                guard let data = try? JSONSerialization.data(withJSONObject: result),
+                      let json = String(data: data, encoding: .utf8) else { return }
+                webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('linguathread:practice-copy', { detail: \(json) }))")
+            } else if action == "openChatGPT" {
+                openChatGPT()
+            }
+        }
+
+        private func openChatGPT() {
+            let destination = URL(string: "https://chatgpt.com/")!
+            UIApplication.shared.open(destination, options: [.universalLinksOnly: true]) { opened in
+                if !opened {
+                    UIApplication.shared.open(destination, options: [:])
+                }
+            }
+        }
+
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction,
             decisionHandler: @escaping @MainActor @Sendable (WKNavigationActionPolicy) -> Void
         ) {
+            if navigationAction.request.url?.absoluteString == "https://chatgpt.com/" {
+                decisionHandler(.cancel)
+                openChatGPT()
+                return
+            }
             guard let destination = navigationAction.request.url,
                   destination.scheme == "https",
                   destination.host == "linguathread.vercel.app" else {

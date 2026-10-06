@@ -7,6 +7,8 @@ import { InteractiveSentence } from "./sentence-anatomy";
 import { UniversalXRay } from "./universal-xray";
 import { FirstLaunchIntro } from "./first-launch-intro";
 import { BrandLogo } from "./brand-mark";
+import { LivePractice } from "./live-practice";
+import { livePracticePrompt, practiceCapsule } from "./live-practice-context";
 import ListenButton from "./listen-button";
 import { AnswerField } from "./answer-field";
 import { approvedAudioFor } from "./audio-pack";
@@ -742,7 +744,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           </div>
         )}
 
-        {stage === "reverse" && <ReverseRecall
+        {stage === "reverse" && <LivePractice key={lesson.id} languages={selectedLearningLanguages} focus={`${lesson.title} · ${lesson.skill}`} prepareContext={() => livePracticePrompt(practiceCapsule(lesson, profile, learnerModel, course, stage))}><ReverseRecall
           key={reverseExercises[reverseIndex]?.id}
           exercise={reverseExercises[reverseIndex]}
           position={reverseIndex + 1}
@@ -759,7 +761,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             if (reverseIndex < reverseExercises.length - 1) setReverseIndex((value) => value + 1);
             else setStage("spoken");
           }}
-        />}
+        /></LivePractice>}
 
         {stage === "spoken" && <SpokenSelfComparison lesson={lesson} onAttempt={() => recordAttempt("spoken-self-comparison", true, "Spanish", lesson, {
           fromLanguage: "English", toLanguage: "Spanish", fromModality: "meaning", toModality: "sound", retrievalType: "production",
