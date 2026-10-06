@@ -1,12 +1,12 @@
 # Live Practice: ChatGPT handoff
 
-Live Practice is a zero-additional-API-cost extension of the current lesson. Its only entry is beneath Reverse Recall in Today’s Lesson, matching the supplied entry mockup. There is no new navigation destination.
+Live Practice is a zero-additional-API-cost extension of the current lesson. Its single entry is beneath the current lesson activity in Today’s Lesson from Reverse Recall through spoken self-comparison and completion, matching the supplied entry mockup. There is no new navigation destination.
 
 ## Flow
 
 Start Live Practice → prepare current context and copy → context ready → Open ChatGPT → learner pastes/sends and starts Voice normally.
 
-Start Live Practice exists in one component and is shown once. Open ChatGPT exists once in the ready state. There is no second initiation confirmation. Return to lesson restores the mounted Reverse Recall exercise, including its answer, feedback and attempts, and returns keyboard focus to the entry. Existing navigation still works. A reload uses the existing lesson restoration mechanism; the transient handoff itself is not stored as learner progress.
+Start Live Practice exists in one component and is shown once. Open ChatGPT exists once in the ready state. There is no second initiation confirmation. Return to lesson restores the mounted current activity, including any Reverse Recall answer, feedback and attempts, and returns keyboard focus to the entry. Existing navigation still works. A reload uses the existing lesson restoration mechanism; the transient handoff itself is not stored as learner progress.
 
 Preparation performs actual synchronous context selection followed by an asynchronous clipboard operation. It stays visible only while that operation is pending, with no artificial delay or timed checklist. Ready is shown only after successful copying. A denial shows Retry copy and an optional manually selectable prompt; no external-opening action appears until copying succeeds. Copy Again is secondary and does not regenerate a different lesson prompt.
 
@@ -42,7 +42,7 @@ The mockup’s connecting copy changes to preparation copy. Its active embedded 
 
 ## Changed files and scope
 
-- app/page.tsx: two imports and a wrapper around the existing ReverseRecall instance.
+- app/page.tsx: two imports and one wrapper around the existing Reverse Recall, spoken self-comparison and completion states.
 - app/live-practice.tsx: entry, preparation, ready and error states; keeps the exercise mounted.
 - app/live-practice.css: feature-scoped layout using existing tokens.
 - app/live-practice-context.ts: compact dynamic selection and conversational prompt.
@@ -63,3 +63,7 @@ Rendered local checks used installed Chrome through Playwright (Browser plugin u
 The iOS app builds and signs under the existing bundle identity com.desmondwood.linguathread. Installation and physical handoff verification are reported separately in the completion message.
 
 ChatGPT login, paste/send and starting Voice remain learner actions. App opening depends on installed-app association and iOS preferences; the HTTPS browser fallback is the dependable destination. Clipboard support on older web shells may require the retry/manual-copy fallback. ChatGPT account availability and Voice allowances are governed by ChatGPT, and LinguaThread neither promises a new allowance nor meters one.
+
+Physical-device placement correction: the original entry was restricted to Reverse Recall and disappeared when the learner completed the lesson. The same single component now remains available through spoken self-comparison and completion; no progression or assessment behavior changed.
+
+Placement-fix validation: production build passed; 66 combined existing/source and Live Practice tests passed, including the new completion placement regression. Twelve rendered checks covered reverse, spoken and completion states in mobile light, mobile dark, desktop and clipboard-denied recovery. Success cases wrote and read the actual browser clipboard, preserving Spanish and Vietnamese diacritics; copied content and learner state remained stable on return. The external ChatGPT destination was intercepted to verify routing without account interaction. Physical-device checks remain with the learner.

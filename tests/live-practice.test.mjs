@@ -94,3 +94,14 @@ test("handoff adds no API endpoint, keys, audio permission or duplicate initiati
   assert.match(native, /UIPasteboard.general.string = text/);
   assert.match(native, /message.frameInfo.isMainFrame/);
 });
+
+
+test("one lesson handoff remains available through reverse recall, spoken practice and completion", () => {
+  const page = readFileSync(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.equal((page.match(/<LivePractice /g) || []).length, 1);
+  assert.match(page, /\(stage === "reverse" \|\| stage === "spoken" \|\| stage === "complete"\) && <LivePractice/);
+  const start = page.indexOf("<LivePractice ");
+  const end = page.indexOf("</LivePractice>", start);
+  assert.ok(end > page.indexOf('stage === "complete" && (', start));
+  assert.match(page.slice(start, end), /prepareContext=\{\(\) => livePracticePrompt\(practiceCapsule\(lesson, profile, learnerModel, course, stage\)\)\}/);
+});
