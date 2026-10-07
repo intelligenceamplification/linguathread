@@ -7,10 +7,22 @@ import WebKit
 /// engine, learner persistence, and future web updates on one source of truth.
 struct ContentView: View {
     @Environment(\.colorScheme) private var colorScheme
+    #if PERSONAL_PRACTICE
+    @StateObject private var personalPractice = PersonalPracticeConnection()
+    #endif
     private let masterURL = URL(string: "https://linguathread.vercel.app/")!
 
     var body: some View {
+        Group {
+        #if PERSONAL_PRACTICE
+        LinguaThreadWebView(url: masterURL, personalPractice: personalPractice)
+            .sheet(isPresented: $personalPractice.showConnection) {
+                PersonalPracticeSheet(connection: personalPractice)
+            }
+        #else
         LinguaThreadWebView(url: masterURL)
+        #endif
+        }
             .background(
                 (colorScheme == .dark
                     ? Color(red: 13 / 255, green: 17 / 255, blue: 20 / 255)
@@ -22,9 +34,10 @@ struct ContentView: View {
 
 private struct LinguaThreadWebView: UIViewRepresentable {
     let url: URL
+    var personalPractice: PersonalPracticeConnection? = nil
 
     func makeCoordinator() -> Coordinator {
-        Coordinator()
+        Coordinator(personalPractice: personalPractice)
     }
 
     func makeUIView(context: Context) -> WKWebView {
@@ -33,7 +46,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         configuration.userContentController.add(context.coordinator, name: "linguathreadAudio")
         configuration.userContentController.add(context.coordinator, name: "linguathreadPractice")
         configuration.userContentController.addUserScript(WKUserScript(
-            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true;",
+            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true; window.__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ = \(personalPractice != nil ? "true" : "false");",
             injectionTime: .atDocumentStart,
             forMainFrameOnly: true
         ))
@@ -68,7 +81,10 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         private var pendingRequestID: String?
         private var activeRequestID: String?
 
-        override init() {
+        private let personalPractice: PersonalPracticeConnection?
+
+        init(personalPractice: PersonalPracticeConnection?) {
+            self.personalPractice = personalPractice
             super.init()
             synthesizer.delegate = self
         }
@@ -225,17 +241,24 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                let text = payload["text"] as? String, !text.isEmpty, text.utf8.count <= 40_000,
                let requestID = payload["requestID"] as? String, UUID(uuidString: requestID) != nil {
                 UIPasteboard.general.string = text
-                let result: [String: Any] = ["requestID": requestID, "copied": true]
-                guard let data = try? JSONSerialization.data(withJSONObject: result),
-                      let json = String(data: data, encoding: .utf8) else { return }
-                webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('linguathread:practice-copy', { detail: \(json) }))")
+                Task { [weak self] in
+                    guard let self else { return }
+                    let shared = await self.personalPractice?.save(text) ?? false
+                    let result: [String: Any] = ["requestID": requestID, "copied": true, "personalPracticeReady": shared]
+                    guard let data = try? JSONSerialization.data(withJSONObject: result),
+                          let json = String(data: data, encoding: .utf8) else { return }
+                    _ = try? await self.webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('linguathread:practice-copy', { detail: \(json) }))")
+                }
+            } else if action == "connectPersonalPractice" {
+                personalPractice?.reconnect()
             } else if action == "openChatGPT" {
                 openChatGPT()
             }
         }
 
         private func openChatGPT() {
-            let destination = URL(string: "https://chatgpt.com/")!
+            // OpenAI's published apple-app-site-association declares #native as app home.
+            let destination = URL(string: personalPractice == nil ? "https://chatgpt.com/" : "https://chatgpt.com/#native")!
             UIApplication.shared.open(destination, options: [.universalLinksOnly: true]) { opened in
                 if !opened {
                     UIApplication.shared.open(destination, options: [:])
@@ -262,4 +285,96 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             decisionHandler(.allow)
         }
     }
+}
+
+// This private connection is instantiated only in the PERSONAL_PRACTICE test build.
+// It operates LinguaThread's own Site; it never inspects or controls ChatGPT.
+@MainActor
+private final class PersonalPracticeConnection: NSObject, ObservableObject, WKScriptMessageHandler, WKNavigationDelegate, WKUIDelegate {
+    @Published var showConnection = false
+    @Published var connected = false
+    let siteURL = URL(string: "https://linguathread-personal-practice.dez108.chatgpt.site/")!
+    private(set) var browser: WKWebView!
+
+    override init() {
+        super.init()
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController.add(self, name: "personalPractice")
+        browser = WKWebView(frame: .zero, configuration: configuration)
+        browser.navigationDelegate = self
+        browser.uiDelegate = self
+        browser.load(URLRequest(url: siteURL))
+        showConnection = !UserDefaults.standard.bool(forKey: "personalPracticeConnected")
+    }
+
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard message.frameInfo.isMainFrame,
+              message.frameInfo.securityOrigin.protocol == "https",
+              message.frameInfo.securityOrigin.host == siteURL.host,
+              let payload = message.body as? [String: String], payload["action"] == "connected" else { return }
+        connected = true
+        UserDefaults.standard.set(true, forKey: "personalPracticeConnected")
+    }
+
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        connected = false
+    }
+
+    func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        if navigationAction.targetFrame == nil, navigationAction.request.url?.scheme == "https" {
+            webView.load(navigationAction.request)
+        }
+        return nil
+    }
+
+    func reconnect() {
+        if !connected { browser.load(URLRequest(url: siteURL)) }
+        showConnection = true
+    }
+
+    func save(_ capsule: String) async -> Bool {
+        guard connected, browser.url?.host == siteURL.host else { return false }
+        // Bound the preparation to four seconds; clipboard fallback always remains.
+        return await withCheckedContinuation { continuation in
+            var finished = false
+            let finish: (Bool) -> Void = { value in
+                guard !finished else { return }
+                finished = true
+                continuation.resume(returning: value)
+            }
+            let timeout = Task { @MainActor in
+                try? await Task.sleep(for: .seconds(4))
+                guard !Task.isCancelled else { return }
+                finish(false)
+            }
+            browser.callAsyncJavaScript("return await window.saveLinguaThreadPractice?.(capsule) === true;", arguments: ["capsule": capsule], in: nil, in: .page, completionHandler: { result in
+                timeout.cancel()
+                if case .success(let value) = result { finish((value as? Bool) == true) }
+                else { finish(false) }
+            })
+        }
+    }
+}
+
+private struct PersonalPracticeSheet: View {
+    @ObservedObject var connection: PersonalPracticeConnection
+    @Environment(\.dismiss) private var dismiss
+    var body: some View {
+        NavigationStack {
+            PersonalPracticeBrowser(browser: connection.browser)
+                .navigationTitle("Personal Live Practice")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button(connection.connected ? "Done" : "Close") { dismiss() }
+                    }
+                }
+        }
+    }
+}
+
+private struct PersonalPracticeBrowser: UIViewRepresentable {
+    let browser: WKWebView
+    func makeUIView(context: Context) -> WKWebView { browser }
+    func updateUIView(_ view: WKWebView, context: Context) {}
 }

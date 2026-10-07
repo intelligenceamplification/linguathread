@@ -108,3 +108,17 @@ test("one current-lesson handoff wraps every lesson activity without a stage res
   }
   assert.match(page.slice(start, end), /prepareContext=\{\(\) => livePracticePrompt\(practiceCapsule\(lesson, profile, learnerModel, course, stage\)\)\}/);
 });
+
+test("personal native sharing must be acknowledged; ordinary handoff remains the default", async () => {
+  const events = new EventTarget();
+  let shared = false;
+  const window = { __LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__: true, addEventListener: events.addEventListener.bind(events), removeEventListener: events.removeEventListener.bind(events), webkit: { messageHandlers: { linguathreadPractice: { postMessage: payload => events.dispatchEvent(new CustomEvent("linguathread:practice-copy", { detail: { requestID: payload.requestID, copied: true, personalPracticeReady: shared } })) } } } };
+  const boundary = moduleAt("../app/live-practice-handoff.ts", {}, { window });
+  assert.equal(await boundary.copyPracticeContext("current lesson"), false);
+  shared = true;
+  assert.equal(await boundary.copyPracticeContext("next lesson"), true);
+  assert.equal(boundary.hasPersonalPracticeConnection(), true);
+  const web = moduleAt("../app/live-practice-handoff.ts", {}, { window: {}, navigator: { clipboard: { writeText: async () => {} } } });
+  assert.equal(await web.copyPracticeContext("context"), false);
+  assert.equal(web.hasPersonalPracticeConnection(), false);
+});

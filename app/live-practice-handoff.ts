@@ -5,21 +5,21 @@ function nativePractice(): NativePractice | undefined {
   return (window as Window & { webkit?: { messageHandlers?: { linguathreadPractice?: NativePractice } } }).webkit?.messageHandlers?.linguathreadPractice;
 }
 
-export async function copyPracticeContext(text: string): Promise<void> {
+export async function copyPracticeContext(text: string): Promise<boolean> {
   const native = nativePractice();
   if (!native) {
     if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
     await navigator.clipboard.writeText(text);
-    return;
+    return false;
   }
-  await new Promise<void>((resolve, reject) => {
+  return await new Promise<boolean>((resolve, reject) => {
     const requestID = crypto.randomUUID();
     const cleanup = () => { clearTimeout(timeout); window.removeEventListener("linguathread:practice-copy", result); };
     const result = (event: Event) => {
-      const detail = (event as CustomEvent<{ requestID: string; copied: boolean }>).detail;
+      const detail = (event as CustomEvent<{ requestID: string; copied: boolean; personalPracticeReady?: boolean }>).detail;
       if (detail?.requestID !== requestID) return;
       cleanup();
-      if (detail.copied) resolve(); else reject(new Error("Clipboard unavailable"));
+      if (detail.copied) resolve(detail.personalPracticeReady === true); else reject(new Error("Clipboard unavailable"));
     };
     const timeout = setTimeout(() => { cleanup(); reject(new Error("Clipboard unavailable")); }, 5000);
     window.addEventListener("linguathread:practice-copy", result);
@@ -34,4 +34,11 @@ export function openNativeChatGPT(): boolean {
   if (!native) return false;
   try { native.postMessage({ action: "openChatGPT" }); return true; }
   catch { return false; }
+}
+
+export function hasPersonalPracticeConnection(): boolean {
+  return typeof window !== "undefined" && (window as Window & { __LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__?: boolean }).__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ === true;
+}
+export function connectPersonalPractice(): void {
+  nativePractice()?.postMessage({ action: "connectPersonalPractice" });
 }

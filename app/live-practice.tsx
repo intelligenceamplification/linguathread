@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { chatGPTDestination, copyPracticeContext, openNativeChatGPT } from "./live-practice-handoff";
+import { chatGPTDestination, copyPracticeContext, openNativeChatGPT, hasPersonalPracticeConnection, connectPersonalPractice } from "./live-practice-handoff";
 import "./live-practice.css";
 
 type PracticeState = "lesson" | "preparing" | "ready" | "error";
@@ -9,6 +9,7 @@ type PracticeState = "lesson" | "preparing" | "ready" | "error";
 export function LivePractice({ children, prepareContext, languages, focus }: { children: ReactNode; prepareContext: () => string; languages: string[]; focus: string }) {
   const [state, setState] = useState<PracticeState>("lesson");
   const [context, setContext] = useState("");
+  const [personalReady, setPersonalReady] = useState(false);
   const [error, setError] = useState("");
   const [copying, setCopying] = useState(false);
   const [copyNote, setCopyNote] = useState("");
@@ -30,7 +31,8 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
       prompt = prepareContext();
       if (!prompt.trim()) throw new Error("Missing lesson context");
       setContext(prompt);
-      await copyPracticeContext(prompt);
+      const shared = await copyPracticeContext(prompt);
+      if (generation.current === current) setPersonalReady(shared);
       if (generation.current === current) setState("ready");
     } catch {
       if (generation.current !== current) return;
@@ -43,6 +45,7 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
     generation.current += 1;
     setState("lesson");
     setContext("");
+    setPersonalReady(false);
     setCopying(false);
     requestAnimationFrame(() => startRef.current?.focus());
   }
@@ -52,7 +55,8 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
     setCopying(true);
     setCopyNote("");
     try {
-      await copyPracticeContext(context);
+      const shared = await copyPracticeContext(context);
+      if (generation.current === current) setPersonalReady(shared);
       if (generation.current === current) { setState("ready"); setCopyNote("Copied again."); }
     } catch {
       if (generation.current === current) setCopyNote("Couldn’t copy. Please try again.");
@@ -69,14 +73,15 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
     </aside> : <div className="focus-content live-practice-content" aria-busy={state === "preparing"}>
       <p className="eyebrow">Live Practice{state === "ready" && languages.length ? ` · ${languages.join(" + ")}` : ""}</p>
       <h1 ref={headingRef} tabIndex={-1} className="exercise-title">{state === "preparing" ? "Preparing your practice session…" : state === "ready" ? "Your practice context is ready." : "Let’s try that again."}</h1>
-      <p className="instruction" role="status">{state === "preparing" ? "Preparing context from your current lesson." : state === "ready" ? "Your lesson context has been copied." : error}</p>
+      <p className="instruction" role="status">{state === "preparing" ? "Preparing context from your current lesson." : state === "ready" ? (personalReady ? "Your lesson context is ready for your personal plugin. A copy is also on your clipboard." : "Your lesson context has been copied.") : error}</p>
       {state !== "error" && <div className="practice-mark-wash" aria-hidden="true"><PracticeMark /></div>}
       {state === "preparing" && <p className="practice-status" role="status">Preparing lesson context and copying it…</p>}
       {state === "ready" && <>
         <a className="primary-action" href={chatGPTDestination} target="_blank" rel="noopener noreferrer" onClick={event => { if (openNativeChatGPT()) event.preventDefault(); }}>Open ChatGPT <span aria-hidden="true">↗</span></a>
-        <p className="practice-handoff-note">Paste the context, send it, then start Voice.</p>
+        <p className="practice-handoff-note">{personalReady ? "Start Live Voice and ask LinguaThread Personal Practice to continue your current lesson." : "Paste the context, send it, then start Voice."}</p>
         <button className="text-action" disabled={copying} onClick={copyAgain}>{copying ? "Copying…" : "Copy Again"}</button>
         {copyNote && <p className="practice-status" role="status">{copyNote}</p>}
+        {hasPersonalPracticeConnection() && <button className="text-action" onClick={connectPersonalPractice}>Personal connection</button>}
         <div className="practice-focus"><p className="eyebrow">Current focus</p><p>{focus}</p></div>
       </>}
       {state === "error" && <>
