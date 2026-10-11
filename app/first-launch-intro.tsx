@@ -79,9 +79,9 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
               <span className="intro-mobile-fragment intro-mobile-bottom-left">relación</span>
               <span className="intro-mobile-fragment intro-mobile-bottom-right">comprensión</span>
             </div>
-            <h1 id="intro-title"><BrandMark className="intro-brand-symbol" /><span>LinguaThread</span></h1>
+            <h1 id="intro-title"><BrandMark className="intro-brand-symbol" /><span>Nuevo Flow</span></h1>
           </div>
-          <p className="intro-title-line">How Language Is Built.</p>
+          <p className="intro-title-line">The Language Stacking App</p>
           <p className="intro-invitation">Pull a thread. Follow the meaning.</p>
           <button className="primary-action intro-begin" onClick={onBegin}>Begin <span aria-hidden="true">→</span></button>
         </div>

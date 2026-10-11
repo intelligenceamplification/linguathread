@@ -9,17 +9,17 @@ const geist = Geist({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://linguathread.vercel.app"),
-  title: "LinguaThread · How Language Is Built",
+  title: "Nuevo Flow · The Language Stacking App",
   description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "LinguaThread · How Language Is Built",
+    title: "Nuevo Flow · The Language Stacking App",
     description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
-    images: [{ url: "/brand/v3/social-preview.png", width: 1200, height: 630, alt: "LinguaThread · 語 · 말 · tiếng · How Language Is Built" }],
+    images: [{ url: "/brand/v3/social-preview.png", width: 1200, height: 630, alt: "Nuevo Flow · 語 · 말 · tiếng · The Language Stacking App" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "LinguaThread · How Language Is Built",
+    title: "Nuevo Flow · The Language Stacking App",
     description: "A contemplative language practice built through language stacking, structure, and meaningful use.",
     images: ["/brand/v3/social-preview.png"],
   },

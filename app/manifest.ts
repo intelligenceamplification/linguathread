@@ -2,9 +2,9 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "LinguaThread",
-    short_name: "LinguaThread",
-    description: "How Language Is Built through language stacking.",
+    name: "Nuevo Flow",
+    short_name: "Nuevo Flow",
+    description: "The Language Stacking App",
     start_url: "/",
     display: "standalone",
     background_color: "#ffffff",

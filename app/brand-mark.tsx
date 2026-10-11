@@ -10,5 +10,5 @@ export function BrandMark({ className = "" }: { className?: string }) {
 }
 
 export function BrandLogo({ className = "" }: { className?: string }) {
-  return <span className={`brand-logo ${className}`}><BrandMark className="brand-symbol" /><span className="brand-name">LinguaThread</span></span>;
+  return <span className={`brand-logo ${className}`}><BrandMark className="brand-symbol" /><span className="brand-name">Nuevo Flow</span></span>;
 }

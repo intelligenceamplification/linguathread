@@ -68,7 +68,7 @@ test("builds LinguaThread on the standard Next.js runtime", async () => {
 
 test("preserves the language setup and calm learning interface", async () => {
   const [page, layout, profile] = await Promise.all([read("../app/page.tsx"), read("../app/layout.tsx"), read("../app/language-profile.ts")]);
-  assert.match(layout, /LinguaThread/);
+  assert.match(layout, /Nuevo Flow/);
   assert.match(page, /Your language stack/);
   assert.match(page, /What language shaped your first thoughts/);
   assert.match(page, /placeholder="Search languages"/);
@@ -275,7 +275,7 @@ test("defines a complete A1-C2 course spine without mislabeling planned content 
   assert.match(documentation, /A mapped lesson position is not a published lesson/);
   assert.match(documentation, /Listening, reading, writing, and self-reported spoken practice remain separate evidence/);
   assert.match(mapSource, /outsidePractice/);
-  assert.match(page, /Beyond LinguaThread · optional practice/);
+  assert.match(page, /Beyond Nuevo Flow · optional practice/);
   assert.match(page, /lesson\.lesson % 4 === 0/);
 });
 

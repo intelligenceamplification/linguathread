@@ -107,7 +107,7 @@ export default function Home() {
       setProfile(canonical);
       setProfileSaveError(data.localOnly ? "Saved on this device. Cloud synchronization is unavailable." : null);
     } catch {
-      setProfileSaveError("Saved on this device. LinguaThread will synchronize these language settings when the connection returns.");
+      setProfileSaveError("Saved on this device. Nuevo Flow will synchronize these language settings when the connection returns.");
     }
   }
 
@@ -772,14 +772,14 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             <div className="completion-mark" aria-hidden="true">{lessonSkipped ? "·" : "✓"}</div>
             <p className="eyebrow">Lesson {lesson.lesson} {lessonSkipped ? "paused" : "mapped"}</p>
             <h1>{lessonSkipped ? "Return to this lesson later." : accelerated ? "This is already familiar." : lesson.title}</h1>
-            <p className="completion-copy">{lessonSkipped ? "The skipped work remains open. No completion or mastery was recorded." : accelerated ? "LinguaThread recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
+            <p className="completion-copy">{lessonSkipped ? "The skipped work remains open. No completion or mastery was recorded." : accelerated ? "Nuevo Flow recorded this foundation as familiar and will keep raising the level." : lesson.completion}</p>
             {!lessonSkipped && <div className="learning-signal">
               <span>{accelerated ? "Advance quickly" : "Review later to stabilize"}</span>
               <strong>Spanish · {lesson.skill}</strong>
               <p>{lesson.vocabulary.map((item) => item.word).join(" · ")}</p>
             </div>}
             {!lessonSkipped && outsidePractice && lesson.lesson % 4 === 0 && <aside className="outside-practice">
-              <span>Beyond LinguaThread · optional practice</span>
+              <span>Beyond Nuevo Flow · optional practice</span>
               <p>{outsidePractice.prompt}</p>
             </aside>}
             <button className="primary-action" onClick={continueLearning}>Continue learning <span aria-hidden="true">→</span></button>
@@ -932,7 +932,7 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
 
       <section className="lesson-stage setup-stage">
         {step === 0 && (
-          <SetupFrame headingRef={headingRef} eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="LinguaThread uses your native language to make unfamiliar grammar immediately intelligible.">
+          <SetupFrame headingRef={headingRef} eyebrow="Your native anchor" title="What language shaped your first thoughts?" description="Nuevo Flow uses your native language to make unfamiliar grammar immediately intelligible.">
             <LanguagePicker selected={[native]} excluded={[]} onSelect={(language) => setNative(language)} />
             <button className="primary-action" onClick={() => { if (second === native) setSecond(null); goToStep(1); }}>Continue <span aria-hidden="true">→</span></button>
           </SetupFrame>
@@ -984,14 +984,14 @@ function LanguageSetup({ initialProfile, onComplete, onCancel }: { initialProfil
                 </div>}
               </div>)}
             </div>
-            <p className="setup-description ready-description">Your complete {selectedLearningLanguages.length}-language selection is retained and remains available from every primary screen. Spanish currently has the reviewed communication course; each selected language has its own independent Writing System path where applicable. Explanations remain grounded in {native}, and LinguaThread will never silently substitute an unreviewed lesson for a language you chose.</p>
+            <p className="setup-description ready-description">Your complete {selectedLearningLanguages.length}-language selection is retained and remains available from every primary screen. Spanish currently has the reviewed communication course; each selected language has its own independent Writing System path where applicable. Explanations remain grounded in {native}, and Nuevo Flow will never silently substitute an unreviewed lesson for a language you chose.</p>
             <button className="primary-action" onClick={completeSetup}>{initialProfile ? "Save language stack" : "Begin with foundations"} <span aria-hidden="true">→</span></button>
             <button className="text-action" onClick={() => goToStep(0)}>Edit my languages</button>
           </div>
         )}
       </section>
 
-      <footer className="lesson-footer"><span>Language begins from what you already know</span><span>How Language Is Built · Language stacking</span></footer>
+      <footer className="lesson-footer"><span>Language begins from what you already know</span><span>The Language Stacking App · Language stacking</span></footer>
     </main>
   );
 }
@@ -1125,7 +1125,7 @@ function SpokenSelfComparison({ lesson, onAttempt, onContinue }: { lesson: Lesso
     <p className="instruction">Imagine saying this to someone in the situation you just studied. Speak naturally, then replay the model and compare what you heard.</p>
     <p className="spoken-model" lang="es">{lesson.sentence.target}</p>
     <ListenButton text={lesson.sentence.target} language="es" />
-    {!said ? <button className="primary-action" onClick={() => { setSaid(true); onAttempt(); }}>I said it aloud</button> : <div role="status"><p>Compare your rhythm, sounds and word order with the model. Repeat once if useful.</p><p className="instruction">This is a self-reported spoken attempt. LinguaThread has not graded your pronunciation.</p><button className="primary-action" onClick={onContinue}>Finish lesson <span aria-hidden="true">→</span></button></div>}
+    {!said ? <button className="primary-action" onClick={() => { setSaid(true); onAttempt(); }}>I said it aloud</button> : <div role="status"><p>Compare your rhythm, sounds and word order with the model. Repeat once if useful.</p><p className="instruction">This is a self-reported spoken attempt. Nuevo Flow has not graded your pronunciation.</p><button className="primary-action" onClick={onContinue}>Finish lesson <span aria-hidden="true">→</span></button></div>}
     {!said && <button className="text-action" onClick={onContinue}>Continue without speaking</button>}
   </div>;
 }

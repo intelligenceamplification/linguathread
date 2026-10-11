@@ -43,7 +43,7 @@ export function livePracticePrompt(capsule: PracticeCapsule) {
   const recent = capsule.recent.map(item => `${item.title}\n${expression(item.expressions)}`).join("\n\n");
   const pathways = capsule.pathways.map(item => `${item.reason === "weak" ? "Reinforce" : "Review"}: ${item.objective} · ${item.edge ? `${item.edge.fromLanguage} → ${item.edge.toLanguage} (${item.edge.fromModality} → ${item.edge.toModality}, ${item.edge.retrievalType})` : item.language}${item.error ? ` · ${item.error}` : ""}`).join("\n");
   return [
-    "You are continuing a LinguaThread language-practice session.",
+    "You are continuing a Nuevo Flow language-practice session.",
     `Anchor language: ${capsule.anchor}\nActive languages: ${capsule.languages.join(" + ")}`,
     `Current lesson: ${capsule.lesson.title}\nTopic: ${capsule.lesson.topic} · ${capsule.lesson.level}\nFocus: ${capsule.lesson.skill}\nCurrent activity: ${capsule.lesson.stage}`,
     `Current expressions:\n${expression(capsule.expressions)}`,
@@ -51,6 +51,6 @@ export function livePracticePrompt(capsule: PracticeCapsule) {
     `Current vocabulary:\n${capsule.vocabulary.map(item => `${item.word}: ${Object.entries(item.meanings).map(([language, meaning]) => `${language}: ${meaning}`).join("; ")}`).join("\n")}`,
     ...(recent ? [`Relevant recent material:\n${recent}`] : []),
     ...(pathways ? [`Relevant retrieval pathways:\n${pathways}`] : []),
-    "Practice instructions:\nContinue from this material through natural spoken conversation. Prioritize listening and speaking. Treat the anchor and every active language as one learning thread; practice retrieval in both directions between each pair where appropriate to my level and the available material. Recycle familiar vocabulary and structures heavily, with natural contextual variations and pattern transfer. Let me attempt retrieval before supplying answers. Correct mistakes naturally and concisely. When I request an X-ray, break the phrase down slowly and explain its structure. Prefer idiomatic native usage and useful register distinctions over forced literal translation. Introduce unfamiliar vocabulary sparingly. Adapt difficulty to my demonstrated performance. Do not claim to update LinguaThread progress. Begin directly with one short practice question rather than explaining these instructions back to me.",
+    "Practice instructions:\nContinue from this material through natural spoken conversation. Prioritize listening and speaking. Treat the anchor and every active language as one learning thread; practice retrieval in both directions between each pair where appropriate to my level and the available material. Recycle familiar vocabulary and structures heavily, with natural contextual variations and pattern transfer. Let me attempt retrieval before supplying answers. Correct mistakes naturally and concisely. When I request an X-ray, break the phrase down slowly and explain its structure. Prefer idiomatic native usage and useful register distinctions over forced literal translation. Introduce unfamiliar vocabulary sparingly. Adapt difficulty to my demonstrated performance. Do not claim to update Nuevo Flow progress. Begin directly with one short practice question rather than explaining these instructions back to me.",
   ].join("\n\n").normalize("NFC");
 }
