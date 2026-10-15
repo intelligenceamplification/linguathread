@@ -167,6 +167,9 @@ button { color: inherit; }
 .audio-controls { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; max-width: 100%; }
 .audio-speed { min-height: 44px; max-width: 90px; border: 1px solid var(--line); border-radius: 999px; padding: 6px 8px; background: var(--paper); color: var(--ink); font: inherit; font-size: .72rem; }
 .audio-controls-compact .audio-speed { max-width: 78px; }
+.audio-model-context { flex-basis: 100%; min-width: 0; padding: 4px 0 10px; font-size: 1rem; line-height: 1.5; overflow-wrap: anywhere; }
+.audio-model-context small { display: block; color: var(--muted); font-size: .72rem; font-family: var(--font-geist), sans-serif; }
+.audio-model-context > span { display: block; }
 
 @keyframes intro-single { 0% { opacity: 0; stroke-dashoffset: 1100; } 16%, 62% { opacity: .72; } 78% { stroke-dashoffset: 0; } 100% { opacity: 0; stroke-dashoffset: 0; } }
 @keyframes intro-separate { 0% { opacity: 0; stroke-dashoffset: 980; } 24% { opacity: .72; } 72%, 100% { opacity: 1; stroke-dashoffset: 0; } }

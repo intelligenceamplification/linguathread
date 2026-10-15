@@ -1,5 +1,33 @@
 # LinguaThread VoxCPM2 curriculum audio
 
+## Isolated iPhone rebuild (2026-10-13)
+
+Current delivery plan (2026-10-15): `audio/native-personal-scope.json` anchors the smaller seed at the user's actual A2 Unit 17 lesson. Run `scripts/scope-native-audio.py` to derive `audio/inventory-native-personal.json`. The current eight-lesson main-content window requires 138 variants / 92 playback texts. The user deferred writing-foundation audio on 2026-10-15. `scripts/run-personal-audio-rebuild.py` builds only that window; it never chains the full-library rebuild, deploys, or installs. The user explicitly deferred the complete library. Add checked later blocks incrementally through the download/cache path while preserving the full curriculum and progression.
+
+The native catalog can refresh checked metadata, fetch an exact content-addressed asset, validate its SHA-256, and cache it. It pins the signed seed's voice reference, backend, recipe and teacher pace. The nominal 24 MB download-cache limit preserves files needed by the active/upcoming/review window; that working set can exceed the limit. Seed files are separate. Prefetch downloads current/next units and due material after session restoration, without audio playback or evidence. Cache misses never select an old voice.
+
+`scripts/build-native-audio-pack.py --export-library audio/generated/ios-download-library` stages validated files and a download index. It does not publish them. Release must explicitly copy/deploy that checked index and its assets under `/audio/native/`, along with the native-aware hosted lesson client, before claiming working device downloads. The smaller signed seed must still contain every required control in its declared scope, and future availability must be verified independently.
+
+The initial VoxCPM Spanish pilot was stopped following rejection of the extracted `de` clips (extra syllables/unintelligible sound). Direct Spanish-specific synthesis then passed focused user review of six pronunciation/voice-consistency benchmarks. The replacement recipe is accepted for a screened pilot; approval of a recipe never grants human review to every generated utterance. Nothing in staging has been published or installed.
+
+The two direct `de` candidates subsequently passed user listening review. Their exact-file approvals live in `audio/listening-reviews-ios-v1.json`; stage them with `scripts/build-native-audio-pack.py --listening-review audio/listening-reviews-ios-v1.json`. Other experimental takes remain unapproved pending review. No backend-wide or corpus-wide approval is implied.
+
+Update: all four remaining `eres`/`Soy de Indiana` benchmarks were accepted. `audio/spanish-recipe-v1.json` pins the accepted Spanish-specific model weights, male/female reference hashes and teacher pace. `scripts/run-native-spanish-batch.py --limit 30` stages a varied bounded batch, screens final WAV bytes, retries flagged variants at most three times, and rebuilds coverage. It caches each voice conditioning once per batch and resumes completed takes. The native pack and signed-build verifier reject superseded Spanish backends or recipe hashes. Only the six benchmark recordings carry human approval; generated batch clips remain provisional. Vietnamese continues through its separate approved-reference pipeline. No bulk-generation command deploys or installs.
+
+Future Spanish batches retain hash-verified FLAC source recordings. The synthesis cache key excludes playback tempo/gain and includes the target text, voice reference, model weights and speech-generation settings. A pace-only revision can remaster those sources, then re-screen the new final bytes. Voice/text/model changes require new synthesis. Source hashes and rendering recipe hashes remain distinct; a changed recording never inherits a previous exact-file listening receipt.
+
+`scripts/run-native-audio-rebuild.py --batch-size 100 --max-cycles 40` runs immediate local Spanish/Vietnamese work sequentially, avoiding two competing MPS speech models. It resumes verified coverage, holds failed takes, and stops at complete coverage, the batch bound, or a cycle without progress. It creates no scheduled task and never installs or publishes. Follow `audio/generated/ios-approved-v1/full-rebuild-state.json` and the per-cycle logs. The first Spanish pilot reached 29/30 screened variants; one phrase remained held for listening review after ASR split `considerarla` into `considerar la`. Pace-only cases can receive at most 25% additional slowing, followed by fresh final-byte screening; that adjustment transfers no human approval.
+
+The iPhone rebuild is staged separately from the published mixed web pack. Its Spanish/Vietnamese playback uses only `NativeAudio/manifest.json` and bundled content-addressed files. Missing or rejected recordings fail explicitly; the native bridge refuses remote ES/VI clips and system speech synthesis for those languages. Other languages retain their existing behavior. No new voice family or pronunciation score is introduced.
+
+1. Fetch the current published `/api/curriculum` JSON and run `node scripts/export-native-audio-inventory.mjs SNAPSHOT.json`. This enumerates actual Listen controls in all published lessons, daily practice, foundation material, anatomy, and writing exercises. It records source hashes so content changes invalidate release coverage. It does not synthesize unused X-Ray word combinations.
+2. Run `python3 scripts/build-native-audio-pack.py` to stage provenance-qualified existing recordings and report missing variants. Family approval does not exempt any take from fresh screening. The new audit version checks exact text, pace, recognition uncertainty and repetition risk. Held results may be recognition errors; they are quarantined, not silently discarded or approved.
+3. Re-screen retained files using `scripts/audit-voice-audio.py --metadata audio/generated/ios-approved-v1/metadata.jsonl --output audio/generated/ios-approved-v1/audit.jsonl`. New generation screens its final AAC once and preserves that hash-bound result, avoiding redundant transcription.
+4. Run the bounded `scripts/run-native-audio-pilot.py` in the local synthesis environment. It uses the registered reference voices, stages 30 Spanish and 30 Vietnamese variants, preserves progress and failures, and never publishes. Check results and representative speech before scaling. `--isolated` lets a new explicit repair plan regenerate an old reviewed/published key without altering the legacy pack.
+5. Build a complete checked pack with `scripts/build-native-audio-pack.py --install`. It refuses to populate Xcode resources while any required variant is missing. The build phase independently checks coverage, current inventory/voice hashes, file hashes, URL isolation, pace and screening status. An unsigned compile can use `NATIVE_AUDIO_ALLOW_STAGING=YES CODE_SIGNING_ALLOWED=NO`; that exemption never permits a signed device build.
+
+Normal playback is the encoded teacher pace at rate 1; Slow plays the same selected file at 0.75. Exact replay keeps the same voice. Automated screening is not pronunciation certification: reported phonetic defects require hash-bound listening acceptance. Only exact reviewed assets can contribute independent assessed listening evidence; the native writing exercises mark provisional audio as supported. Keep the user's phone disconnected until release coverage and quality checks are ready for physical testing.
+
 VoxCPM2 is a local production dependency, never an iPhone or browser runtime dependency. The app downloads only versioned clips with explicit review status. The model and its weights must not be committed or bundled.
 
 ## Reproducible production
@@ -20,6 +48,12 @@ When a phrase has reviewed male and female variants, playback chooses one varian
 For Spanish and Vietnamese coverage, `audio/inventory-es-vi.json` lists the exact authored strings that can reach a Listen control. Run `scripts/generate-approved-voice-coverage.py --limit N` in the local VoxCPM2 environment; it resumes from metadata and uses the three approved synthetic reference samples. Generation checks signal quality, independently transcribes the candidate, checks text and pace, and retries failures up to three times. Slashes and middle dots become pauses while displayed curriculum text stays unchanged.
 
 For a long rebuild, use `--defer-failed` to keep generating new keys instead of repeating known failed takes after a restart. Run a separate `--only-failed --prompt-mode` pass for those keys. Both passes preserve the same final-AAC text and pace gates; failures never enter the published pack automatically.
+
+On the 16 GB local Mac, the native rebuild now separates Vietnamese synthesis (`--isolated --synthesis-only`) from `scripts/screen-native-vietnamese.py`. This keeps the speech generator and recognizer from competing for memory. Pending candidates are not publishable; the separate screen must finish before packaging. Existing checks are reused only for matching file hashes. Context retries are bounded, and previously failed context keys stay held. The supported MPS float32 setting is preserved: the installed model code warns that reducing GPU precision can glitch speech. Unused MPS allocations are released between utterances.
+
+Vietnamese screening uses pinned `vinai/PhoWhisper-small` revision `a86b604c346caf7148c37512eafe783a16420adb`, converted locally to CTranslate2 int8 with file-hash provenance. A ten-clip held/control benchmark recovered three previously misrecognized targets while continuing to reject four incorrect targets. Pace comes from the active waveform span, including internal pauses and excluding padded ends, rather than recognizer timestamps. This remains content/clarity screening, not pronunciation assessment or human listening review. The benchmark grants no clip approval.
+
+Spanish ASR may write a spoken letter name as a glyph. The checker recognizes that equivalence only inside the explicit cue `Esta es la letra …`, using standard letter names. It does not relax ordinary-word matching, remove diacritics, change writing assessment, or mark a clip human-reviewed. Contextual letter-model experiments and newly cropped words remain isolated until their complete final files pass checks; the initial two `Llevo` crops failed and remain held.
 
 ## Incremental voice coverage
 
@@ -64,3 +98,83 @@ Reported Spanish pronunciation defects require a fresh, hash-bound listening app
 The incremental planner queues provisional clips at outdated Normal tempo and alternative-form clips without the current segmented-speech generation signature. Its per-item replacement list lets the generator repair only affected variants; exact human-reviewed recordings remain protected. A published file is not automatically current just because its language and text match. Failed replacements stay in the retry queue and cannot silently restore rejected recordings.
 
 Reported rejected variants are prioritized ahead of the bulk backlog and marked for focused listening review in the work plan. Their ASR transcript alone cannot establish pronunciation approval.
+
+### Accepted Vietnamese CPU candidate backend (2026-10-14)
+
+The user accepted the exact `Tôi không muốn khiến bạn cảm thấy bị phớt lờ.`
+VieNeu candidate as authentic and clear. Its receipt is in
+`listening-reviews-ios-v1.json`; failed benchmark words remain excluded.
+`generate-native-vietnamese.py` verifies that receipt, the approved female
+reference and pinned model files, then writes resumable pending candidates.
+It never grants human review or publishes assets. Use the isolated cached model:
+
+```sh
+HF_HUB_CACHE="$PWD/audio/models/vieneu-hf-cache" HF_HUB_OFFLINE=1 \
+  .vieneu-venv/bin/python scripts/generate-native-vietnamese.py \
+  --inventory audio/generated/ios-personal-v1/missing.json --limit 150
+.voxcpm-venv/bin/python scripts/screen-native-vietnamese.py \
+  --work-directory audio/generated/ios-vieneu-v1
+```
+
+Only checked candidates become eligible through the existing pack builder.
+Retries use `--attempt 2` or `--attempt 3` against a refreshed missing list;
+never regenerate successful files or repeat failed candidates without a bound.
+
+
+### Vietnamese recognizer reference implementation
+
+Use `audit-native-vietnamese.py` through `screen-native-vietnamese.py`.
+The original pinned PhoWhisper-small weights run in CPU float32 with their
+no-timestamps generation mode. The converted int8 implementation produced
+trailing hallucinations: controlled comparison recovered five of six full
+carrier sentences with the original implementation, and all six deliberately
+mismatched controls remained rejected. Evidence is under
+`audio/generated/vietnamese-recognizer-reference-control`.
+Do not use the converted recognizer as the release authority. Original-model
+results have a separate cache identity; no old result is silently relabeled.
+Exact text including diacritics, uncertainty, repetition and waveform pace
+remain mandatory checks. This remains automated triage, not human review.
+The accepted Vietnamese synthesis recipe is pinned in `vietnamese-recipe-v1.json`.
+
+
+### Short-word repair and release authority
+
+`generate-native-vietnamese.py --context-carrier` creates held teaching
+sentences, not lesson assets. Screen parents with the original recognizer, run
+`extract-checked-carrier-words.py --parents DIRECTORY`, then independently
+screen the final crops. Forced alignment supplies timing only: the original
+recognizer must check the full parent and the final crop without a text prompt.
+Parents are always excluded by the pack builder. Failed crops remain held.
+The six-word repetition and conservative-temperature pilots did not broadly
+resolve tone errors, so neither is a blanket replacement recipe.
+
+Vietnamese manifests pin `requiredAuditModel`; stale generic/converted passes
+cannot override an original-model rejection. Native playback also rejects
+obsolete recognizer claims. Raw Spanish ASR error rates remain visible; the
+explicit letter-name/glyph notation equivalence is used consistently by the
+checker and pack selector. Joined words in marked-letter names preserve every
+character and diacritic. Isolated spoken sí/si is not proof of its written
+accent: typing assessment still rejects si when sí is requested. No general
+accent stripping or i/y or n/ñ equivalence is permitted.
+
+English held-out reading answers use English playback. Vietnamese composition
+examples use the already authored ăn, cơ, thư and đường word models; assessed
+letters and learner progress stay unchanged. Export the inventory again after
+any route/model change before preparing a pack.
+
+
+### Delivery size and local repair scheduling
+
+New production takes use mono AAC at 128 kbps; source WAV/FLAC masters remain
+local for later pace renders. Exact human-reviewed WAV files are not silently
+converted or granted review to a derivative. Final encoded bytes get their own
+text/pace screening. A controlled encoding of the accepted Vietnamese sentence
+reduced 276,524 bytes to 48,072 bytes (82.6%) and passed the original recognizer.
+Evidence: `audio/generated/native-aac-benchmark` (excluded from release inputs).
+
+`generate-native-spanish.py --terminal-punctuation` is a bounded repair option,
+not a replacement actor. It adds a citation ending only when one is absent;
+the raw cache identity includes preparation version 2, so approved masters
+cannot be overwritten or mistaken for the new attempt. Spanish model processes
+serialize through an OS-held lock to avoid loading two large models together.
+A leftover lock filename is not evidence of a live worker.

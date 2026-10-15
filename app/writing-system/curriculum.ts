@@ -1,3 +1,4 @@
+import { scriptAudioText } from "../script-course-engine";
 import { scriptCourses } from "../script-courses";
 import type { FoundationLanguage } from "../multilingual-foundation";
 import type { Course, Exercise, InventorySection, Stage, Unit } from "./model";
@@ -36,7 +37,7 @@ const words: Record<FoundationLanguage, Word[]> = {
 function makeCourse(language: FoundationLanguage): Course {
  const legacy = scriptCourses[language];
  const source = sources[language as keyof typeof sources] || sources.cefr;
- const c: Course = { language, version: 5, title: legacy.convention, tracks: [], sources: [sources.cefr, ...(source.id === "cefr" ? [] : [source])], units: [], inventory: [], editorialStatus: "awaiting-language-review" };
+ const c: Course = { language, version: (language === "es" || language === "vi") ? 6 : 5, title: legacy.convention, tracks: [], sources: [sources.cefr, ...(source.id === "cefr" ? [] : [source])], units: [], inventory: [], editorialStatus: "awaiting-language-review" };
  const add = (id: string, title: string, track: string, stage: Stage, explanation: string, items: Exercise[], example = "", meaning = "", prerequisites?: string[], inventorySection?: string) => {
   const previous = c.units.filter(u => u.track === track).at(-1);
   const level: Unit["level"] = stage === "forms" || stage === "contrasts" || stage === "composition" ? "Foundation" : stage === "decoding" || stage === "words" ? "A1" : stage === "sentences" ? "A2" : "B1";
@@ -65,7 +66,7 @@ function makeCourse(language: FoundationLanguage): Course {
      { id: `${skill}:form-sound-retrieval`, skill, direction: "form-sound", kind: "audio-choice", prompt: "Retrieve the sound from the form, then confirm it among the audio choices.", cue: item.form, answer: item.form, choices: [...choices].reverse(), choiceAudio: Object.fromEntries(group.items.map(candidate => [candidate.form, candidate.audio || candidate.form])), explanation, reading: item.reading || item.label },
      { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: `Enter ${item.label} exactly.`, answer: item.form.replace(/^-/, ""), accepted: item.form.startsWith("-") ? [item.form] : undefined, explanation, reading: item.reading || item.label },
      { id: `${skill}:input-retrieval`, skill, direction: "input", kind: "input", prompt: `Reconstruct the form read ${item.reading || item.label}.`, answer: item.form.replace(/^-/, ""), accepted: item.form.startsWith("-") ? [item.form] : undefined, explanation, reading: item.reading || item.label },
-    ];
+    ].map(exercise => ({ ...exercise, ...((language === "es" || language === "vi") && item.audio ? { answerAudio: item.audio } : {}) })) as Exercise[];
    });
    add(`inventory-${group.id}-${at}`, `${group.title} · ${slice.map(item => item.form).join("  ")}`, group.track, "forms", group.description, exercises, "", "", undefined, group.id);
   }
@@ -80,7 +81,8 @@ function makeCourse(language: FoundationLanguage): Course {
    { id: `${skill}:input`, skill, direction: "input", kind: "input", prompt: lesson.prompt, answer: lesson.answer, explanation: lesson.explanation },
    { id: `${skill}:input-retrieval`, skill, direction: "input", kind: "input", prompt: `${lesson.prompt} Reconstruct it again without the model.`, answer: lesson.answer, explanation: lesson.explanation },
   ];
-  add(lesson.id, lesson.title, "architecture", "contrasts", lesson.explanation, exercises, lesson.example, lesson.meaning);
+  const answerAudio = (language === "es" || language === "vi") ? scriptAudioText(lesson) : lesson.answer;
+  add(lesson.id, lesson.title, "architecture", "contrasts", lesson.explanation, exercises.map(exercise => answerAudio !== lesson.answer ? { ...exercise, answerAudio } : exercise), lesson.example, lesson.meaning);
  }
  c.tracks.push({ id: language === "zh" ? "hanzi" : language === "ja" ? "words-kanji" : "words", title: language === "zh" ? "Hanzi and words" : language === "ja" ? "Words and kanji" : "Read and reconstruct words", description: "Connect written words with sound, meaning and independent input." });
  const wordTrack = c.tracks.at(-1)!.id;

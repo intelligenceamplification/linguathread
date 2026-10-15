@@ -1,6 +1,7 @@
 import { curriculum } from "../../curriculum";
 import { mergeCurriculum, validateManifest, validatePack } from "../../curriculum-packs";
 import { courseMap, courseUnits, plannedCourseLessonCount } from "../../course-map";
+import { correctLessonAudioText } from "../../lesson-audio-corrections";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +18,7 @@ export async function GET() {
       if (!response.ok) throw new Error(`Pack ${descriptor.id} returned ${response.status}.`);
       return validatePack(await response.json(), descriptor);
     }));
-    const lessons = mergeCurriculum(curriculum, packs);
+    const lessons = correctLessonAudioText(mergeCurriculum(curriculum, packs));
     return Response.json({
       courseId: manifest.courseId,
       revision: manifest.revision,

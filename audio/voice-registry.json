@@ -7,13 +7,23 @@
       "referenceClipId": "es-origin-native-castilian",
       "sourceReference": {
         "language": "es",
+        "text": "Ahora puedo expresarme con más confianza.",
+        "url": "/audio/packs/v5/es-male-742018e80e2e975e-dcd0fbac7bcd.m4a",
+        "sha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875",
+        "reviewedAt": "2026-10-13",
+        "approvalEvidence": "Previously accepted Spanish reference; used in the six male/female pronunciation and voice-consistency benchmarks accepted 2026-10-13."
+      },
+      "inferenceTimesteps": 20,
+      "normalTempo": 0.85,
+      "previousApprovedReference": {
+        "language": "es",
         "text": "Soy de Indiana.",
         "url": "/audio/packs/v2/es-origin-native-castilian-a3dc7d41dd38.wav",
         "sha256": "a3dc7d41dd3802e10ad93940a89bc0d1c0eed8701b08e7f1b5b182d30e6f1109",
         "reviewedAt": "2026-09-23T23:39:24Z"
       },
-      "inferenceTimesteps": 20,
-      "normalTempo": 0.85
+      "nativeBackend": "Chatterbox-Multilingual-es-es",
+      "nativeRecipePath": "audio/spanish-recipe-v1.json"
     },
     {
       "language": "es",
@@ -22,18 +32,46 @@
       "inferenceTimesteps": 10,
       "sourceReference": {
         "language": "es",
+        "text": "Ahora puedo expresarme con más confianza.",
+        "url": "/audio/packs/v5/es-female-6a81111823816aa9-3f93ec4315fc.m4a",
+        "sha256": "3f93ec4315fc6cbc97ce2aa45435e61f2e6659c42ced2024daf573fc9448dbb8",
+        "reviewedAt": "2026-10-13",
+        "approvalEvidence": "Previously accepted Spanish reference; used in the six male/female pronunciation and voice-consistency benchmarks accepted 2026-10-13."
+      },
+      "normalTempo": 0.7,
+      "previousApprovedReference": {
+        "language": "es",
         "text": "Soy de Indiana.",
         "url": "/audio/packs/v3/spanish-female-audition-2cd3bd7cdd5d.wav",
         "sha256": "2cd3bd7cdd5d7334e67e1fd44652c08f11eae639f044b5eac9e55288b2e072f7",
         "reviewedAt": "2026-09-24T18:00:00Z"
       },
-      "normalTempo": 0.7
+      "nativeBackend": "Chatterbox-Multilingual-es-es",
+      "nativeRecipePath": "audio/spanish-recipe-v1.json"
     },
     {
       "language": "vi",
       "voice": "female",
       "referenceClipId": "vietnamese-female-audition",
-      "inferenceTimesteps": 10
+      "sourceReference": {
+        "language": "vi",
+        "text": "Mình đến từ Indiana. Rất vui được gặp bạn.",
+        "url": "/audio/packs/v3/vietnamese-female-audition-ffe7c562b3c4.wav",
+        "sha256": "ffe7c562b3c4c744f4bffe76e9e594dbc83a11c9132390f86136818fbc2e8c1b",
+        "reviewedAt": "2026-09-24T18:00:00Z"
+      },
+      "inferenceTimesteps": 10,
+      "acceptedCandidateBackends": [
+        {
+          "backend": "VieNeu-TTS-v3-Turbo",
+          "referenceSha256": "ffe7c562b3c4c744f4bffe76e9e594dbc83a11c9132390f86136818fbc2e8c1b",
+          "acceptanceClipSha256": "d4958ba0f2d88ad4630be52fc7a918af0c51a91b0e06dcfb61a1b168a89407b4",
+          "acceptedAt": "2026-10-14",
+          "approvalScope": "Same-reference voice consistency accepted; each generated clip still requires independent content and pace checks.",
+          "recipePath": "audio/vietnamese-recipe-v1.json"
+        }
+      ],
+      "nativeAuditModel": "vinai/PhoWhisper-small@a86b604c346caf7148c37512eafe783a16420adb:transformers-fp32-no-timestamps-v1"
     }
   ]
 }

@@ -162,3 +162,79 @@ Every skip path must persist deferral so the scheduler cannot restart the same u
 # Approved multilingual icon baseline — 2026-10-04
 
 The user approved the sculpted multilingual icon containing traditional Chinese 語, Korean 말, Vietnamese tiếng, and a connecting ribbon. The name LinguaThread sits beneath the icon and is not baked into its artwork. Preserve the correct character strokes and Vietnamese diacritics. Canonical light and dark assets are `public/brand/v2/icon-{light,dark}-1024.png`, copied identically into the existing iOS asset catalog. The web uses the same artwork in responsive sizes, an appearance-aware favicon, and a 1200×630 sharing preview. iOS build 6 locks in this baseline; later builds must retain these assets unless the user approves another design.
+## iPhone audio overhaul — 2026-10-13
+
+The user authorized a new isolated Spanish/Vietnamese instructional audio pack, retaining only proven recordings and using the approved Spanish male/female and Vietnamese female references. Voice-family acceptance is not approval of every generated utterance. Re-screen existing clips and hold unintelligible, mismatched, uncertain, or reported defective takes; automated transcription cannot certify pronunciation. The iPhone must not fall back to legacy packs or platform voices for these two languages. Normal/Slow reuse the same selected clip at rates 1/0.75. Require complete authored-control coverage and a validated native pack before a signed install; connect the physical phone only when ready for that test. Web audio overhaul remains deferred. Preserve the current Nuevo Flow title, approved multilingual icon, progression, saved learner data, and curriculum.
+
+The user rejected both extracted `de` candidates for extra syllables and unintelligible sound. They remain blocked by exact file hash. Bulk generation is paused pending a successful direct Spanish pronunciation benchmark using approved reference recordings. A Spanish-specific backend is an isolated experiment; neither its outputs nor altered voice identity become approved automatically. Do not compensate for wrong sounds by slowing playback.
+
+The direct Spanish-specific male/female `de` candidates were accepted on 2026-10-13 ("Nailed it!", "Es perfecto"). Exact approved hashes and listening evidence are recorded in `audio/listening-reviews-ios-v1.json`. This approves those two recordings; `eres` and full-phrase voice consistency must still be checked before scaling the new recipe.
+
+The same day, the user accepted all four male/female `eres` and `Soy de Indiana` benchmarks. The six exact recordings are approved; the generation recipe is pinned in `audio/spanish-recipe-v1.json`. Native Spanish candidates must match that backend and recipe hash. Previous Spanish synthesis output is excluded from the new native pack even if it came from an earlier approved voice family. New utterances remain provisional until screened and must not inherit human review from the six benchmarks. Vietnamese keeps its accepted female reference and separate generation backend.
+
+The user also explicitly approved the Spanish female `A la luz de los datos, la estrategia parece eficaz, aunque sería prematuro considerarla definitiva.` recording, SHA-256 `4f9c32f01c7a8c1d4d484c72d1a390be7e865054a9b318eabaeb5abb4be40cd7`, after focused listening review on 2026-10-13. This resolves that exact take's ASR clitic-segmentation flag without weakening text checks for other recordings. The first 30-variant pilot now has 29 screened variants and one human-approved variant.
+
+## Personal audio footprint and continued progression — 2026-10-13
+
+### Scope correction — 2026-10-15
+
+The user explicitly excluded rebuilding the full Spanish/Vietnamese library from this update. Prepare and validate the initial personal lesson window, with reusable checked download/cache delivery for later lesson blocks. Do not chain a full-library rebuild after the personal pack or make thousands of regenerated clips a prerequisite for this build. Preserve all authored lessons and learner progression. Later blocks are added incrementally; do not claim that ungenerated or unavailable audio is already delivered. Stop when the update is ready and ask the user to connect the iPhone then.
+
+The user approved a smaller initial iPhone installation for Spanish and Vietnamese, with English as the existing meaning anchor. The screenshot identifies the current lesson as `a2-u17-4-a-learning-intention-lesson` (A2 Unit 17): `Practico cada día para que las palabras salgan con naturalidad.` The initial audio scope includes Units 17–18 and the existing Spanish/Vietnamese writing foundations: 352 unique texts, 481 voice variants. It does not change the curriculum, language-stack settings, learner progress, title Nuevo Flow, icon, or portrait constraint.
+
+The user explicitly requires enough audio to continue advancing. The smaller installation is not a cap on the lesson library. Prioritize the personal window, then continue preparing the complete authored Spanish/Vietnamese audio library (5,047 variants). Future checked recordings are served separately, downloaded ahead for the current/next units and due retrieval, and cached with file-hash verification. The signed seed pins accepted voice references, backend and recipe; remote assets must satisfy those same constraints. No old voice or platform-speech fallback is permitted for native Spanish/Vietnamese. Prefetch is silent and creates no learning evidence. It starts only after restoring the saved learner session.
+
+The download/cache integration is not deployed or installed yet. Readiness requires complete initial-window coverage, tested download/cache behavior, and verified availability of later lesson blocks; incomplete future audio must not be represented as uninterrupted coverage. Keep source recordings and reviewed receipts. Scoped completeness must be validated against the scope policy and full authored inventory, not achieved by silently dropping missing controls.
+
+### Rebuild and release checks — 2026-10-14
+
+Current/upcoming authored lessons precede writing foundations in the generation queue; ordering never removes required recordings. The local runner keeps the Mac awake while processing and stops with an explicit repair/review state when a scope remains incomplete. It must not advance to the full-library stage while reporting an incomplete initial scope as ready.
+
+Listening quality is taken from the recording that actually finished playback. A separate catalog lookup cannot establish reviewed listening evidence. Real Swift cache tests with a controlled HTTP transport verify shared downloads, file hashes, offline reuse, cached metadata, and rejection of a previously cached recording after it is blocked. These checks are not physical-iPhone playback proof.
+
+Two published A2 Unit 18 vocabulary entries mistakenly contain English editorial labels (`repair intention`, `intention contrast`) as Spanish words. The narrowly scoped runtime corrections use `manera` and `quería`, respectively, both already present in their target sentences. The export uses the same corrections as the curriculum endpoint; lesson IDs, sentence prompts, course size, and saved progress are preserved. A later authored correction takes precedence.
+
+This work remains unreleased until audio coverage and deployment/device checks pass. The approved installed build must not be replaced with an incomplete staging pack.
+
+The Spanish/Vietnamese writing controls now distinguish an assessed written form from its audio model. Spanish alphabet and marked-vowel entries use their letter names; Vietnamese entries with authored word examples reuse those examples for the revealed model. The audio model is shown explicitly when it differs from the assessed form. Invalid spelling distractors in the legacy Spanish/Vietnamese visual script exercises remain selectable but are not spoken as instructional models. The correct form retains playback, and the sound, composition, and input directions remain intact. Other language controls are unchanged.
+
+The resulting personal-window inventory is 284 audio texts / 405 voice variants; the full Spanish/Vietnamese inventory is 3,323 texts. This reduction follows the actual corrected controls, not removal of missing recordings from the manifest. Exact writing assessment, inventory forms, lesson IDs, and all 288 authored course lessons are retained. The exporter and scoped verifier derive coverage from the same runtime models.
+
+Spanish/Vietnamese writing content is version 6 so cached version-5 units cannot preserve obsolete audio controls. Progress schema and skill IDs are unchanged. Native release review dates come only from exact-file current-release listening receipts; historical mixed-pack review flags cannot manufacture reviewed listening evidence. Voice-family provenance remains required even for retained clips.
+
+### Short-utterance quality investigation
+
+The Vietnamese quality checker now uses the pinned native-language PhoWhisper model described in `audio/README.md`. A held/control benchmark demonstrated recognition improvements while retaining rejection of incorrect speech. Timing is measured independently from waveform activity because the native recognizer's short-clip timestamps can be inaccurate. Neither change grants human listening review or pronunciation mastery.
+
+Spanish letter controls retain the reviewed standalone `de`; other letter models use the explicit cue `Esta es la letra …`, shown in the interface exactly as spoken. The assessed glyph and its existing skill ID remain unchanged. This addresses unstable isolated-name synthesis without hiding added speech or changing writing assessment. The scoped requirement remains 284 utterances / 405 voice variants; the current full inventory contains 3,324 texts.
+
+The initial two `Llevo` crops from checked same-voice sentences failed standalone checks and remain held. A free, Vietnamese-specific VieNeu-TTS CPU cloning experiment is isolated under `audio/generated/vietnamese-backend-benchmark`; its failed samples are excluded from release discovery, and only the exact accepted sentence has been promoted to checked metadata. The approved female reference is unchanged. On 2026-10-14 the user accepted its complete sentence sample as authentic and clear (exact hash in listening-reviews-ios-v1.json). This accepts same-reference voice consistency for further checked generation; the failed short-word samples remain held. Existing checked Vietnamese recordings remain eligible. No experimental candidate is released without its own content and pace checks.
+
+
+The 2026-10-14 Vietnamese screening comparison identified trailing transcript
+hallucinations in the converted int8 recognizer. The release checker now uses
+the original pinned full-precision PhoWhisper-small implementation and its
+no-timestamps generation configuration, with a distinct audit cache identity.
+A controlled six-sentence comparison recovered five exact carrier sentences;
+all six deliberately mismatched controls were rejected. Retained and pending
+Vietnamese candidates must be re-screened with this implementation. This does
+not approve failed audio or confer human pronunciation review.
+
+
+Audio routing corrections preserve assessed writing: English reading-transfer
+answers retain their English voice, and Vietnamese composition models use
+existing authored examples (ăn, cơ, thư, đường) while still assessing the
+requested glyphs and their marks. These corrections change playable audio
+requirements, not lesson IDs, learning-path scope or mastery evidence.
+Spanish audio triage recognizes explicit letter-name/glyph notation and the
+isolated sí/si segment homophony; raw transcription metrics remain recorded.
+Writing assessment still distinguishes sí/si, n/ñ, all vowel accents and all
+Vietnamese tone/shape marks. A newer authoritative Vietnamese rejection cannot
+be overridden by an older cached pass. The native manifest and playback policy
+pin the reference recognizer identity for automated Vietnamese checks.
+
+### Main-lesson audio scope — 2026-10-15
+
+The user subsequently directed: leave writing-foundation audio alone for now and focus on the main lesson content. The personal seed therefore includes the eight authored lessons in Units 17–18, without the separate writing-foundation audio inventory. This is an explicit product scope change, not a relaxation of clip validation. All main-lesson controls in those lessons remain required: 92 playback texts / 138 voice variants. Writing-foundation experiments begun during this scope discussion were reverted. Preserve existing writing assessment and learner progress. Future lesson packs use the same checked download/cache delivery; do not restart the complete-library rebuild.
+
+The five fragile vocabulary audio requests (`Llevo`, `corregir`, `haberte hablado`, and Vietnamese `cách` / `sửa`) reuse existing authored context models in the native player. The control displays “Listen in context” and the exact spoken sentence or phrase; it never silently plays added words. Vocabulary, translation and writing answers remain unchanged. Displayed-context playback cannot count as independent listening evidence. The inventory exporter applies the same routing helper as the actual player; all eight lessons’ required controls remain covered. Failed isolated takes remain excluded.

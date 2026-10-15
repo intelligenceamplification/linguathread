@@ -7,15 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		LT0000000000000000000006 /* NativeAudio in Resources */ = {isa = PBXBuildFile; fileRef = LT0000000000000000001006 /* NativeAudio */; };
 		LT0000000000000000000001 /* LinguaThreadApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = LT0000000000000000001001 /* LinguaThreadApp.swift */; };
 		LT0000000000000000000004 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = LT0000000000000000001004 /* ContentView.swift */; };
+		LT0000000000000000000008 /* NativeAudioCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = LT0000000000000000001008 /* NativeAudioCatalog.swift */; };
 		LT0000000000000000000005 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = LT0000000000000000001005 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		LT0000000000000000001006 /* NativeAudio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = NativeAudio; sourceTree = "<group>"; };
 		LT0000000000000000001000 /* LinguaThread.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinguaThread.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		LT0000000000000000001001 /* LinguaThreadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinguaThreadApp.swift; sourceTree = "<group>"; };
 		LT0000000000000000001004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		LT0000000000000000001008 /* NativeAudioCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeAudioCatalog.swift; sourceTree = "<group>"; };
 		LT0000000000000000001005 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,8 +45,10 @@
 		LT0000000000000000003001 /* LinguaThread */ = {
 			isa = PBXGroup;
 			children = (
+				LT0000000000000000001006 /* NativeAudio */,
 				LT0000000000000000001001 /* LinguaThreadApp.swift */,
 				LT0000000000000000001004 /* ContentView.swift */,
+				LT0000000000000000001008 /* NativeAudioCatalog.swift */,
 				LT0000000000000000001005 /* Assets.xcassets */,
 			);
 			path = LinguaThread;
@@ -63,6 +69,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = LT0000000000000000005000 /* Build configuration list for PBXNativeTarget "LinguaThread" */;
 			buildPhases = (
+				LT0000000000000000006003 /* Verify Native Audio */,
 				LT0000000000000000006001 /* Sources */,
 				LT0000000000000000002001 /* Frameworks */,
 				LT0000000000000000006002 /* Resources */,
@@ -115,11 +122,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				LT0000000000000000000006 /* NativeAudio in Resources */,
 				LT0000000000000000000005 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		LT0000000000000000006003 /* Verify Native Audio */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = ();
+			inputPaths = ("$(SRCROOT)/..");
+			name = "Verify Native Audio";
+			outputPaths = ();
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"$NATIVE_AUDIO_ALLOW_STAGING\" = YES ] && [ \"$CODE_SIGNING_ALLOWED\" = NO ]; then\n  /usr/bin/python3 \"$SRCROOT/../scripts/verify-native-audio-pack.py\" --allow-staging\nelse\n  /usr/bin/python3 \"$SRCROOT/../scripts/verify-native-audio-pack.py\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		LT0000000000000000006001 /* Sources */ = {
@@ -128,6 +151,7 @@
 			files = (
 				LT0000000000000000000001 /* LinguaThreadApp.swift in Sources */,
 				LT0000000000000000000004 /* ContentView.swift in Sources */,
+				LT0000000000000000000008 /* NativeAudioCatalog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,7 +200,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = Z3HWNWL3WF;
 				ENABLE_PREVIEWS = YES;
@@ -204,7 +228,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = Z3HWNWL3WF;
 				ENABLE_PREVIEWS = YES;

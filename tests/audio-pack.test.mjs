@@ -1,6 +1,56 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+test("personal audio window follows course progression and includes due retrieval without changing the course", async () => {
+  const { nativeAudioLessonWindow, prepareNativeAudioWindow } = await import("../app/audio-pack.ts");
+  const course = [
+    { id: "old", level: "A1", unit: 1 },
+    { id: "current-a", level: "A2", unit: 17 },
+    { id: "current-b", level: "A2", unit: 17 },
+    { id: "next", level: "A2", unit: 18 },
+    { id: "later", level: "A2", unit: 19 },
+  ];
+  const before = structuredClone(course);
+  assert.deepEqual(nativeAudioLessonWindow(course, "current-b", ["old", "unknown"]), ["current-a", "current-b", "next", "old"]);
+  assert.deepEqual(nativeAudioLessonWindow(course, "next"), ["next", "later"]);
+  assert.deepEqual(nativeAudioLessonWindow(course, "unknown"), []);
+  assert.deepEqual(course, before);
+  const previous = globalThis.window;
+  const messages = [];
+  try {
+    globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: {}, webkit: { messageHandlers: { linguathreadAudio: { postMessage: message => messages.push(message) } } } };
+    prepareNativeAudioWindow(course, "next");
+    assert.deepEqual(messages, [{ action: "prepareLessons", lessonIds: ["next", "later"] }]);
+    delete globalThis.window.__LINGUATHREAD_NATIVE_AUDIO_PACK__;
+    prepareNativeAudioWindow(course, "next");
+    assert.equal(messages.length, 1);
+  } finally { globalThis.window = previous; }
+});
+
+test("a later native lesson refreshes the approved catalog without querying legacy web audio", async () => {
+  const { approvedAudioFor } = await import("../app/audio-pack.ts");
+  const previous = globalThis.window;
+  const oldFetch = globalThis.fetch;
+  const nativeWindow = new EventTarget();
+  nativeWindow.setTimeout = setTimeout;
+  nativeWindow.clearTimeout = clearTimeout;
+  nativeWindow.__LINGUATHREAD_NATIVE_AUDIO_PACK__ = { approvedAt: "2026-10-13", clips: [] };
+  const requests = [];
+  nativeWindow.webkit = { messageHandlers: { linguathreadAudio: { postMessage: payload => {
+    requests.push(payload.action);
+    queueMicrotask(() => {
+      nativeWindow.__LINGUATHREAD_NATIVE_AUDIO_PACK__.clips = [{ id: "later", language: "es", text: "Más adelante.", normalizedText: "Más adelante.", sha256: "checked", url: "linguathread-audio://pack/checked.wav" }];
+      nativeWindow.dispatchEvent(new Event("linguathread:native-audio-library-ready"));
+    });
+  } } } };
+  try {
+    globalThis.window = nativeWindow;
+    globalThis.fetch = () => { throw new Error("Must not fetch legacy audio"); };
+    assert.equal((await approvedAudioFor("Más adelante.", "es"))?.id, "later");
+    assert.deepEqual(requests, ["refreshLibrary"]);
+  } finally { globalThis.window = previous; globalThis.fetch = oldFetch; }
+});
+
 test("chooses only reviewed voice variants when a reviewed model exists", async () => {
   const originalFetch = globalThis.fetch;
   const originalRandom = Math.random;
@@ -39,4 +89,27 @@ test("chooses only reviewed voice variants when a reviewed model exists", async 
     Math.random = originalRandom;
     Date.now = originalNow;
   }
+});
+
+test("native isolated pack never fetches legacy clips, even when coverage is missing", async () => {
+  const previousWindow = globalThis.window;
+  const previousFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("Legacy pack must not be queried"); };
+  globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: {
+    approvedAt: "2026-10-13", clips: [
+      { id: "approved-native", language: "es", normalizedText: "eres", url: "linguathread-audio://pack/valid.m4a", sha256: "good", voice: "male" },
+      { id: "rejected", language: "es", normalizedText: "de", sha256: "bad", url: "linguathread-audio://pack/bad.m4a" },
+    ], blockedAudioSha256: ["bad"],
+  } };
+  try {
+    const { approvedAudioFor, requiresNativeApprovedAudio } = await import("../app/audio-pack.ts");
+    assert.equal(requiresNativeApprovedAudio("es"), true);
+    assert.equal(requiresNativeApprovedAudio("vi"), true);
+    assert.equal(requiresNativeApprovedAudio("en"), false);
+    assert.equal((await approvedAudioFor("eres", "es"))?.id, "approved-native");
+    assert.equal(await approvedAudioFor("de", "es"), null);
+    assert.equal(await approvedAudioFor("Mình / Tôi", "vi"), null);
+    globalThis.window.__LINGUATHREAD_NATIVE_AUDIO_PACK__.approvedAt = null;
+    assert.equal(await approvedAudioFor("eres", "es"), null);
+  } finally { globalThis.window = previousWindow; globalThis.fetch = previousFetch; }
 });

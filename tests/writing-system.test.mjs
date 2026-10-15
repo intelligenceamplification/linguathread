@@ -16,6 +16,23 @@ const model = await load("../app/writing-system/model.ts");
 const { writingCourses } = await load("../app/writing-system/curriculum.ts");
 const { courseMaterial, relatedVocabulary } = await load("../app/writing-system/course-links.ts");
 
+test("writing audio names or contextual words do not replace assessed written forms", () => {
+ const spanish = writingCourses.es.units.flatMap(u => u.exercises);
+ const letter = spanish.find(e => e.id === "es:inventory:letters:d:input");
+ assert.equal(letter.answerAudio, "de");
+ assert.ok(model.assess(letter, "d"));
+ assert.ok(!model.assess(letter, "de"));
+ const marked = spanish.find(e => e.id === "es:inventory:marked-vowels:ü:input");
+ assert.equal(marked.answerAudio, "Esta es la letra u con diéresis.");
+ assert.ok(!model.assess(marked, "u"));
+ const vietnamese = writingCourses.vi.units.flatMap(u => u.exercises);
+ const crossed = vietnamese.find(e => e.id === "vi:inventory:consonants:đ:input");
+ assert.equal(crossed.answerAudio, "đi");
+ assert.ok(!model.assess(crossed, "d"));
+ assert.ok(!model.assess(crossed, "đi"));
+ assert.ok(model.assess(crossed, "đ"));
+});
+
 test("every course has valid unique units, prerequisites and response controls", () => {
  assert.equal(Object.keys(writingCourses).length, 13);
  for (const course of Object.values(writingCourses)) {
@@ -154,4 +171,36 @@ test("Mandarin components precede characters, compounds and reading", () => {
  }
  const reading = writingCourses.zh.units.find(unit => unit.id === "zh-reading-0");
  assert.equal(reading.prerequisites[0], hanzi.at(-1).id);
+});
+
+
+test("held-out reading meaning answers keep English audio instead of the course voice", () => {
+ for (const language of ["es", "vi"]) {
+  const unit = writingCourses[language].units.find(u => u.id === `${language}-reading-transfer`);
+  const meaning = unit.exercises.find(e => e.answerLanguage === "en");
+  assert.equal(meaning.answer, "At school");
+  assert.equal(model.writingAnswerLanguage(meaning, language), "en");
+  const reconstruction = unit.exercises.find(e => e.direction === "input");
+  assert.equal(model.writingAnswerLanguage(reconstruction, language), language);
+ }
+});
+
+
+test("Vietnamese composition keeps assessed glyphs while hearing authored word models", () => {
+ const unit = writingCourses.vi.units.find(u => u.id === "vi-architecture-vowel-a");
+ assert.equal(unit.example, "ăn");
+ const reconstruction = unit.exercises.find(e => e.direction === "input");
+ assert.equal(reconstruction.answer, "ă");
+ assert.equal(reconstruction.answerAudio, "ăn");
+ assert.ok(model.assess(reconstruction, "ă"));
+ assert.ok(!model.assess(reconstruction, "ăn"));
+ assert.ok(!model.assess(reconstruction, "a"));
+});
+
+
+test("audio homophony cannot erase the assessed accent in sí", () => {
+ const affirmative = writingCourses.es.units.flatMap(u => u.exercises).find(e => e.answer === "sí" && e.kind === "input");
+ assert.ok(affirmative);
+ assert.ok(model.assess(affirmative, "sí"));
+ assert.ok(!model.assess(affirmative, "si"));
 });

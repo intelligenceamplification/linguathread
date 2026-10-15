@@ -2,8 +2,9 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { languageInfo, type FoundationLanguage } from "./multilingual-foundation";
 import { speechLocales, voiceForLanguage } from "./speech";
-import { approvedAudioFor, type ApprovedAudioClip } from "./audio-pack";
+import { approvedAudioFor, requiresNativeApprovedAudio, type ApprovedAudioClip } from "./audio-pack";
 import { spokenText } from "./spoken-text";
+import { instructionalAudioText } from "./instructional-audio-models";
 
 const speedEvent = "linguathread:audio-speed";
 const speedKey = "linguathread.audio-speed.v1";
@@ -26,10 +27,19 @@ const supportsNativeClip = () => Boolean((window as Window & { __LINGUATHREAD_NA
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
 
-export default function ListenButton({ text, language, onUse, onPlayback, onComplete, onError, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; onComplete?: () => void; onError?: () => void; compact?: boolean }) {
+export default function ListenButton({ text: requestedText, language, onUse, onPlayback, onComplete, onError, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; onComplete?: (reviewed?: boolean) => void; onError?: () => void; compact?: boolean }) {
+ const text = requiresNativeApprovedAudio(language) ? instructionalAudioText(requestedText, language) : requestedText;
+ const contextual = text !== requestedText;
  const id = useId();
  const supported = useSyncExternalStore(subscribeToSpeechSupport, hasSpeechSupport, noServerSpeechSupport);
  const [speaking, setSpeaking] = useState(false);
+ const [unavailable, setUnavailable] = useState(false);
+ const [preparingKey, setPreparingKey] = useState<string | null>(null);
+ const activeTextKey = `${language}\u0000${text}`;
+ const preparing = preparingKey === activeTextKey;
+ const preparingRef = useRef(false);
+ const requestGeneration = useRef(0);
+ const nativeRequest = useRef(id);
  const speed = useSyncExternalStore(subscribeSpeed, readSpeed, serverSpeed);
  const rate = speed === "slow" ? 0.75 : 1;
  const playback = useRef(onPlayback);
@@ -42,45 +52,54 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
  useEffect(() => { completion.current = onComplete; }, [onComplete]);
  useEffect(() => { failure.current = onError; }, [onError]);
  useEffect(() => { speakingRef.current = speaking; }, [speaking]);
+ useEffect(() => { preparingRef.current = preparing; }, [preparing]);
 
  useEffect(() => {
-  const resetForAnother = (event: Event) => { if ((event as CustomEvent<string>).detail !== id) { audioRef.current?.pause(); setSpeaking(false); } };
+  const requests = requestGeneration;
+  const resetForAnother = (event: Event) => { if ((event as CustomEvent<string>).detail !== id) { const stoppedRequest = nativeRequest.current; requestGeneration.current++; nativeRequest.current = `${id}:inactive:${requestGeneration.current}`; nativeHandler()?.postMessage({ action: "stop", requestID: stoppedRequest }); audioRef.current?.pause(); setSpeaking(false); setPreparingKey(null); } };
   window.addEventListener(speechEvent, resetForAnother);
-  const nativeEnded = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(false); completion.current?.(); } };
-  const nativeStarted = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(true); playback.current?.(); } };
-  const nativeCancelled = (event: Event) => { if ((event as CustomEvent<string>).detail === id) setSpeaking(false); };
-  const nativeError = (event: Event) => { if ((event as CustomEvent<string>).detail === id) { setSpeaking(false); failure.current?.(); } };
+  const nativeEnded = (event: Event) => { if ((event as CustomEvent<string>).detail === nativeRequest.current) { setPreparingKey(null); setSpeaking(false); completion.current?.(Boolean(selectedClip.current?.clip?.reviewedAt) && !contextual); } };
+  const nativeStarted = (event: Event) => { if ((event as CustomEvent<string>).detail === nativeRequest.current) { setPreparingKey(null); setSpeaking(true); playback.current?.(); } };
+  const nativeCancelled = (event: Event) => { if ((event as CustomEvent<string>).detail === nativeRequest.current) { setPreparingKey(null); setSpeaking(false); } };
+  const nativeError = (event: Event) => { if ((event as CustomEvent<string>).detail === nativeRequest.current) { setPreparingKey(null); setSpeaking(false); if (requiresNativeApprovedAudio(language)) setUnavailable(true); failure.current?.(); } };
   window.addEventListener(nativeSpeechEndEvent, nativeEnded);
   window.addEventListener(nativeSpeechStartEvent, nativeStarted);
   window.addEventListener(nativeSpeechCancelEvent, nativeCancelled);
   window.addEventListener(nativeSpeechErrorEvent, nativeError);
   return () => {
    window.removeEventListener(speechEvent, resetForAnother); window.removeEventListener(nativeSpeechEndEvent, nativeEnded); window.removeEventListener(nativeSpeechStartEvent, nativeStarted); window.removeEventListener(nativeSpeechCancelEvent, nativeCancelled); window.removeEventListener(nativeSpeechErrorEvent, nativeError);
-   if (speakingRef.current) { nativeHandler()?.postMessage({ action: "stop", requestID: id }); window.speechSynthesis?.cancel(); audioRef.current?.pause(); }
+   const stoppedRequest = nativeRequest.current; requests.current++; nativeRequest.current = `${id}:inactive:${requests.current}`;
+   if (speakingRef.current || preparingRef.current) { nativeHandler()?.postMessage({ action: "stop", requestID: stoppedRequest }); window.speechSynthesis?.cancel(); audioRef.current?.pause(); }
   };
- }, [id]);
+ }, [contextual, id, language, text]);
 
  async function toggle() {
-  if (!supported) return;
+  if (!supported || preparing) return;
   if (speaking) {
-    nativeHandler()?.postMessage({ action: "stop" });
+    const stoppedRequest = nativeRequest.current; requestGeneration.current++; nativeRequest.current = `${id}:inactive:${requestGeneration.current}`;
+    nativeHandler()?.postMessage({ action: "stop", requestID: stoppedRequest });
     if ("speechSynthesis" in window) window.speechSynthesis.cancel();
     audioRef.current?.pause();
     setSpeaking(false);
     return;
   }
   onUse?.();
+  setUnavailable(false);
   if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   window.dispatchEvent(new CustomEvent(speechEvent, { detail: id }));
+  const generation = ++requestGeneration.current;
+  nativeRequest.current = `${id}:${generation}`;
+  if (requiresNativeApprovedAudio(language)) { preparingRef.current = true; setPreparingKey(activeTextKey); }
   const clipKey = `${language}\u0000${text}`;
   const approved = selectedClip.current?.key === clipKey
    ? selectedClip.current.clip
    : await approvedAudioFor(text, language);
+  if (generation !== requestGeneration.current) return;
   selectedClip.current = approved ? { key: clipKey, clip: approved } : null;
   if (approved) {
    const native = nativeHandler();
    if (native && supportsNativeClip()) {
-    native.postMessage({ action: "playClip", url: approved.url, rate, requestID: id });
+    native.postMessage({ action: "playClip", url: approved.url, language, rate, requestID: nativeRequest.current });
     return;
    }
    const audio = new Audio(approved.url);
@@ -88,16 +107,22 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
    audio.playbackRate = rate;
    audio.preservesPitch = true;
    audioRef.current = audio;
-   audio.onplay = () => { setSpeaking(true); playback.current?.(); };
-   audio.onended = () => { setSpeaking(false); completion.current?.(); };
-   audio.onerror = () => { setSpeaking(false); failure.current?.(); };
-   try { await audio.play(); } catch { setSpeaking(false); failure.current?.(); }
+   audio.onplay = () => { setPreparingKey(null); setSpeaking(true); playback.current?.(); };
+   audio.onended = () => { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); completion.current?.(Boolean(approved.reviewedAt) && !contextual); };
+   audio.onerror = () => { setPreparingKey(null); setSpeaking(false); failure.current?.(); };
+   try { await audio.play(); } catch { setPreparingKey(null); setSpeaking(false); failure.current?.(); }
    return;
+  }
+  if (requiresNativeApprovedAudio(language)) {
+    setPreparingKey(null);
+    setUnavailable(true);
+    failure.current?.();
+    return;
   }
   const native = nativeHandler();
   if (native) {
     try {
-      native.postMessage({ action: "speak", text: spokenText(text), language: speechLocales[language], rate, requestID: id });
+      native.postMessage({ action: "speak", text: spokenText(text), language: speechLocales[language], rate, requestID: nativeRequest.current });
       return;
     } catch {
       // Continue with the browser/device speech engine below.
@@ -109,15 +134,15 @@ export default function ListenButton({ text, language, onUse, onPlayback, onComp
   utterance.pitch = 1;
   const voice = voiceForLanguage(window.speechSynthesis.getVoices(), language);
   if (voice) utterance.voice = voice;
-  utterance.onstart = () => { setSpeaking(true); playback.current?.(); };
-  utterance.onend = () => { setSpeaking(false); completion.current?.(); };
+  utterance.onstart = () => { setPreparingKey(null); setSpeaking(true); playback.current?.(); };
+  utterance.onend = () => { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); completion.current?.(false); };
   utterance.onerror = () => { setSpeaking(false); failure.current?.(); };
   window.speechSynthesis.speak(utterance);
  }
 
  if (supported === false) return <span className="audio-unavailable">Audio unavailable on this device</span>;
- return <span className={`audio-controls${compact ? " audio-controls-compact" : ""}`}><button type="button" className={`listen-action${compact ? " listen-action-compact" : ""}`} aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}`} title={compact ? `${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}` : undefined} onClick={toggle}>
+ return <span className={`audio-controls${compact ? " audio-controls-compact" : ""}`}>{contextual && <span className="audio-model-context"><small>Listen in context</small><span lang={language}>{text}</span></span>}<button type="button" className={`listen-action${compact ? " listen-action-compact" : ""}`} disabled={preparing} aria-busy={preparing} aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}${contextual ? " in context" : ""}`} title={compact ? `${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}` : undefined} onClick={toggle}>
   <svg aria-hidden="true" viewBox="0 0 24 24"><path d={speaking ? "M7 7h10v10H7z" : "M4 10v4h4l5 4V6L8 10H4zm12.5-1.8a5 5 0 010 7.6m2.2-9.8a8 8 0 010 12"} /></svg>
-  <span className="listen-action-label">{speaking ? "Stop" : "Listen"}</span>
- </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={speaking} onChange={(event) => { window.localStorage.setItem(speedKey, event.target.value); window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select></span>;
+  <span className="listen-action-label">{preparing ? "Preparing…" : speaking ? "Stop" : "Listen"}</span>
+ </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={speaking || preparing} onChange={(event) => { window.localStorage.setItem(speedKey, event.target.value); window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select>{unavailable && <span role="status" className="audio-unavailable">Lesson audio unavailable. Please retry.</span>}</span>;
 }

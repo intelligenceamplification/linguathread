@@ -11,7 +11,7 @@ import { LivePractice } from "./live-practice";
 import { livePracticePrompt, practiceCapsule } from "./live-practice-context";
 import ListenButton from "./listen-button";
 import { AnswerField } from "./answer-field";
-import { approvedAudioFor } from "./audio-pack";
+import { prepareNativeAudioWindow } from "./audio-pack";
 import { speechLanguage } from "./speech";
 import type { FoundationLanguage } from "./multilingual-foundation";
 import "./multilingual-preview/preview.css";
@@ -167,6 +167,13 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const learningSessionIdRef = useRef("");
   const initialScriptLanguageRef = useRef(speechLanguage(activeSelections(profile)[0]?.language || ""));
   const lesson = course[lessonIndex] || course[0];
+  useEffect(() => {
+    if (!sessionHydrated) return;
+    const now = Date.now();
+    const dueObjectives = new Set(Object.values(learnerModel.evidence).filter((item) => new Date(item.nextReviewAt).getTime() <= now).map((item) => item.objectiveId));
+    const due = course.filter((item) => dueObjectives.has(item.objectiveId || item.id)).map((item) => item.id);
+    prepareNativeAudioWindow(course, lesson.id, due);
+  }, [course, lesson.id, learnerModel, sessionHydrated]);
 
   useEffect(() => {
     attemptStartedAtRef.current = Date.now();
@@ -560,6 +567,8 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     setLearnerModel(nextModel);
     window.localStorage.setItem(learnerModelKey, JSON.stringify(nextModel));
   }
+
+  if (!sessionHydrated) return <main className="app-shell" aria-busy="true"><header className="topline"><BrandLogo /></header><section className="lesson-stage"><p role="status">Restoring your lesson…</p></section></main>;
 
   return (
     <main className={`app-shell stage-${stage}`}>
@@ -1100,16 +1109,11 @@ function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson
   const distractors = course.filter((item) => item.id !== lesson.id && item.sentence.anchor !== lesson.sentence.anchor);
   const choices = [lesson.sentence.anchor, ...[distractors[(index + 1) % distractors.length], distractors[(index + 2) % distractors.length]].map((item) => item?.sentence.anchor).filter((item): item is string => !!item)];
   const orderedChoices = [choices[1], choices[0], choices[2]].filter((item): item is string => !!item);
-  useEffect(() => {
-    let active = true;
-    void approvedAudioFor(lesson.sentence.target, "es").then((clip) => { if (active) setReviewedAudio(Boolean(clip?.reviewedAt)); });
-    return () => { active = false; };
-  }, [lesson.sentence.target]);
   return <div className="focus-content audio-first-content">
     <p className="eyebrow">Listen · understand</p>
     <h1>What does the speaker mean?</h1>
     <p className="instruction">Play the Spanish first. Its written form appears after your meaning choice.</p>
-    <ListenButton text={lesson.sentence.target} language="es" onComplete={() => { setPlayed(true); setPlaybacks((count) => count + 1); }} onError={() => setAudioError(true)} />
+    <ListenButton text={lesson.sentence.target} language="es" onComplete={(reviewed) => { setReviewedAudio(Boolean(reviewed)); setAudioError(false); setPlayed(true); setPlaybacks((count) => count + 1); }} onError={() => setAudioError(true)} />
     <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Instructional audio · pronunciation not reviewed"}</p>
     {audioError && <p role="alert">Playback did not finish. Try Listen again before answering.</p>}
     {played && choice === null && <fieldset className="listening-choices"><legend>Choose the meaning you heard</legend>{orderedChoices.map((meaning) => <button type="button" key={meaning} className="quiet-action" onClick={() => { setChoice(meaning); onAttempt(meaning === lesson.sentence.anchor, !reviewedAudio || playbacks > 1); }}>{meaning}</button>)}</fieldset>}

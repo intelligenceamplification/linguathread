@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import type { FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptLesson } from "../script-courses";
 import type { ScriptRequirement, ScriptTaskMode } from "../script-literacy";
-import { advanceScript, appendAssembly, assessScript, canAdvanceScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, scriptInstruction, type ScriptPractice } from "../script-course-engine";
+import { advanceScript, appendAssembly, assessScript, canAdvanceScript, hasScriptCompletion, newScriptPractice, parseScriptPractice, restartScriptPractice, scriptChoices, scriptAudioText, scriptInstruction, type ScriptPractice } from "../script-course-engine";
 import ListenButton from "../listen-button";
 import { AnswerField } from "../answer-field";
 
@@ -25,6 +25,7 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
  const [error, setError] = useState("");
  const [storageError, setStorageError] = useState(false);
  const [loading, setLoading] = useState(false);
+ const [heard, setHeard] = useState<{ reviewed: boolean } | null>(null);
  const [reviewClock, setReviewClock] = useState(() => Date.now());
  const loadId = useRef(0);
  const progressKey = `linguathread.script-practice.v2:${language}`;
@@ -74,6 +75,7 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
    const lesson = await loadUnit(id, index.revision);
    if (request !== loadId.current) return;
    setUnit(lesson);
+   setHeard(null);
    const saved = records[`${index.revision}:${id}`];
    setPractice(check || review ? restartScriptPractice(saved, check) : saved || newScriptPractice());
    setLoading(false);
@@ -83,14 +85,16 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
  }
  function save(next: ScriptPractice) {
   if (!unit || !index) return;
+  if (next.phase !== practice.phase) setHeard(null);
   setPractice(next);
   const nextRecords = { ...records, [`${index.revision}:${unit.id}`]: next };
   setRecords(nextRecords);
   try { localStorage.setItem(progressKey, JSON.stringify(nextRecords)); setStorageError(false); } catch { setStorageError(true); }
  }
  function assess(answer: string) {
-  if (!unit) return;
-  const next = assessScript(unit, practice, answer);
+  if (!unit || (practice.phase === "sound" && !heard)) return;
+  const evidenceState = practice.phase === "sound" && !heard?.reviewed ? { ...practice, supported: true } : practice;
+  const next = assessScript(unit, evidenceState, answer);
   if (next.attempts > practice.attempts) {
    const mode: ScriptTaskMode = practice.phase === "visual" ? "visual-recognition" : practice.phase === "sound" ? "sound-to-form" : practice.inputMode === "dictation" ? "device-dictation" : "keyboard-reconstruction";
    onEvidence?.(unit.id, mode, next.result === "correct", next.supported);
@@ -132,8 +136,8 @@ export default function ScriptCourseView({ language, onClose, onEvidence }: { la
    <p className="eyebrow">{unit.strand.replace("-", " ")} · {practice.phase === "study" ? "notice" : practice.phase}</p><h1>{unit.title}</h1>
    {practice.phase === "study" ? <><p>{unit.explanation}</p><p className="pilot-expression" lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p><button className="primary-action" onClick={() => save(advanceScript(practice, Date.now()))}>Begin directional practice</button></> : practice.phase === "complete" ? <><h2>{practice.supported ? "Foundation practised" : "Independent evidence recorded"}</h2><p>Recognition, sound-to-form, component assembly and input are stored as separate pathways. A weak direction returns for focused review.</p><button className="primary-action" onClick={() => setUnit(null)}>Return to writing system</button></> : <>
     <p>{scriptInstruction(unit, practice)}</p>
-    {practice.phase === "sound" && <div className="script-listen-cue"><ListenButton text={unit.answer} language={language}/></div>}
-    {(practice.phase === "visual" || practice.phase === "sound") ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <div className="script-choice-row" key={choice}><button className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct"} onClick={() => assess(choice)}>{choice}</button>{practice.phase === "visual" && <ListenButton text={choice} language={language}/>}</div>)}</div> : practice.phase === "assemble" ? <>
+    {practice.phase === "sound" && <div className="script-listen-cue"><ListenButton text={scriptAudioText(unit)} language={language} onComplete={reviewed => setHeard({ reviewed: reviewed === true })}/>{!heard && <p>Listen to the complete model before choosing.</p>}</div>}
+    {(practice.phase === "visual" || practice.phase === "sound") ? <div className="readiness-choices">{scriptChoices(unit).map(choice => <div className="script-choice-row" key={choice}><button className="quiet-action" lang={language} dir={dir} disabled={practice.result === "correct" || (practice.phase === "sound" && !heard)} onClick={() => assess(choice)}>{choice}</button>{(practice.phase === "visual" && (!["es", "vi"].includes(language) || choice === unit.answer)) && <>{scriptAudioText(unit) !== unit.answer && <p className="writing-note">Audio model · <span lang={language}>{scriptAudioText(unit)}</span></p>}<ListenButton text={choice === unit.answer ? scriptAudioText(unit) : choice} language={language}/></>}</div>)}</div> : practice.phase === "assemble" ? <>
      <div className="assembly-result" lang={language} dir={dir}>{practice.assembly.join("") || "\u00a0"}</div>
      <div className="component-bank">{unit.components.map((component, index) => <button key={`${component}-${index}`} className="glass-chip" disabled={practice.assembly.length !== index || practice.result === "correct"} onClick={() => assemble(component)}>{component === " " ? "space" : component}</button>)}</div>
      {practice.result !== "correct" && practice.assembly.length > 0 && <button className="text-action" onClick={() => save({ ...practice, assembly: [], answer: "", result: "idle" })}>Clear and rebuild</button>}

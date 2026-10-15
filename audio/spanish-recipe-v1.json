@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "backend": "Chatterbox-Multilingual-es-es",
+  "language": "es",
+  "modelFiles": {
+    "ve.pt": {
+      "repository": "ResembleAI/chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "sha256": "4b16d836bc598509860f6fa068165a8bb5e9ac84f05582dfcf278a5a372879f1"
+    },
+    "grapheme_mtl_merged_expanded_v1.json": {
+      "repository": "ResembleAI/chatterbox",
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
+      "sha256": "69632f47220a788a52ce2661d096453c5655e9bf25289d89a8d832c46ee07dbf"
+    },
+    "t3_es_es.safetensors": {
+      "repository": "ResembleAI/Chatterbox-Multilingual-es-es",
+      "revision": "7262b364e3222ba9446c9289e7485eadc47ed902",
+      "sha256": "d85844b13ea8cb45e95b8d84a55bcfeccb2d743035cf304ee3d778fc6be39546"
+    },
+    "s3gen_v3.pt": {
+      "repository": "ResembleAI/Chatterbox-Multilingual-es-es",
+      "revision": "7262b364e3222ba9446c9289e7485eadc47ed902",
+      "sha256": "f7abce4b196dae2d08d9296cbebc6521b046079577643b42a19a03499d08721e"
+    }
+  },
+  "exaggeration": 0.3,
+  "cfgWeight": 0.3,
+  "temperature": 0.6,
+  "outputPeakCeiling": 0.95,
+  "postGain": 0.95,
+  "voices": [
+    {
+      "voice": "male",
+      "sourceReference": {
+        "language": "es",
+        "text": "Ahora puedo expresarme con más confianza.",
+        "url": "/audio/packs/v5/es-male-742018e80e2e975e-dcd0fbac7bcd.m4a",
+        "sha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875",
+        "reviewedAt": "2026-10-13",
+        "approvalEvidence": "Previously accepted Spanish reference; used in the six male/female pronunciation and voice-consistency benchmarks accepted 2026-10-13."
+      },
+      "normalTempo": 0.85
+    },
+    {
+      "voice": "female",
+      "sourceReference": {
+        "language": "es",
+        "text": "Ahora puedo expresarme con más confianza.",
+        "url": "/audio/packs/v5/es-female-6a81111823816aa9-3f93ec4315fc.m4a",
+        "sha256": "3f93ec4315fc6cbc97ce2aa45435e61f2e6659c42ced2024daf573fc9448dbb8",
+        "reviewedAt": "2026-10-13",
+        "approvalEvidence": "Previously accepted Spanish reference; used in the six male/female pronunciation and voice-consistency benchmarks accepted 2026-10-13."
+      },
+      "normalTempo": 0.7
+    }
+  ],
+  "benchmarkApproval": "audio/listening-reviews-ios-v1.json",
+  "recipeApprovalDate": "2026-10-13",
+  "generatedUtterancesRequireScreening": true
+}

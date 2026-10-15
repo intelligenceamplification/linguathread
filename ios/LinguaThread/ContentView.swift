@@ -1,5 +1,6 @@
 import SwiftUI
 import WebKit
+import CryptoKit
 @preconcurrency import AVFoundation
 
 /// The iOS target hosts the same production runtime as the Vercel master.
@@ -10,7 +11,14 @@ struct ContentView: View {
     #if PERSONAL_PRACTICE
     @StateObject private var personalPractice = PersonalPracticeConnection()
     #endif
-    private let masterURL = URL(string: "https://linguathread.vercel.app/")!
+    private let masterURL: URL = {
+        // A new installed build must fetch its compatible client instead of
+        // reopening the previous build's cached HTML. Origin and storage stay
+        // the same, and repeated launches can reuse this build's cache.
+        var components = URLComponents(string: "https://linguathread.vercel.app/")!
+        components.queryItems = [URLQueryItem(name: "nativeBuild", value: Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "development")]
+        return components.url!
+    }()
 
     var body: some View {
         Group {
@@ -46,6 +54,11 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         configuration.userContentController.add(context.coordinator, name: "linguathreadAudio")
         configuration.userContentController.add(context.coordinator, name: "linguathreadPractice")
         configuration.userContentController.addUserScript(WKUserScript(
+            source: NativeAudioCatalog.javascript,
+            injectionTime: .atDocumentStart,
+            forMainFrameOnly: true
+        ))
+        configuration.userContentController.addUserScript(WKUserScript(
             source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true; window.__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ = \(personalPractice != nil ? "true" : "false");",
             injectionTime: .atDocumentStart,
             forMainFrameOnly: true
@@ -77,6 +90,8 @@ private struct LinguaThreadWebView: UIViewRepresentable {
         private let synthesizer = AVSpeechSynthesizer()
         private var clipPlayer: AVAudioPlayer?
         private var clipTask: Task<Void, Never>?
+        private var libraryTask: Task<Void, Never>?
+        private var prefetchTask: Task<Void, Never>?
         private var clipRequestID: String?
         private var pendingRequestID: String?
         private var activeRequestID: String?
@@ -97,7 +112,23 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             guard message.name == "linguathreadAudio",
                   let payload = message.body as? [String: Any],
                   let action = payload["action"] as? String else { return }
+            if action == "refreshLibrary" {
+                refreshAudioLibrary()
+                return
+            }
+            if action == "prepareLessons", let ids = payload["lessonIds"] as? [String] {
+                prefetchTask?.cancel()
+                let library = refreshAudioLibrary()
+                prefetchTask = Task {
+                    await library.value
+                    guard !Task.isCancelled else { return }
+                    await NativeAudioCatalog.prefetchLessons(ids)
+                }
+                return
+            }
             if action == "stop" {
+                if let requestID = payload["requestID"] as? String,
+                   requestID != clipRequestID, requestID != pendingRequestID, requestID != activeRequestID { return }
                 clipTask?.cancel()
                 clipTask = nil
                 if let clipPlayer {
@@ -113,10 +144,13 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             }
             if action == "playClip" {
                 guard let path = payload["url"] as? String,
-                      path.hasPrefix("/audio/packs/"),
+                      path.hasPrefix("/audio/packs/") || path.hasPrefix("linguathread-audio://pack/"),
                       !path.contains(".."),
                       let requestID = payload["requestID"] as? String,
-                      let url = URL(string: "https://linguathread.vercel.app\(path)") else { return }
+                      let url = URL(string: path.hasPrefix("linguathread-audio:") ? path : "https://linguathread.vercel.app\(path)") else {
+                    notifySpeechEvent("linguathread:native-speech-error", requestID: payload["requestID"] as? String)
+                    return
+                }
                 clipTask?.cancel()
                 clipPlayer?.stop()
                 clipPlayer = nil
@@ -124,12 +158,22 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                 clipRequestID = requestID
                 clipTask = Task { [weak self] in
                     do {
-                        let (data, response) = try await URLSession.shared.data(from: url)
-                        guard !Task.isCancelled, let self, self.clipRequestID == requestID else { return }
-                        guard (response as? HTTPURLResponse)?.statusCode == 200 else {
-                            self.notifySpeechEvent("linguathread:native-speech-error", requestID: requestID)
-                            return
+                        let data: Data
+                        if url.scheme == "linguathread-audio" {
+                            data = try await NativeAudioCatalog.audioData(for: url)
+                        } else {
+                            // Older hosted clients must not reintroduce remote ES/VI assets.
+                            guard let language = payload["language"] as? String,
+                                  language != "es", language != "vi" else {
+                                throw CocoaError(.fileReadNoPermission)
+                            }
+                            let (download, response) = try await URLSession.shared.data(from: url)
+                            guard (response as? HTTPURLResponse)?.statusCode == 200 else {
+                                throw CocoaError(.fileReadUnknown)
+                            }
+                            data = download
                         }
+                        guard !Task.isCancelled, let self, self.clipRequestID == requestID else { return }
                         try AVAudioSession.sharedInstance().setCategory(.playback, mode: .spokenAudio)
                         try AVAudioSession.sharedInstance().setActive(true)
                         let player = try AVAudioPlayer(data: data)
@@ -154,6 +198,10 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             guard action == "speak",
                   let text = payload["text"] as? String,
                   let language = payload["language"] as? String else { return }
+            if ["es", "vi"].contains(language.split(separator: "-").first.map(String.init) ?? language) {
+                notifySpeechEvent("linguathread:native-speech-error", requestID: payload["requestID"] as? String)
+                return
+            }
             if let clipPlayer {
                 clipPlayer.stop()
                 self.clipPlayer = nil
@@ -170,6 +218,21 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             utterance.pitchMultiplier = 1
             utterance.preUtteranceDelay = 0.08
             synthesizer.speak(utterance)
+        }
+
+        @discardableResult private func refreshAudioLibrary() -> Task<Void, Never> {
+            if let libraryTask, !libraryTask.isCancelled { return libraryTask }
+            let task = Task { [weak self] in
+                await NativeAudioCatalog.refreshLibrary()
+                self?.webView?.evaluateJavaScript(NativeAudioCatalog.javascript, completionHandler: nil)
+                self?.libraryTask = nil
+            }
+            libraryTask = task
+            return task
+        }
+
+        func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            refreshAudioLibrary()
         }
 
         func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {

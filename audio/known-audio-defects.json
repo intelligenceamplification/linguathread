@@ -69,6 +69,26 @@
       "reportedAt": "2026-09-29",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "de",
+      "voice": "female",
+      "sha256": "a3407017c4f434bbb3fe5a4960aa0c9cdaedfe3ce1fabac23b90504972751783",
+      "reason": "User rejected this exact cropped de candidate: incorrect pronunciation, extra syllables and unintelligible sound (Neither, call_GcsIAoTSz81XiTDn0uVCCyTR; clarified 2026-10-13).",
+      "reportedAt": "2026-10-13",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "de",
+      "voice": "male",
+      "sha256": "1f2649d7233a31b21f642d0a7ade7dbb4316302196743348973321d3d7481cc2",
+      "reason": "User rejected this exact cropped de candidate: incorrect pronunciation, extra syllables and unintelligible sound (Neither, call_GcsIAoTSz81XiTDn0uVCCyTR; clarified 2026-10-13).",
+      "reportedAt": "2026-10-13",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

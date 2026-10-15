@@ -5,10 +5,14 @@ export type Stage = typeof stages[number];
 export type Direction = "recognize" | "sound-form" | "form-sound" | "compose" | "meaning" | "input" | "transfer";
 export type Exercise = {
  id: string; skill: string; direction: Direction; kind: "choice" | "input" | "compose" | "audio-choice";
- prompt: string; cue?: string; audio?: string; answer: string; accepted?: string[];
+ prompt: string; cue?: string; audio?: string; answer: string; answerAudio?: string; accepted?: string[];
  choices?: string[]; choiceAudio?: Record<string, string>; components?: string[]; composition?: "sequence" | "hangul";
  explanation: string; reading?: string; meaning?: string; transfer?: boolean; answerLanguage?: FoundationLanguage;
 };
+/** English meaning answers retain their anchor language in every direction. */
+export function writingAnswerLanguage(exercise: Exercise | undefined, language: FoundationLanguage): FoundationLanguage {
+ return exercise?.answerLanguage || (exercise?.direction === "meaning" ? "en" : language);
+}
 export type Unit = {
  id: string; title: string; track: string; stage: Stage; prerequisites: string[];
  level: "Foundation" | "A1" | "A2" | "B1" | "B2";

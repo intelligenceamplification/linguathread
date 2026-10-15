@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import ListenButton from "../listen-button";
+import { requiresNativeApprovedAudio } from "../audio-pack";
 import { AnswerField } from "../answer-field";
 import { languageInfo, type FoundationLanguage } from "../multilingual-foundation";
 import type { ScriptTaskMode } from "../script-literacy";
-import { assess, combine, edgeKey, edgeState, emptyProgress, migrateLegacy, parseProgress, recordAttempt, supportVisible, type Course, type Exercise, type InventoryItem, type Progress, type Unit } from "./model";
+import { writingAnswerLanguage, assess, combine, edgeKey, edgeState, emptyProgress, migrateLegacy, parseProgress, recordAttempt, supportVisible, type Course, type Exercise, type InventoryItem, type Progress, type Unit } from "./model";
 import "./writing-system.css";
 import type { LessonDefinition } from "../curriculum";
 import { courseMaterial, relatedVocabulary } from "./course-links";
@@ -16,7 +17,7 @@ const modeMap: Record<Exercise["direction"], ScriptTaskMode> = { recognize: "vis
 const progressKey = (language: string) => `linguathread.writing-progress.v1:${language}`;
 const cacheKey = (language: string, version: number, unit: string) => `linguathread.writing-unit.v1:${language}:${version}:${unit}`;
 function isIndex(value: unknown, language: string): value is Index {
- const v = value as Index; return Boolean(v && v.language === language && Number.isInteger(v.version) && v.version >= 5 && Array.isArray(v.units) && Array.isArray(v.tracks) && Array.isArray(v.inventory) && v.inventory.length && v.units.every(u => typeof u.id === "string" && Array.isArray(u.prerequisites) && Array.isArray(u.skills)));
+ const v = value as Index; return Boolean(v && v.language === language && Number.isInteger(v.version) && v.version >= ((language === "es" || language === "vi") ? 6 : 5) && Array.isArray(v.units) && Array.isArray(v.tracks) && Array.isArray(v.inventory) && v.inventory.length && v.units.every(u => typeof u.id === "string" && Array.isArray(u.prerequisites) && Array.isArray(u.skills)));
 }
 function isUnit(value: unknown, id: string): value is Unit {
  const u = value as Unit; return Boolean(u && u.id === id && Array.isArray(u.exercises) && u.exercises.length && u.exercises.every(e => typeof e.answer === "string" && typeof e.skill === "string" && ["choice", "audio-choice", "compose", "input"].includes(e.kind)));
@@ -62,7 +63,7 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
  const inFlight = useRef(new Map<string, Promise<Unit>>());
  const exercise = unit?.exercises[step];
  const dir = language === "ar" ? "rtl" : "ltr";
- const answerLanguage = exercise?.answerLanguage || (exercise?.direction === "meaning" ? "en" : language);
+ const answerLanguage = writingAnswerLanguage(exercise, language);
  const answerDir = answerLanguage === "ar" ? "rtl" : "ltr";
  const material = currentLesson ? courseMaterial(currentLesson, language) : undefined;
  const related = unit && material ? relatedVocabulary(unit.forms, material.vocabulary) : [];
@@ -93,6 +94,10 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
  function save(next: Progress) {
   currentProgress.current = next; setProgress(next);
   try { localStorage.setItem(progressKey(language), JSON.stringify(next)); } catch { setError("Progress could not be saved on this device. Keep the app open and free some storage before closing it."); }
+ }
+ function noteAudioQuality(reviewed?: boolean) {
+  // A screened take can be played without claiming reviewed phonetic evidence.
+  if (requiresNativeApprovedAudio(language) && !reviewed) setHelped(true);
  }
  async function loadUnit(id: string, version: number): Promise<Unit> {
   const key = cacheKey(language, version, id);
@@ -196,12 +201,12 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
    {step === -1 ? <><p>{showGuide ? unit.explanation : unit.objective}</p>{unit.example && <div className="writing-model"><p lang={language} dir={dir}>{unit.example}</p><ListenButton text={unit.example} language={language}/><p>{unit.meaning}</p></div>}{showGuide ? <div className="writing-form-guide">{unit.exercises.filter(e => e.direction === "recognize").map(e => <p key={e.id}><strong lang={language} dir={dir}>{e.answer}</strong><span>{e.reading || e.explanation}</span></p>)}</div> : <p className="writing-note">Reading aids have receded because these pathways have usable evidence. You can restore them at any time.</p>}<button className="text-action" onClick={() => setShowGuide(value => !value)}>{showGuide ? "Hide reading aids" : "Show reading aids"}</button><button className="primary-action" onClick={start}>Begin practice →</button></> : step >= unit.exercises.length ? <div className="writing-complete"><h2>Lesson practised.</h2><p>Your progress is saved. Further independent practice, separated over time, strengthens these pathways.</p><button className="primary-action" onClick={leaveUnit}>See your updated path →</button></div> : exercise && <>
     <p className="writing-prompt">{exercise.prompt}</p>
     {exercise.cue && <div className="writing-cue"><p lang={language} dir={dir}>{exercise.cue}</p>{exercise.kind !== "audio-choice" && <ListenButton text={exercise.cue} language={language} onUse={() => setHelped(true)}/>}</div>}
-    {exercise.audio && <div className="writing-audio"><ListenButton text={exercise.audio} language={language} onComplete={() => { setHeard(true); setAudioError(false); }} onError={() => setAudioError(true)}/>{!heard && !audioError && <p>Listen to the complete prompt before answering.</p>}{audioError && <p role="status">Audio did not play, so this attempt will not be scored. Try again or return to the path.</p>}</div>}
-    {(exercise.kind === "choice" || exercise.kind === "audio-choice") && <div className="writing-choices">{choices.map((choice, i) => <div key={choice}>{exercise.kind === "audio-choice" && <ListenButton text={exercise.choiceAudio?.[choice] || choice} language={language} onComplete={() => setHeardChoices((current) => [...new Set([...current, choice])])} onError={() => setAudioError(true)}/>}<button className="quiet-action" disabled={result === "correct" || Boolean(exercise.audio && !heard) || (exercise.kind === "audio-choice" && !heardChoices.includes(choice))} onClick={() => check(choice)} lang={answerLanguage} dir={answerDir}>{exercise.kind === "audio-choice" ? `Choose audio ${i + 1}` : choice}</button></div>)}</div>}
+    {exercise.audio && <div className="writing-audio"><ListenButton text={exercise.audio} language={language} onComplete={(reviewed) => { noteAudioQuality(reviewed); setHeard(true); setAudioError(false); }} onError={() => setAudioError(true)}/>{!heard && !audioError && <p>Listen to the complete prompt before answering.</p>}{audioError && <p role="status">Audio did not play, so this attempt will not be scored. Try again or return to the path.</p>}</div>}
+    {(exercise.kind === "choice" || exercise.kind === "audio-choice") && <div className="writing-choices">{choices.map((choice, i) => <div key={choice}>{exercise.kind === "audio-choice" && <ListenButton text={exercise.choiceAudio?.[choice] || choice} language={language} onComplete={(reviewed) => { noteAudioQuality(reviewed); setHeardChoices((current) => [...new Set([...current, choice])]); }} onError={() => setAudioError(true)}/>}<button className="quiet-action" disabled={result === "correct" || Boolean(exercise.audio && !heard) || (exercise.kind === "audio-choice" && !heardChoices.includes(choice))} onClick={() => check(choice)} lang={answerLanguage} dir={answerDir}>{exercise.kind === "audio-choice" ? `Choose audio ${i + 1}` : choice}</button></div>)}</div>}
     {exercise.kind === "compose" && <><output className="writing-assembly" lang={language} dir={dir}>{combine(parts.map(i => exercise.components![i]), exercise.composition) || "…"}</output><div className="writing-bank">{bank.map(({text, id}) => <button className="quiet-action" key={id} disabled={parts.includes(id) || result === "correct"} onClick={() => { setParts([...parts, id]); setResult("idle"); }}>{/^\p{M}/u.test(text) ? `◌${text}` : text}</button>)}</div><button className="text-action" onClick={() => { setParts([]); setResult("idle"); }}>Clear</button><button className="primary-action" disabled={!parts.length || result === "correct"} onClick={() => check(combine(parts.map(i => exercise.components![i]), exercise.composition))}>Check composition</button></>}
     {exercise.kind === "input" && <><label className="writing-input">Your answer<AnswerField label="Your answer" placeholder="Write your answer" value={answer} lang={language} dir={dir} maxLength={2000} disabled={result === "correct"} onChange={value => { setAnswer(value); setResult("idle"); }} onEnter={() => { if (answer.trim()) check(answer); }}/></label><fieldset className="writing-method"><legend>Input method</legend><label><input type="radio" checked={method === "keyboard"} onChange={() => setMethod("keyboard")}/>Keyboard</label><label><input type="radio" checked={method === "dictation"} onChange={() => setMethod("dictation")}/>My device’s dictation</label></fieldset>{method === "dictation" && <p className="writing-note">Use your device’s dictation, then inspect the resulting text. This records dictation-assisted input separately from spelling through the keyboard.</p>}<button className="primary-action" disabled={!answer.trim() || result === "correct" || Boolean(exercise.audio && !heard)} onClick={() => check(answer)}>Check answer</button></>}
     <p role="status" className="writing-feedback">{result === "correct" ? "Correct. Your evidence is recorded." : result === "retry" ? "Check the exact form, its marks and order. Try again, or open the explanation." : ""}</p>
-    {result === "correct" ? <button className="primary-action" onClick={next}>Continue →</button> : <details onToggle={e => { if (e.currentTarget.open) { setHelped(true); if (unit) save({ ...currentProgress.current, session: { unit: unit.id, index: step, helped: true } }); } }}><summary>Show explanation and model</summary><p>{exercise.explanation}</p><p className="writing-answer-model" lang={exercise.direction === "meaning" ? "en" : language} dir={dir}>{exercise.answer}</p>{exercise.direction !== "meaning" && <ListenButton text={exercise.answer} language={language}/>}</details>}
+    {result === "correct" ? <button className="primary-action" onClick={next}>Continue →</button> : <details onToggle={e => { if (e.currentTarget.open) { setHelped(true); if (unit) save({ ...currentProgress.current, session: { unit: unit.id, index: step, helped: true } }); } }}><summary>Show explanation and model</summary><p>{exercise.explanation}</p><p className="writing-answer-model" lang={answerLanguage} dir={answerDir}>{exercise.answer}</p>{exercise.direction !== "meaning" && <>{exercise.answerAudio && exercise.answerAudio !== exercise.answer && <p className="writing-note">Audio model · <span lang={language}>{exercise.answerAudio}</span></p>}<ListenButton text={exercise.answerAudio || exercise.answer} language={answerLanguage}/></>}</details>}
    </>}
   </>}
  </section>;

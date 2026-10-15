@@ -41,6 +41,10 @@ next-env.d.ts
 *.tsbuildinfo
 /dist/
 /.wrangler/
+/ios/LinguaThread/NativeAudio/*.m4a
+/ios/LinguaThread/NativeAudio/*.wav
+/.chatterbox-venv/
+/.vieneu-venv/
 /outputs/
 /work/
 /.voxcpm-venv/

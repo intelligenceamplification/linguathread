@@ -1,4 +1,8 @@
 import type { ScriptLesson } from "./script-courses";
+
+export function scriptAudioText(lesson: ScriptLesson) {
+ return lesson.answerAudio || (lesson.id === "vi-script-letters" ? lesson.example : lesson.answer);
+}
 import type { ScriptTaskMode } from "./script-literacy";
 
 // Stable within a lesson, but no universal answer position to learn by rote.

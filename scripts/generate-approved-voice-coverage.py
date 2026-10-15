@@ -40,21 +40,37 @@ def speech_segments(language, text):
     return [spoken_form(language, part.strip()) for part in re.split(r"[/／·]", text) if part.strip()]
 
 
+def pending_context_retry(failed_ids, clip_id, reference_signature, context_signature):
+    return (clip_id, reference_signature) in failed_ids and (clip_id, context_signature) not in failed_ids
+
+def candidate_seed(identity, candidate_attempt, signal_attempt):
+    return (int(identity[:8], 16) + (candidate_attempt - 1) * 208729 + signal_attempt * 104729) % (2**31 - 1)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--inventory", type=Path, default=ROOT / "audio/inventory-es-vi.json")
     parser.add_argument("--output", type=Path, default=ROOT / "audio/generated/voice-coverage")
     parser.add_argument("--limit", type=int, default=0, help="Maximum number of new clips in this run; 0 means all")
     parser.add_argument("--force", action="store_true", help="Generate replacement candidates for published keys")
+    parser.add_argument("--isolated", action="store_true", help="Honor a new pack's explicit work plan without legacy published/reviewed shortcuts; never publishes")
     parser.add_argument("--defer-failed", action="store_true", help="Skip previously failed keys until a dedicated retry pass")
+    parser.add_argument("--synthesis-only", action="store_true", help="Isolated candidates only; screen in a separate process to reduce peak memory")
     parser.add_argument("--only-failed", action="store_true", help="Retry only previously failed keys")
     parser.add_argument("--prompt-mode", action="store_true", help="Use the approved transcript and recording as a cadence prompt")
     parser.add_argument("--attempts", type=int, default=3, help="Bounded retries for failed speech/text checks")
+    parser.add_argument("--candidate-attempt", type=int, default=1, choices=(1, 2, 3), help="Separate bounded content attempt, retained under its own signature")
     parser.add_argument("--device", default="auto", choices=("auto", "cpu", "mps"))
     parser.add_argument("--inference-timesteps", type=int, help="Override the reviewed per-voice diffusion steps for a small audition only")
     parser.add_argument("--voice-registry", type=Path, default=ROOT / "audio/voice-registry.json")
     parser.add_argument("--language", help="Generate one reviewed language family at a time")
     args = parser.parse_args()
+    if args.synthesis_only and not args.isolated:
+        parser.error("Synthesis-only output must stay isolated and unpublished")
+    if args.isolated:
+        registered = json.loads(args.voice_registry.read_text())["voices"]
+        if any(v.get("nativeBackend") and (not args.language or v["language"] == args.language) for v in registered):
+            parser.error("Native Spanish now uses scripts/generate-native-spanish.py; the prior backend is superseded")
     if args.defer_failed and args.only_failed:
         parser.error("--defer-failed and --only-failed are mutually exclusive")
     if args.inference_timesteps is not None and not 4 <= args.inference_timesteps <= 30:
@@ -128,6 +144,8 @@ def main():
     def was_failed(language: str, text: str, voice: str) -> bool:
         identity = hashlib.sha256(f"{language}\0{voice}\0{text}".encode()).hexdigest()[:16]
         clip_id = f"{language}-{voice}-{identity}"
+        if args.only_failed and args.prompt_mode:
+            return pending_context_retry(failed_ids, clip_id, signature(language, voice, prompt_mode=False), signature(language, voice))
         return ((clip_id, signature(language, voice)) in failed_ids
                 or (args.only_failed and args.prompt_mode and
                     (clip_id, signature(language, voice, prompt_mode=False)) in failed_ids))
@@ -135,6 +153,8 @@ def main():
     def signature(language: str, voice: str, prompt_mode=None) -> str:
         settings = {**voice_settings[(language, voice)], "promptMode": args.prompt_mode if prompt_mode is None else prompt_mode,
                     "pipelineVersion": 6, "model": "openbmb/VoxCPM2", "cfgValue": 2.0}
+        if args.candidate_attempt != 1:
+            settings["candidateAttempt"] = args.candidate_attempt
         return hashlib.sha256(json.dumps(settings, sort_keys=True).encode()).hexdigest()[:12]
 
     work = [
@@ -144,8 +164,8 @@ def main():
         if language == item["language"]
         and (args.language is None or language == args.language)
         and ("neededVariants" not in item or voice in item["neededVariants"])
-        and (language, item["text"], voice) not in reviewed
-        and (args.force or voice in item.get("replacementVariants", []) or (language, item["text"], voice) not in published)
+        and (args.isolated or (language, item["text"], voice) not in reviewed)
+        and (args.isolated or args.force or voice in item.get("replacementVariants", []) or (language, item["text"], voice) not in published)
         and (language, item["text"], voice, signature(language, voice)) not in completed
         and (not args.defer_failed or not was_failed(language, item["text"], voice))
         and (not args.only_failed or was_failed(language, item["text"], voice))
@@ -167,7 +187,7 @@ def main():
             reference = decoded
         prompt_references[key] = reference
     model = VoxCPM.from_pretrained("openbmb/VoxCPM2", load_denoiser=False, device=args.device, optimize=False)
-    recognizer = WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
+    recognizer = None if args.synthesis_only else WhisperModel("small", device="cpu", compute_type="int8", download_root=str(ROOT / "audio/models"))
     ffmpeg = imageio_ffmpeg.get_ffmpeg_exe()
     prompt_caches = {}
     for key in {(language, voice) for language, _, voice, _, _ in work}:
@@ -187,7 +207,7 @@ def main():
             try:
                 speech_text = spoken_form(language, text)
                 for attempt in range(args.attempts):
-                    attempt_seed = (seed + attempt * 104729) % (2**31 - 1)
+                    attempt_seed = candidate_seed(identity, args.candidate_attempt, attempt)
                     torch.manual_seed(attempt_seed)
                     np.random.seed(attempt_seed)
                     # Generate alternatives independently: never send their separator to TTS.
@@ -215,6 +235,9 @@ def main():
                             command += ["-filter:a", f"atempo={tempo}"]
                         command += ["-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(audio_path)]
                         subprocess.run(command, check=True)
+                        if args.synthesis_only:
+                            seed = attempt_seed
+                            break
                         segments, _ = recognizer.transcribe(str(audio_path), language=language, beam_size=5, condition_on_previous_text=False, temperature=0)
                         segments = list(segments)
                         transcript = " ".join(segment.text.strip() for segment in segments)
@@ -224,8 +247,9 @@ def main():
                         pace = len(target.split()) / max(.1, sum(segment.end - segment.start for segment in segments))
                         mismatch = not transcript or target != heard
                         fast = len(target.split()) >= 4 and pace > (3.4 if language == "es" else 5.0)
-                        problem = f"text/pace check: {transcript!r}, pace={pace:.2f}"
-                        if not mismatch and not fast:
+                        clarity_flags = quality.intelligibility_flags(segments)
+                        problem = f"text/pace/clarity check: {transcript!r}, pace={pace:.2f}, flags={clarity_flags}"
+                        if not mismatch and not fast and not clarity_flags:
                             seed = attempt_seed
                             break
                     print(f"RETRY {clip_id} {attempt + 1}/{args.attempts}: {problem}", flush=True)
@@ -240,12 +264,13 @@ def main():
                     "file": audio_path.name, "generatedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                     "approved": False,
                     "pipelineVersion": 6, "promptMode": args.prompt_mode,
+                    "candidateAttempt": args.candidate_attempt,
                     "inferenceTimesteps": voice_settings[(language, voice)]["inferenceTimesteps"],
                     "normalTempo": voice_settings[(language, voice)]["normalTempo"],
                     "generationSignature": generation_signature,
                     "referenceSha256": voice_settings[(language, voice)]["referenceSha256"],
                     "referenceCache": True,
-                    "qualityCheck": {"transcript": transcript, "wordErrorRate": wer, "characterErrorRate": cer, "tokensPerSecond": pace},
+                    "qualityCheck": {"auditVersion": 2, "status": "pending-audit", "flags": ["unscreened"]} if args.synthesis_only else {"auditVersion": 2, "status": "automated-pass", "flags": [], "transcript": transcript, "wordErrorRate": wer, "characterErrorRate": cer, "tokensPerSecond": pace, "minimumSpeechConfidence": min(segment.avg_logprob for segment in segments)},
                 }
                 log.write(json.dumps(row, ensure_ascii=False) + "\n")
                 log.flush()
@@ -258,6 +283,10 @@ def main():
                 print(f"FAILED {clip_id}: {exc}", flush=True)
             finally:
                 wav_path.unlink(missing_ok=True)
+                if args.device == "mps":
+                    if "waveform" in locals():
+                        del waveform
+                    torch.mps.empty_cache()
 
 
 if __name__ == "__main__":

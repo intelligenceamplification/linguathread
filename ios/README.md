@@ -6,6 +6,10 @@ The governing product and platform decisions are recorded in [`../docs/product-s
 
 ## Device installation
 
+The native Spanish/Vietnamese overhaul uses a checked seed plus a downloadable library. Run `scripts/verify-native-audio-pack.py` before signing; an incomplete seed is not installable. The hosted client and `/audio/native/library.json` must be published together with the seed's matching voice policies. The full course stays available; the smaller bundled audio window does not remove lessons.
+
+`scripts/test-native-audio-cache.py` tests the real Swift cache using temporary resources and controlled HTTP responses. It does not access learner data or install an app. Physical-device playback and Normal/Slow controls still require release verification.
+
 1. Open `LinguaThread.xcodeproj` in Xcode.
 2. Connect the iPhone by cable, unlock it, and tap **Trust** if the phone asks whether to trust this Mac.
 3. In Xcode, open the project settings, select the **LinguaThread** target, and under **Signing & Capabilities** choose the Apple Account / **Personal Team**. Leave automatic signing enabled.

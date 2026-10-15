@@ -1,0 +1,1174 @@
+{
+  "generatedAt": "2026-10-15T15:01:53.038Z",
+  "sourceLessonCount": 288,
+  "publishedRevision": 8,
+  "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
+  "sourceHashes": {
+    "app/curriculum.ts": "d2daa015dece390c2b54428dcad4f05a85ec66ffb785e531ee7c53a815147047",
+    "app/interactive-sentence.ts": "c831dd63f9a32702065937ccc7e9765db7e718c45d9854b8b0abc7f967858fe6",
+    "app/answer-assessment.ts": "728f9aa4948cab93657136f6259fe5e0b008affa2b72df357a6e1e1c59de33fb",
+    "app/lesson-audio-corrections.ts": "d9ad6701f67a1a57ba9bc015fb5f8a95f97f1a5c4449958e9823379e5ecae3a2",
+    "app/writing-system/model.ts": "863e48823417e68543701dd7a6c3bebf5981221a7ef6bd3cf5c020f7e2811c32",
+    "app/writing-system/curriculum.ts": "f67c45e21f211f33edc5f872728b6847e1ad01d8bf010b445ca20ac58ee783d6",
+    "app/script-course-engine.ts": "63056842d9a7d2c9394af4a775742910069198bb0018ce7f5ba19a178c6d6332",
+    "app/script-courses.ts": "6b430d00bba9223af284613ddb108b84bb2ed5bd0966aa559a3666fd158b04a5",
+    "app/script-literacy.ts": "233b5bb2e7e576daa235720a9893c3e6af93485edefa82b2fc039f0a1dd07fc4",
+    "app/writing-system/architecture.ts": "720cf91c4cdd5e28cfc55d0908875cc46f06baeb3626fe43596b1212eca44da7",
+    "app/writing-system/reading.ts": "30bc51680112dd2fab2754db861eeaccc8c6932b5fd8609cae01f3588e58d58c",
+    "app/writing-system/families.ts": "268e60ba13ebe14713447617c55648d31377c3be2de23cd6acc8cf274279cb7d",
+    "app/writing-system/inventories.ts": "e3cb38bd834781e0df36871d4a56dc1a0072f973a2aed33985d41a6868373f6c",
+    "app/writing-system/audio-models.ts": "570684677b2dbd7d9f6125efb99b16360fa305f433c9d7f333c68f532bcd1ec2",
+    "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
+    "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
+    "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
+    "app/page.tsx": "2da9ef392bc3a29531263b16d55accbacd1eae687e3a6cbcd4dbfe07da245987",
+    "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
+    "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
+    "app/writing-system/view.tsx": "8110a9ef4fb8a270fd116a819fe0d9febad1954eb2c853f4abb5220a7ac8f15d",
+    "app/multilingual-preview/readiness.tsx": "1da67a52f2ffc8318a6d70e26d7cc4d7928b1aa988182855ad8cd070937a5790",
+    "app/multilingual-preview/script-course-view.tsx": "9203cd6f50b7a3109e6ba1d044565fb26a80fbb5fb330406a1b4cca4680ea64d",
+    "app/multilingual-preview/preview-client.tsx": "6ad7873be2258d3e6105aae9d6356d8b3fed759bcf266f90296ea868a7026dcb"
+  },
+  "items": [
+    {
+      "id": "es-00001",
+      "language": "es",
+      "text": "Soy de Indiana.",
+      "sources": [
+        "es-u1-l1-identity-origin:sentence",
+        "es-u1-l1-identity-origin:transform",
+        "es-u1-l1-identity-origin:mastery",
+        "es-u1-l1-identity-origin:daily-phrase",
+        "es-u1-l2-names:daily-phrase",
+        "es-u1-l3-needs:daily-phrase",
+        "es-u1-l4-location:daily-phrase",
+        "es-u2-l1-routines:daily-phrase",
+        "es-u2-l2-attention:daily-phrase",
+        "es-u2-l3-feelings:daily-phrase",
+        "es-u2-l4-connection:daily-phrase",
+        "es-u3-l1-family:daily-phrase",
+        "es-u3-l2-description:daily-phrase",
+        "es-u3-l3-home:daily-phrase",
+        "es-u3-l4-people-review:daily-phrase",
+        "es-u4-l1-food:daily-phrase",
+        "es-u4-l2-restaurant:daily-phrase",
+        "es-u4-l3-shopping:daily-phrase",
+        "es-u4-l4-exchange:daily-phrase",
+        "es-u5-l1-time:daily-phrase",
+        "es-u5-l2-frequency:daily-phrase",
+        "es-u5-l3-plans:daily-phrase",
+        "es-u5-l4-availability:daily-phrase",
+        "es-u6-l1-directions:daily-phrase",
+        "es-u6-l2-transport:daily-phrase",
+        "es-u6-l3-help:daily-phrase",
+        "es-u6-l4-reflection:daily-phrase",
+        "a1-u7-l1-opinions:daily-phrase",
+        "a1-u7-l2-agreement:daily-phrase",
+        "a1-u7-l3-values:daily-phrase",
+        "a1-u7-l4-boundaries:daily-phrase",
+        "a1-u8-l1-body:daily-phrase",
+        "a1-u8-l2-symptoms:daily-phrase",
+        "a1-u8-l3-care:daily-phrase",
+        "a1-u8-l4-wellbeing:daily-phrase",
+        "a1-u9-l1-weather:daily-phrase",
+        "a1-u9-l2-clothing:daily-phrase",
+        "a1-u9-l3-seasons:daily-phrase",
+        "a1-u9-l4-preparation:daily-phrase",
+        "a1-u10-l1-work:daily-phrase",
+        "a1-u10-l2-tasks:daily-phrase",
+        "a1-u10-l3-study:daily-phrase",
+        "a1-u10-l4-clarification:daily-phrase",
+        "a1-u11-l1-recent-past:daily-phrase",
+        "a1-u11-l2-activity:daily-phrase",
+        "a1-u11-l3-obligation:daily-phrase",
+        "a1-u11-l4-ability:daily-phrase",
+        "a1-u12-l1-introduction:daily-phrase",
+        "a1-u12-l2-day:daily-phrase",
+        "a1-u12-l3-social:daily-phrase",
+        "a1-u12-l4-reflection:daily-phrase",
+        "a2-u13-l1-childhood:daily-phrase",
+        "a2-u13-l2-change:daily-phrase",
+        "a2-u13-l3-first-time:daily-phrase",
+        "a2-u13-l4-continuity:daily-phrase",
+        "a2-u14-1-childhood-evenings-lesson:daily-phrase",
+        "a2-u14-2-what-was-normal-lesson:daily-phrase",
+        "a2-u14-3-a-routine-interrupted-lesson:daily-phrase",
+        "a2-u14-4-past-routine-reflection-lesson:daily-phrase",
+        "a2-u15-1-a-completed-journey-lesson:daily-phrase",
+        "a2-u15-2-a-missed-connection-lesson:daily-phrase",
+        "a2-u15-3-changing-a-reservation-lesson:daily-phrase",
+        "a2-u15-4-travel-lesson-learned-lesson:daily-phrase",
+        "a2-u16-1-current-responsibility-lesson:daily-phrase",
+        "a2-u16-2-asking-a-colleague-lesson:daily-phrase",
+        "a2-u16-3-reporting-progress-lesson:daily-phrase",
+        "a2-u16-4-explaining-a-delay-lesson:daily-phrase",
+        "a2-u17-1-a-growing-ability-lesson:daily-phrase",
+        "a2-u17-2-knowing-how-lesson:daily-phrase",
+        "a2-u17-3-learning-through-error-lesson:daily-phrase",
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase",
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase",
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase",
+        "a2-u18-3-making-space-lesson:daily-phrase",
+        "a2-u18-4-restoring-connection-lesson:daily-phrase",
+        "a2-u19-1-seeking-advice-lesson:daily-phrase",
+        "a2-u19-2-describing-improvement-lesson:daily-phrase",
+        "a2-u19-3-a-conditional-choice-lesson:daily-phrase",
+        "a2-u19-4-balanced-advice-lesson:daily-phrase",
+        "a2-u20-1-comparing-neighborhoods-lesson:daily-phrase",
+        "a2-u20-2-reporting-a-problem-lesson:daily-phrase",
+        "a2-u20-3-requesting-service-lesson:daily-phrase",
+        "a2-u20-4-community-participation-lesson:daily-phrase",
+        "a2-u21-1-a-recommendation-lesson:daily-phrase",
+        "a2-u21-2-a-recent-reaction-lesson:daily-phrase",
+        "a2-u21-3-explaining-taste-lesson:daily-phrase",
+        "a2-u21-4-choosing-leisure-lesson:daily-phrase",
+        "a2-u22-1-comparing-value-lesson:daily-phrase",
+        "a2-u22-2-explaining-priority-lesson:daily-phrase",
+        "a2-u22-3-a-qualified-choice-lesson:daily-phrase",
+        "a2-u22-4-reconsidering-lesson:daily-phrase",
+        "a2-u23-1-confirming-a-plan-lesson:daily-phrase",
+        "a2-u23-2-a-firm-intention-lesson:daily-phrase",
+        "a2-u23-3-contingency-lesson:daily-phrase",
+        "a2-u23-4-shared-responsibility-lesson:daily-phrase",
+        "a2-u24-1-a-connected-account-lesson:daily-phrase",
+        "a2-u24-2-opinion-and-reason-lesson:daily-phrase",
+        "a2-u24-3-relational-clarity-lesson:daily-phrase",
+        "a2-u24-4-a2-reflection-lesson:daily-phrase",
+        "b1-u25-1-an-unexpected-turn-lesson:daily-phrase",
+        "b1-u25-2-background-and-interruption-lesson:daily-phrase",
+        "b1-u25-3-what-happened-before-lesson:daily-phrase",
+        "b1-u25-4-closing-a-story-lesson:daily-phrase",
+        "b1-u26-1-a-supported-view-lesson:daily-phrase",
+        "b1-u26-2-adding-qualification-lesson:daily-phrase",
+        "b1-u26-3-another-perspective-lesson:daily-phrase",
+        "b1-u26-4-a-reasoned-conclusion-lesson:daily-phrase",
+        "b1-u27-1-a-likely-outcome-lesson:daily-phrase",
+        "b1-u27-2-advice-for-a-friend-lesson:daily-phrase",
+        "b1-u27-3-considering-alternatives-lesson:daily-phrase",
+        "b1-u27-4-a-careful-warning-lesson:daily-phrase",
+        "b1-u28-1-naming-a-feeling-lesson:daily-phrase",
+        "b1-u28-2-explaining-impact-lesson:daily-phrase",
+        "b1-u28-3-making-a-request-lesson:daily-phrase",
+        "b1-u28-4-repairing-together-lesson:daily-phrase",
+        "b1-u29-1-reporting-progress-lesson:daily-phrase",
+        "b1-u29-2-making-a-proposal-lesson:daily-phrase",
+        "b1-u29-3-attributing-a-message-lesson:daily-phrase",
+        "b1-u29-4-clarifying-responsibility-lesson:daily-phrase",
+        "b1-u30-1-context-shapes-meaning-lesson:daily-phrase",
+        "b1-u30-2-comparing-practices-lesson:daily-phrase",
+        "b1-u30-3-avoiding-assumptions-lesson:daily-phrase",
+        "b1-u30-4-mediating-a-difference-lesson:daily-phrase",
+        "b1-u31-1-defining-the-problem-lesson:daily-phrase",
+        "b1-u31-2-evaluating-options-lesson:daily-phrase",
+        "b1-u31-3-negotiating-a-condition-lesson:daily-phrase",
+        "b1-u31-4-reaching-a-decision-lesson:daily-phrase",
+        "b1-u32-1-reporting-an-event-lesson:daily-phrase",
+        "b1-u32-2-separating-fact-and-reaction-lesson:daily-phrase",
+        "b1-u32-3-reporting-a-claim-lesson:daily-phrase",
+        "b1-u32-4-evaluating-uncertainty-lesson:daily-phrase",
+        "b1-u33-1-a-creative-choice-lesson:daily-phrase",
+        "b1-u33-2-explaining-a-joke-lesson:daily-phrase",
+        "b1-u33-3-a-playful-response-lesson:daily-phrase",
+        "b1-u33-4-interpreting-tone-lesson:daily-phrase",
+        "b1-u34-1-a-sustained-goal-lesson:daily-phrase",
+        "b1-u34-2-changing-a-habit-lesson:daily-phrase",
+        "b1-u34-3-explaining-motivation-lesson:daily-phrase",
+        "b1-u34-4-adjusting-the-plan-lesson:daily-phrase",
+        "b1-u35-1-restating-simply-lesson:daily-phrase",
+        "b1-u35-2-relaying-instructions-lesson:daily-phrase",
+        "b1-u35-3-explaining-a-term-lesson:daily-phrase",
+        "b1-u35-4-checking-understanding-lesson:daily-phrase",
+        "b1-u36-1-integrated-account-lesson:daily-phrase",
+        "b1-u36-2-integrated-position-lesson:daily-phrase",
+        "b1-u36-3-integrated-repair-lesson:daily-phrase",
+        "b1-u36-4-b1-reflection-lesson:daily-phrase",
+        "b2-u37-1-reframing-the-beginning-lesson:daily-phrase",
+        "b2-u37-2-controlling-chronology-lesson:daily-phrase",
+        "b2-u37-3-foregrounding-the-cause-lesson:daily-phrase",
+        "b2-u37-4-changing-viewpoint-lesson:daily-phrase",
+        "b2-u38-1-a-central-claim-lesson:daily-phrase",
+        "b2-u38-2-conceding-a-point-lesson:daily-phrase",
+        "b2-u38-3-challenging-an-assumption-lesson:daily-phrase",
+        "b2-u38-4-weighing-evidence-lesson:daily-phrase",
+        "b2-u39-1-defining-scope-lesson:daily-phrase",
+        "b2-u39-2-documenting-a-decision-lesson:daily-phrase",
+        "b2-u39-3-qualifying-feasibility-lesson:daily-phrase",
+        "b2-u39-4-diplomatic-correction-lesson:daily-phrase",
+        "b2-u40-1-understatement-lesson:daily-phrase",
+        "b2-u40-2-reading-implication-lesson:daily-phrase",
+        "b2-u40-3-playful-contrast-lesson:daily-phrase",
+        "b2-u40-4-explaining-wordplay-lesson:daily-phrase",
+        "b2-u41-1-mixed-feelings-lesson:daily-phrase",
+        "b2-u41-2-a-clear-boundary-lesson:daily-phrase",
+        "b2-u41-3-regret-and-learning-lesson:daily-phrase",
+        "b2-u41-4-relational-nuance-lesson:daily-phrase",
+        "b2-u42-1-defining-an-idea-lesson:daily-phrase",
+        "b2-u42-2-interpreting-a-text-lesson:daily-phrase",
+        "b2-u42-3-connecting-concepts-lesson:daily-phrase",
+        "b2-u42-4-mediating-complexity-lesson:daily-phrase",
+        "b2-u43-1-holding-the-floor-lesson:daily-phrase",
+        "b2-u43-2-self-correcting-lesson:daily-phrase",
+        "b2-u43-3-adapting-register-lesson:daily-phrase",
+        "b2-u43-4-repairing-misunderstanding-lesson:daily-phrase",
+        "b2-u44-1-competing-duties-lesson:daily-phrase",
+        "b2-u44-2-qualified-judgment-lesson:daily-phrase",
+        "b2-u44-3-responsibility-for-impact-lesson:daily-phrase",
+        "b2-u44-4-a-principled-challenge-lesson:daily-phrase",
+        "b2-u45-1-explaining-incentives-lesson:daily-phrase",
+        "b2-u45-2-unequal-effects-lesson:daily-phrase",
+        "b2-u45-3-institutional-feedback-lesson:daily-phrase",
+        "b2-u45-4-structural-reform-lesson:daily-phrase",
+        "b2-u46-1-calibrating-certainty-lesson:daily-phrase",
+        "b2-u46-2-explaining-evidence-lesson:daily-phrase",
+        "b2-u46-3-projecting-consequences-lesson:daily-phrase",
+        "b2-u46-4-responsible-uncertainty-lesson:daily-phrase",
+        "b2-u47-1-mitigated-disagreement-lesson:daily-phrase",
+        "b2-u47-2-preserving-face-lesson:daily-phrase",
+        "b2-u47-3-negotiating-wording-lesson:daily-phrase",
+        "b2-u47-4-conditional-compromise-lesson:daily-phrase",
+        "b2-u48-1-integrated-analysis-lesson:daily-phrase",
+        "b2-u48-2-integrated-negotiation-lesson:daily-phrase",
+        "b2-u48-3-integrated-mediation-lesson:daily-phrase",
+        "b2-u48-4-b2-reflection-lesson:daily-phrase",
+        "c1-u49-1-what-was-left-unsaid-lesson:daily-phrase",
+        "c1-u49-2-reading-a-reservation-lesson:daily-phrase",
+        "c1-u49-3-calibrating-a-hint-lesson:daily-phrase",
+        "c1-u49-4-interpersonal-positioning-lesson:daily-phrase",
+        "c1-u50-1-institutional-voice-lesson:daily-phrase",
+        "c1-u50-2-intimate-voice-lesson:daily-phrase",
+        "c1-u50-3-neutral-professional-voice-lesson:daily-phrase",
+        "c1-u50-4-shifting-voice-lesson:daily-phrase",
+        "c1-u51-1-establishing-a-thesis-lesson:daily-phrase",
+        "c1-u51-2-developing-the-reasoning-lesson:daily-phrase",
+        "c1-u51-3-answering-a-counterargument-lesson:daily-phrase",
+        "c1-u51-4-drawing-a-conclusion-lesson:daily-phrase",
+        "c1-u52-1-opening-deliberation-lesson:daily-phrase",
+        "c1-u52-2-reframing-conflict-lesson:daily-phrase",
+        "c1-u52-3-inviting-dissent-lesson:daily-phrase",
+        "c1-u52-4-closing-with-accountability-lesson:daily-phrase",
+        "c1-u53-1-figurative-image-lesson:daily-phrase",
+        "c1-u53-2-interpreting-an-allusion-lesson:daily-phrase",
+        "c1-u53-3-marked-word-order-lesson:daily-phrase",
+        "c1-u53-4-cultural-idiom-lesson:daily-phrase",
+        "c1-u54-1-reconstructing-a-concept-lesson:daily-phrase",
+        "c1-u54-2-preserving-intention-lesson:daily-phrase",
+        "c1-u54-3-adding-context-lesson:daily-phrase",
+        "c1-u54-4-transparent-uncertainty-lesson:daily-phrase",
+        "c1-u55-1-correcting-immediately-lesson:daily-phrase",
+        "c1-u55-2-responding-without-overclaiming-lesson:daily-phrase",
+        "c1-u55-3-defusing-escalation-lesson:daily-phrase",
+        "c1-u55-4-protecting-accuracy-lesson:daily-phrase",
+        "c1-u56-1-distinguishing-claim-and-evidence-lesson:daily-phrase",
+        "c1-u56-2-integrating-sources-lesson:daily-phrase",
+        "c1-u56-3-synthesizing-a-pattern-lesson:daily-phrase",
+        "c1-u56-4-reporting-limitations-lesson:daily-phrase",
+        "c1-u57-1-defining-freedom-lesson:daily-phrase",
+        "c1-u57-2-testing-a-principle-lesson:daily-phrase",
+        "c1-u57-3-preserving-a-distinction-lesson:daily-phrase",
+        "c1-u57-4-reasoning-conditionally-lesson:daily-phrase",
+        "c1-u58-1-addressing-a-broad-audience-lesson:daily-phrase",
+        "c1-u58-2-recognizing-legitimate-concern-lesson:daily-phrase",
+        "c1-u58-3-defending-with-proportion-lesson:daily-phrase",
+        "c1-u58-4-answering-criticism-lesson:daily-phrase",
+        "c1-u59-1-choosing-an-idiom-lesson:daily-phrase",
+        "c1-u59-2-recognizing-limits-lesson:daily-phrase",
+        "c1-u59-3-regional-awareness-lesson:daily-phrase",
+        "c1-u59-4-avoiding-decorative-idiom-lesson:daily-phrase",
+        "c1-u60-1-integrated-inference-lesson:daily-phrase",
+        "c1-u60-2-integrated-leadership-lesson:daily-phrase",
+        "c1-u60-3-integrated-mediation-lesson:daily-phrase",
+        "c1-u60-4-c1-reflection-lesson:daily-phrase",
+        "c2-u61-1-reluctance-or-refusal-lesson:daily-phrase",
+        "c2-u61-2-concern-or-alarm-lesson:daily-phrase",
+        "c2-u61-3-possible-or-plausible-lesson:daily-phrase",
+        "c2-u61-4-precision-of-stance-lesson:daily-phrase",
+        "c2-u62-1-compressing-an-argument-lesson:daily-phrase",
+        "c2-u62-2-expanding-a-premise-lesson:daily-phrase",
+        "c2-u62-3-changing-grammatical-form-lesson:daily-phrase",
+        "c2-u62-4-preserving-tone-lesson:daily-phrase",
+        "c2-u63-1-judicious-idiom-lesson:daily-phrase",
+        "c2-u63-2-collocational-precision-lesson:daily-phrase",
+        "c2-u63-3-contextual-limit-lesson:daily-phrase",
+        "c2-u63-4-regional-judgment-lesson:daily-phrase",
+        "c2-u64-1-parallel-emphasis-lesson:daily-phrase",
+        "c2-u64-2-rhythmic-accumulation-lesson:daily-phrase",
+        "c2-u64-3-foregrounding-a-value-lesson:daily-phrase",
+        "c2-u64-4-controlled-understatement-lesson:daily-phrase",
+        "c2-u65-1-reconciling-sources-lesson:daily-phrase",
+        "c2-u65-2-mapping-concepts-lesson:daily-phrase",
+        "c2-u65-3-weighing-testimony-lesson:daily-phrase",
+        "c2-u65-4-making-a-relationship-visible-lesson:daily-phrase",
+        "c2-u66-1-protecting-face-lesson:daily-phrase",
+        "c2-u66-2-hierarchy-and-warmth-lesson:daily-phrase",
+        "c2-u66-3-delicate-disagreement-lesson:daily-phrase",
+        "c2-u66-4-humor-with-judgment-lesson:daily-phrase",
+        "c2-u67-1-defining-a-technical-term-lesson:daily-phrase",
+        "c2-u67-2-adapting-to-a-field-lesson:daily-phrase",
+        "c2-u67-3-explaining-across-expertise-lesson:daily-phrase",
+        "c2-u67-4-genre-control-lesson:daily-phrase",
+        "c2-u68-1-challenging-a-premise-lesson:daily-phrase",
+        "c2-u68-2-revising-a-position-lesson:daily-phrase",
+        "c2-u68-3-clarifying-assumptions-lesson:daily-phrase",
+        "c2-u68-4-separating-levels-lesson:daily-phrase",
+        "c2-u69-1-layered-ambiguity-lesson:daily-phrase",
+        "c2-u69-2-sound-based-play-lesson:daily-phrase",
+        "c2-u69-3-timing-the-joke-lesson:daily-phrase",
+        "c2-u69-4-judging-translatability-lesson:daily-phrase",
+        "c2-u70-1-historical-echo-lesson:daily-phrase",
+        "c2-u70-2-regional-subtext-lesson:daily-phrase",
+        "c2-u70-3-compressed-hierarchy-lesson:daily-phrase",
+        "c2-u70-4-interpreting-ellipsis-lesson:daily-phrase",
+        "c2-u71-1-measured-conviction-lesson:daily-phrase",
+        "c2-u71-2-rhythmic-intimacy-lesson:daily-phrase",
+        "c2-u71-3-public-clarity-lesson:daily-phrase",
+        "c2-u71-4-self-editing-voice-lesson:daily-phrase",
+        "c2-u72-1-integrated-precision-lesson:daily-phrase",
+        "c2-u72-2-integrated-reformulation-lesson:daily-phrase",
+        "c2-u72-3-integrated-cultural-judgment-lesson:daily-phrase",
+        "c2-u72-4-lifelong-maintenance-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00468",
+      "language": "vi",
+      "text": "học",
+      "sources": [
+        "a1-u10-l3-study:vocabulary",
+        "a1-u12-l1-introduction:vocabulary",
+        "a2-u17-1-a-growing-ability-lesson:vocabulary",
+        "vi:family:final-contrasts:1:recognize:answer",
+        "vi:family:final-contrasts:1:input:answer",
+        "vi:family:final-contrasts:1:audio:exercise-audio",
+        "vi:family:final-contrasts:1:audio:answer"
+      ]
+    },
+    {
+      "id": "es-00477",
+      "language": "es",
+      "text": "explicar",
+      "sources": [
+        "a1-u10-l4-clarification:vocabulary",
+        "a2-u17-2-knowing-how-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00478",
+      "language": "vi",
+      "text": "giải thích",
+      "sources": [
+        "a1-u10-l4-clarification:vocabulary",
+        "a2-u17-2-knowing-how-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00561",
+      "language": "vi",
+      "text": "khi",
+      "sources": [
+        "a2-u13-l1-childhood:vocabulary",
+        "a2-u13-l1-childhood:daily-phrase",
+        "a2-u17-3-learning-through-error-lesson:vocabulary",
+        "a2-u23-1-confirming-a-plan-lesson:vocabulary",
+        "b2-u42-3-connecting-concepts-lesson:vocabulary",
+        "vi:inventory:multigraphs:gh:form-sound:choice-audio",
+        "vi:inventory:multigraphs:gh:form-sound-retrieval:choice-audio",
+        "vi:inventory:multigraphs:gi:form-sound:choice-audio",
+        "vi:inventory:multigraphs:gi:form-sound-retrieval:choice-audio",
+        "vi:inventory:multigraphs:kh:identify:answer",
+        "vi:inventory:multigraphs:kh:identify-context:answer",
+        "vi:inventory:multigraphs:kh:sound-form:exercise-audio",
+        "vi:inventory:multigraphs:kh:sound-form:answer",
+        "vi:inventory:multigraphs:kh:sound-form-retrieval:exercise-audio",
+        "vi:inventory:multigraphs:kh:sound-form-retrieval:answer",
+        "vi:inventory:multigraphs:kh:form-sound:answer",
+        "vi:inventory:multigraphs:kh:form-sound:choice-audio",
+        "vi:inventory:multigraphs:kh:form-sound-retrieval:answer",
+        "vi:inventory:multigraphs:kh:form-sound-retrieval:choice-audio",
+        "vi:inventory:multigraphs:kh:input:answer",
+        "vi:inventory:multigraphs:kh:input-retrieval:answer"
+      ]
+    },
+    {
+      "id": "es-00730",
+      "language": "es",
+      "text": "Llevo seis meses estudiando español.",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:sentence",
+        "a2-u17-1-a-growing-ability-lesson:transform",
+        "a2-u17-1-a-growing-ability-lesson:mastery",
+        "a2-u17-1-a-growing-ability-lesson:vocabulary",
+        "a2-u17-1-a-growing-ability-lesson:daily-phrase",
+        "a2-u20-4-community-participation-lesson:vocabulary",
+        "a2-u20-4-community-participation-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00731",
+      "language": "vi",
+      "text": "Tôi đã học tiếng Tây Ban Nha được sáu tháng.",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:sentence",
+        "a2-u17-1-a-growing-ability-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "vi-00733",
+      "language": "vi",
+      "text": "Tôi đã",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary",
+        "a2-u17-1-a-growing-ability-lesson:daily-phrase",
+        "a2-u20-4-community-participation-lesson:vocabulary",
+        "a2-u20-4-community-participation-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00734",
+      "language": "es",
+      "text": "seis meses",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00735",
+      "language": "vi",
+      "text": "được sáu tháng",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00736",
+      "language": "es",
+      "text": "estudiando",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00737",
+      "language": "es",
+      "text": "español",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00738",
+      "language": "vi",
+      "text": "tiếng Tây Ban Nha",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00740",
+      "language": "vi",
+      "text": "Tôi đã được sáu tháng",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00739",
+      "language": "es",
+      "text": "Llevo seis meses",
+      "sources": [
+        "a2-u17-1-a-growing-ability-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00741",
+      "language": "es",
+      "text": "Ya sé explicar la idea con claridad.",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:sentence",
+        "a2-u17-2-knowing-how-lesson:transform",
+        "a2-u17-2-knowing-how-lesson:mastery",
+        "a2-u17-2-knowing-how-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00742",
+      "language": "vi",
+      "text": "Bây giờ tôi đã biết giải thích ý tưởng rõ ràng.",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:sentence",
+        "a2-u17-2-knowing-how-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00743",
+      "language": "es",
+      "text": "Ya sé",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary",
+        "a2-u17-2-knowing-how-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00744",
+      "language": "vi",
+      "text": "Bây giờ tôi đã biết",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary",
+        "a2-u17-2-knowing-how-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00745",
+      "language": "es",
+      "text": "la idea",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary",
+        "b2-u43-1-holding-the-floor-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00746",
+      "language": "vi",
+      "text": "ý tưởng",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00747",
+      "language": "es",
+      "text": "con claridad",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00748",
+      "language": "vi",
+      "text": "rõ ràng",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00750",
+      "language": "vi",
+      "text": "Bây giờ tôi đã biết giải thích",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00749",
+      "language": "es",
+      "text": "Ya sé explicar",
+      "sources": [
+        "a2-u17-2-knowing-how-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00751",
+      "language": "es",
+      "text": "Aprendí mucho al corregir mis errores.",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:sentence",
+        "a2-u17-3-learning-through-error-lesson:transform",
+        "a2-u17-3-learning-through-error-lesson:mastery",
+        "a2-u17-3-learning-through-error-lesson:vocabulary",
+        "a2-u17-3-learning-through-error-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00752",
+      "language": "vi",
+      "text": "Tôi học được nhiều khi sửa lỗi của mình.",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:sentence",
+        "a2-u17-3-learning-through-error-lesson:bridge-mastery",
+        "a2-u17-3-learning-through-error-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00753",
+      "language": "es",
+      "text": "Aprendí mucho",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:vocabulary",
+        "a2-u17-3-learning-through-error-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00754",
+      "language": "vi",
+      "text": "Tôi học được nhiều",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:vocabulary",
+        "a2-u17-3-learning-through-error-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00755",
+      "language": "es",
+      "text": "al",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00758",
+      "language": "es",
+      "text": "mis errores",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00759",
+      "language": "vi",
+      "text": "lỗi của mình",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00761",
+      "language": "vi",
+      "text": "Tôi học được nhiều khi",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00760",
+      "language": "es",
+      "text": "Aprendí mucho al",
+      "sources": [
+        "a2-u17-3-learning-through-error-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00762",
+      "language": "es",
+      "text": "Practico cada día para que las palabras salgan con naturalidad.",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:sentence",
+        "a2-u17-4-a-learning-intention-lesson:transform",
+        "a2-u17-4-a-learning-intention-lesson:mastery",
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00763",
+      "language": "vi",
+      "text": "Tôi luyện tập mỗi ngày để lời nói trở nên tự nhiên.",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:sentence",
+        "a2-u17-4-a-learning-intention-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00764",
+      "language": "es",
+      "text": "Practico cada día",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary",
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00765",
+      "language": "vi",
+      "text": "Tôi luyện tập mỗi ngày",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary",
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00766",
+      "language": "es",
+      "text": "para que",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary",
+        "b1-u33-1-a-creative-choice-lesson:vocabulary",
+        "b1-u34-1-a-sustained-goal-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00767",
+      "language": "vi",
+      "text": "để",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary",
+        "b1-u33-1-a-creative-choice-lesson:vocabulary",
+        "b1-u34-1-a-sustained-goal-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00768",
+      "language": "es",
+      "text": "las palabras",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00769",
+      "language": "vi",
+      "text": "lời nói",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00770",
+      "language": "es",
+      "text": "salgan con naturalidad",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00771",
+      "language": "vi",
+      "text": "trở nên tự nhiên",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00773",
+      "language": "vi",
+      "text": "Tôi luyện tập mỗi ngày để",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00772",
+      "language": "es",
+      "text": "Practico cada día para que",
+      "sources": [
+        "a2-u17-4-a-learning-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00774",
+      "language": "es",
+      "text": "Siento haberte hablado de esa manera.",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:sentence",
+        "a2-u18-1-acknowledging-harm-lesson:transform",
+        "a2-u18-1-acknowledging-harm-lesson:mastery",
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary",
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00775",
+      "language": "vi",
+      "text": "Tôi xin lỗi vì đã nói với bạn như vậy.",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:sentence",
+        "a2-u18-1-acknowledging-harm-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00776",
+      "language": "es",
+      "text": "Siento",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary",
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00777",
+      "language": "vi",
+      "text": "Tôi xin lỗi vì",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary",
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00779",
+      "language": "vi",
+      "text": "đã nói với bạn",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00780",
+      "language": "es",
+      "text": "de esa manera",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00781",
+      "language": "vi",
+      "text": "như vậy",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-798d65dbc23fc5fb",
+      "language": "es",
+      "text": "manera",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00819",
+      "language": "vi",
+      "text": "một cách bình tĩnh hơn",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:vocabulary",
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00785",
+      "language": "vi",
+      "text": "Tôi xin lỗi vì đã nói với bạn",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00784",
+      "language": "es",
+      "text": "Siento haberte hablado",
+      "sources": [
+        "a2-u18-1-acknowledging-harm-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00786",
+      "language": "es",
+      "text": "No quería hacerte sentir ignorado.",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:sentence",
+        "a2-u18-2-clarifying-intention-lesson:transform",
+        "a2-u18-2-clarifying-intention-lesson:mastery",
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00787",
+      "language": "vi",
+      "text": "Tôi không muốn khiến bạn cảm thấy bị phớt lờ.",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:sentence",
+        "a2-u18-2-clarifying-intention-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00788",
+      "language": "es",
+      "text": "No quería",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary",
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00789",
+      "language": "vi",
+      "text": "Tôi không muốn",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary",
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00790",
+      "language": "es",
+      "text": "hacerte sentir",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00791",
+      "language": "vi",
+      "text": "khiến bạn cảm thấy",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00792",
+      "language": "es",
+      "text": "ignorado",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00793",
+      "language": "vi",
+      "text": "bị phớt lờ",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-bd10251a2c1ee69f",
+      "language": "es",
+      "text": "quería",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-a8868ff6d8d68d80",
+      "language": "vi",
+      "text": "muốn",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00797",
+      "language": "vi",
+      "text": "Tôi không muốn khiến bạn cảm thấy",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00796",
+      "language": "es",
+      "text": "No quería hacerte sentir",
+      "sources": [
+        "a2-u18-2-clarifying-intention-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00798",
+      "language": "es",
+      "text": "Necesito que me escuches antes de responder.",
+      "sources": [
+        "a2-u18-3-making-space-lesson:sentence",
+        "a2-u18-3-making-space-lesson:transform",
+        "a2-u18-3-making-space-lesson:mastery",
+        "a2-u18-3-making-space-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00799",
+      "language": "vi",
+      "text": "Tôi cần bạn lắng nghe trước khi trả lời.",
+      "sources": [
+        "a2-u18-3-making-space-lesson:sentence",
+        "a2-u18-3-making-space-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00800",
+      "language": "es",
+      "text": "Necesito",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary",
+        "a2-u18-3-making-space-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00801",
+      "language": "vi",
+      "text": "Tôi cần",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary",
+        "a2-u18-3-making-space-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00802",
+      "language": "es",
+      "text": "que me escuches",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00803",
+      "language": "vi",
+      "text": "bạn lắng nghe",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00804",
+      "language": "es",
+      "text": "antes de",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary",
+        "b1-u27-2-advice-for-a-friend-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00805",
+      "language": "vi",
+      "text": "trước khi",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary",
+        "b1-u27-2-advice-for-a-friend-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00806",
+      "language": "es",
+      "text": "responder",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00807",
+      "language": "vi",
+      "text": "trả lời",
+      "sources": [
+        "a2-u18-3-making-space-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00809",
+      "language": "vi",
+      "text": "Tôi cần bạn lắng nghe",
+      "sources": [
+        "a2-u18-3-making-space-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00808",
+      "language": "es",
+      "text": "Necesito que me escuches",
+      "sources": [
+        "a2-u18-3-making-space-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00810",
+      "language": "es",
+      "text": "Podemos intentarlo de nuevo con más calma.",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:sentence",
+        "a2-u18-4-restoring-connection-lesson:transform",
+        "a2-u18-4-restoring-connection-lesson:mastery",
+        "a2-u18-4-restoring-connection-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00811",
+      "language": "vi",
+      "text": "Chúng ta có thể thử lại một cách bình tĩnh hơn.",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:sentence",
+        "a2-u18-4-restoring-connection-lesson:bridge-mastery"
+      ]
+    },
+    {
+      "id": "es-00812",
+      "language": "es",
+      "text": "Podemos",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary",
+        "a2-u18-4-restoring-connection-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "vi-00813",
+      "language": "vi",
+      "text": "Chúng ta có thể",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary",
+        "a2-u18-4-restoring-connection-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00814",
+      "language": "es",
+      "text": "intentarlo",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00815",
+      "language": "vi",
+      "text": "thử",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00816",
+      "language": "es",
+      "text": "de nuevo",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00817",
+      "language": "vi",
+      "text": "lại",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "es-00818",
+      "language": "es",
+      "text": "con más calma",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:vocabulary"
+      ]
+    },
+    {
+      "id": "vi-00821",
+      "language": "vi",
+      "text": "Chúng ta có thể thử",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:daily-phrase"
+      ]
+    },
+    {
+      "id": "es-00820",
+      "language": "es",
+      "text": "Podemos intentarlo",
+      "sources": [
+        "a2-u18-4-restoring-connection-lesson:daily-phrase"
+      ]
+    }
+  ],
+  "scope": {
+    "kind": "personal-window",
+    "languages": [
+      "es",
+      "vi"
+    ],
+    "anchorLessonId": "a2-u17-4-a-learning-intention-lesson",
+    "lessonIds": [
+      "a2-u17-1-a-growing-ability-lesson",
+      "a2-u17-2-knowing-how-lesson",
+      "a2-u17-3-learning-through-error-lesson",
+      "a2-u17-4-a-learning-intention-lesson",
+      "a2-u18-1-acknowledging-harm-lesson",
+      "a2-u18-2-clarifying-intention-lesson",
+      "a2-u18-3-making-space-lesson",
+      "a2-u18-4-restoring-connection-lesson"
+    ],
+    "reviewLessonIds": [],
+    "includeWritingFoundations": false,
+    "unitCount": 2
+  },
+  "fullInventorySha256": "d2a8f32978376df564f09cc550664195ae0e70327b47a66dd8282ec777c123aa",
+  "scopePolicySha256": "0b857c26fef58e112a7d1cc2e7d7d4e64692d4d9c9e70170f3bed0b6ad2d6acf"
+}

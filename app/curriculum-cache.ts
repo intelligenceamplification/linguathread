@@ -1,3 +1,4 @@
+import { correctLessonAudioText } from "./lesson-audio-corrections";
 import type { LessonDefinition } from "./curriculum";
 
 type CachedCurriculum = {
@@ -52,21 +53,22 @@ function valid(value: unknown): value is CachedCurriculum {
 }
 
 export async function loadCurriculum(fallback: LessonDefinition[]) {
-  const cached = await readCachedCurriculum().catch(() => null);
+  const cached = await readCachedCurriculum().then((value) => valid(value) ? { ...value, lessons: correctLessonAudioText(value.lessons) } : null).catch(() => null);
   try {
     const response = await fetch("/api/curriculum");
     if (!response.ok) throw new Error("Curriculum unavailable");
     const payload = await response.json() as CachedCurriculum;
     if (!valid(payload)) throw new Error("Invalid curriculum payload");
+    const lessons = correctLessonAudioText(payload.lessons);
     if (payload.source === "bundled" && cached && cached.revision > payload.revision) {
       return { lessons: cached.lessons, revision: cached.revision, source: "cache" as const };
     }
     if (payload.source === "published") {
-      await saveCachedCurriculum({ ...payload, savedAt: new Date().toISOString() }).catch(() => undefined);
+      await saveCachedCurriculum({ ...payload, lessons, savedAt: new Date().toISOString() }).catch(() => undefined);
     }
-    return { lessons: payload.lessons, revision: payload.revision, source: payload.source };
+    return { lessons, revision: payload.revision, source: payload.source };
   } catch {
     if (cached) return { lessons: cached.lessons, revision: cached.revision, source: "cache" as const };
-    return { lessons: fallback, revision: 0, source: "bundled" as const };
+    return { lessons: correctLessonAudioText(fallback), revision: 0, source: "bundled" as const };
   }
 }

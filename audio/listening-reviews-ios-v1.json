@@ -1,0 +1,92 @@
+{
+  "reviews": [
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "de",
+      "sha256": "24d2085b7d3c15517a04dd64ac646db0b26efb0e5d310d5d8e548c7130352018",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted both presented teacher-paced Spanish de candidates: Nailed it! followed by Es perfecto. Approval applies to these exact two files."
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "text": "de",
+      "sha256": "ced3912c15433c35fc732741c006bbdf9c0a672c4d2509a109a4e90878414d35",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted both presented teacher-paced Spanish de candidates: Nailed it! followed by Es perfecto. Approval applies to these exact two files."
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "eres",
+      "sha256": "c426ed2c24913358353127f5450834dcaad76ecc25a14aa6b351bc222d1e7550",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all four presented male/female eres and Soy de Indiana candidates: Yes. All four are muy excelenete."
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "Soy de Indiana.",
+      "sha256": "4af3cff5d805609efbdd249a8ca74d54cc1ab2abca9e09a65384116d317070cb",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all four presented male/female eres and Soy de Indiana candidates: Yes. All four are muy excelenete."
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "text": "eres",
+      "sha256": "4d7d62ea967195e23700b08b59ee81ed5eef075488cf45d13d50009558445542",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all four presented male/female eres and Soy de Indiana candidates: Yes. All four are muy excelenete."
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "text": "Soy de Indiana.",
+      "sha256": "a8de29b66cd8453563077d2fac88b424bdf8481925d3810a9c4aa5e379529bd7",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all four presented male/female eres and Soy de Indiana candidates: Yes. All four are muy excelenete."
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "A la luz de los datos, la estrategia parece eficaz, aunque sería prematuro considerarla definitiva.",
+      "sha256": "4f9c32f01c7a8c1d4d484c72d1a390be7e865054a9b318eabaeb5abb4be40cd7",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-13",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "Explicit listening approval: Yes, approve this clip. Question call_f6d4da0971564bb0814605caac46aa49; complete sentence including considerarla definitiva, no extra sounds."
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "text": "Tôi không muốn khiến bạn cảm thấy bị phớt lờ.",
+      "sha256": "d4958ba0f2d88ad4630be52fc7a918af0c51a91b0e06dcfb61a1b168a89407b4",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-10-14",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User heard the visible Vietnamese candidate and confirmed: Yes. it sounds authentic and clear. Exact clip acceptance; short-word candidates remain rejected."
+    }
+  ]
+}
