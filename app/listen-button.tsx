@@ -35,6 +35,7 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
  const id = useId();
  const supported = useSyncExternalStore(subscribeToSpeechSupport, hasSpeechSupport, noServerSpeechSupport);
  const [speaking, setSpeaking] = useState(false);
+ const [liveRateAvailable, setLiveRateAvailable] = useState(false);
  const [unavailable, setUnavailable] = useState(false);
  const [preparingKey, setPreparingKey] = useState<string | null>(null);
  const activeTextKey = `${language}\u0000${text}`;
@@ -103,6 +104,7 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
    : await approvedAudioFor(text, language);
   if (generation !== requestGeneration.current) return;
   selectedClip.current = approved ? { key: clipKey, clip: approved } : null;
+  setLiveRateAvailable(Boolean(approved) && (!nativeHandler() || nativeAudioVersion() >= 2));
   if (approved) {
    const native = nativeHandler();
    if (native && supportsNativeClip()) {
@@ -152,5 +154,5 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
  return <span className={`audio-controls${compact ? " audio-controls-compact" : ""}`}>{contextual && <span className="audio-model-context"><small>Listen in context</small><span lang={language}>{text}</span></span>}<button type="button" className={`listen-action${compact ? " listen-action-compact" : ""}`} disabled={preparing} aria-busy={preparing} aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}${contextual ? " in context" : ""}`} title={compact ? `${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}` : undefined} onClick={toggle}>
   <svg aria-hidden="true" viewBox="0 0 24 24"><path d={speaking ? "M7 7h10v10H7z" : "M4 10v4h4l5 4V6L8 10H4zm12.5-1.8a5 5 0 010 7.6m2.2-9.8a8 8 0 010 12"} /></svg>
   <span className="listen-action-label">{preparing ? "Preparing…" : speaking ? "Stop" : "Listen"}</span>
- </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={preparing || (speaking && (!selectedClip.current?.clip || (Boolean(nativeHandler()) && nativeAudioVersion() < 2)))} onChange={(event) => { memorySpeed = event.target.value; try { window.localStorage.setItem(speedKey, memorySpeed); } catch { /* Playback still works when storage is unavailable. */ } window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select>{unavailable && <span role="status" className="audio-unavailable">Lesson audio unavailable. Please retry.</span>}</span>;
+ </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={preparing || (speaking && !liveRateAvailable)} onChange={(event) => { memorySpeed = event.target.value; try { window.localStorage.setItem(speedKey, memorySpeed); } catch { /* Playback still works when storage is unavailable. */ } window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select>{unavailable && <span role="status" className="audio-unavailable">Lesson audio unavailable. Please retry.</span>}</span>;
 }
