@@ -634,10 +634,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         ) : <LivePractice key={lesson.id} languages={selectedLearningLanguages} focus={`${lesson.title} · ${lesson.skill}`} prepareContext={() => livePracticePrompt(practiceCapsule(lesson, profile, learnerModel, course, stage))}>
         {stage === "listening" && <AudioFirstListening key={lesson.id} lesson={lesson} course={course} onAttempt={(correct, supported) => recordAttempt("sound-to-meaning", correct, "Spanish", lesson, {
           fromLanguage: "Spanish", toLanguage: "English", fromModality: "audio", toModality: "meaning", retrievalType: "recognition",
-        }, correct ? undefined : "listening", supported)} onContinue={() => sessionMode === "review" ? finishLesson() : setStage("transcript")} />}
+        }, correct ? undefined : "listening", supported)} onContinue={() => sessionMode === "review" ? finishLesson() : setStage("transcript")} onTextContinue={() => setStage("transcript")} />}
 
         {stage === "transcript" && <div className="focus-content audio-first-content">
-          <p className="eyebrow">Written form · after listening</p>
+          <p className="eyebrow">Written form</p>
           <h1 lang="es">{lesson.sentence.target}</h1>
           <ListenButton text={lesson.sentence.target} language="es" />
           <div className="language-stack compact-stack">
@@ -1099,7 +1099,7 @@ function TransformExercise({ lesson, onAttempt, onComplete, onSkip }: { lesson: 
   );
 }
 
-function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson: LessonDefinition; course: LessonDefinition[]; onAttempt: (correct: boolean, supported: boolean) => void; onContinue: () => void }) {
+function AudioFirstListening({ lesson, course, onAttempt, onContinue, onTextContinue }: { lesson: LessonDefinition; course: LessonDefinition[]; onAttempt: (correct: boolean, supported: boolean) => void; onContinue: () => void; onTextContinue: () => void }) {
   const [playbacks, setPlaybacks] = useState(0);
   const [played, setPlayed] = useState(false);
   const [choice, setChoice] = useState<string | null>(null);
@@ -1114,8 +1114,8 @@ function AudioFirstListening({ lesson, course, onAttempt, onContinue }: { lesson
     <h1>What does the speaker mean?</h1>
     <p className="instruction">Play the Spanish first. Its written form appears after your meaning choice.</p>
     <ListenButton text={lesson.sentence.target} language="es" onComplete={(reviewed) => { setReviewedAudio(Boolean(reviewed)); setAudioError(false); setPlayed(true); setPlaybacks((count) => count + 1); }} onError={() => setAudioError(true)} />
-    <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Instructional audio · pronunciation not reviewed"}</p>
-    {audioError && <p role="alert">Playback did not finish. Try Listen again before answering.</p>}
+    {played && <p className="audio-quality-note">{reviewedAudio ? "Reviewed lesson audio" : "Instructional audio · pronunciation not reviewed"}</p>}
+    {audioError && <div role="alert"><p>Audio could not play. Retry Listen, or continue this lesson through text.</p><p className="instruction">Continuing through text does not count as a listening attempt.</p><button className="primary-action" onClick={onTextContinue}>Continue with text <span aria-hidden="true">→</span></button></div>}
     {played && choice === null && <fieldset className="listening-choices"><legend>Choose the meaning you heard</legend>{orderedChoices.map((meaning) => <button type="button" key={meaning} className="quiet-action" onClick={() => { setChoice(meaning); onAttempt(meaning === lesson.sentence.anchor, !reviewedAudio || playbacks > 1); }}>{meaning}</button>)}</fieldset>}
     {choice !== null && <div role="status"><p>{choice === lesson.sentence.anchor ? "Meaning connected." : `The meaning is: ${lesson.sentence.anchor}`}</p><p className="instruction">The transcript is ready. This attempt stays separate from reading and writing.</p><button className="primary-action" onClick={onContinue}>Reveal the written form <span aria-hidden="true">→</span></button></div>}
   </div>;

@@ -54,6 +54,9 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
  useEffect(() => { playback.current = onPlayback; }, [onPlayback]);
  useEffect(() => { completion.current = onComplete; }, [onComplete]);
  useEffect(() => { failure.current = onError; }, [onError]);
+ useEffect(() => {
+  if (!hasSpeechSupport() || nativeAudioNeedsUpdate(language)) failure.current?.();
+ }, [supported, language]);
  useEffect(() => { speakingRef.current = speaking; }, [speaking]);
  useEffect(() => { preparingRef.current = preparing; }, [preparing]);
  useEffect(() => {

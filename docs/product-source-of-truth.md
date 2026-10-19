@@ -8,6 +8,12 @@ This document governs product, curriculum, and platform decisions across the web
 
 ## Audio delivery and refresh repair — 2026-10-19
 
+### Unit 19 availability incident
+
+Physical-device state confirmed the learner had reached `a2-u19-2-describing-improvement-lesson` while the delivered catalog contained only Units 17–18. Rejecting legacy audio exposed this delivery gap; the listening step then prevented all progress. A playback failure must offer explicit text continuation, create no listening evidence, and never complete a review simply because audio failed. Successful audio-first items still hide the transcript until the listening response. Retrying remains available.
+
+`scripts/publish-prepared-audio-window.py` reuses existing hash-checked recordings for at most two authored units, validates the resulting catalog with the actual Swift player admission rules, and reports uncovered texts. It loads no speech model and synthesizes nothing. Units 19–20 have 91 of 97 requested playback texts available from existing prepared files; six remain unavailable. This is partial coverage, not launch readiness. Existing current-lesson Spanish sentence recordings are available in both approved voice families. Never assume the learner remains inside an old initial seed window or claim an entire unit is audio-ready from a subset of files.
+
 The weekly refresh shortcut was building the detached `2bf22d1` checkout in `2026-09-19/i-h/work/linguathread`: native build 1, no approved audio catalog, and fixed-speed platform speech. Refreshing from that checkout can undo newer native audio work while retaining the current hosted interface. The repaired source is `2026-06-13/polyflow/site`. Do not infer installed playback capability from the hosted interface alone.
 
 Build 11 introduces audio contract 2. `scripts/verify-ios-audio-release.py` must pass before a refresh build and against its built `.app` before installation. It checks the player contract, native project integration, approved source pack, exact bundled manifest, file hashes, bundle identity and minimum build. The existing refresh shortcut now invokes those checks and uses the repaired source. Retain in-place installation and learner data. A stale wrapper must display an update requirement instead of consulting mixed web recordings or platform Spanish/Vietnamese speech.
