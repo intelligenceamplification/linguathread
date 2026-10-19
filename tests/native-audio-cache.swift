@@ -70,6 +70,19 @@ final class AudioStub: URLProtocol, @unchecked Sendable {
             _ = try await NativeAudioCatalog.audioData(for: url, using: session)
             preconditionFailure("Blocked cached recording was accepted")
         } catch { }
-        print("PASS: shared download, checked bytes, offline cache, cached index, blocked cached audio")
+        // Every file is pinned for upcoming lessons. The cap must still hold.
+        NativeAudioCatalog.testCacheLimit = 60
+        let largeA = clip("uno", Data(repeating: 1, count: 40))
+        let largeB = clip("dos", Data(repeating: 2, count: 40))
+        let largeClips = [largeA, largeB]
+        AudioStub.library = try JSONSerialization.data(withJSONObject: ["kind": "verified-audio-library", "schemaVersion": 1, "clips": largeClips, "lessonAudio": ["large-lesson": largeClips.map { $0["url"] as! String }]])
+        for (index, clip) in largeClips.enumerated() { AudioStub.assets[clip["file"] as! String] = Data(repeating: UInt8(index + 1), count: 40) }
+        await NativeAudioCatalog.refreshLibrary(using: session)
+        await NativeAudioCatalog.prefetchLessons(["large-lesson"], using: session)
+        let files = try FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: [.fileSizeKey])
+        let bytesOnDisk = try files.filter { $0.pathExtension == "wav" }.reduce(0) { try $0 + $1.resourceValues(forKeys: [.fileSizeKey]).fileSize! }
+        precondition(bytesOnDisk <= 60)
+        precondition(files.contains { largeClips.map { $0["file"] as! String }.contains($0.lastPathComponent) })
+        print("PASS: shared download, checked bytes, offline cache, cached index, blocked cached audio, bounded pinned cache")
     }
 }

@@ -6,6 +6,16 @@ Build 7 retains the approved multilingual design and dark appearance, with the l
 
 This document governs product, curriculum, and platform decisions across the web master, iOS, macOS, Android, and future clients. When implementations differ, resolve them toward these principles rather than allowing each platform to become a separate product.
 
+## Audio delivery and refresh repair — 2026-10-19
+
+The weekly refresh shortcut was building the detached `2bf22d1` checkout in `2026-09-19/i-h/work/linguathread`: native build 1, no approved audio catalog, and fixed-speed platform speech. Refreshing from that checkout can undo newer native audio work while retaining the current hosted interface. The repaired source is `2026-06-13/polyflow/site`. Do not infer installed playback capability from the hosted interface alone.
+
+Build 11 introduces audio contract 2. `scripts/verify-ios-audio-release.py` must pass before a refresh build and against its built `.app` before installation. It checks the player contract, native project integration, approved source pack, exact bundled manifest, file hashes, bundle identity and minimum build. The existing refresh shortcut now invokes those checks and uses the repaired source. Retain in-place installation and learner data. A stale wrapper must display an update requirement instead of consulting mixed web recordings or platform Spanish/Vietnamese speech.
+
+Normal/Slow uses one recording at rates 1 and 0.75. Contract-2 native playback supports changes during playback, scoped to the current request. Cached audio is bounded to 24 MiB even when lesson prefetch pins files; the signed seed is additional storage. Hash/provenance checks remain necessary but do not certify pronunciation. Voice approval never implies that every generated utterance is correct.
+
+This repair generates zero audio and does not replace voices. Further preparation remains limited to missing or explicitly rejected clips in small main-lesson packs. Ordinary UI updates and weekly signing refreshes must synthesize zero clips. Cloud candidates require a bounded benchmark and explicit acceptance before entering the approved catalog; do not silently switch providers or incur paid fallback. No microphone access, recognition, or automated pronunciation scoring is part of this task. Existing optional self-report/replay behavior is preserved.
+
 ## The promise
 
 LinguaThread is a quiet language practice. The learner opens it intentionally, returns to the right place, listens, reads, recalls, compares, expresses, and leaves with progress preserved.

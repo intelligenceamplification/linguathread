@@ -2,13 +2,14 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import { languageInfo, type FoundationLanguage } from "./multilingual-foundation";
 import { speechLocales, voiceForLanguage } from "./speech";
-import { approvedAudioFor, requiresNativeApprovedAudio, type ApprovedAudioClip } from "./audio-pack";
+import { approvedAudioFor, nativeAudioNeedsUpdate, requiresNativeApprovedAudio, type ApprovedAudioClip } from "./audio-pack";
 import { spokenText } from "./spoken-text";
 import { instructionalAudioText } from "./instructional-audio-models";
 
 const speedEvent = "linguathread:audio-speed";
 const speedKey = "linguathread.audio-speed.v1";
-const readSpeed = () => window.localStorage.getItem(speedKey) === "slow" ? "slow" : "normal";
+let memorySpeed = "normal";
+const readSpeed = () => { try { return window.localStorage.getItem(speedKey) === "slow" ? "slow" : "normal"; } catch { return memorySpeed; } };
 const subscribeSpeed = (notify: () => void) => {
  window.addEventListener(speedEvent, notify);
  window.addEventListener("storage", notify);
@@ -26,6 +27,7 @@ const nativeHandler = () => (window as Window & { webkit?: { messageHandlers?: {
 const supportsNativeClip = () => Boolean((window as Window & { __LINGUATHREAD_NATIVE_CLIP__?: boolean }).__LINGUATHREAD_NATIVE_CLIP__);
 const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in window && "SpeechSynthesisUtterance" in window);
 const noServerSpeechSupport = () => false;
+const nativeAudioVersion = () => (window as Window & { __LINGUATHREAD_NATIVE_AUDIO_VERSION__?: number }).__LINGUATHREAD_NATIVE_AUDIO_VERSION__ ?? 0;
 
 export default function ListenButton({ text: requestedText, language, onUse, onPlayback, onComplete, onError, compact = false }: { text: string; language: FoundationLanguage; onUse?: () => void; onPlayback?: () => void; onComplete?: (reviewed?: boolean) => void; onError?: () => void; compact?: boolean }) {
  const text = requiresNativeApprovedAudio(language) ? instructionalAudioText(requestedText, language) : requestedText;
@@ -53,6 +55,11 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
  useEffect(() => { failure.current = onError; }, [onError]);
  useEffect(() => { speakingRef.current = speaking; }, [speaking]);
  useEffect(() => { preparingRef.current = preparing; }, [preparing]);
+ useEffect(() => {
+  if (!speakingRef.current) return;
+  if (audioRef.current) audioRef.current.playbackRate = rate;
+  if (nativeAudioVersion() >= 2) nativeHandler()?.postMessage({ action: "setRate", rate, requestID: nativeRequest.current });
+ }, [rate]);
 
  useEffect(() => {
   const requests = requestGeneration;
@@ -107,10 +114,10 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
    audio.playbackRate = rate;
    audio.preservesPitch = true;
    audioRef.current = audio;
-   audio.onplay = () => { setPreparingKey(null); setSpeaking(true); playback.current?.(); };
+   audio.onplay = () => { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(true); playback.current?.(); };
    audio.onended = () => { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); completion.current?.(Boolean(approved.reviewedAt) && !contextual); };
-   audio.onerror = () => { setPreparingKey(null); setSpeaking(false); failure.current?.(); };
-   try { await audio.play(); } catch { setPreparingKey(null); setSpeaking(false); failure.current?.(); }
+   audio.onerror = () => { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); failure.current?.(); };
+   try { await audio.play(); } catch { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); failure.current?.(); }
    return;
   }
   if (requiresNativeApprovedAudio(language)) {
@@ -141,8 +148,9 @@ export default function ListenButton({ text: requestedText, language, onUse, onP
  }
 
  if (supported === false) return <span className="audio-unavailable">Audio unavailable on this device</span>;
+ if (nativeAudioNeedsUpdate(language)) return <span role="status" className="audio-unavailable">Update the iPhone app to use approved lesson audio.</span>;
  return <span className={`audio-controls${compact ? " audio-controls-compact" : ""}`}>{contextual && <span className="audio-model-context"><small>Listen in context</small><span lang={language}>{text}</span></span>}<button type="button" className={`listen-action${compact ? " listen-action-compact" : ""}`} disabled={preparing} aria-busy={preparing} aria-label={`${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}${contextual ? " in context" : ""}`} title={compact ? `${speaking ? "Stop" : "Listen to"} ${languageInfo(language).name}` : undefined} onClick={toggle}>
   <svg aria-hidden="true" viewBox="0 0 24 24"><path d={speaking ? "M7 7h10v10H7z" : "M4 10v4h4l5 4V6L8 10H4zm12.5-1.8a5 5 0 010 7.6m2.2-9.8a8 8 0 010 12"} /></svg>
   <span className="listen-action-label">{preparing ? "Preparing…" : speaking ? "Stop" : "Listen"}</span>
- </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={speaking || preparing} onChange={(event) => { window.localStorage.setItem(speedKey, event.target.value); window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select>{unavailable && <span role="status" className="audio-unavailable">Lesson audio unavailable. Please retry.</span>}</span>;
+ </button><select className="audio-speed" aria-label="Audio playback speed" value={speed} disabled={preparing || (speaking && (!selectedClip.current?.clip || (Boolean(nativeHandler()) && nativeAudioVersion() < 2)))} onChange={(event) => { memorySpeed = event.target.value; try { window.localStorage.setItem(speedKey, memorySpeed); } catch { /* Playback still works when storage is unavailable. */ } window.dispatchEvent(new Event(speedEvent)); }}><option value="normal">Normal</option><option value="slow">Slow</option></select>{unavailable && <span role="status" className="audio-unavailable">Lesson audio unavailable. Please retry.</span>}</span>;
 }

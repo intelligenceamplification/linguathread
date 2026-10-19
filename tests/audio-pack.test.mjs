@@ -113,3 +113,21 @@ test("native isolated pack never fetches legacy clips, even when coverage is mis
     assert.equal(await approvedAudioFor("eres", "es"), null);
   } finally { globalThis.window = previousWindow; globalThis.fetch = previousFetch; }
 });
+
+test("a stale iPhone wrapper cannot fetch mixed voices or use system Spanish/Vietnamese", async () => {
+  const previousWindow = globalThis.window;
+  const previousFetch = globalThis.fetch;
+  const messages = [];
+  globalThis.window = { webkit: { messageHandlers: { linguathreadAudio: { postMessage: message => messages.push(message) } } } };
+  globalThis.fetch = () => { throw new Error("A stale wrapper must never fetch legacy audio"); };
+  try {
+    const { approvedAudioFor, requiresNativeApprovedAudio, nativeAudioNeedsUpdate } = await import("../app/audio-pack.ts");
+    for (const language of ["es", "vi"]) {
+      assert.equal(requiresNativeApprovedAudio(language), true);
+      assert.equal(nativeAudioNeedsUpdate(language), true);
+      assert.equal(await approvedAudioFor("de", language), null);
+    }
+    assert.equal(nativeAudioNeedsUpdate("en"), false);
+    assert.deepEqual(messages, []);
+  } finally { globalThis.window = previousWindow; globalThis.fetch = previousFetch; }
+});

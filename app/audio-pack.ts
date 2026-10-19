@@ -50,13 +50,19 @@ export function nativeAudioLessonWindow(course: Array<{ id: string; level: strin
 }
 
 export function prepareNativeAudioWindow(course: Array<{ id: string; level: string; unit: number }>, currentId: string, reviewIds: string[] = []) {
-  if (!requiresNativeApprovedAudio("es")) return;
+  if (!requiresNativeApprovedAudio("es") || nativeAudioNeedsUpdate("es")) return;
   const lessonIds = nativeAudioLessonWindow(course, currentId, reviewIds);
   if (lessonIds.length) (window as NativeAudioWindow).webkit?.messageHandlers?.linguathreadAudio?.postMessage({ action: "prepareLessons", lessonIds });
 }
 
 export function requiresNativeApprovedAudio(language: FoundationLanguage) {
-  return typeof window !== "undefined" && Boolean((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__) && (language === "es" || language === "vi");
+  return typeof window !== "undefined" && (language === "es" || language === "vi") && Boolean(
+    (window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ || (window as NativeAudioWindow).webkit?.messageHandlers?.linguathreadAudio,
+  );
+}
+
+export function nativeAudioNeedsUpdate(language: FoundationLanguage) {
+  return requiresNativeApprovedAudio(language) && !(window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__;
 }
 
 function selectClip(pack: ApprovedAudioPack | null, text: string, language: FoundationLanguage) {
@@ -75,6 +81,9 @@ export function normalizeAudioText(text: string) {
 
 export function approvedAudioFor(text: string, language: FoundationLanguage) {
   if (requiresNativeApprovedAudio(language)) {
+    // A pre-catalog wrapper cannot handle refreshLibrary or approved clip URLs.
+    // Do not wait for its nonexistent response or drop into legacy/system voices.
+    if (nativeAudioNeedsUpdate(language)) return Promise.resolve(null);
     // The installed pack is authoritative even when a recording is absent.
     // Never consult the mixed legacy web pack for these native languages.
     const clip = selectClip((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null, text, language);

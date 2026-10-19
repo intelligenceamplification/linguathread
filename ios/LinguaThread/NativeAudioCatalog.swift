@@ -21,6 +21,7 @@ import CryptoKit
     private static let cacheLimit = 24 * 1_024 * 1_024
 #if AUDIO_CATALOG_TESTS
     static var testCacheDirectory: URL?
+    static var testCacheLimit: Int?
 #endif
 
     static var javascript: String {
@@ -153,18 +154,25 @@ import CryptoKit
             ((try? $0.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast) < ((try? $1.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate) ?? .distantPast)
         }
         var bytes = ordered.reduce(0) { $0 + ((try? $1.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0) }
-        for file in ordered where bytes > cacheLimit && !pinnedFiles.contains(file.lastPathComponent) {
+        // Prefer retaining upcoming lessons, but pinning may never bypass the cap.
+        // Active playback owns its Data, so evicting a file cannot interrupt it.
+        let evictionOrder = ordered.filter { !pinnedFiles.contains($0.lastPathComponent) } + ordered.filter { pinnedFiles.contains($0.lastPathComponent) }
+        var limit = cacheLimit
+#if AUDIO_CATALOG_TESTS
+        limit = testCacheLimit ?? cacheLimit
+#endif
+        for file in evictionOrder where bytes > limit {
             bytes -= (try? file.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0
             try? FileManager.default.removeItem(at: file)
         }
     }
 
-    static func prefetchLessons(_ ids: [String]) async {
+    static func prefetchLessons(_ ids: [String], using session: URLSession = .shared) async {
         let urls = Set(ids.prefix(16).flatMap { lessonAudio[$0] ?? [] })
         pinnedFiles = Set(urls.compactMap { URL(string: $0)?.lastPathComponent })
         for url in urls {
             if Task.isCancelled { return }
-            if let parsed = URL(string: url) { _ = try? await audioData(for: parsed) }
+            if let parsed = URL(string: url) { _ = try? await audioData(for: parsed, using: session) }
         }
     }
 }

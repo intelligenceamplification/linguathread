@@ -59,7 +59,7 @@ private struct LinguaThreadWebView: UIViewRepresentable {
             forMainFrameOnly: true
         ))
         configuration.userContentController.addUserScript(WKUserScript(
-            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true; window.__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ = \(personalPractice != nil ? "true" : "false");",
+            source: "window.__LINGUATHREAD_NATIVE_SPEECH__ = true; window.__LINGUATHREAD_NATIVE_CLIP__ = true; window.__LINGUATHREAD_NATIVE_AUDIO_VERSION__ = 2; window.__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ = \(personalPractice != nil ? "true" : "false");",
             injectionTime: .atDocumentStart,
             forMainFrameOnly: true
         ))
@@ -114,6 +114,11 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                   let action = payload["action"] as? String else { return }
             if action == "refreshLibrary" {
                 refreshAudioLibrary()
+                return
+            }
+            if action == "setRate" {
+                guard let requestID = payload["requestID"] as? String, requestID == clipRequestID else { return }
+                clipPlayer?.rate = (payload["rate"] as? Double) == 0.75 ? 0.75 : 1
                 return
             }
             if action == "prepareLessons", let ids = payload["lessonIds"] as? [String] {
