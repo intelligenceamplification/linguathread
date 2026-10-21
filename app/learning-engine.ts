@@ -249,6 +249,7 @@ export function selectNextLesson(
   now = new Date(),
   language: LearningLanguage = "Spanish",
   skippedLessonIds: string[] = [],
+  includeScheduledReview = false,
 ) {
   const unlockedNew = curriculum.find((lesson) =>
     !completedLessonIds.includes(lesson.id) && !skippedLessonIds.includes(lesson.id) && isUnlocked(lesson, model, completedLessonIds, curriculum, language));
@@ -263,7 +264,7 @@ export function selectNextLesson(
   }).sort((a, b) => a.evidence.nextReviewAt.localeCompare(b.evidence.nextReviewAt)
     || a.evidence.lastPracticedAt.localeCompare(b.evidence.lastPracticedAt))[0];
   // One brief edge check per four completed sessions; never restart the lesson cycle.
-  if (due && (!unlockedNew || (model.sessionsCompleted > 0 && model.sessionsCompleted % 4 === 0))) {
+  if (includeScheduledReview && due && (!unlockedNew || (model.sessionsCompleted > 0 && model.sessionsCompleted % 4 === 0))) {
     return { lesson: due.lesson, mode: "review" as const, reviewEdge: due.evidence.edge };
   }
   if (unlockedNew) return { lesson: unlockedNew, mode: "new" as const };
@@ -272,6 +273,66 @@ export function selectNextLesson(
   if (deferred) return { lesson: deferred, mode: "strengthen" as const };
 
   return { lesson: undefined, mode: "complete" as const };
+}
+
+export type ReviewItem = { lesson: LessonDefinition; evidence: SkillEvidence; reason: "Needs strengthening" | "Due for recall" };
+export type ReviewTask = { id: string; prompt: string; answer: string; accepted: string[]; language: string; edge: RetrievalEdge };
+
+/** Review is opt-in, specific to an attempted skill, and separate from progression. */
+export function reviewQueue(course: LessonDefinition[], model: LearnerModel, activeLanguages: string[], now = new Date()): ReviewItem[] {
+  const active = new Set(activeLanguages.map(language => language.toLocaleLowerCase()));
+  const items = course.flatMap(lesson => evidenceForObjective(model, lesson.objectiveId || lesson.id).flatMap(evidence => {
+    const edge = evidence.edge;
+    if (!edge || !["Spanish", "Vietnamese"].includes(evidence.language) || !active.has(evidence.language.toLocaleLowerCase()) || isEvidenceRetired(evidence)) return [];
+    if (edge.retrievalType === "transfer" && !active.has(edge.fromLanguage.toLocaleLowerCase())) return [];
+    const written = edge.toModality === "written" && ["production", "reconstruction", "transfer"].includes(edge.retrievalType);
+    const meaning = edge.toModality === "meaning" && ["written", "audio"].includes(edge.fromModality);
+    if (!written && !meaning) return [];
+    // A fresh check must not immediately queue the same phrase again.
+    if (now.getTime() - Date.parse(evidence.lastPracticedAt) < 15 * 60_000) return [];
+    const weak = Boolean(evidence.lastFailureAt && evidence.lastFailureAt >= (evidence.lastIndependentSuccessAt || ""));
+    if (!weak && !(Date.parse(evidence.nextReviewAt) <= now.getTime())) return [];
+    return [{ lesson, evidence, reason: weak ? "Needs strengthening" as const : "Due for recall" as const }];
+  })).sort((a, b) => Number(b.reason === "Needs strengthening") - Number(a.reason === "Needs strengthening")
+    || a.evidence.score - b.evidence.score || a.evidence.nextReviewAt.localeCompare(b.evidence.nextReviewAt));
+  const seen = new Set<string>();
+  return items.filter(item => { const id = item.lesson.objectiveId || item.lesson.id; if (seen.has(id)) return false; seen.add(id); return true; }).slice(0, 12);
+}
+
+/** Use authored answers only; never invent translations or conflate evidence edges. */
+export function reviewTasks(item: ReviewItem, activeLanguages: string[]): ReviewTask[] {
+  const { lesson, evidence } = item;
+  const edge = evidence.edge!;
+  const language = evidence.language;
+  let focus: ReviewTask;
+  if (edge.retrievalType === "transfer") {
+    const answer = edge.toLanguage === "Vietnamese" ? lesson.sentence.bridge : lesson.sentence.target;
+    focus = { id: "focus", prompt: edge.fromLanguage === "Vietnamese" ? lesson.sentence.bridge : lesson.sentence.target, answer, accepted: [answer], language, edge };
+  } else if (edge.retrievalType === "reconstruction") {
+    focus = { id: "focus", prompt: lesson.transform.prompt, answer: lesson.transform.answer, accepted: lesson.transform.accepted, language, edge };
+  } else if (edge.toModality === "written") {
+    const model = edge.toLanguage === "Vietnamese" ? lesson.bridgeMastery : lesson.mastery;
+    focus = { id: "focus", prompt: model.prompt, answer: model.answer, accepted: model.accepted, language, edge };
+  } else if (edge.fromModality === "audio" || edge.retrievalType === "reverse") {
+    focus = { id: "focus", prompt: edge.fromLanguage === "Vietnamese" ? lesson.sentence.bridge : lesson.sentence.target, answer: lesson.sentence.anchor, accepted: [lesson.sentence.anchor], language, edge };
+  } else {
+    focus = { id: "focus", prompt: lesson.recall.prompt, answer: lesson.recall.rescue.answer, accepted: lesson.recall.accepted, language, edge };
+  }
+  const languages = new Set(activeLanguages);
+  const tasks = [focus];
+  // Practise both active languages through the same authored meaning. Each
+  // response earns evidence for its own direction; a bridge is not just a label.
+  if (languages.has("Spanish") && languages.has("Vietnamese")) {
+    for (const to of ["Spanish", "Vietnamese"]) {
+      const from = to === "Spanish" ? "Vietnamese" : "Spanish";
+      if (edge.retrievalType === "transfer" && edge.toLanguage === to) continue;
+      tasks.push({ id: `stack-${to}`, prompt: from === "Spanish" ? lesson.sentence.target : lesson.sentence.bridge,
+        answer: to === "Spanish" ? lesson.sentence.target : lesson.sentence.bridge,
+        accepted: [to === "Spanish" ? lesson.sentence.target : lesson.sentence.bridge], language: to,
+        edge: { fromLanguage: from, toLanguage: to, fromModality: "written", toModality: "written", retrievalType: "transfer" } });
+    }
+  }
+  return tasks;
 }
 
 export function migrateCompletedLessons(completedLessonIds: string[], curriculum: LessonDefinition[]) {

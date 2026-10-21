@@ -36,7 +36,7 @@ class RefreshGate(unittest.TestCase):
             (app / "NativeAudio/manifest.json").write_bytes(manifest)
             media = app / "NativeAudio" / (digest + ".m4a")
             media.write_bytes(data)
-            info = {"CFBundleIdentifier": "com.desmondwood.linguathread", "CFBundleVersion": "11", "NuevoFlowAudioContractVersion": 2}
+            info = {"CFBundleIdentifier": "com.desmondwood.linguathread", "CFBundleVersion": "12", "NuevoFlowAudioContractVersion": 2}
 
             def check():
                 (app / "Info.plist").write_bytes(plistlib.dumps(info))
@@ -50,7 +50,7 @@ class RefreshGate(unittest.TestCase):
             info["CFBundleVersion"] = "1"
             with self.assertRaisesRegex(ValueError, "old fixed-speed"):
                 check()
-            info["CFBundleVersion"] = "11"
+            info["CFBundleVersion"] = "12"
             info["CFBundleIdentifier"] = "wrong.app"
             with self.assertRaisesRegex(ValueError, "identity"):
                 check()

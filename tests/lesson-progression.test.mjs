@@ -28,7 +28,7 @@ test("a later reading deficiency schedules its own brief check without invalidat
   }
   model = recordEvidence(model, first.id, "Spanish", false, false, new Date("2026-09-26"), reading, undefined, "listening", "four");
   assert.equal(isPhraseRetired(first, model), true);
-  const selected = selectNextLesson(course, { ...model, sessionsCompleted: 4 }, [first.id], new Date("2026-10-30"));
+  const selected = selectNextLesson(course, { ...model, sessionsCompleted: 4 }, [first.id], new Date("2026-10-30"), "Spanish", [], true);
   assert.deepEqual([selected.lesson?.id, selected.mode], [first.id, "review"]);
   assert.deepEqual(selected.reviewEdge, reading);
   const skipped = selectNextLesson(course, emptyLearnerModel(), [], new Date("2026-09-27"), "Spanish", [first.id]);
@@ -48,7 +48,7 @@ test("completion never restarts elementary content without a due evidence check"
   assert.equal(selectNextLesson(course, emptyLearnerModel(), course.map(x => x.id)).mode, "complete");
   let model = recordEvidence(emptyLearnerModel(), first.id, "Spanish", true, false, new Date("2026-09-30"), production, undefined, undefined, "one");
   assert.equal(selectNextLesson(course, model, course.map(x => x.id), new Date("2026-09-30")).mode, "complete");
-  const due = selectNextLesson(course, model, course.map(x => x.id), new Date("2026-10-02"));
+  const due = selectNextLesson(course, model, course.map(x => x.id), new Date("2026-10-02"), "Spanish", [], true);
   assert.equal(due.mode, "review");
   assert.deepEqual(due.reviewEdge, production);
 });

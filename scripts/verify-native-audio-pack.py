@@ -17,6 +17,10 @@ def verify(directory, inventory, registry, defects):
     def key(language, text, voice): return language, " ".join(unicodedata.normalize("NFC", text).split()), voice
     voices = {(row["language"], row["voice"]): row for row in json.loads(registry.read_text())["voices"]}
     policies = [{"language": row["language"], "voice": row["voice"], "referenceSha256": row.get("sourceReference", {}).get("sha256"), "backend": row.get("nativeBackend"), "recipeSha256": hashlib.sha256((ROOT / row["nativeRecipePath"]).read_bytes()).hexdigest() if row.get("nativeRecipePath") else None, "normalTempo": row.get("normalTempo", 1), **({"requiredAuditModel": row["nativeAuditModel"]} if row.get("nativeAuditModel") else {})} for row in voices.values()]
+    if registry.resolve() == (ROOT / "audio/voice-registry.json").resolve():
+        spec = importlib.util.spec_from_file_location("cloud_policy", ROOT / "scripts/audio_pipeline.py")
+        cloud = importlib.util.module_from_spec(spec); spec.loader.exec_module(cloud)
+        policies += cloud.accepted_cloud_policies(ROOT)
     if pack.get("voicePolicies") != policies:
         raise ValueError("Native download policies do not match the approved voices.")
     authored = json.loads(inventory.read_text())

@@ -22,7 +22,7 @@ def verify_source(root=ROOT):
         info = plistlib.load(handle)
     if info.get("NuevoFlowAudioContractVersion") != CONTRACT or project.count("INFOPLIST_FILE = LinguaThread/Info.plist;") != 2:
         raise ValueError("Missing audio release contract in Debug/Release.")
-    if any(int(value) < 11 for value in re.findall(r"CURRENT_PROJECT_VERSION = (\d+);", project)):
+    if any(int(value) < 12 for value in re.findall(r"CURRENT_PROJECT_VERSION = (\d+);", project)):
         raise ValueError("Refusing a build older than the audio rollback repair.")
     spec = importlib.util.spec_from_file_location("audio_release_gate", root / "scripts/verify-native-audio-pack.py")
     gate = importlib.util.module_from_spec(spec)
@@ -40,7 +40,7 @@ def verify_app(app, root=ROOT):
         info = plistlib.load(handle)
     if info.get("CFBundleIdentifier") != "com.desmondwood.linguathread":
         raise ValueError("Unexpected iPhone app identity.")
-    if int(info.get("NuevoFlowAudioContractVersion", 0)) != CONTRACT or int(info.get("CFBundleVersion", 0)) < 11:
+    if int(info.get("NuevoFlowAudioContractVersion", 0)) != CONTRACT or int(info.get("CFBundleVersion", 0)) < 12:
         raise ValueError("Refusing to install the old fixed-speed/system-voice wrapper.")
     seed = root / "ios/LinguaThread/NativeAudio/manifest.json"
     installed = app / "NativeAudio/manifest.json"

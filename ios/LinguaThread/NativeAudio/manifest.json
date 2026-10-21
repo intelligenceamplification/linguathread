@@ -4,7 +4,7 @@
   "model": "approved-families",
   "approvedAt": "2026-10-15T15:01:53Z",
   "inventoryPath": "audio/inventory-native-personal.json",
-  "inventorySha256": "286f041e0d89bbcad991b4c0c3600870213bd1403e8b52c1ea3260ece0f2d889",
+  "inventorySha256": "2242a7c18ee26f6705fa24f1f6ad0faa3c7cb1dab77eae318e3c5dab6248a584",
   "voiceRegistrySha256": "92a48cf1eca921950024b49f9ab6eb1171c07422e849f34c50aa1c0f60e2118a",
   "scope": {
     "kind": "personal-window",
@@ -52,6 +52,30 @@
       "recipeSha256": null,
       "normalTempo": 1,
       "requiredAuditModel": "vinai/PhoWhisper-small@a86b604c346caf7148c37512eafe783a16420adb:transformers-fp32-no-timestamps-v1"
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "referenceSha256": "fe798350f06bb8c3f7c774e148ba6cf926f7c08b40dcf397fd38db1bfcdd39df",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "e940462ff95ed2846f29b5c6db69d44d15579dfb3f301fd6d8afd5d30a23f5ad",
+      "normalTempo": 1
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "referenceSha256": "2a38151f93f875eed9e6d4528b6344a8c871665936e48e1ca09e9d77fa0d62ba",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "b396ba156c7f1143019e687ab0f34041728d87f711a6aca3317e34229c849788",
+      "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "efef28d95c1e9a914febd6578d01bfb1d1ef665e218552e14bb42c348c63a382",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "296cf58f1b08b6f28ec0479c605bd09d463851fb32863b2d7793e8c0131cbfcb",
+      "normalTempo": 1
     }
   ],
   "releaseReady": true,

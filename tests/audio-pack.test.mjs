@@ -1,6 +1,20 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
+test("accepted preferred recordings replace older renditions only for their exact phrase", async () => {
+  const before = globalThis.window;
+  globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: { approvedAt: "2026-10-21", clips: [
+    { id: "old", language: "es", normalizedText: "Ahora puedo.", sha256: "old", reviewedAt: "2026-10-13" },
+    { id: "cloud", language: "es", normalizedText: "Ahora puedo.", sha256: "cloud", reviewedAt: "2026-10-21", preferred: true },
+    { id: "keep", language: "es", normalizedText: "Otra frase.", sha256: "keep", reviewedAt: "2026-10-13" },
+  ] } };
+  try {
+    const { approvedAudioFor } = await import("../app/audio-pack.ts");
+    assert.equal((await approvedAudioFor("Ahora puedo.", "es"))?.id, "cloud");
+    assert.equal((await approvedAudioFor("Otra frase.", "es"))?.id, "keep");
+  } finally { globalThis.window = before; }
+});
+
 test("personal audio window follows course progression and includes due retrieval without changing the course", async () => {
   const { nativeAudioLessonWindow, prepareNativeAudioWindow } = await import("../app/audio-pack.ts");
   const course = [

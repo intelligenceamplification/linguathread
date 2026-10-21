@@ -9,6 +9,7 @@ export type ApprovedAudioClip = {
   sha256: string;
   reviewedAt?: string;
   voice?: "male" | "female";
+  preferred?: boolean;
 };
 
 export type ApprovedAudioPack = {
@@ -71,7 +72,8 @@ function selectClip(pack: ApprovedAudioPack | null, text: string, language: Foun
   const blocked = new Set(pack.blockedAudioSha256 ?? []);
   const matches = pack.clips.filter((clip) => clip.language === language && clip.normalizedText === normalized && !blocked.has(clip.sha256));
   const reviewed = matches.filter((clip) => Boolean(clip.reviewedAt));
-  const candidates = reviewed.length ? reviewed : matches;
+  const preferred = reviewed.filter((clip) => clip.preferred);
+  const candidates = preferred.length ? preferred : reviewed.length ? reviewed : matches;
   return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : null;
 }
 

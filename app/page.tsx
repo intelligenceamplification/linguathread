@@ -30,7 +30,7 @@ import {
 } from "./learning-engine";
 
 type Stage = "listening" | "transcript" | "vocabulary" | "recall" | "sentence" | "grammar" | "transform" | "mastery" | "reverse" | "spoken" | "complete";
-type AppDestination = "lesson" | "path" | "writing" | "xray";
+type AppDestination = "lesson" | "review" | "path" | "writing" | "xray";
 type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
 type ProductionLanguage = "Spanish" | "Vietnamese";
@@ -47,6 +47,7 @@ const languageProfileKey = "linguathread.language-profile.v2";
 
 const jsonHeaders = { "content-type": "application/json" };
 const ScriptCourseView = dynamic(() => import("./writing-system/view"), { loading: () => <p role="status">Opening writing foundations…</p> });
+const ReviewSection = dynamic(() => import("./review-section"), { loading: () => <p role="status">Opening review…</p> });
 
 export default function Home() {
   const [profile, setProfile] = useState<LanguageProfile | null>(null);
@@ -239,7 +240,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         try {
           const savedSession = JSON.parse(window.localStorage.getItem(lessonSessionKey) || "null") as { lessonId?: string; stage?: Stage; audioFirstVersion?: number; progressionVersion?: number; lessonSkipped?: boolean; wordIndex?: number; answer?: string; feedback?: FeedbackState; failedAttempts?: number; productionLanguage?: ProductionLanguage; spanishConfirmed?: boolean; reverseIndex?: number; destination?: AppDestination; scriptLanguage?: FoundationLanguage; sessionId?: string; sessionMode?: "new" | "review" | "strengthen" } | null;
           const restoredIndex = savedSession?.lessonId ? loadedCourse.findIndex((item) => item.id === savedSession.lessonId) : -1;
-          if (savedSession && restoredIndex >= 0 && savedSession.stage && savedSession.stage !== "complete" && !savedSession.lessonSkipped && stages.includes(savedSession.stage) && (!completed.includes(savedSession.lessonId || "") || (savedSession.progressionVersion === 1 && savedSession.sessionMode === "review"))) {
+          if (savedSession && savedSession.sessionMode !== "review" && restoredIndex >= 0 && savedSession.stage && savedSession.stage !== "complete" && !savedSession.lessonSkipped && stages.includes(savedSession.stage) && !completed.includes(savedSession.lessonId || "")) {
             learningSessionIdRef.current = savedSession.sessionId || crypto.randomUUID();
             setLessonIndex(restoredIndex); setStage(savedSession.audioFirstVersion === 1 ? savedSession.stage : "listening"); setWordIndex(Math.max(0, savedSession.wordIndex || 0));
             setLessonSkipped(false);
@@ -248,7 +249,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
             const resumedLanguage = savedSession.productionLanguage === "Vietnamese" ? "Vietnamese" : "Spanish";
             const spanishDone = hasSessionProduction(localModel, restoredLesson.objectiveId || restoredLesson.id, "Spanish", learningSessionIdRef.current);
             const currentProductionDone = hasSessionProduction(localModel, restoredLesson.objectiveId || restoredLesson.id, resumedLanguage, learningSessionIdRef.current);
-            const resumeBridge = savedSession.stage === "mastery" && resumedLanguage === "Spanish" && spanishDone && savedSession.sessionMode !== "review"
+            const resumeBridge = savedSession.stage === "mastery" && resumedLanguage === "Spanish" && spanishDone
               && activeSelections(profile).some(item => item.language === "Vietnamese");
             setSpanishConfirmed(Boolean(savedSession.spanishConfirmed || spanishDone || resumedLanguage === "Vietnamese"));
             setProductionLanguage(resumeBridge ? "Vietnamese" : resumedLanguage);
@@ -258,7 +259,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               setAnswer(savedSession.answer || (resumedLanguage === "Spanish" ? restoredLesson.mastery.answer : restoredLesson.bridgeMastery.answer));
             }
             setReverseIndex(Math.max(0, savedSession.reverseIndex || 0));
-            const restoredDestination = savedSession.destination && ["lesson", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
+            const restoredDestination = savedSession.destination && ["lesson", "review", "path", "writing", "xray"].includes(savedSession.destination) ? savedSession.destination : "lesson";
             setDestination(restoredDestination); setXrayOpen(restoredDestination === "xray");
             if (restoredDestination === "writing") setScriptLanguage(savedSession.scriptLanguage || initialScriptLanguageRef.current || null);
             setSessionMode(savedSession.sessionMode || "new");
@@ -374,9 +375,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     edge?: RetrievalEdge,
     errorType?: "lexical" | "structural" | "script" | "listening" | "production" | "unknown",
     supported = false,
+    sessionId = learningSessionIdRef.current || (learningSessionIdRef.current = crypto.randomUUID()),
+    measuredLatencyMs?: number,
   ) {
     const learningLanguage = language;
-    const latencyMs = Math.max(0, Date.now() - attemptStartedAtRef.current);
+    const latencyMs = measuredLatencyMs ?? Math.max(0, Date.now() - attemptStartedAtRef.current);
     attemptStartedAtRef.current = Date.now();
     setLearnerModel((current) => {
       const next = recordEvidence(
@@ -389,7 +392,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         edge,
         latencyMs,
         errorType,
-        learningSessionIdRef.current || (learningSessionIdRef.current = crypto.randomUUID()),
+        sessionId,
       );
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
@@ -580,6 +583,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         </div>
         <nav className="header-actions" aria-label="Learning destinations">
           <button className="quiet-action today-action" aria-current={destination === "lesson" ? "page" : undefined} onClick={() => openDestination("lesson")}>Today’s Lesson</button>
+          <button className="quiet-action" aria-current={destination === "review" ? "page" : undefined} onClick={() => openDestination("review")}>Review</button>
           <button className="quiet-action" aria-current={destination === "path" ? "page" : undefined} onClick={() => openDestination("path")}>Language Path</button>
           {literacyLanguages[0] && <button className="quiet-action writing-action" aria-current={destination === "writing" ? "page" : undefined} onClick={() => openDestination("writing")}>Writing System</button>}
           <button ref={xrayTriggerRef} className="quiet-action xray-action" aria-current={destination === "xray" ? "page" : undefined} onClick={() => openDestination("xray")}>Expression X-Ray</button>
@@ -594,7 +598,9 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section ref={lessonStageRef} className="lesson-stage" aria-live="polite">
-        {destination === "writing" && scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => openDestination("lesson")} onEvidence={recordScriptEvidence} /></div> : destination === "path" ? (
+        {destination === "review" ? <ReviewSection key={selectedLearningLanguages.join(":")} course={course} model={learnerModel} languages={selectedLearningLanguages}
+          onAttempt={(item, task, correct, supported, session, latency) => recordAttempt("targeted-review", correct, task.language, item.lesson, task.edge, correct ? undefined : task.edge.fromModality === "audio" ? "listening" : task.edge.toModality === "written" ? "production" : "lexical", supported, session, latency)}
+          onContinue={() => { if (stage === "complete") continueLearning(); openDestination("lesson"); }} /> : destination === "writing" && scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => openDestination("lesson")} onEvidence={recordScriptEvidence} /></div> : destination === "path" ? (
           placementUnit ? (() => {
             const unit = courseUnits.find((item) => item.level === placementUnit.level && item.unit === placementUnit.unit)!;
             return <UnitPlacement unit={unit} onClose={() => setPlacementUnit(null)} onFinish={(passed) => completeUnitPlacement(unit.lessons, passed)} onStudy={() => { const index = course.findIndex((item) => item.id === unit.lessons[0].id); resetLesson(index); openDestination("lesson"); }} />;
@@ -792,7 +798,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
               <p>{outsidePractice.prompt}</p>
             </aside>}
             <button className="primary-action" onClick={continueLearning}>Continue learning <span aria-hidden="true">→</span></button>
-            <button className="text-action" onClick={() => openDestination("path")}>Review the stack</button>
+            <button className="text-action" onClick={() => openDestination("review")}>Review weak skills</button>
             <button className="text-action edit-languages-action" onClick={onEditLanguages}>Edit language stack</button>
           </div>
         )}

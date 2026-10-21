@@ -1,0 +1,134 @@
+{
+  "schemaVersion": 1,
+  "purpose": "Offline audition configuration only. No runtime voice approval or automatic publication. Cloud and Gemini voices are distinct despite shared names.",
+  "providers": {
+    "gemini": {
+      "model": "gemini-3.8-flash-tts",
+      "status": "accepted-for-incremental-lesson-packs",
+      "profiles": [
+        {
+          "language": "es",
+          "role": "male",
+          "locale": "es-ES",
+          "voiceId": "Charon",
+          "settings": {
+            "style": "Native Spanish; calm, clear, deliberate teacher delivery at a natural pace."
+          },
+          "approvedAt": "2026-10-21",
+          "referenceAudioSha256": "fe798350f06bb8c3f7c774e148ba6cf926f7c08b40dcf397fd38db1bfcdd39df",
+          "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+        },
+        {
+          "language": "es",
+          "role": "female",
+          "locale": "es-ES",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Spanish; calm, clear, deliberate teacher delivery at a natural pace."
+          },
+          "approvedAt": "2026-10-21",
+          "referenceAudioSha256": "2a38151f93f875eed9e6d4528b6344a8c871665936e48e1ca09e9d77fa0d62ba",
+          "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Vietnamese; calm, clear, deliberate teacher delivery at a natural pace."
+          },
+          "approvedAt": "2026-10-21",
+          "referenceAudioSha256": "efef28d95c1e9a914febd6578d01bfb1d1ef665e218552e14bb42c348c63a382",
+          "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+        }
+      ]
+    },
+    "google-cloud": {
+      "model": "chirp3-hd",
+      "status": "unapproved-candidates",
+      "profiles": [
+        {
+          "language": "es",
+          "role": "male",
+          "locale": "es-ES",
+          "voiceId": "es-ES-Chirp3-HD-Charon",
+          "settings": {
+            "pace": 1.0
+          },
+          "approvedAt": null
+        },
+        {
+          "language": "es",
+          "role": "female",
+          "locale": "es-ES",
+          "voiceId": "es-ES-Chirp3-HD-Kore",
+          "settings": {
+            "pace": 1.0
+          },
+          "approvedAt": null
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "vi-VN-Chirp3-HD-Kore",
+          "settings": {
+            "pace": 1.0
+          },
+          "approvedAt": null
+        }
+      ]
+    }
+  },
+  "benchmark": [
+    {
+      "language": "es",
+      "text": "de"
+    },
+    {
+      "language": "es",
+      "text": "eres"
+    },
+    {
+      "language": "es",
+      "text": "Soy de Indiana."
+    },
+    {
+      "language": "es",
+      "text": "Ahora puedo expresarme con más confianza."
+    },
+    {
+      "language": "es",
+      "text": "La primera vez que viajé solo, aprendí mucho."
+    },
+    {
+      "language": "es",
+      "text": "A la luz de los datos, la estrategia parece eficaz, aunque sería prematuro considerarla definitiva."
+    },
+    {
+      "language": "vi",
+      "text": "Mình / Tôi"
+    },
+    {
+      "language": "vi",
+      "text": "từ / của"
+    },
+    {
+      "language": "vi",
+      "text": "Mình đến từ Indiana. Rất vui được gặp bạn."
+    },
+    {
+      "language": "vi",
+      "text": "Tôi không muốn khiến bạn cảm thấy bị phớt lờ."
+    },
+    {
+      "language": "vi",
+      "text": "Tôi luyện tập mỗi ngày để lời nói trở nên tự nhiên."
+    },
+    {
+      "language": "vi",
+      "text": "Dù quá trình có chậm, tôi vẫn sẽ tiếp tục luyện tập cho đến khi diễn đạt trôi chảy."
+    }
+  ]
+}

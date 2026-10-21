@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "clips": [
+    {
+      "requestKey": "60f97c2a91c45d3d98dd2d9e0b573ab60e846d24a0659dc9a01dbdee625815fd",
+      "sha256": "fe798350f06bb8c3f7c774e148ba6cf926f7c08b40dcf397fd38db1bfcdd39df",
+      "reviewedAt": "2026-10-21",
+      "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+    },
+    {
+      "requestKey": "edf1a96e8a1fd0c83d465f75b5460b567b00084b9b1f500d4021f5e2bc5e7550",
+      "sha256": "2a38151f93f875eed9e6d4528b6344a8c871665936e48e1ca09e9d77fa0d62ba",
+      "reviewedAt": "2026-10-21",
+      "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+    },
+    {
+      "requestKey": "d59d4eab0281ba1a2de17b2e29ed4800adcf421f335f9a2a579fd8e117c474de",
+      "sha256": "efef28d95c1e9a914febd6578d01bfb1d1ef665e218552e14bb42c348c63a382",
+      "reviewedAt": "2026-10-21",
+      "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+    }
+  ]
+}

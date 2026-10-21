@@ -6,7 +6,61 @@ Build 7 retains the approved multilingual design and dark appearance, with the l
 
 This document governs product, curriculum, and platform decisions across the web master, iOS, macOS, Android, and future clients. When implementations differ, resolve them toward these principles rather than allowing each platform to become a separate product.
 
+## Dedicated review and forward progression — 2026-10-21
+
+The user accepted all three Gemini representative recordings (Spanish male Charon,
+Spanish female Kore, Vietnamese female Kore) as better than the installed voices.
+Exact hashes and approval evidence are in `audio/cloud-listening-approvals.json`;
+profile references are in `audio/cloud-audio-candidates.json`. Build 12 adds those
+pinned identities alongside the preserved voice families and prefers the three
+accepted files for their exact texts. This is incremental integration, not a claim
+that all remaining lesson recordings have been regenerated or reviewed. UI updates
+and this policy-only native build synthesize zero audio.
+
+Review is a separate, learner-initiated destination. Finishing a lesson selects the
+next eligible authored lesson; it must not inject an old foundation check at a
+session-count boundary. This supersedes the older every-four-sessions automatic
+review rule below. Old saved automatic-review sessions are not resumed as today's
+lesson. Preserve completion records and all existing evidence during this change.
+
+The Review queue is derived from actual attempted skills in active languages,
+prioritizes unresolved deficiencies, then due recall, and excludes retired edges.
+Do not manufacture a generic fallback when nothing is due. A recent check cannot
+immediately queue the same phrase. For the authored Spanish/Vietnamese stack,
+review must include real responses in both languages, with separate directional
+evidence; neither language may be merely a label beside a Spanish-only task.
+Completing review never marks an unfinished lesson completed or increments the
+forward-session counter. Hints, revealed models, retries and text fallback must
+not become independent listening or production evidence. Continue to preserve
+meaning-bearing diacritics, delayed retrieval and independent session identity.
+
+Cloud audition setup uses a private, ignored, owner-only local credential file.
+The verified Free-tier project's Gemini TTS limits on 2026-10-21 are three requests
+per minute and ten per day. The worker paces real calls at 22-second intervals and
+conservatively caps all reserved requests at ten per Pacific calendar day. A quota
+failure stops generation; no paid fallback or automatic repeated attempts. This
+supports incremental reuse, not an immediate full-library rebuild. Provider
+candidates do not change approved app voices until explicitly accepted.
+
 ## Audio delivery and refresh repair — 2026-10-19
+
+### Scalable preparation contract — 2026-10-20
+
+The bounded workflow is documented in [audio-pipeline.md](audio-pipeline.md).
+`scripts/audio_pipeline.py` reconciles existing files by exact checksum, reports
+per-lesson delivery gaps, and plans small cloud auditions or missing-only two-unit
+windows. It runs no models and does not publish candidates. Ordinary app releases
+and signing refreshes generate zero recordings. Keep approved recordings and their
+actual review metadata; never manufacture utterance approval from voice acceptance.
+Cloud adapters and their candidate configuration are not an approved voice change.
+Default Gemini auditions require a billing-disabled project; metered Cloud TTS is
+blocked without separate explicit acceptance. No silent paid fallback is allowed.
+This supersedes the older local-tools-only preparation requirement below; large
+local rebuilding and a full-language gender matrix are not the current work scope.
+Missing or rejected main-lesson coverage takes priority over optional snippets.
+Coverage checks must include physical files and blocked/obsolete voice policies;
+metadata counts alone cannot establish readiness. No microphone or pronunciation
+assessment feature is authorized by this infrastructure work.
 
 ### Unit 19 availability incident
 
