@@ -89,6 +89,17 @@
       "reportedAt": "2026-10-13",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "language": "vi",
+      "text": "Tôi có nên xin thêm ý kiến không?",
+      "voice": "female",
+      "sha256": "8cb9c615339aeb5b257bb9ba212f5970a23cf2ddbc2b5ed3e2a61427031c9db8",
+      "reason": "User rejected the pronunciation of nên in this exact cloud take; other nine batch clips accepted.",
+      "reportedAt": "2026-10-22",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "requestKey": "139a58572c852697da57d2f92f2e86b9d99b3c90e981e98e0db44f4b581c84f7"
     }
   ]
 }

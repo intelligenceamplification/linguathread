@@ -18,6 +18,60 @@
       "sha256": "efef28d95c1e9a914febd6578d01bfb1d1ef665e218552e14bb42c348c63a382",
       "reviewedAt": "2026-10-21",
       "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+    },
+    {
+      "requestKey": "02adc2a411bd770aa6d4b1f61ea070e262aff39c0a91ee3921f4875b01937c4f",
+      "sha256": "47957760ed23da536a04c2e48fcb63c69635e1c957f6406909736e60ad56f875",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "ef3705d815fbce3e7fcb7459daecfc2a31061610efca475d1818840a2fcede25",
+      "sha256": "467c2f3f5dbb653737a5efe13c66586ad5c79e22426d530e3fd9d5e59585f51e",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "09649f410a4fd7ca01b84d65570163b448c209c471f735aef5aa559d2a37d31e",
+      "sha256": "1805a214295333c8672d543ba9839c9353543d878f75475de3030a9f2b8463d6",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "ea298ab9a1442a3bb33830c178b0a3e6de8267a423b28a4e4176e70d5cd2ca16",
+      "sha256": "db0a2140fe78a5fc40ba8e9b9e7217abc897034251a51db652346eccbe762fe3",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "db45005421c5abeb71f68755900dcd08a7bb21c187c5f29c8279403a18f04b8f",
+      "sha256": "a81f1092405b014584cc19310ba0693b8d8f066bc2128b657d2807465ead851f",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "76feb28007c68b1f03228e0a1ebf8ddf5a92b48b9893d304105ebad1fc890ae1",
+      "sha256": "fd7fa804475ea9cfc03c5f00cea8b84927f260cb28cfaecf83c79a1f26ff4fff",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "d159d9d9f63896dce82883c07ffe411920753506e72df31dc89ba998b9a2d998",
+      "sha256": "4aac93f16a9a3907a64717f36135f52a7213948752bd9fe8bf5f39193f1397aa",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "bec4da8013be6722f35d7561c002289c97ba9a546172cd234326701b5765d44c",
+      "sha256": "13fe8925f1f4c1ce9087a5c9a1380e58703fee6b9a05f3ed66fd1d7147ca1bfe",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "e955e6ff19320eb6f3e4e42d649eb05290491cdfc78e642e47bd04eb92e25506",
+      "sha256": "9ac0485fd41e259bf3e85b651be829f12d7cb4509ebe7229c26fec19bfe09d51",
+      "reviewedAt": "2026-10-22",
+      "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
     }
   ]
 }

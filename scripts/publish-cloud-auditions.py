@@ -46,6 +46,9 @@ def main():
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args()
     seed, policies, clips, copies = prepare()
+    blocked = set(seed.get("blockedAudioSha256", []))
+    blocked.update(row["sha256"] for row in read(ROOT / "audio/known-audio-defects.json")["defects"] if row["status"] == "blocked")
+    approved_at = max(clip["reviewedAt"] for clip in clips)
     if args.apply:
         seed["voicePolicies"] = policies
         save(ROOT / "ios/LinguaThread/NativeAudio/manifest.json", seed)
@@ -53,7 +56,7 @@ def main():
         library = read(library_path)
         by_sha = {r["sha256"]: r for r in library["clips"]}
         by_sha.update({r["sha256"]: r for r in clips})
-        library.update(clips=list(by_sha.values()), approvedAt="2026-10-21")
+        library.update(clips=[row for row in by_sha.values() if row["sha256"] not in blocked], approvedAt=approved_at, blockedAudioSha256=sorted(blocked))
         inventory = read(ROOT / "audio/inventory-es-vi.json")
         for clip in clips:
             shutil.copy2(copies[clip["file"]], ROOT / "public/audio/native/assets" / clip["file"])
@@ -68,7 +71,7 @@ def main():
         web = read(web_path)
         existing = {r["sha256"]: r for r in web["clips"]}
         existing.update({r["sha256"]: dict(r, url="/audio/native/assets/" + r["file"]) for r in clips})
-        web.update(clips=list(existing.values()), approvedAt="2026-10-21", packVersion="approved-cloud-20261021")
+        web.update(clips=[row for row in existing.values() if row["sha256"] not in blocked], approvedAt=approved_at, packVersion="approved-cloud-" + approved_at.replace("-", ""), blockedAudioSha256=sorted(blocked))
         save(web_path, web)
         staged_path = ROOT / "audio/generated/ios-approved-v1/manifest.json"
         staged = read(staged_path)
