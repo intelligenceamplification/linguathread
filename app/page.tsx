@@ -22,7 +22,7 @@ import { planStackSession } from "./stack-coordination";
 import {
   activeSelections, chooseAuthoritativeProfile, LanguageName, LanguageProfile,
   LanguageSelection, markProfileSynchronized, normalizeLanguageProfile,
-  supportedLanguageNames, updateSelections,
+  launchLanguageChoices, updateSelections,
 } from "./language-profile";
 import {
   completeSession, coordinateLanguageProgress, emptyLearnerModel, LearnerModel, RetrievalEdge,
@@ -35,7 +35,7 @@ type FeedbackState = "idle" | "correct" | "gentle";
 type Confidence = "developing" | "comfortable" | "strong";
 type ProductionLanguage = "Spanish" | "Vietnamese";
 
-const commonLanguages = [...supportedLanguageNames];
+const commonLanguages = [...launchLanguageChoices];
 
 const stages: Stage[] = ["listening", "transcript", "vocabulary", "recall", "sentence", "grammar", "transform", "mastery", "reverse", "spoken", "complete"];
 const learnerIdKey = "linguathread.learner-id.v1";

@@ -74,3 +74,11 @@ test("listening remains listening and failed transfer reopens its exact edge", (
   assert.deepEqual(tasks[0].edge, transfer);
   assert.equal(reviewQueue([lesson], model, ["Vietnamese"], now).length, 0);
 });
+
+
+test("standalone Vietnamese review carries its authored translation meaning", () => {
+  const contextual = { ...lesson, bridgeMastery: { ...lesson.bridgeMastery, prompt: "Now express the same meaning.", instruction: "Translate Time together is important into Vietnamese." } };
+  const model = attempt(emptyLearnerModel(), "Vietnamese", false, { ...production, toLanguage: "Vietnamese" });
+  const item = reviewQueue([contextual], model, ["Spanish", "Vietnamese"], now)[0];
+  assert.equal(reviewTasks(item, ["Spanish", "Vietnamese"])[0].prompt, contextual.bridgeMastery.instruction);
+});

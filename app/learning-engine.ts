@@ -312,11 +312,11 @@ export function reviewTasks(item: ReviewItem, activeLanguages: string[]): Review
     focus = { id: "focus", prompt: lesson.transform.prompt, answer: lesson.transform.answer, accepted: lesson.transform.accepted, language, edge };
   } else if (edge.toModality === "written") {
     const model = edge.toLanguage === "Vietnamese" ? lesson.bridgeMastery : lesson.mastery;
-    focus = { id: "focus", prompt: model.prompt, answer: model.answer, accepted: model.accepted, language, edge };
+    focus = { id: "focus", prompt: edge.toLanguage === "Vietnamese" ? (lesson.bridgeMastery.instruction || lesson.sentence.anchor) : model.prompt, answer: model.answer, accepted: model.accepted, language, edge };
   } else if (edge.fromModality === "audio" || edge.retrievalType === "reverse") {
     focus = { id: "focus", prompt: edge.fromLanguage === "Vietnamese" ? lesson.sentence.bridge : lesson.sentence.target, answer: lesson.sentence.anchor, accepted: [lesson.sentence.anchor], language, edge };
   } else {
-    focus = { id: "focus", prompt: lesson.recall.prompt, answer: lesson.recall.rescue.answer, accepted: lesson.recall.accepted, language, edge };
+    focus = { id: "focus", prompt: `${lesson.sentence.target}\n\n${lesson.recall.prompt}`, answer: lesson.recall.rescue.answer, accepted: lesson.recall.accepted, language, edge };
   }
   const languages = new Set(activeLanguages);
   const tasks = [focus];

@@ -168,6 +168,21 @@ class PlanningTests(unittest.TestCase):
         self.assertEqual(first["generationRequests"], 5)
         self.assertFalse({t["key"] for t in first["tasks"]} & {t["key"] for t in second["tasks"]})
 
+    def test_main_sentence_upgrade_is_bounded_and_excludes_legacy_voice_reuse(self):
+        with patch.object(p, "existing", return_value=({}, {}, {}, [])):
+            first = p.make_plan("gemini", lesson="a2-u19-2-describing-improvement-lesson", limit=10, main_sentences=True)
+        self.assertEqual(first["generationRequests"], 10)
+        self.assertTrue(first["scope"].endswith(":main-sentences"))
+        course = p.read(ROOT / "audio/generated/ios-approved-v1/curriculum.json")["lessons"]
+        sentences = {row["sentence"][field] for row in course if row["unit"] in (19, 20) for field in ("target", "bridge")}
+        self.assertTrue(all(task["displayText"] in sentences for task in first["tasks"]))
+        sample = first["tasks"][0]
+        legacy = {"language": sample["language"], "voice": sample["role"], "normalizedText": sample["displayText"], "sha256": "old", "backend": "legacy"}
+        with patch.object(p, "existing", return_value=({}, {}, {}, [legacy])):
+            upgraded = p.make_plan("gemini", lesson="a2-u19-2-describing-improvement-lesson", limit=10, main_sentences=True)
+        self.assertTrue(all(task["reuseSha256"] != "old" for task in upgraded["tasks"]))
+        with self.assertRaises(ValueError): p.make_plan("gemini", benchmark=True, main_sentences=True)
+
     def test_voice_setting_changes_key_but_ui_text_normalization_does_not(self):
         config = p.read(ROOT / "audio/cloud-audio-candidates.json")
         config["benchmark"] = [{"language": "es", "text": "aprendí"}]

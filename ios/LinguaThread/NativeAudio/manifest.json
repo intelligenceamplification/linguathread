@@ -4,7 +4,7 @@
   "model": "approved-families",
   "approvedAt": "2026-10-15T15:01:53Z",
   "inventoryPath": "audio/inventory-native-personal.json",
-  "inventorySha256": "2242a7c18ee26f6705fa24f1f6ad0faa3c7cb1dab77eae318e3c5dab6248a584",
+  "inventorySha256": "ef83dad54d22f34d7942ef87edf6d6a4a1993fba6b815cb3913b51460af7a871",
   "voiceRegistrySha256": "92a48cf1eca921950024b49f9ab6eb1171c07422e849f34c50aa1c0f60e2118a",
   "scope": {
     "kind": "personal-window",

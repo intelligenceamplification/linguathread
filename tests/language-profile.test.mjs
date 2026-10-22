@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  activeSelections, chooseAuthoritativeProfile, normalizeLanguageProfile,
+  activeSelections, chooseAuthoritativeProfile, normalizeLanguageProfile, launchLearningLanguages,
   updateSelections,
 } from "../app/language-profile.ts";
 import { coordinateLanguageProgress, emptyLearnerModel, normalizeLearnerModel } from "../app/learning-engine.ts";
@@ -42,4 +42,11 @@ test("pausing and re-adding a language preserves independent progress", () => {
   assert.equal(model.languages.korean.communicationPosition, "A1-unit-3");
   assert.equal(model.languages.korean.writingPosition, "hangul-batchim");
   assert.equal(model.languages.korean.status, "active");
+});
+
+
+test("launch selection is bounded without deleting historical profiles", () => {
+  assert.deepEqual([...launchLearningLanguages], ["Spanish", "Vietnamese", "French", "Mandarin Chinese", "Korean", "Arabic"]);
+  const historical = normalizeLanguageProfile({ native: "English", second: "Japanese", additional: ["Hindi", "Russian"] });
+  assert.deepEqual(activeSelections(historical).map(item => item.language), ["Japanese", "Hindi", "Russian"]);
 });

@@ -212,11 +212,15 @@ def audit(root=ROOT):
             "coverageIsNotPronunciationReview": True, "lessons": lessons}
 
 
-def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offset=0):
+def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offset=0, main_sentences=False):
     if not 1 <= limit <= 64 or offset < 0:
         raise ValueError("Plans allow 1–64 new requests per batch and a nonnegative offset.")
     config = read(root / "audio/cloud-audio-candidates.json")
     profiles = config["providers"][provider]["profiles"]
+    if main_sentences:
+        if benchmark: raise ValueError("Main-sentence upgrades require an authored lesson window.")
+        profiles = [profile for profile in profiles if profile.get("approvedAt")]
+        if not profiles: raise ValueError("Approve a voice before planning its lesson upgrade.")
     _, _, _, reusable = existing(root)
     reuse = {(r["language"], r["normalizedText"], r["voice"]): r["sha256"] for r in reusable}
     if benchmark:
@@ -231,6 +235,13 @@ def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offse
         start = units.index((anchor["level"], anchor["unit"]))
         allowed = {r["id"] for r in course if (r["level"], r["unit"]) in units[start:start + 2]}
         items = [r for r in read(root / "audio/inventory-es-vi.json")["items"] if any(s.split(":")[0] in allowed for s in r["sources"])]
+    if main_sentences:
+        main_texts = {(language, row["sentence"][field]) for row in course if row["id"] in allowed for language, field in (("es", "target"), ("vi", "bridge"))}
+        items = [item for item in items if (item["language"], item["text"]) in main_texts]
+        # An explicit voice upgrade reuses only the accepted provider's renditions.
+        # Ordinary coverage plans continue to reuse any working checked recording.
+        reusable = [row for row in reusable if row.get("backend") == provider + "/" + config["providers"][provider]["model"]]
+        reuse = {(row["language"], row["normalizedText"], row["voice"]): row["sha256"] for row in reusable}
     tasks = {}
     for item in items:
         available = [r for r in reusable if (r["language"], r["normalizedText"]) == (item["language"], item["text"])]
@@ -242,13 +253,13 @@ def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offse
             key = digest(canonical(identity).encode())
             # A working approved rendition is enough for coverage. Do not generate
             # alternate genders just to fill a matrix during this repair.
-            reusable_sha = reuse.get((item["language"], item["text"], profile["role"])) or (available[0]["sha256"] if available else None)
+            reusable_sha = reuse.get((item["language"], item["text"], profile["role"])) or (available[0]["sha256"] if available and not main_sentences else None)
             tasks[key] = {"key": key, "request": identity, "displayText": item["text"], "language": profile["language"],
                           "role": profile["role"], "reuseSha256": None if benchmark else reusable_sha}
     missing = [r for r in tasks.values() if not r["reuseSha256"]]
     selected = [r for r in tasks.values() if r["reuseSha256"]] + missing[offset:offset + limit]
     body = {"schemaVersion": 1, "kind": "audition" if benchmark else "lesson-candidates", "provider": provider,
-            "scope": "benchmark" if benchmark else lesson, "tasks": selected}
+            "scope": "benchmark" if benchmark else lesson + (":main-sentences" if main_sentences else ""), "tasks": selected}
     return dict(body, id=digest(canonical(body).encode()), generationRequests=sum(not r["reuseSha256"] for r in selected),
                 estimatedCharacters=sum(len(r["request"]["text"]) + len(r["request"]["settings"].get("style", "")) for r in selected if not r["reuseSha256"]),
                 totalMissingRequests=len(missing), nextOffset=offset + limit if offset + limit < len(missing) else None)
@@ -421,6 +432,7 @@ def main():
     plan_cmd.add_argument("--provider", choices=["gemini", "google-cloud"], required=True)
     plan_cmd.add_argument("--benchmark", action="store_true")
     plan_cmd.add_argument("--lesson")
+    plan_cmd.add_argument("--main-sentences", action="store_true", help="Upgrade only whole lesson sentences with accepted cloud voices")
     plan_cmd.add_argument("--limit", type=int, default=18)
     plan_cmd.add_argument("--offset", type=int, default=0)
     worker = commands.add_parser("run")
@@ -460,7 +472,7 @@ def main():
         print(canonical({"recoverableFiles": recovered, "applied": args.apply, "generatedClips": 0}))
     elif args.command == "plan":
         if args.benchmark and args.lesson: raise ValueError("Choose benchmark or lesson, not both.")
-        plan = make_plan(args.provider, args.benchmark, args.lesson, limit=args.limit, offset=args.offset)
+        plan = make_plan(args.provider, args.benchmark, args.lesson, limit=args.limit, offset=args.offset, main_sentences=args.main_sentences)
         destination = WORK / "plans" / (plan["id"] + ".json"); save(destination, plan)
         print(canonical({"plan": str(destination), "requests": plan["generationRequests"], "characters": plan["estimatedCharacters"], "nextOffset": plan["nextOffset"], "generatedClips": 0}))
     elif args.command == "run":

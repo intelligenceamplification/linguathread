@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-21T17:25:30.783Z",
+  "generatedAt": "2026-10-22T17:14:30.613Z",
   "sourceLessonCount": 288,
   "publishedRevision": 8,
   "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
@@ -21,7 +21,7 @@
     "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
     "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
     "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
-    "app/page.tsx": "c09fcd0393442a6633edee4c192fdf43894a3fcd4aaa6b56d76a96c3d538614f",
+    "app/page.tsx": "b8583af4750acedb635fe6efa3af0b36d7a79caa65c1e29a0b370f4454981abb",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
     "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
     "app/writing-system/view.tsx": "8110a9ef4fb8a270fd116a819fe0d9febad1954eb2c853f4abb5220a7ac8f15d",
