@@ -320,3 +320,8 @@ Immediate audio work is **Spanish and Vietnamese only**. Generate at most the av
 
 
 On 2026-10-22, the user rejected the exact Vietnamese cloud take “Tôi có nên xin thêm ý kiến không?” for mispronouncing nên (SHA 8cb9c615339aeb5b257bb9ba212f5970a23cf2ddbc2b5ed3e2a61427031c9db8). This file is blocked, not the entire Vietnamese female profile. The other nine batch recordings were explicitly accepted, including three Spanish takes flagged by ASR. Preserve those raw screening results; human acceptance resolves these exact-file flags without relaxing writing accents or global screening rules. No retry generation occurred; the daily budget remains ten requests used.
+
+
+The user approved the universal Nuevo Flow launch tagline on 2026-10-22: “Build on your native language. Find your rhythm in others.” Replace the former thread-based invitation in the shared web/iOS launch screen. Preserve the approved icon, name, subtitle and learning behavior.
+
+The launch screen omits the redundant top “A language-stacking practice” kicker. Keep “The Language Stacking App” as the single methodology subtitle under the name.

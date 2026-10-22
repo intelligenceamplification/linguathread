@@ -38,7 +38,6 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
         style={threadStyle}
       >
         <div className="intro-copy">
-          <p className="intro-kicker">A language-stacking practice</p>
           <div className="intro-mark">
             <svg className="intro-thread-art" viewBox="0 0 1200 500" role="presentation" aria-hidden="true">
               <defs>
@@ -82,7 +81,7 @@ export function FirstLaunchIntro({ onBegin }: { onBegin: () => void }) {
             <h1 id="intro-title"><BrandMark className="intro-brand-symbol" /><span>Nuevo Flow</span></h1>
           </div>
           <p className="intro-title-line">The Language Stacking App</p>
-          <p className="intro-invitation">Pull a thread. Follow the meaning.</p>
+          <p className="intro-invitation">Build on your native language. Find your rhythm in others.</p>
           <button className="primary-action intro-begin" onClick={onBegin}>Begin <span aria-hidden="true">→</span></button>
         </div>
       </section>
