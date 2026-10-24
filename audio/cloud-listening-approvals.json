@@ -72,6 +72,66 @@
       "sha256": "9ac0485fd41e259bf3e85b651be829f12d7cb4509ebe7229c26fec19bfe09d51",
       "reviewedAt": "2026-10-22",
       "approvalEvidence": "User rejected only the Vietnamese nên take and explicitly confirmed all other voices in the 2026-10-22 batch are great. This exact clip is one of those nine accepted recordings."
+    },
+    {
+      "requestKey": "c18fb5eea7b164c37603d43a3e413657fb54abce5e7e69384c982b49d638d96c",
+      "sha256": "ac06631339a6bce9b2ec6175c3c9ee8d114a7e38f6f7a07fc3b66c1235bc9d7f",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "2ca1de577467308f4a5ebdb292ecc47ddea9650707095e404d296d9597a04a23",
+      "sha256": "bd1b1b633da763e6314e306bbba1ddd4596eb16dc04e96b45e103776d459d571",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "e33672fa3e0e77200f87fbad07a2961fa0837a58abe62a4d65c49231daeaa9db",
+      "sha256": "bb77392c97190c590bc21cc6584e728c6cc33824aa50ce544b6c78ab26f4267a",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "463e813c70890ed626f3d998c4d531105a67a8414675661bd02996b4d47e2369",
+      "sha256": "498543d8f51b0b9e0e048d5e5870565fc5fd222bc7c2094b10592b44d17ecbbb",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "f855baaa879a865d0c2d20605f21f9d7949834f7e6294ead2135624f62f6875c",
+      "sha256": "28a677ae23335fdac43b2360e3c0a47b1f6c478cbf45106f3e4b509d5975e79c",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "dbba610a9a8241b04b8d480ec1e464c3b5ddaeb98a7d39e2e28f21232b600306",
+      "sha256": "d0c550ea9bb84d7e5728149578221487cd48aaa8f0df3a3e18b862b7fb3776f1",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "51ebee012abf2bfbf8679e1c4608a2b84f113c7df434109f805a0523bd5bec66",
+      "sha256": "f7d22faafdace1f992b4e35505b75143b4d68a4530f68d42ef0d39fccafbd5ca",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "fad0bc570c7d5e2f0a5d5afd376a94c97d466480e21fa9b7c7d731b16b673fd0",
+      "sha256": "2315cf47141d9a991a721796b5ff499ccf0fe7f6086aff95b06829ace7cd7d0e",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "5b33f9a079bff3ee015bad527b786b51d1d337735259ddcad2b7bc64890756f6",
+      "sha256": "a3173351c24e7d4e680d261ba9a1bb91f156492f7e9bcbe0f20c96b7f61dc86d",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
+    },
+    {
+      "requestKey": "bdd31f7834934de6401660bc50187518b73e311f79384962db7195a8d8b063eb",
+      "sha256": "0580675f58d16ecda34aead2b9f66fcf8242239c3b6dd47fcba06196bbc419ce",
+      "reviewedAt": "2026-10-24",
+      "approvalEvidence": "User accepted all ten 2026-10-24 batch clips as great, including clip 8. Dialect of clip 8 is not independently established."
     }
   ]
 }

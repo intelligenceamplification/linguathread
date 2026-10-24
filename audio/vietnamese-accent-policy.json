@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-24",
+  "allowedAccents": [
+    "Northern Vietnamese",
+    "Southern Vietnamese"
+  ],
+  "preferredForNextAudition": "Northern Vietnamese",
+  "centralAccentsForFutureGeneration": false,
+  "instructions": "Future Vietnamese generation must explicitly request a Northern or Southern accent and validate the resulting accent before release. The current accepted voice recipe has no verified regional label. Preserve exact recordings already accepted; do not relabel them based on speculation or silently change their pinned recipes. A regional prompt change is a new recipe requiring a checked audition.",
+  "supersedes": "Earlier same-day Northern/Central request; latest user correction is Northern/Southern."
+}

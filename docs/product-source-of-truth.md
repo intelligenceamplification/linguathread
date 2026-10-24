@@ -325,3 +325,8 @@ On 2026-10-22, the user rejected the exact Vietnamese cloud take “Tôi có nê
 The user approved the universal Nuevo Flow launch tagline on 2026-10-22: “Build on your native language. Find your rhythm in others.” Replace the former thread-based invitation in the shared web/iOS launch screen. Preserve the approved icon, name, subtitle and learning behavior.
 
 The launch screen omits the redundant top “A language-stacking practice” kicker. Keep “The Language Stacking App” as the single methodology subtitle under the name.
+
+
+### Vietnamese accent preference — 2026-10-24
+
+The user's final instruction is Northern and Southern Vietnamese only for future generation, superseding their immediately earlier Northern/Central wording. See audio/vietnamese-accent-policy.json. All ten 2026-10-24 batch recordings were accepted, including clip 8 (Nên nghỉ ngơi...). The user suggested dialect variation as a possible explanation; do not assert this clip's regional accent as verified. Preserve accepted recordings and original recipe hashes. The earlier rejected take from 2026-10-22 remains blocked. Future regional delivery prompts require a new checked recipe/audition; never silently relabel the existing general vi-VN recipe as region-validated.
