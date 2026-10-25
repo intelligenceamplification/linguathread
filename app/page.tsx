@@ -658,10 +658,10 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <div className="focus-content vocab-content" key={currentWord.word}>
             <p className="eyebrow">{lesson.title} · {wordIndex + 1} of {lesson.vocabulary.length}</p>
             <h1>{currentWord.word}</h1>
-            <ListenButton text={currentWord.word} language="es" />
+            <ListenButton text={currentWord.word} language="es" contextText={lesson.sentence.target} />
             <div className="language-stack compact-stack">
               <StackLine role="Meaning anchor" language="English" value={currentWord.english} />
-              {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} />}
+              {bridgeEnabled && <StackLine role="Supporting bridge" language="Vietnamese" value={currentWord.vietnamese} contextText={lesson.sentence.bridge} />}
             </div>
             <button className="selected-stack-ribbon" onClick={onEditLanguages}><span>Your selected stack</span>{selectedLearningLanguages.join(" · ")}</button>
             <p className="stack-session-note">{stackSession.explanation}</p>
@@ -1047,9 +1047,9 @@ function ProfileLanguage({ index, role, language, detail }: { index: string; rol
   return <div className="profile-language"><span>{index}</span><div><small>{role}{detail && <em> · {detail}</em>}</small><strong>{language}</strong></div></div>;
 }
 
-function StackLine({ role, language, value }: { role: string; language: string; value: string }) {
+function StackLine({ role, language, value, contextText }: { role: string; language: string; value: string; contextText?: string }) {
   const audioLanguage = speechLanguage(language);
-  return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} compact />}</div></div>;
+  return <div className="stack-line"><span>{role}<small>{language}</small></span><div><strong>{value}</strong>{audioLanguage && <ListenButton text={value} language={audioLanguage} contextText={contextText} compact />}</div></div>;
 }
 
 function Feedback({ kind, title, detail, action, onClick }: { kind: "correct" | "gentle"; title: string; detail?: string; action: string; onClick: () => void }) {

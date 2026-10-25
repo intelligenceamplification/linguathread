@@ -200,3 +200,7 @@ This explicit upgrade mode selects only complete Spanish/Vietnamese sentences fr
 ## Northern Vietnamese approval — 2026-10-25
 
 The user accepted all ten October 25 recordings. The explicitly Northern Vietnamese (Hanoi) recipe now has its own listening reference and native admission policy. Keep the earlier accepted Vietnamese recordings and their exact recipe intact; disable that unlabelled recipe for future whole-sentence generation. New whole-sentence Vietnamese plans use the accepted Northern recipe. Spanish recipes are unchanged. Build 14 carries the additional native policy; routine audio delivery still does not require regenerating files.
+
+## Vocabulary context coverage — 2026-10-25
+
+A whole-sentence pack does not imply isolated vocabulary coverage. Vocabulary controls now receive their explicit parent lesson sentence: use an exact admitted clip when available, otherwise use a human-accepted recording of that sentence, display its complete text under Listen in context, and withhold independent listening credit. Never substitute an arbitrary sentence or a system voice. Current Unit 20 Vietnamese coverage is 14 exact vocabulary models plus 2 contextual models for 16 items. Whole-sentence assessments retain exact matching. No synthesis or native policy change is needed for this repair.

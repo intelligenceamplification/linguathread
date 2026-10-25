@@ -81,16 +81,19 @@ export function normalizeAudioText(text: string) {
   return text.normalize("NFC").trim().replace(/\s+/g, " ");
 }
 
-export function approvedAudioFor(text: string, language: FoundationLanguage) {
+export function approvedAudioFor(text: string, language: FoundationLanguage, contextText?: string) {
+  // Context is explicit lesson material, never an arbitrary substring match.
+  const choose = (pack: ApprovedAudioPack | null) => selectClip(pack, text, language)
+    ?? (contextText ? selectClip(pack ? { ...pack, clips: pack.clips.filter((clip) => Boolean(clip.reviewedAt)) } : null, contextText, language) : null);
   if (requiresNativeApprovedAudio(language)) {
     // A pre-catalog wrapper cannot handle refreshLibrary or approved clip URLs.
     // Do not wait for its nonexistent response or drop into legacy/system voices.
     if (nativeAudioNeedsUpdate(language)) return Promise.resolve(null);
     // The installed pack is authoritative even when a recording is absent.
     // Never consult the mixed legacy web pack for these native languages.
-    const clip = selectClip((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null, text, language);
+    const clip = choose((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null);
     if (clip) return Promise.resolve(clip);
-    return refreshNativeLibrary().then(() => selectClip((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null, text, language));
+    return refreshNativeLibrary().then(() => choose((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null));
   }
   if (!packPromise || Date.now() - packRequestedAt > 30_000) {
     packRequestedAt = Date.now();
@@ -98,5 +101,5 @@ export function approvedAudioFor(text: string, language: FoundationLanguage) {
       .then((response) => response.ok ? response.json() as Promise<ApprovedAudioPack> : null)
       .catch(() => null);
   }
-  return packPromise.then((pack) => selectClip(pack, text, language));
+  return packPromise.then(choose);
 }

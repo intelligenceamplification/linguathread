@@ -145,3 +145,26 @@ test("a stale iPhone wrapper cannot fetch mixed voices or use system Spanish/Vie
     assert.deepEqual(messages, []);
   } finally { globalThis.window = previousWindow; globalThis.fetch = previousFetch; }
 });
+
+test('missing Vietnamese vocabulary uses its approved lesson sentence, preserves exact clips, and respects blocked files', async () => {
+  const previous = globalThis.window;
+  const { readFile } = await import('node:fs/promises');
+  const pack = JSON.parse(await readFile(new URL('../public/audio/native/library.json', import.meta.url), 'utf8'));
+  const context = 'Khu này yên tĩnh hơn nơi tôi từng sống trước đây.';
+  const { approvedAudioFor } = await import('../app/audio-pack.ts');
+  globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: pack };
+  try {
+    for (const fragment of ['Khu này', 'yên tĩnh hơn', 'nơi', 'tôi từng sống trước đây']) {
+      const clip = await approvedAudioFor(fragment, 'vi', context);
+      assert.ok(clip, fragment);
+      assert.ok(clip.normalizedText === fragment || (clip.normalizedText === context && clip.reviewedAt));
+    }
+    const exact = { ...pack.clips.find(c => c.normalizedText === context), text: 'yên tĩnh hơn', normalizedText: 'yên tĩnh hơn', sha256: 'exact-test', id: 'exact-test' };
+    pack.clips.push(exact);
+    assert.equal((await approvedAudioFor('yên tĩnh hơn', 'vi', context)).id, 'exact-test');
+    pack.blockedAudioSha256 = [...(pack.blockedAudioSha256 || []), exact.sha256];
+    assert.equal((await approvedAudioFor('yên tĩnh hơn', 'vi', context)).normalizedText, context);
+    pack.clips = pack.clips.filter(c => c.normalizedText !== context);
+    assert.equal(await approvedAudioFor('yên tĩnh hơn', 'vi', context), null);
+  } finally { globalThis.window = previous; }
+});
