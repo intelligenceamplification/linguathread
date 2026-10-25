@@ -219,7 +219,7 @@ def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offse
     profiles = config["providers"][provider]["profiles"]
     if main_sentences:
         if benchmark: raise ValueError("Main-sentence upgrades require an authored lesson window.")
-        profiles = [profile for profile in profiles if profile.get("approvedAt")]
+        profiles = [profile for profile in profiles if profile.get("approvedAt") and profile.get("generationEnabled", True)]
         if not profiles: raise ValueError("Approve a voice before planning its lesson upgrade.")
     _, _, _, reusable = existing(root)
     reuse = {(r["language"], r["normalizedText"], r["voice"]): r["sha256"] for r in reusable}

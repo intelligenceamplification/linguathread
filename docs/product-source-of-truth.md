@@ -330,3 +330,7 @@ The launch screen omits the redundant top “A language-stacking practice” kic
 ### Vietnamese accent preference — 2026-10-24
 
 The user's final instruction is Northern and Southern Vietnamese only for future generation, superseding their immediately earlier Northern/Central wording. See audio/vietnamese-accent-policy.json. All ten 2026-10-24 batch recordings were accepted, including clip 8 (Nên nghỉ ngơi...). The user suggested dialect variation as a possible explanation; do not assert this clip's regional accent as verified. Preserve accepted recordings and original recipe hashes. The earlier rejected take from 2026-10-22 remains blocked. Future regional delivery prompts require a new checked recipe/audition; never silently relabel the existing general vi-VN recipe as region-validated.
+
+### Accepted cloud pack — 2026-10-25
+
+All ten October 25 recordings were explicitly accepted by the user. The Northern Vietnamese (Hanoi) recipe has its own accepted reference and build 14 admission policy. Preserve previously accepted recordings; future whole-sentence generation uses the accepted Northern recipe. The prepared catalog contains 300 variants. Publication and device installation remain pending. No additional audio was generated for this release.

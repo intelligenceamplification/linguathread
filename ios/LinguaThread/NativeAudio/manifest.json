@@ -76,6 +76,14 @@
       "backend": "gemini/gemini-3.8-flash-tts",
       "recipeSha256": "296cf58f1b08b6f28ec0479c605bd09d463851fb32863b2d7793e8c0131cbfcb",
       "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "b2e47951e9bc9e825b4163abdc6c040251b92c2458c51b03e935189c977d6f33",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "c1bde2346a072187558826ddaab898394d14a63faaa1c5acabe74b316d8da11a",
+      "normalTempo": 1
     }
   ],
   "releaseReady": true,

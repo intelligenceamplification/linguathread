@@ -196,3 +196,7 @@ pronunciation scoring, or learner progress migration is included here.
 `python3 scripts/audio_pipeline.py plan --provider gemini --lesson <authored-lesson-id> --main-sentences --limit 10`
 
 This explicit upgrade mode selects only complete Spanish/Vietnamese sentences from the two-unit lesson window and only accepted cloud voice profiles. Legacy recordings do not satisfy this voice migration; other ordinary coverage plans still reuse working checked recordings. The registry skips exact successful cloud requests on reruns. Offset applies to the stable plan queue; the worker's independent ten-request Pacific-day cap still applies. Generated files remain candidates until their own content/pace checks and acceptance. No other launch languages are generated now.
+
+## Northern Vietnamese approval — 2026-10-25
+
+The user accepted all ten October 25 recordings. The explicitly Northern Vietnamese (Hanoi) recipe now has its own listening reference and native admission policy. Keep the earlier accepted Vietnamese recordings and their exact recipe intact; disable that unlabelled recipe for future whole-sentence generation. New whole-sentence Vietnamese plans use the accepted Northern recipe. Spanish recipes are unchanged. Build 14 carries the additional native policy; routine audio delivery still does not require regenerating files.

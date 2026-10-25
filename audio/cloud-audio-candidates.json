@@ -40,7 +40,22 @@
           },
           "approvedAt": "2026-10-21",
           "referenceAudioSha256": "efef28d95c1e9a914febd6578d01bfb1d1ef665e218552e14bb42c348c63a382",
-          "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21."
+          "approvalEvidence": "User accepted all three representative cloud samples as wonderful and better than the installed app voices on 2026-10-21.",
+          "generationEnabled": false
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Northern Vietnamese (Hanoi accent); calm, clear, deliberate teacher delivery at a natural pace. Use Northern Vietnamese pronunciation consistently."
+          },
+          "approvedAt": "2026-10-25",
+          "referenceAudioSha256": "b2e47951e9bc9e825b4163abdc6c040251b92c2458c51b03e935189c977d6f33",
+          "approvalEvidence": "User approved the October 25 explicitly Northern Vietnamese audition as authentic and beautiful.",
+          "accentRequested": "Northern Vietnamese (Hanoi)",
+          "generationEnabled": true
         }
       ]
     },

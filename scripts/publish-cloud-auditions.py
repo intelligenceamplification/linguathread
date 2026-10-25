@@ -21,8 +21,9 @@ def prepare():
         request = task["request"]
         if digest(canonical(request).encode()) != task["key"] or receipt["file"] != sha + ".wav":
             raise ValueError("Cloud receipt identity changed.")
-        policy = next(p for p in cloud if p["language"] == task["language"] and p["voice"] == task["role"])
         recipe = {k: v for k, v in request.items() if k != "text"}
+        recipe_sha = digest(canonical(recipe).encode())
+        policy = next(p for p in cloud if p["language"] == task["language"] and p["voice"] == task["role"] and p["recipeSha256"] == recipe_sha)
         if digest(canonical(recipe).encode()) != policy["recipeSha256"]:
             raise ValueError("Candidate differs from the accepted voice recipe.")
         source = WORK / receipt["file"]
