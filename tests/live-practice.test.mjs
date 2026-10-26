@@ -136,3 +136,34 @@ test("current lesson sync uses only the personal bridge and never overwrites the
   boundary.syncPracticeContext("Do not share");
   assert.equal(sent.length, 2);
 });
+
+test("native Site writes stay ordered even when a caller stops waiting, and recover after rejection", async () => {
+  const swift = readFileSync(new URL('../ios/LinguaThread/ContentView.swift', import.meta.url), 'utf8');
+  const script = swift.match(/browser\.callAsyncJavaScript\("""([\s\S]*?)""", arguments: \["capsule": capsule\]/)?.[1];
+  assert.ok(script, 'Test the actual native Site write queue');
+  // Share the same page across calls, just as WKWebView does.
+  let release;
+  const writes = [];
+  const window = { saveNuevoFlowPractice: async capsule => {
+    if (capsule === 'old') await new Promise(resolve => { release = resolve; });
+    if (capsule === 'rejected') throw new Error('offline');
+    writes.push(capsule); return true;
+  } };
+  const save = vm.runInNewContext(`(async function(capsule) { ${script} })`, { window });
+  const old = save('old');
+  await new Promise(resolve => setImmediate(resolve));
+  const newer = save('new'); // The old native caller may have timed out already.
+  await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(writes, []);
+  release();
+  assert.equal(await old, true);
+  assert.equal(await newer, true);
+  assert.deepEqual(writes, ['old', 'new']);
+  await assert.rejects(save('rejected'), /offline/);
+  assert.equal(await save('latest'), true);
+  assert.deepEqual(writes, ['old', 'new', 'latest']);
+  delete window.saveNuevoFlowPractice;
+  window.saveLinguaThreadPractice = async capsule => { writes.push(capsule); return true; };
+  assert.equal(await save('legacy'), true);
+  assert.equal(writes.at(-1), 'legacy');
+});

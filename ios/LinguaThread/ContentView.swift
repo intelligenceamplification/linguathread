@@ -447,7 +447,15 @@ private final class PersonalPracticeConnection: NSObject, ObservableObject, WKSc
                 guard !Task.isCancelled else { return }
                 finish(false)
             }
-            browser.callAsyncJavaScript("return await (window.saveNuevoFlowPractice ?? window.saveLinguaThreadPractice)?.(capsule) === true;", arguments: ["capsule": capsule], in: nil, in: .page, completionHandler: { result in
+            // A native acknowledgement timeout does not cancel the Site request.
+            // Keep the writes ordered in the page too, even after that timeout.
+            browser.callAsyncJavaScript("""
+                const previous = window.__nuevoFlowPracticeSaveQueue ?? Promise.resolve();
+                const next = previous.catch(() => {}).then(async () =>
+                    await (window.saveNuevoFlowPractice ?? window.saveLinguaThreadPractice)?.(capsule) === true);
+                window.__nuevoFlowPracticeSaveQueue = next;
+                return await next;
+                """, arguments: ["capsule": capsule], in: nil, in: .page, completionHandler: { result in
                 timeout.cancel()
                 if case .success(let value) = result { finish((value as? Bool) == true) }
                 else { finish(false) }
