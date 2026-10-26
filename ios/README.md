@@ -1,6 +1,6 @@
-# LinguaThread iOS build
+# Nuevo Flow iOS build
 
-This directory contains the signed iOS app shell for the LinguaThread master build. The production web app in the repository and at `https://linguathread.vercel.app/` remains the single source of truth for the launch choreography, typography, responsive layout, lesson engine, learner persistence, and future updates. The iOS target hosts that same runtime in `WKWebView` so the installed app stays in visual and behavioral harmony with the master instead of becoming a parallel rewrite.
+This directory contains the signed iOS app shell for the Nuevo Flow master build. The production web app in the repository and at `https://linguathread.vercel.app/` remains the single source of truth for the launch choreography, typography, responsive layout, lesson engine, learner persistence, and future updates. The iOS target hosts that same runtime in `WKWebView` so the installed app stays in visual and behavioral harmony with the master instead of becoming a parallel rewrite.
 
 The governing product and platform decisions are recorded in [`../docs/product-source-of-truth.md`](../docs/product-source-of-truth.md). Keep the shared runtime authoritative while adding native code only where iOS supplies a material platform benefit, such as reliable caching, network awareness, secure recovery, background synchronization, accessibility, or distribution support.
 

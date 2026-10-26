@@ -24,7 +24,7 @@ The context generator reads the current LessonDefinition, normalized LanguagePro
 
 No learner/session identity, full history, answer text, settings, or new mastery estimate enters the prompt. The feature never records practice as completion or competence. Diacritics are preserved with NFC normalization.
 
-The prompt asks ChatGPT to practice every direction between the anchor and active languages where appropriate, recycle familiar material, wait for retrieval, correct concisely, use idiomatic register, explain X-ray structure on request, and start with a short practice question. It does not claim ChatGPT can update LinguaThread.
+The prompt asks ChatGPT to practice every direction between the anchor and active languages where appropriate, recycle familiar material, wait for retrieval, correct concisely, use idiomatic register, explain X-ray structure on request, and start with a short practice question. It does not claim ChatGPT can update Nuevo Flow.
 
 ## Clipboard and external-opening boundary
 
@@ -32,7 +32,7 @@ app/live-practice-handoff.ts is the replaceable boundary. Context selection, UI 
 
 Web uses navigator.clipboard.writeText inside the initial user action, and awaits success. Open ChatGPT is a normal HTTPS anchor to https://chatgpt.com/, in a new browsing context with noopener/noreferrer. No lesson content enters the URL.
 
-iOS uses a small WKWebView main-frame bridge limited to the existing HTTPS LinguaThread host. Copy writes UIPasteboard.general.string and acknowledges the request ID before the UI reports success. Open requests UIApplication.open with universalLinksOnly for the standard ChatGPT HTTPS destination. If iOS cannot resolve an installed app for that URL, normal system HTTPS opening falls back to the browser. No unofficial custom scheme, prompt-prefill parameter, prompt submission or Voice activation is used. The same HTTPS destination is also recognized in the web view’s navigation delegate.
+iOS uses a small WKWebView main-frame bridge limited to the existing HTTPS Nuevo Flow host. Copy writes UIPasteboard.general.string and acknowledges the request ID before the UI reports success. Open requests UIApplication.open with universalLinksOnly for the standard ChatGPT HTTPS destination. If iOS cannot resolve an installed app for that URL, normal system HTTPS opening falls back to the browser. No unofficial custom scheme, prompt-prefill parameter, prompt submission or Voice activation is used. The same HTTPS destination is also recognized in the web view’s navigation delegate.
 
 ## Mockup adaptation
 
@@ -62,7 +62,7 @@ Rendered local checks used installed Chrome through Playwright (Browser plugin u
 
 The iOS app builds and signs under the existing bundle identity com.desmondwood.linguathread. Installation and physical handoff verification are reported separately in the completion message.
 
-ChatGPT login, paste/send and starting Voice remain learner actions. App opening depends on installed-app association and iOS preferences; the HTTPS browser fallback is the dependable destination. Clipboard support on older web shells may require the retry/manual-copy fallback. ChatGPT account availability and Voice allowances are governed by ChatGPT, and LinguaThread neither promises a new allowance nor meters one.
+ChatGPT login, paste/send and starting Voice remain learner actions. App opening depends on installed-app association and iOS preferences; the HTTPS browser fallback is the dependable destination. Clipboard support on older web shells may require the retry/manual-copy fallback. ChatGPT account availability and Voice allowances are governed by ChatGPT, and Nuevo Flow neither promises a new allowance nor meters one.
 
 Physical-device placement correction: the original entry was restricted to Reverse Recall and disappeared when the learner completed the lesson. The same single component now remains available through spoken self-comparison and completion; no progression or assessment behavior changed.
 
@@ -74,15 +74,15 @@ All-stage validation: production build and 80 automated checks passed. Forty-fou
 
 ## Personal ChatGPT plugin trial (build 10)
 
-The optional `PERSONAL_PRACTICE` Swift compilation condition enables an owner-private ChatGPT Sites connection only in the developer's iPhone test build. Standard builds and ordinary web users retain the existing clipboard handoff. The Site is a separate private connection service, not a replacement LinguaThread app or learner-state store.
+The optional `PERSONAL_PRACTICE` Swift compilation condition enables an owner-private ChatGPT Sites connection only in the developer's iPhone test build. Standard builds and ordinary web users retain the existing clipboard handoff. The Site is a separate private connection service, not a replacement Nuevo Flow app or learner-state store.
 
 The native shell opens the connection's own authenticated page once. Sites manages ChatGPT sign-in and the plugin's OAuth connection. No ChatGPT tokens, passwords, API keys or bypass credentials are embedded in the app. The page's WK bridge accepts only its exact HTTPS main-frame origin. During Start Live Practice, the same existing compact capsule is copied and, when connected, sent through the Site's authenticated same-origin request. Sharing is bounded to four seconds; only an affirmative save acknowledgement changes ready-state instructions. Failure preserves the clipboard handoff. The Personal connection link appears only in the personal native build and allows reconnection.
 
-The private Site exposes one read-only MCP tool, `get_current_linguathread_practice`, returning the authenticated account's latest capsule. It cannot accept another account ID or update LinguaThread. Unauthenticated reads/writes and cross-origin writes are rejected. No history is appended: a new capsule replaces the previous one. Retrieval excludes capsules older than 24 hours; expired database records are removed during the next save. This is temporary practice context, not authoritative learner state or recorded practice evidence.
+The private Site exposes one read-only MCP tool, `get_current_linguathread_practice`, returning the authenticated account's latest capsule. It cannot accept another account ID or update Nuevo Flow. Unauthenticated reads/writes and cross-origin writes are rejected. No history is appended: a new capsule replaces the previous one. Retrieval excludes capsules older than 24 hours; expired database records are removed during the next save. This is temporary practice context, not authoritative learner state or recorded practice evidence.
 
 For the personal build, native Open ChatGPT uses `https://chatgpt.com/#native` with universal-links-only opening first. OpenAI's published https://chatgpt.com/.well-known/apple-app-site-association explicitly describes this route as opening a new in-app conversation. No prompt parameters or automatic Voice activation are used. The existing HTTPS browser fallback remains available if iOS declines the association; that fallback does not satisfy the actual-ChatGPT-app acceptance check.
 
-User setup: install/connect LinguaThread Personal Practice under ChatGPT Plugins → Personal → Created by you, then sign into the private connection on the iPhone with the same ChatGPT account. After preparing a lesson, open the actual ChatGPT app, choose Live Voice, and ask it to use LinguaThread Personal Practice to continue the current lesson. The personal plugin can also read the phone-prepared capsule in ChatGPT through Chrome on Mac; desktop LinguaThread continues its regular clipboard flow.
+User setup: install/connect Nuevo Flow Personal Practice under ChatGPT Plugins → Personal → Created by you, then sign into the private connection on the iPhone with the same ChatGPT account. After preparing a lesson, open the actual ChatGPT app, choose Live Voice, and ask it to use Nuevo Flow Personal Practice to continue the current lesson. The personal plugin can also read the phone-prepared capsule in ChatGPT through Chrome on Mac; desktop Nuevo Flow continues its regular clipboard flow.
 
 The iPhone trial is built using `SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG PERSONAL_PRACTICE'` and `CURRENT_PROJECT_VERSION=10`. Future signing refreshes must preserve that compilation condition to retain the trial. No paid OpenAI API calls, embedded microphone handling or changes to lesson generation, audio, progression, X-Ray or review were added.
 

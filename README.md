@@ -1,10 +1,10 @@
-# LinguaThread
+# Nuevo Flow
 
 **How Language Is Built**
 
-LinguaThread is a calm, text-first multilingual expression engine built around the method of **language stacking**. It uses a native language as the anchor and actively develops every additional language through vocabulary, structural comparison, sentence production, grammar, transformation, and review.
+Nuevo Flow is a calm, text-first multilingual expression engine built around the method of **language stacking**. It uses a native language as the anchor and actively develops every additional language through vocabulary, structural comparison, sentence production, grammar, transformation, and review.
 
-The initial curriculum teaches Spanish with English as the native anchor and Vietnamese as an active supporting language. Its level architecture follows CEFR from A1 through C2 while retaining LinguaThread's own pedagogy.
+The initial curriculum teaches Spanish with English as the native anchor and Vietnamese as an active supporting language. Its level architecture follows CEFR from A1 through C2 while retaining Nuevo Flow's own pedagogy.
 
 Product, curriculum, language-expansion, and cross-platform decisions are governed by [`docs/product-source-of-truth.md`](docs/product-source-of-truth.md). The web master and native clients must remain one coherent product: quiet, text-first, free of attention-extraction mechanics, and delivered through seamless local caching and background synchronization rather than forced course downloads.
 
@@ -15,7 +15,7 @@ npm install
 npm run dev
 ```
 
-LinguaThread works without a database by keeping each installation's language profile and completed lessons in that browser. A fresh installation begins at onboarding.
+Nuevo Flow works without a database by keeping each installation's language profile and completed lessons in that browser. A fresh installation begins at onboarding.
 
 For private hosted progress, create a Neon or Vercel Postgres database, run `drizzle/0002_vercel_postgres.sql`, `drizzle/0003_objective_mastery.sql`, and `drizzle/0004_private_learner_identity.sql` in order, then set `DATABASE_URL` from `.env.example`. The server issues an opaque HttpOnly installation session and ignores client-supplied learner IDs. See `docs/learner-identity.md` for ownership, migration, and cross-device requirements.
 
@@ -28,11 +28,11 @@ The app ships with an offline foundation and loads additional versioned curricul
 3. Run `npm run curriculum:validate`.
 4. Publish the data commit to the `curriculum-data` branch.
 
-LinguaThread validates the manifest and every pack before merging lessons. Invalid or unreachable remote content is never shown; the bundled course remains available.
+Nuevo Flow validates the manifest and every pack before merging lessons. Invalid or unreachable remote content is never shown; the bundled course remains available.
 
 ## Interactive sentence anatomy
 
-Every shipped lesson now enters LinguaThread's Interactive Sentence Model at its sentence stage. The curriculum baseline is derived from the lesson's reviewed target, anchor, bridge, vocabulary, and pattern data; a lesson can supply a richer `anatomy` object when a particular construction deserves deeper editorial treatment. Author those objects in `app/interactive-sentence.ts` (or a future versioned curriculum pack) rather than embedding explanations in presentation components.
+Every shipped lesson now enters Nuevo Flow's Interactive Sentence Model at its sentence stage. The curriculum baseline is derived from the lesson's reviewed target, anchor, bridge, vocabulary, and pattern data; a lesson can supply a richer `anatomy` object when a particular construction deserves deeper editorial treatment. Author those objects in `app/interactive-sentence.ts` (or a future versioned curriculum pack) rather than embedding explanations in presentation components.
 
 The model keeps realizations, sentence units, relationships, cross-language mappings, and related patterns separate. Units may include multiple visible segments or be marked implied or omitted; mappings can be one-to-one, reordered, structural, expanded, or implicit. The interface only shows concepts that have authored data.
 
