@@ -317,6 +317,9 @@ private struct LinguaThreadWebView: UIViewRepresentable {
                           let json = String(data: data, encoding: .utf8) else { return }
                     _ = try? await self.webView?.evaluateJavaScript("window.dispatchEvent(new CustomEvent('linguathread:practice-copy', { detail: \(json) }))")
                 }
+            } else if action == "sync",
+                      let text = payload["text"] as? String, !text.isEmpty, text.utf8.count <= 40_000 {
+                personalPractice?.sync(text)
             } else if action == "connectPersonalPractice" {
                 personalPractice?.reconnect()
             } else if action == "openChatGPT" {
@@ -356,13 +359,17 @@ private struct LinguaThreadWebView: UIViewRepresentable {
 }
 
 // This private connection is instantiated only in the PERSONAL_PRACTICE test build.
-// It operates LinguaThread's own Site; it never inspects or controls ChatGPT.
+// It operates Nuevo Flow's own Site; it never inspects or controls ChatGPT.
 @MainActor
 private final class PersonalPracticeConnection: NSObject, ObservableObject, WKScriptMessageHandler, WKNavigationDelegate, WKUIDelegate {
     @Published var showConnection = false
     @Published var connected = false
     let siteURL = URL(string: "https://linguathread-personal-practice.dez108.chatgpt.site/")!
     private(set) var browser: WKWebView!
+    private var latestContext: String?
+    private var pendingContext: String?
+    private var sharingTask: Task<Bool, Never>?
+    private var lastSavedContext: String?
 
     override init() {
         super.init()
@@ -381,6 +388,7 @@ private final class PersonalPracticeConnection: NSObject, ObservableObject, WKSc
               message.frameInfo.securityOrigin.host == siteURL.host,
               let payload = message.body as? [String: String], payload["action"] == "connected" else { return }
         connected = true
+        if let latestContext { sync(latestContext) }
         UserDefaults.standard.set(true, forKey: "personalPracticeConnected")
     }
 
@@ -400,7 +408,31 @@ private final class PersonalPracticeConnection: NSObject, ObservableObject, WKSc
         showConnection = true
     }
 
+    // Serialize writes so a slow previous lesson cannot overwrite a newer one.
+    func sync(_ capsule: String) {
+        latestContext = capsule
+        pendingContext = capsule
+        guard connected, sharingTask == nil else { return }
+        sharingTask = Task { @MainActor [weak self] in
+            guard let self else { return false }
+            defer { self.sharingTask = nil }
+            while let next = self.pendingContext {
+                self.pendingContext = nil
+                guard await self.saveToSite(next) else { return false }
+                self.lastSavedContext = next
+            }
+            return true
+        }
+    }
+
     func save(_ capsule: String) async -> Bool {
+        sync(capsule)
+        guard let sharingTask else { return false }
+        let saved = await sharingTask.value
+        return saved && lastSavedContext == capsule
+    }
+
+    private func saveToSite(_ capsule: String) async -> Bool {
         guard connected, browser.url?.host == siteURL.host else { return false }
         // Bound the preparation to four seconds; clipboard fallback always remains.
         return await withCheckedContinuation { continuation in
@@ -415,7 +447,7 @@ private final class PersonalPracticeConnection: NSObject, ObservableObject, WKSc
                 guard !Task.isCancelled else { return }
                 finish(false)
             }
-            browser.callAsyncJavaScript("return await window.saveLinguaThreadPractice?.(capsule) === true;", arguments: ["capsule": capsule], in: nil, in: .page, completionHandler: { result in
+            browser.callAsyncJavaScript("return await (window.saveNuevoFlowPractice ?? window.saveLinguaThreadPractice)?.(capsule) === true;", arguments: ["capsule": capsule], in: nil, in: .page, completionHandler: { result in
                 timeout.cancel()
                 if case .success(let value) = result { finish((value as? Bool) == true) }
                 else { finish(false) }

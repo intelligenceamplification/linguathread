@@ -42,3 +42,10 @@ export function hasPersonalPracticeConnection(): boolean {
 export function connectPersonalPractice(): void {
   nativePractice()?.postMessage({ action: "connectPersonalPractice" });
 }
+
+// Personal native builds only. Existing builds ignore this optional action.
+// This does not touch the clipboard, open ChatGPT, or mark practice complete.
+export function syncPracticeContext(text: string): void {
+  if (!hasPersonalPracticeConnection() || !text.trim()) return;
+  try { nativePractice()?.postMessage({ action: "sync", text }); } catch { /* Explicit handoff remains available. */ }
+}

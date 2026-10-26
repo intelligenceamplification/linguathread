@@ -122,3 +122,17 @@ test("personal native sharing must be acknowledged; ordinary handoff remains the
   assert.equal(await web.copyPracticeContext("context"), false);
   assert.equal(web.hasPersonalPracticeConnection(), false);
 });
+
+
+test("current lesson sync uses only the personal bridge and never overwrites the clipboard", () => {
+  const sent = [];
+  const window = { __LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__: true, webkit: { messageHandlers: { linguathreadPractice: { postMessage: value => sent.push(value) } } } };
+  const boundary = moduleAt("../app/live-practice-handoff.ts", {}, { window });
+  boundary.syncPracticeContext("Current lesson: One");
+  boundary.syncPracticeContext("Current lesson: Two");
+  boundary.syncPracticeContext(" ");
+  assert.deepEqual(JSON.parse(JSON.stringify(sent)), [{ action: "sync", text: "Current lesson: One" }, { action: "sync", text: "Current lesson: Two" }]);
+  window.__LINGUATHREAD_PERSONAL_PRACTICE_ENABLED__ = false;
+  boundary.syncPracticeContext("Do not share");
+  assert.equal(sent.length, 2);
+});

@@ -85,3 +85,12 @@ For the personal build, native Open ChatGPT uses `https://chatgpt.com/#native` w
 User setup: install/connect LinguaThread Personal Practice under ChatGPT Plugins → Personal → Created by you, then sign into the private connection on the iPhone with the same ChatGPT account. After preparing a lesson, open the actual ChatGPT app, choose Live Voice, and ask it to use LinguaThread Personal Practice to continue the current lesson. The personal plugin can also read the phone-prepared capsule in ChatGPT through Chrome on Mac; desktop LinguaThread continues its regular clipboard flow.
 
 The iPhone trial is built using `SWIFT_ACTIVE_COMPILATION_CONDITIONS='DEBUG PERSONAL_PRACTICE'` and `CURRENT_PROJECT_VERSION=10`. Future signing refreshes must preserve that compilation condition to retain the trial. No paid OpenAI API calls, embedded microphone handling or changes to lesson generation, audio, progression, X-Ray or review were added.
+
+
+## Nuevo Flow connection upgrade (October 26, 2026)
+
+The private service and advertised tool now use Nuevo Flow branding. Its existing Site origin, account-scoped storage and legacy native save function remain compatible. `get_current_nuevo_flow_practice` advertises the current name; the old tool name remains a callable alias for existing chats. Results include the last sync time and expiry, and never claim a snapshot is a live read of a closed phone.
+
+Personal iOS Debug builds retain `PERSONAL_PRACTICE` in the tracked project configuration; Release builds keep the ordinary clipboard flow. Once authenticated, the open current lesson/activity synchronizes through the existing native bridge without changing the clipboard or learner progress. Native writes are serialized and coalesce queued updates so older requests cannot replace newer ones. Opening the connection flushes the latest pending lesson. Explicit Start Live Practice remains the acknowledged handoff and retry path.
+
+A new signed iOS build is required for the native sync action and durable personal build configuration. This repository can be validated on Linux, but signing/installing and actual iPhone-to-Voice confirmation require the iPhone/Xcode environment. The plugin cannot inspect an offline app or manufacture lesson content when no snapshot is available.

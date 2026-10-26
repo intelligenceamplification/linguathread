@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { chatGPTDestination, copyPracticeContext, openNativeChatGPT, hasPersonalPracticeConnection, connectPersonalPractice } from "./live-practice-handoff";
+import { chatGPTDestination, copyPracticeContext, openNativeChatGPT, hasPersonalPracticeConnection, connectPersonalPractice, syncPracticeContext } from "./live-practice-handoff";
 import "./live-practice.css";
 
 type PracticeState = "lesson" | "preparing" | "ready" | "error";
@@ -19,6 +19,15 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
 
   useEffect(() => () => { generation.current += 1; }, []);
   useEffect(() => { if (state !== "lesson") headingRef.current?.focus(); }, [state]);
+
+  // Sync the actual open lesson/activity; never copy automatically or record progress.
+  const currentContext = prepareContext();
+  useEffect(() => {
+    const sync = () => { if (document.visibilityState === "visible") syncPracticeContext(currentContext); };
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, [currentContext]);
 
   async function prepare() {
     const current = ++generation.current;
@@ -78,7 +87,7 @@ export function LivePractice({ children, prepareContext, languages, focus }: { c
       {state === "preparing" && <p className="practice-status" role="status">Preparing lesson context and copying it…</p>}
       {state === "ready" && <>
         <a className="primary-action" href={chatGPTDestination} target="_blank" rel="noopener noreferrer" onClick={event => { if (openNativeChatGPT()) event.preventDefault(); }}>Open ChatGPT <span aria-hidden="true">↗</span></a>
-        <p className="practice-handoff-note">{personalReady ? "Start Live Voice and ask LinguaThread Personal Practice to continue your current lesson." : "Paste the context, send it, then start Voice."}</p>
+        <p className="practice-handoff-note">{personalReady ? "Start Live Voice and ask Nuevo Flow Personal Practice to continue your current lesson." : "Paste the context, send it, then start Voice."}</p>
         <button className="text-action" disabled={copying} onClick={copyAgain}>{copying ? "Copying…" : "Copy Again"}</button>
         {copyNote && <p className="practice-status" role="status">{copyNote}</p>}
         {hasPersonalPracticeConnection() && <button className="text-action" onClick={connectPersonalPractice}>Personal connection</button>}
