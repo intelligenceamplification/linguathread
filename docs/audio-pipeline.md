@@ -204,3 +204,13 @@ The user accepted all ten October 25 recordings. The explicitly Northern Vietnam
 ## Vocabulary context coverage — 2026-10-25
 
 A whole-sentence pack does not imply isolated vocabulary coverage. Vocabulary controls now receive their explicit parent lesson sentence: use an exact admitted clip when available, otherwise use a human-accepted recording of that sentence, display its complete text under Listen in context, and withhold independent listening credit. Never substitute an arbitrary sentence or a system voice. Current Unit 20 Vietnamese coverage is 14 exact vocabulary models plus 2 contextual models for 16 items. Whole-sentence assessments retain exact matching. No synthesis or native policy change is needed for this repair.
+
+## Reusable listening-batch preparation
+
+After a bounded generation job, run the same helper for any date and saved plan:
+
+```sh
+python3 scripts/prepare-cloud-listening-batch.py --plan audio/generated/cloud-pipeline/plans/daily-20261027.json --date 2026-10-27
+```
+
+It verifies exact receipt/file identities, writes Spanish/Vietnamese metadata for the existing cached transcript/pace auditors, and joins their results into `outputs/audio-batch-YYYYMMDD.html` and its JSON receipt. Rerun after screening finishes. It generates no audio, grants no approval, and publishes nothing. Individual generated recordings still require listening acceptance. Keep the connected phone unchanged until the accepted batch is included in the newest published baseline.

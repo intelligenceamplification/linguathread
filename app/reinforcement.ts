@@ -1,5 +1,5 @@
 import type { LessonDefinition } from "./curriculum";
-import { edgeEvidenceKey, evidenceForObjective, isEvidenceRetired, isPhraseRetired, recordEvidence, type LearnerModel, type RetrievalEdge, type ReviewItem, type SkillEvidence } from "./learning-engine";
+import { edgeEvidenceKey, evidenceForObjective, isEvidenceRetired, recordEvidence, type LearnerModel, type RetrievalEdge, type ReviewItem, type SkillEvidence } from "./learning-engine";
 
 export type Flashcard = {
   id: string; objectiveId: string; lesson: LessonDefinition; language: "Spanish" | "Vietnamese";
@@ -48,7 +48,8 @@ export function flashcardQueue(course: LessonDefinition[], model: LearnerModel, 
   const recent = (card: Flashcard) => Math.max(0, ...evidenceForObjective(model, objective(card.lesson)).map(e => Date.parse(e.lastPracticedAt)));
   return flashcardCatalog(course, model, completedIds, activeLanguages).filter(card => {
     if (card.lesson.id === excludeLessonId) return false;
-    if (card.kind !== "Vocabulary" && isPhraseRetired(card.lesson, model)) return false;
+    const production = model.evidence[edgeEvidenceKey(objective(card.lesson), { fromLanguage: "English", toLanguage: card.language, fromModality: "meaning", toModality: "written", retrievalType: "production" })];
+    if (card.kind !== "Vocabulary" && production && isEvidenceRetired(production)) return false;
     if (card.evidence) return Date.parse(card.evidence.nextReviewAt) <= now.getTime() && now.getTime() - Date.parse(card.evidence.lastPracticedAt) >= cooldown;
     const history = evidenceForObjective(model, objective(card.lesson));
     const last = Math.max(0, ...history.map(e => Date.parse(e.lastPracticedAt)));

@@ -82,6 +82,8 @@ test('retired exact sentence cards stay retired until an independent deficiency'
   let model = engine.emptyLearnerModel();
   for (let i = 0; i < 3; i++) model = engine.recordEvidence(model, 'a', 'Spanish', true, false, new Date(old.getTime() + i * 86400000), production, 1200, undefined, String(i));
   assert.ok(flashcardQueue([lesson], model, ['a'], ['Spanish'], now).every(c => c.kind === 'Vocabulary'));
+  assert.ok(flashcardQueue([lesson], model, ['a'], ['Spanish', 'Vietnamese'], now).some(c => c.language === 'Vietnamese' && c.kind === 'Expression'));
+  assert.ok(!flashcardQueue([lesson], model, ['a'], ['Spanish', 'Vietnamese'], now).some(c => c.language === 'Spanish' && c.kind === 'Expression'));
   model = engine.recordEvidence(model, 'a', 'Spanish', false, false, old, production, 1200, 'production', 'failed');
   // Use a later deficiency, after the three demonstrations.
   model = engine.recordEvidence(model, 'a', 'Spanish', false, false, new Date('2026-10-26T12:00:00Z'), production, 1200, 'production', 'failed-later');
