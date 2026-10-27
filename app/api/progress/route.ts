@@ -40,7 +40,7 @@ export async function POST(request: Request) {
   const body = await request.json() as {
     type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string;
     language?: string; correct?: boolean; accelerated?: boolean;
-    objectiveId?: string; supported?: boolean;
+    objectiveId?: string; supported?: boolean; reviewDelayDays?: number;
     edgeKey?: string; fromLanguage?: string; toLanguage?: string;
     fromModality?: string; toModality?: string; retrievalType?: string; errorType?: string; latencyMs?: number;
   };
@@ -55,11 +55,18 @@ export async function POST(request: Request) {
     // these dimensions into indexed columns without losing the edge identity.
     const evidenceDimension = body.edgeKey || language;
     const evidenceId = `${learner}:${body.objectiveId || body.lessonId}:${evidenceDimension.toLocaleLowerCase()}`;
+    if (body.kind === "flashcard-self-rating") body.supported = true;
     const gain = body.correct ? (body.supported ? 7 : 18) : -8;
     const [existingEvidence] = await db.select({ score: objectiveMastery.score }).from(objectiveMastery)
       .where(eq(objectiveMastery.id, evidenceId)).limit(1);
     const updatedScore = Math.max(0, Math.min(100, (existingEvidence?.score || 0) + gain));
-    const intervalDays = updatedScore >= 92 ? 30 : updatedScore >= 78 ? 14 : updatedScore >= 58 ? 7 : updatedScore >= 35 ? 3 : 1;
+    const selfRated = body.kind === "flashcard-self-rating";
+    // The shared card scheduler sends a bounded delay; ratings remain supported.
+    if (selfRated) body.supported = true;
+    const cardDelay = Number(body.reviewDelayDays);
+    const intervalDays = selfRated && Number.isInteger(cardDelay) && [1, 3, 7, 14, 30].includes(cardDelay)
+      ? (body.correct ? cardDelay : 1)
+      : !body.correct ? 1 : updatedScore >= 92 ? 30 : updatedScore >= 78 ? 14 : updatedScore >= 58 ? 7 : updatedScore >= 35 ? 3 : 1;
     const nextReviewAt = new Date(now.getTime() + intervalDays * 86_400_000);
     await Promise.all([
       db.insert(answerAttempts).values({

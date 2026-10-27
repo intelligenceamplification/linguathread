@@ -259,24 +259,25 @@ test("uses native Apple speech with browser speech as a zero-cost fallback", asy
 test("defines a complete A1-C2 course spine without mislabeling planned content as authored", async () => {
   const [mapSource, page, route, documentation] = await Promise.all([
     read("../app/course-map.ts"),
-    read("../app/page.tsx"),
+    read("../app/language-path.tsx"),
     read("../app/api/curriculum/route.ts"),
     read("../curriculum/README.md"),
   ]);
   for (const level of ["A1", "A2", "B1", "B2", "C1", "C2"]) assert.match(mapSource, new RegExp(`${level}: \\[`));
   assert.match(mapSource, /plannedLessons: 4/);
   assert.match(mapSource, /plannedCourseLessonCount/);
-  assert.match(page, /Your language course/);
-  assert.match(page, />Language Path<\/button>/);
-  assert.match(page, /Authoring in progress/);
-  assert.match(page, /Only reviewed, publishable lessons enter your learning sequence/);
+  assert.match(page, /Your languages. One path./);
+  assert.match(page, /Language Path/);
+  assert.match(page, /in development/);
+  assert.match(page, /Published describes content availability/);
   assert.match(route, /mappedUnitCount/);
   assert.match(route, /plannedLessonCount/);
   assert.match(documentation, /A mapped lesson position is not a published lesson/);
   assert.match(documentation, /Listening, reading, writing, and self-reported spoken practice remain separate evidence/);
   assert.match(mapSource, /outsidePractice/);
-  assert.match(page, /Beyond Nuevo Flow · optional practice/);
-  assert.match(page, /lesson\.lesson % 4 === 0/);
+  const mainPage = await read("../app/page.tsx");
+  assert.match(mainPage, /Beyond Nuevo Flow · optional practice/);
+  assert.match(mainPage, /lesson\.lesson % 4 === 0/);
 });
 
 test("activates Vietnamese production from any non-native profile position", async () => {
@@ -703,11 +704,11 @@ test("keeps the voy X-Ray specific, concise, and transformational", async () => 
 test("uses the approved primary navigation language", async () => {
   const [page, daily, xray] = await Promise.all([read("../app/page.tsx"), read("../app/daily-lesson.tsx"), read("../app/universal-xray.tsx")]);
   assert.match(page, /<UniversalXRay/);
-  assert.match(page, />Today’s Lesson<\/button>/);
+  assert.match(page, />Daily Learning Path<\/button>/);
   assert.match(page, />Language Path<\/button>/);
   assert.match(page, />Writing System<\/button>/);
   assert.match(page, />Expression X-Ray<\/button>/);
-  assert.match(page, />Languages<\/button>/);
+  assert.match(await read("../app/language-path.tsx"), /Customize stack/);
   assert.doesNotMatch(page, />Current Lesson<\/button>/);
   assert.doesNotMatch(page, />Today<\/button>|>Course<\/button>|>X-Ray<\/button>/);
   assert.match(daily, /Skip this part for now/);
@@ -723,12 +724,12 @@ test("uses the approved primary navigation language", async () => {
 
 test("uses one destination state and offers evidence-based unit placement", async () => {
   const page = await read("../app/page.tsx");
-  assert.match(page, /type AppDestination = "lesson" \| "path" \| "writing" \| "xray"/);
+  assert.match(page, /type AppDestination = "lesson" \| "review" \| "path" \| "writing" \| "xray"/);
   assert.match(page, /aria-current=\{destination === "lesson"/);
-  assert.match(page, /Test out of this unit/);
+  assert.match(await read("../app/language-path.tsx"), /Check this unit’s foundations/);
   assert.match(page, /Math\.ceil\(unit\.lessons\.length \* \.75\)/);
   assert.match(page, /The check never reveals a model before you answer/);
-  assert.match(page, /Add or remove languages/);
+  assert.match(await read("../app/language-path.tsx"), /Customize stack/);
   assert.match(page, /onCancel=\{\(\) => setEditingProfile\(false\)\}/);
 });
 

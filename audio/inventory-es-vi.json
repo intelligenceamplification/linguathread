@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T18:09:36.140Z",
+  "generatedAt": "2026-10-27T13:34:31.303Z",
   "sourceLessonCount": 288,
   "publishedRevision": 8,
   "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
@@ -21,7 +21,10 @@
     "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
     "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
     "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
-    "app/page.tsx": "d4d027e714a43a00f82052ca1490c1ebd03df659943cb3c41b968d054c20c3a4",
+    "app/page.tsx": "15bc7947bdaab3c60cdebd45d7bfe7b07084b1c299a41f44f62c7d806d2fb269",
+    "app/review-section.tsx": "0443a25d0f2bc746678fea83d8e037c5cb82c6b4a10ecdd655f0cb80d92bb3b5",
+    "app/flashcard-round.tsx": "cf675fe8ba0d6d759eab73f58498b39ef3133d26e8dcea890ec4c483b4fb6daf",
+    "app/reinforcement.ts": "eefb306f5d22826e6b0ca5550bf8858e8a579ccda60408e2299b319e35bdacd6",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
     "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
     "app/writing-system/view.tsx": "8110a9ef4fb8a270fd116a819fe0d9febad1954eb2c853f4abb5220a7ac8f15d",

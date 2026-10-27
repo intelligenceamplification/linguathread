@@ -58,6 +58,6 @@ for(const language of ['es','vi']){
  }
 }
 const sourceHashes=Object.fromEntries([...sources].map(([path,hash])=>[path.slice(new URL('../',import.meta.url).pathname.length),hash]));
-for(const file of ['app/page.tsx','app/daily-lesson.tsx','app/sentence-anatomy.tsx','app/writing-system/view.tsx','app/multilingual-preview/readiness.tsx','app/multilingual-preview/script-course-view.tsx','app/multilingual-preview/preview-client.tsx'])sourceHashes[file]=createHash('sha256').update(await readFile(new URL('../'+file,import.meta.url))).digest('hex');
+for(const file of ['app/page.tsx','app/review-section.tsx','app/flashcard-round.tsx','app/reinforcement.ts','app/daily-lesson.tsx','app/sentence-anatomy.tsx','app/writing-system/view.tsx','app/multilingual-preview/readiness.tsx','app/multilingual-preview/script-course-view.tsx','app/multilingual-preview/preview-client.tsx'])sourceHashes[file]=createHash('sha256').update(await readFile(new URL('../'+file,import.meta.url))).digest('hex');
 await writeFile(output,JSON.stringify({generatedAt:new Date().toISOString(),sourceLessonCount:curriculum.length,publishedRevision:published.revision,publishedCurriculumSha256:createHash('sha256').update(publishedBytes).digest('hex'),sourceHashes,items:[...items.values()]},null,2)+'\n');
 console.log(JSON.stringify({lessons:curriculum.length,previousTexts:previous.items.length,currentTexts:items.size,addedTexts:items.size-previous.items.length}));

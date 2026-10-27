@@ -152,7 +152,7 @@ export function recordEvidence(
   const legacyQualified = previous?.legacyQualified || (previous?.independentSessionIds === undefined && (previous?.independentReviewDays?.length || 0) >= 3);
   const priorScore = previous?.score || 0;
   const score = Math.max(0, Math.min(100, priorScore + (correct ? (supported ? 7 : 18) : -8)));
-  const intervalDays = score >= 92 ? 30 : score >= 78 ? 14 : score >= 58 ? 7 : score >= 35 ? 3 : 1;
+  const intervalDays = !correct ? 1 : score >= 92 ? 30 : score >= 78 ? 14 : score >= 58 ? 7 : score >= 35 ? 3 : 1;
   const nextReview = new Date(now.getTime() + intervalDays * 86_400_000);
 
   return {
@@ -278,7 +278,7 @@ export function selectNextLesson(
 export type ReviewItem = { lesson: LessonDefinition; evidence: SkillEvidence; reason: "Needs strengthening" | "Due for recall" };
 export type ReviewTask = { id: string; prompt: string; answer: string; accepted: string[]; language: string; edge: RetrievalEdge };
 
-/** Review is opt-in, specific to an attempted skill, and separate from progression. */
+/** Focused review is specific to an attempted skill; daily reinforcement shares these records. */
 export function reviewQueue(course: LessonDefinition[], model: LearnerModel, activeLanguages: string[], now = new Date()): ReviewItem[] {
   const active = new Set(activeLanguages.map(language => language.toLocaleLowerCase()));
   const items = course.flatMap(lesson => evidenceForObjective(model, lesson.objectiveId || lesson.id).flatMap(evidence => {
@@ -290,7 +290,8 @@ export function reviewQueue(course: LessonDefinition[], model: LearnerModel, act
     if (!written && !meaning) return [];
     // A fresh check must not immediately queue the same phrase again.
     if (now.getTime() - Date.parse(evidence.lastPracticedAt) < 15 * 60_000) return [];
-    const weak = Boolean(evidence.lastFailureAt && evidence.lastFailureAt >= (evidence.lastIndependentSuccessAt || ""));
+    const weak = Boolean(evidence.lastFailureAt && evidence.lastFailureAt >= (evidence.lastIndependentSuccessAt || ""))
+      || (evidence.supportedSuccesses > 0 && evidence.independentSuccesses === 0);
     if (!weak && !(Date.parse(evidence.nextReviewAt) <= now.getTime())) return [];
     return [{ lesson, evidence, reason: weak ? "Needs strengthening" as const : "Due for recall" as const }];
   })).sort((a, b) => Number(b.reason === "Needs strengthening") - Number(a.reason === "Needs strengthening")

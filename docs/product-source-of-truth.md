@@ -334,3 +334,13 @@ The user's final instruction is Northern and Southern Vietnamese only for future
 ### Accepted cloud pack — 2026-10-25
 
 All ten October 25 recordings were explicitly accepted by the user. The Northern Vietnamese (Hanoi) recipe has its own accepted reference and build 14 admission policy. Preserve previously accepted recordings; future whole-sentence generation uses the accepted Northern recipe. The prepared catalog contains 300 variants. Publication and device installation remain pending. No additional audio was generated for this release.
+
+## Daily Learning Path, Review and Language Path — 2026-10-27
+
+Daily Learning Path replaces Today’s Lesson. Its existing audio-first lesson cycle stays intact; between completed lessons it offers at most two eligible cards from earlier encountered material, prioritizing difficulty and recent learning. The next authored lesson is selected and saved before reinforcement, and active rounds persist their position and revealed state. Bypassing a card records no success.
+
+Review has three focused modes: Mistakes (incorrect or unresolved supported responses), Flashcards (authored vocabulary, expressions and grammatical patterns), and Listening (due auditory checks with an available reviewed exact model). Both Daily and Review use the same learner evidence and card identities. Expression and pattern cues alternate on one shared schedule. No independent CEFR course is created for a supporting language.
+
+Revealed Know it / Practice again ratings are always supported evidence on card-specific recognition edges. A consecutive familiar rating schedules 1, 3, 7, 14, then 30 days; Practice again resets the sequence to one day. Ratings never satisfy independent writing or listening mastery. Exact retired sentence translations remain retired until a detected production deficiency; vocabulary and other directional skills keep their own records. Normal/Slow playback and exact-then-explicit-context audio admission remain unchanged. No speech recognition or audio synthesis is part of this UI update.
+
+Language Path is the central stack settings entry point, using the existing revision-aware configuration. One Spanish-led A1–C2 communication spine joins published lessons to existing planned positions. Published/development status, practised/deferred/current progress, and retention evidence are distinct. Supporting roles and available independent writing paths are shown without implying complete translated CEFR curricula. Automatic appearance uses the established palette.

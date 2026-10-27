@@ -3,9 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import type { LessonDefinition } from "./curriculum";
 import { normalizeAnswer } from "./answer-assessment";
-import { reviewQueue, reviewTasks, type LearnerModel, type ReviewItem, type ReviewTask } from "./learning-engine";
+import { edgeEvidenceKey, reviewQueue, reviewTasks, type LearnerModel, type ReviewItem, type ReviewTask } from "./learning-engine";
 import { AnswerField } from "./answer-field";
 import ListenButton from "./listen-button";
+import FlashcardRound, { type CardRating } from "./flashcard-round";
+import { flashcardQueue, listeningReviewQueue, planFlashcards, type Flashcard } from "./reinforcement";
+import { approvedAudioFor } from "./audio-pack";
+
+const itemKey = (item: ReviewItem) => item.evidence.edge ? edgeEvidenceKey(item.lesson.id, item.evidence.edge) : item.lesson.id;
 
 type ReviewResult = { task: ReviewTask; outcome: "independent" | "supported" | "revealed" };
 
@@ -22,36 +27,61 @@ function ReviewPlan({ tasks }: { tasks: ReviewTask[] }) {
 
 type Attempt = (item: ReviewItem, task: ReviewTask, correct: boolean, supported: boolean, session: string, latency: number) => void;
 
-export default function ReviewSection({ course, model, languages, onAttempt, onContinue }: {
-  course: LessonDefinition[]; model: LearnerModel; languages: string[]; onAttempt: Attempt; onContinue: () => void;
+export default function ReviewSection({ course, model, languages, completedIds, onAttempt, onCardRating, onContinue }: {
+  course: LessonDefinition[]; model: LearnerModel; languages: string[]; completedIds: string[];
+  onAttempt: Attempt; onCardRating: CardRating; onContinue: () => void;
 }) {
+  const [mode, setMode] = useState<"Mistakes" | "Flashcards" | "Listening">("Mistakes");
   const [current, setCurrent] = useState<ReviewItem | null>(null);
+  const [cards, setCards] = useState<Flashcard[] | null>(null);
   const [session, setSession] = useState("");
   const [finished, setFinished] = useState<string[]>([]);
-  const queue = reviewQueue(course, model, languages).filter(item => !finished.includes(item.lesson.id));
+  const queue = reviewQueue(course, model, languages).filter(item => item.reason === "Needs strengthening" && !finished.includes(itemKey(item)));
+  const dueCards = flashcardQueue(course, model, completedIds, languages);
+  const difficultCards = dueCards.filter(card => card.evidence?.lastFailureAt && card.reason === "Strengthen");
+  if (cards) return <FlashcardRound cards={cards} onRating={onCardRating} onFinish={() => setCards(null)} />;
   if (current) return <ReviewRound key={session} item={current} languages={languages} session={session} onAttempt={onAttempt}
-    onClose={() => setCurrent(null)} onFinish={() => { setFinished(ids => [...ids, current.lesson.id]); setCurrent(null); }} />;
+    onClose={() => setCurrent(null)} onFinish={() => { setFinished(ids => [...ids, itemKey(current)]); setCurrent(null); }} />;
+  const start = (item: ReviewItem) => { setSession(crypto.randomUUID()); setCurrent(item); };
   return <div className="focus-content review-content">
-    <p className="eyebrow">Review</p>
-    <h1>Your review.</h1>
-    <p className="review-introduction">Choose a topic from your recent difficulties or material due for recall. Each short set checks one skill, then connects the same meaning across your active languages.</p>
-    {finished.length > 0 && <p role="status">Review saved. Your next lesson is unchanged.</p>}
-    {queue.length ? <div className="review-groups">{(["Needs strengthening", "Due for recall"] as const).map(reason => {
-      const items = queue.filter(item => item.reason === reason);
-      return items.length > 0 && <section key={reason} aria-label={reason}>
-        <h2>{reason} <span className="review-count">{items.length}</span></h2>
-        <p className="review-note">{reason === "Needs strengthening" ? "Skills where your last independent check needs another try." : "Previously practised material ready for a later memory check."}</p>
-        {items.map(item => <article key={item.lesson.id} className="review-item">
-          <span className="eyebrow">{item.lesson.level} · Unit {item.lesson.unit} · {item.evidence.language}</span>
-          <strong>{item.lesson.title}</strong>
-          <span>Focus: {item.lesson.skill}</span>
-          <ReviewPlan tasks={reviewTasks(item, languages)} />
-          <button className="text-action review-start" onClick={() => { setSession(crypto.randomUUID()); setCurrent(item); }}>Start {reviewTasks(item, languages).length}-step review →</button>
-        </article>)}
-      </section>;
-    })}</div> : <div className="review-empty"><h2>No review due.</h2><p>There are no eligible weak or due skills in your selected languages right now. Continue learning; reviews will appear as your practice history develops.</p></div>}
-    <button className="primary-action" onClick={onContinue}>Continue learning <span aria-hidden="true">→</span></button>
+    <p className="eyebrow">Review</p><h1>Make it stay.</h1>
+    <p className="review-introduction">Focus on a difficulty, recall what you know, or listen for meaning. Your daily path uses the same learning records and review schedule.</p>
+    <nav className="review-modes" aria-label="Review experiences">{(["Mistakes", "Flashcards", "Listening"] as const).map(label => <button key={label} className="text-action" aria-current={mode === label ? "page" : undefined} onClick={() => setMode(label)}>{label}</button>)}</nav>
+    {finished.length > 0 && <p role="status" className="review-note">Review saved. Your place in the daily path is unchanged.</p>}
+    {mode === "Mistakes" && <section aria-label="Mistakes"><h2 className="review-heading">Give difficult ideas another try.</h2><p className="review-note">Incorrect and supported responses that still need an independent check. A recent attempt gets a short rest before returning.</p>
+      {difficultCards.length > 0 && <button className="quiet-action" onClick={() => setCards(planFlashcards(difficultCards, 6))}>Revisit difficult flashcards →</button>}
+      {queue.length ? <div className="review-groups">{queue.map(item => <ReviewTopic key={item.lesson.id} item={item} languages={languages} onStart={() => start(item)} />)}</div> : <div className="review-empty"><h2>No mistakes waiting.</h2><p>When a response needs strengthening, it will appear here after a short pause. Flashcards and listening offer other ways to practise.</p></div>}
+    </section>}
+    {mode === "Flashcards" && <section aria-label="Flashcards"><h2 className="review-heading">Recall, reveal, reconnect.</h2><p className="review-note">Vocabulary, expressions, and patterns from material you have already encountered. Ratings adjust spacing without awarding independent mastery.</p>
+      {dueCards.length ? <><p>{dueCards.length} cards ready · a short set of up to 6</p><button className="primary-action" onClick={() => setCards(planFlashcards(dueCards, 6))}>Start flashcards →</button><div className="review-groups">{Array.from(new Set(dueCards.map(c => c.lesson.title))).slice(0, 4).map(title => <p key={title} className="review-note">{title}</p>)}</div></> : <div className="review-empty"><h2>No cards due.</h2><p>Continue your daily path. Encountered material becomes available for recall after a short pause, and rated cards return when due.</p></div>}
+    </section>}
+    {mode === "Listening" && <ListeningTopics course={course} model={model} languages={languages} completedIds={completedIds} finished={finished} onStart={start} />}
+    <button className="text-action review-return" onClick={onContinue}>Continue Daily Learning Path →</button>
   </div>;
+}
+
+function ReviewTopic({ item, languages, onStart }: { item: ReviewItem; languages: string[]; onStart: () => void }) {
+  const tasks = reviewTasks(item, languages);
+  return <article className="review-item"><span className="eyebrow">{item.lesson.level} · Unit {item.lesson.unit} · {item.evidence.language}</span><strong>{item.lesson.title}</strong><span>Focus: {item.lesson.skill}</span><ReviewPlan tasks={tasks} /><button className="text-action review-start" onClick={onStart}>Start {tasks.length}-step review →</button></article>;
+}
+
+function ListeningTopics({ course, model, languages, completedIds, finished, onStart }: {
+  course: LessonDefinition[]; model: LearnerModel; languages: string[]; completedIds: string[]; finished: string[]; onStart: (item: ReviewItem) => void;
+}) {
+  const [available, setAvailable] = useState<ReviewItem[] | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const candidates = listeningReviewQueue(course, model, completedIds, languages).filter(item => !finished.includes(itemKey(item)));
+    Promise.all(candidates.map(async item => {
+      const vietnamese = item.evidence.language === "Vietnamese";
+      const clip = await approvedAudioFor(vietnamese ? item.lesson.sentence.bridge : item.lesson.sentence.target, vietnamese ? "vi" : "es");
+      return clip?.reviewedAt ? item : null;
+    })).then(items => { if (!cancelled) setAvailable(items.filter((item): item is ReviewItem => item !== null)); });
+    return () => { cancelled = true; };
+  }, [course, model, completedIds, languages, finished]);
+  return <section aria-label="Listening"><h2 className="review-heading">Recognize meaning by ear.</h2><p className="review-note">Listen before seeing the words. Each language has its own listening record; reading and flashcard ratings do not count as listening success.</p>
+    {available === null ? <p role="status">Checking reviewed listening models…</p> : available.length ? <div className="review-groups">{available.map(item => <ReviewTopic key={`${item.lesson.id}:${item.evidence.language}`} item={item} languages={languages} onStart={() => onStart(item)} />)}</div> : <div className="review-empty"><h2>No listening review ready.</h2><p>Only due material with an available, reviewed recording appears here. Newly practised listening gets time to settle before returning.</p></div>}
+  </section>;
 }
 
 function ReviewRound({ item, languages, session, onAttempt, onClose, onFinish }: {
