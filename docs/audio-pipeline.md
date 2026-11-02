@@ -220,3 +220,28 @@ It verifies exact receipt/file identities, writes Spanish/Vietnamese metadata fo
 The user requests equal Northern and Southern Vietnamese representation in future additions, with male and female voices in each accent. Target a 1:1 Northern/Southern ratio and balanced male/female allocation across recordings over each complete four-slot cycle. Carry any imbalance across odd-sized batches. This replaces the Northern-only generation preference; Central accents are outside the requested scope.
 
 The approved Northern female profile remains valid. Southern female, Northern male, and Southern male profiles require representative listening approval and pinned native admission policies before production use. Do not relabel an existing voice, claim accent validation from automated transcription, or silently enable unapproved profiles. Today's ten approved November 2 recordings remain accepted unchanged. Fill missing lesson coverage first; this balance does not require four renditions of every sentence or regeneration of working audio. Generation remains bounded by the free ten-request daily cap until the user authorizes paid usage.
+
+## Sampling and review policy — 2026-11-02
+
+The user approved a scalable listening-review method for future audio batches, superseding earlier instructions that require the user to listen to every exact generated recording. The publisher supports the separately recorded batch-review ledger. The ledger is initially empty: previous exact-file approvals remain authoritative. Each released member must match its receipt and screening identity; failed or uncertain members must be explicitly held. Unsampled members retain automated evidence and batch review metadata without an individual listening date.
+
+1. The user first listens to and approves each voice and accent using representative short phrases, difficult sounds, and longer sentences. A new or changed provider, model, voice, accent or material recipe requires a new audition. Existing explicit file approvals and defect blocks remain valid.
+2. Screen every generated file for text mismatch, extra or missing speech, silence, clipping and unusual pace, to the extent supported by the available checks. Mark any unimplemented or inconclusive check as unverified. Automatic screening cannot certify pronunciation, accent, authenticity or exact spoken content.
+3. The user listens to a representative sample from every batch and to flagged clips. Prioritize short words and known problem sounds, including Spanish “de” and “eres.” Hold failed or inconclusive clips pending review or a replacement; a batch sample never overrides a file-specific rejection.
+4. Record the voice/recipe, exact file identities, screening results, sampled clips, review outcome and any held or replaced clips. When the user accepts the sampled batch and the implemented screening gates pass, unsampled passing clips may be designated batch-reviewed rather than individually listened-to. Keep those labels distinct and retain a way to report and replace a defective clip.
+5. Investigate similar clips when a defect is found; quarantine the affected files as appropriate. Preserve verified working recordings and do not regenerate them for routine app updates. Deliver only after the applicable review and release checks; the connected iPhone is refreshed after the approved batch is live.
+
+This review policy does not authorize paid generation or imply full-course coverage. Any actual publication mechanism must enforce these distinctions and remain compatible with previously accepted recordings.
+
+## Offline launch planning tools
+
+Export current three-language audio candidates without changing the ES/VI release inventory:
+
+```
+node scripts/export-native-audio-inventory.mjs audio/generated/ios-approved-v1/curriculum.json en,es,vi outputs/launch-audio-inventory.json
+python3 scripts/prepare-launch-audio.py --planning-allowance 40
+```
+
+The resulting `outputs/launch-audio-readiness.json` lists missing exact texts, voice-audition prerequisites, and an illustrative output-price estimate. The allowance is not a spend authorization or a billing cap. This command performs no generation, API calls, publication, or billing changes. English candidates include anchor and foundation material, not a complete target-language course. Existing English voices remain unapproved for the planned new pack.
+
+For sampled releases, `audio/cloud-batch-reviews.json` contains batch identity, `reviewedAt`, `approvalEvidence`, exact `clips` (`requestKey`, `sha256`), `sampledRequestKeys`, `heldRequestKeys`, and `screeningFiles` (`path`, `sha256`). Minimum sampling is three clips or 10 percent of batch members (whichever is greater, bounded by batch size), plus every non-held phrase of two words or fewer and each represented voice/recipe. These are operational sampling defaults, not a statistical guarantee. Every non-held member requires an exact matching version-2 automated pass with no flags. `python3 scripts/publish-cloud-auditions.py` validates without mutation; `--apply` stages accepted files but does not deploy. No batch has yet been approved through this new mechanism.

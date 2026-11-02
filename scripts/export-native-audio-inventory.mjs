@@ -25,11 +25,13 @@ const {foundationContent}=await load(new URL('../app/multilingual-foundation.ts'
 const {createDailyLessonPlan}=await load(new URL('../app/lesson-tools.ts',import.meta.url));
 const {scriptAudioText}=await load(new URL('../app/script-course-engine.ts',import.meta.url));
 const {instructionalAudioText}=await load(new URL('../app/instructional-audio-models.ts',import.meta.url));
-const output=new URL('../audio/inventory-es-vi.json',import.meta.url);
-const previous=JSON.parse(await readFile(output,'utf8'));const items=new Map();
+const languages=process.argv[3]?.split(',') || ['es','vi'];
+if(languages.some(language=>!['en','es','vi','ko'].includes(language)))throw new Error('Unsupported inventory language');
+const output=process.argv[4] ? new URL(process.argv[4], `file://${process.cwd()}/`) : new URL('../audio/inventory-es-vi.json',import.meta.url);
+const previous=JSON.parse(await readFile(output,'utf8').catch(()=>'{"items":[]}'));const items=new Map();
 const previousIDs=new Map(previous.items.map(item=>[`${item.language}\0${item.text}`,item.id]));
 function add(language,text,source){
- if(!['es','vi'].includes(language)||typeof text!=='string'||!text.trim())return;
+ if(!languages.includes(language)||typeof text!=='string'||!text.trim())return;
  text=instructionalAudioText(text,language);
  text=text.normalize('NFC').trim().replace(/\s+/g,' ');const key=`${language}\0${text}`;
  const item=items.get(key)||{id:previousIDs.get(key)||`${language}-${createHash('sha256').update(key).digest('hex').slice(0,16)}`,language,text,sources:[]};
@@ -37,15 +39,15 @@ function add(language,text,source){
 }
 // Enumerate actual Listen controls, including their dynamically generated prompts.
 // Do not synthesize every possible X-Ray word grouping when it has no audio control.
-const code={Spanish:'es',Vietnamese:'vi'};
+const code={Spanish:'es',Vietnamese:'vi',English:'en',Korean:'ko'};
 for(const lesson of curriculum){
- add('es',lesson.sentence.target,`${lesson.id}:sentence`);add('vi',lesson.sentence.bridge,`${lesson.id}:sentence`);
+ add('en',lesson.sentence.anchor,`${lesson.id}:sentence`);add('es',lesson.sentence.target,`${lesson.id}:sentence`);add('vi',lesson.sentence.bridge,`${lesson.id}:sentence`);
  add('es',lesson.transform.answer,`${lesson.id}:transform`);add('es',lesson.mastery.answer,`${lesson.id}:mastery`);add('vi',lesson.bridgeMastery.answer,`${lesson.id}:bridge-mastery`);
  for(const word of lesson.vocabulary){add('es',word.word,`${lesson.id}:vocabulary`);add('vi',word.vietnamese,`${lesson.id}:vocabulary`);}
  for(const realization of sentenceAnatomyForLesson(lesson).realizations)add(code[realization.language],realization.sentence,`${lesson.id}:anatomy`);
  for(let day=0;day<7;day++)for(const exercise of createDailyLessonPlan(curriculum,lesson,[],[],day).exercises){add(code[exercise.from],exercise.prompt,`${lesson.id}:daily-phrase`);add(code[exercise.to],exercise.answer,`${lesson.id}:daily-phrase`);}
 }
-for(const language of ['es','vi']){
+for(const language of languages){
  for(const [objective,content] of Object.entries(foundationContent[language]))add(language,content.text,`foundation:${objective}`);
  for(const unit of scriptCourses[language].lessons){add(language,unit.example,`${unit.id}:example`);add(language,scriptAudioText(unit),`${unit.id}:answer`);add(language,scriptAudioText(unit),`${unit.id}:choice-audio`);}
  for(const unit of writingCourses[language].units){

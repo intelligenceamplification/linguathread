@@ -38,6 +38,7 @@ function inventoryEvidence(item: InventoryItem, progress: Progress, now: number)
 }
 
 export default function WritingSystemView({ language, onClose, onEvidence, languages, onLanguage, currentLesson }: Props) {
+ const languageOptions = languages?.some(item => item.id === language) ? languages : [...(languages || []), { id: language, name: languageInfo(language).name }];
  const [index, setIndex] = useState<Index>();
  const [progress, setProgress] = useState<Progress>(emptyProgress);
  const [unit, setUnit] = useState<Unit>();
@@ -168,7 +169,7 @@ export default function WritingSystemView({ language, onClose, onEvidence, langu
  const dueUnits = visibleUnits.filter(u => u.skills.some(s => progress.edges[s.key] && progress.edges[s.key].due <= clock));
 
  return <section className="writing-system" aria-busy={loading}>
-  <div className="writing-toolbar"><button className="text-action" onClick={unit ? leaveUnit : onClose}>{unit ? "Back to writing path" : "Return to lesson"}</button>{languages && languages.length > 1 && <label>Language<select value={language} onChange={e => onLanguage?.(e.target.value as FoundationLanguage)}>{languages.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}</select></label>}</div>
+  <div className="writing-toolbar"><button className="text-action" onClick={unit ? leaveUnit : onClose}>{unit ? "Back to writing path" : "Return to lesson"}</button>{languageOptions.length > 1 && <label>Language<select value={language} onChange={e => onLanguage?.(e.target.value as FoundationLanguage)}>{languageOptions.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}</select></label>}</div>
   {error && <p role="alert">{error}</p>}
   {offline && <p role="status">Offline · Previously downloaded units remain available.</p>}
   {!index && <p role="status">{offline ? "Connect once to download your writing path." : "Opening your writing path…"}</p>}

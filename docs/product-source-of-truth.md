@@ -348,3 +348,27 @@ Language Path is the central stack settings entry point, using the existing revi
 ### Combined October 27 baseline
 
 All ten October 27 Gemini recordings were accepted explicitly after listening: three Spanish variants and seven Vietnamese female recordings targeting the approved Northern recipe. The catalog now contains 310 variants; exact-file acceptance is recorded in the listening ledger. The combined baseline retains the installed Build 16 wrapper, the updated shared daily/review/path runtime and the 310-clip downloadable catalog. No native voice-policy change, model download, or extra generation is needed to receive this release. Refresh the phone only after this accepted batch is live.
+
+### Focused launch scope and future connection — 2026-11-02
+
+The intended initial language scope is English, Spanish, Vietnamese, and Korean. English must support learners as a target language as well as serve as a meaning anchor. Mandarin and other popular languages, including Arabic, are candidates for later releases. This decision supersedes the October 22 language list; it does not claim any course or audio coverage is launch-ready. Existing language content and learner progress should be preserved when the eventual scope is implemented.
+
+Prioritize the approved-voice audio build, starting with Spanish and Vietnamese; establish reviewed English and Korean content and voices before advertising full support. Reuse accepted recordings, track missing coverage, and validate playback and learner isolation before launch. Paid generation requires the user's authorization.
+
+A future Connect & Converse section may help learners meet and practice with real people. It is an idea for a later version, outside the initial release; its experience, safety, privacy, moderation, technical architecture, and costs need their own design and review before implementation. This is distinct from the existing personal practice connection.
+
+### Scalable audio listening review — 2026-11-02
+
+The user approved batch sampling instead of personally hearing every generated recording. They approve representative examples for each voice and accent; every file receives the available automated checks; the user listens to a sample of each batch and flagged or high-risk clips. Hold failed or uncertain clips and investigate related material when a defect appears. Track individually heard approvals separately from batch-reviewed unsampled clips; automated checks do not certify pronunciation or accents. Existing individual approvals and blocks remain in force. See `docs/audio-pipeline.md` for the policy and the requirement to implement and test enforcement before using batch-reviewed publication.
+
+### Three-language initial launch — 2026-11-02
+
+The user has narrowed the initial launch to English, Spanish, and Vietnamese, superseding the earlier four-language scope. English must support learners as a target language as well as serve as a meaning anchor. Korean is the first candidate for a later expansion, followed by Mandarin and other languages to be chosen later. Preserve existing content and learner progress; the launch scope is a product decision, not a claim of completed courses or permission to delete content. Continue the ten-request free daily workflow until the user explicitly authorizes paid generation. Retain the approved sampling and voice policies and plan future paid audio as a bounded, separately authorized expense.
+
+### English varieties and listening awareness — 2026-11-02
+
+The user wants English learning to include respectful examples of West Coast California, New York City, Southern American, British, and Australian English for learners and native speakers. See `docs/english-varieties.md` for the proposed lesson flow and audition approach. These are example varieties, not exhaustive regional coverage; authentic voices and specific labels require listening review. Their inclusion does not create new launch languages, authorize paid audio, or claim the examples are already available.
+
+### Pre-build implementation — 2026-11-02
+
+The shared app now offers English, Spanish and Vietnamese for new stack choices while preserving historical profile names. Language Path provides an English writing-foundations entry for native speakers and learners and labels regional English voices as planned. The publisher supports an empty-by-default separate batch-review ledger; unsampled files retain automated evidence rather than individual listening dates. The offline launch-audio planner reports missing candidate texts and audition prerequisites without generating or changing billing. Paid execution remains disabled by the free worker cap until separately authorized with a budget.

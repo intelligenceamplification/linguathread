@@ -2,6 +2,7 @@
 import argparse
 import json
 import shutil
+from audio_batch_review import accepted_batch_clips
 from audio_pipeline import ROOT, WORK, accepted_cloud_policies, canonical, digest, inspect_wav, permitted, read, save
 
 
@@ -13,7 +14,10 @@ def prepare():
     blocked = set(seed.get("blockedAudioSha256", []))
     blocked.update(r["sha256"] for r in read(ROOT / "audio/known-audio-defects.json")["defects"] if r["status"] == "blocked")
     clips, copies = [], {}
-    for approval in read(ROOT / "audio/cloud-listening-approvals.json")["clips"]:
+    individual = read(ROOT / "audio/cloud-listening-approvals.json")["clips"]
+    individual_keys = {item["requestKey"] for item in individual}
+    approvals = individual + [item for item in accepted_batch_clips() if item["requestKey"] not in individual_keys]
+    for approval in approvals:
         receipt = read(WORK / (approval["requestKey"] + ".json"))
         task, sha = receipt["task"], receipt["sha256"]
         if not approval.get("reviewedAt") or not approval.get("approvalEvidence") or sha != approval["sha256"] or task["key"] != approval["requestKey"]:
@@ -37,6 +41,12 @@ def prepare():
                 "backend": policy["backend"], "recipeSha256": policy["recipeSha256"], "normalTempo": 1,
                 "paceCorrectionFactor": 1, "auditVersion": 2, "qualityCheck": "human-text-pace-clarity",
                 "reviewedAt": approval["reviewedAt"], "preferred": True, "requestKey": task["key"]}
+        if approval.get("batchReviewId"):
+            clip["batchReviewId"] = approval["batchReviewId"]
+            clip["batchReviewedAt"] = approval["reviewedAt"]
+            if not approval["individuallyHeard"]:
+                clip.pop("reviewedAt", None)
+                clip.update(qualityCheck="automated-text-pace-clarity", voiceApprovalBasis="reference-hash", auditModel=approval["auditModel"])
         if not permitted(clip, policies, blocked): raise ValueError("Accepted recording failed catalog admission.")
         clips.append(clip); copies[clip["file"]] = source
     return seed, policies, clips, copies

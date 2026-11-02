@@ -46,7 +46,7 @@ test("pausing and re-adding a language preserves independent progress", () => {
 
 
 test("launch selection is bounded without deleting historical profiles", () => {
-  assert.deepEqual([...launchLearningLanguages], ["Spanish", "Vietnamese", "French", "Mandarin Chinese", "Korean", "Arabic"]);
+  assert.deepEqual([...launchLearningLanguages], ["English", "Spanish", "Vietnamese"]);
   const historical = normalizeLanguageProfile({ native: "English", second: "Japanese", additional: ["Hindi", "Russian"] });
   assert.deepEqual(activeSelections(historical).map(item => item.language), ["Japanese", "Hindi", "Russian"]);
 });

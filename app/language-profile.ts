@@ -4,8 +4,8 @@ export const supportedLanguageNames = [
 ] as const;
 
 // Launch choices are separate from persisted names: never erase older selections.
-export const launchLearningLanguages = ["Spanish", "Vietnamese", "French", "Mandarin Chinese", "Korean", "Arabic"] as const;
-export const launchLanguageChoices = ["English", ...launchLearningLanguages] as const;
+export const launchLearningLanguages = ["English", "Spanish", "Vietnamese"] as const;
+export const launchLanguageChoices = launchLearningLanguages;
 
 export type LanguageName = typeof supportedLanguageNames[number];
 export type Confidence = "developing" | "comfortable" | "strong";

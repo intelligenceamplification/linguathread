@@ -22,12 +22,22 @@ export default function LanguagePath({ course, profile, model, completedIds, ski
       <div className="stack-overview" aria-label="Your selected language stack"><div><span>Native anchor</span><strong>{profile.native}</strong></div>
         {selected.map(selection => {
           const writing = writingLanguages.find(item => item.name === selection.language);
-          const role = selection.language === "Spanish" ? "Primary communication course · A1–C2" : selection.language === "Vietnamese" ? "Supporting bridge · authored Spanish–Vietnamese connections" : "Supporting language · no separate CEFR communication course";
+          const role = selection.language === "Spanish" ? "Primary communication course · A1–C2" : selection.language === "Vietnamese" ? "Supporting bridge · authored Spanish–Vietnamese connections" : selection.language === "English" ? "English learning · writing foundations and shared meaning; communication course in preparation" : "Supporting language · no separate CEFR communication course";
           return <div key={selection.language}><span>{role}</span><strong>{selection.language}</strong><small>{selection.status === "paused" ? "Paused · progress retained" : `Active · priority ${selection.priority + 1}`}</small>{writing && selection.status === "active" ? <button className="text-action" onClick={() => onWriting(writing.id)}>Open writing path →</button> : <small>{selection.status === "paused" ? "Reactivate in stack settings" : "No independent writing path selected"}</small>}</div>;
         })}
       </div>
       {!selected.some(selection => selection.language === "Spanish" && selection.status === "active") && <p className="review-note">Spanish is not currently active in your stack. You can explore the published course below or activate Spanish in stack settings.</p>}
       {selected.some(selection => !["Spanish", "Vietnamese"].includes(selection.language)) && <p className="review-note">Supporting languages do not imply a complete translated curriculum. Only authored connections and independently available writing material are offered.</p>}
+    </section>
+    <section aria-label="English learning and varieties" className="path-stack-section">
+      <h2 className="review-heading">English · find your ear</h2>
+      <p className="review-note">English can be your starting language or a language you are learning. Writing foundations are available; a dedicated communication course and new teaching voices are in preparation.</p>
+      <button className="text-action" onClick={() => onWriting("en")}>Explore English writing foundations →</button>
+      <details><summary>English voices and varieties · planned</summary>
+        <p className="review-note">Listen for rhythm, pronunciation and everyday expressions in Californian, New York, Southern American, British and Australian English. These are starting points for exploration: each region contains many ways of speaking.</p>
+        <p className="review-note">Voice examples will appear after listening review. Every speaker has an accent; no accent determines intelligence or education.</p>
+      </details>
+      <p className="review-note">Our initial focus is English, Spanish and Vietnamese. Korean and Mandarin are planned for later. Previously saved language selections and progress remain available.</p>
     </section>
     <section aria-label="Primary communication course"><h2 className="review-heading">Spanish · A1 to C2</h2><p className="review-note">Published describes content availability. Practised describes completed lessons; retention is checked separately. In development marks planned content that is not yet published.</p>
       <div className="unit-path" aria-label="Course units">{courseMap.map(level => {

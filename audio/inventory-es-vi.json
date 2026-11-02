@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-27T13:44:51.535Z",
+  "generatedAt": "2026-11-02T19:04:08.936Z",
   "sourceLessonCount": 288,
   "publishedRevision": 8,
   "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
@@ -27,7 +27,7 @@
     "app/reinforcement.ts": "bc8c4bf3a07c8fed271fe19f4644deadd418e68d85515072d45c67ea3f9eb17f",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
     "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
-    "app/writing-system/view.tsx": "8110a9ef4fb8a270fd116a819fe0d9febad1954eb2c853f4abb5220a7ac8f15d",
+    "app/writing-system/view.tsx": "d2c0416580c798b610c48352ed84a3c98a04e5336cba7b7463870ae3151444eb",
     "app/multilingual-preview/readiness.tsx": "1da67a52f2ffc8318a6d70e26d7cc4d7928b1aa988182855ad8cd070937a5790",
     "app/multilingual-preview/script-course-view.tsx": "9203cd6f50b7a3109e6ba1d044565fb26a80fbb5fb330406a1b4cca4680ea64d",
     "app/multilingual-preview/preview-client.tsx": "6ad7873be2258d3e6105aae9d6356d8b3fed759bcf266f90296ea868a7026dcb"
