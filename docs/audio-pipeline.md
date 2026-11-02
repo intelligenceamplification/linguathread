@@ -214,3 +214,9 @@ python3 scripts/prepare-cloud-listening-batch.py --plan audio/generated/cloud-pi
 ```
 
 It verifies exact receipt/file identities, writes Spanish/Vietnamese metadata for the existing cached transcript/pace auditors, and joins their results into `outputs/audio-batch-YYYYMMDD.html` and its JSON receipt. Rerun after screening finishes. It generates no audio, grants no approval, and publishes nothing. Individual generated recordings still require listening acceptance. Keep the connected phone unchanged until the accepted batch is included in the newest published baseline.
+
+## Vietnamese voice balance — 2026-11-02
+
+The user requests equal Northern and Southern Vietnamese representation in future additions, with male and female voices in each accent. Target a 1:1 Northern/Southern ratio and balanced male/female allocation across recordings over each complete four-slot cycle. Carry any imbalance across odd-sized batches. This replaces the Northern-only generation preference; Central accents are outside the requested scope.
+
+The approved Northern female profile remains valid. Southern female, Northern male, and Southern male profiles require representative listening approval and pinned native admission policies before production use. Do not relabel an existing voice, claim accent validation from automated transcription, or silently enable unapproved profiles. Today's ten approved November 2 recordings remain accepted unchanged. Fill missing lesson coverage first; this balance does not require four renditions of every sentence or regeneration of working audio. Generation remains bounded by the free ten-request daily cap until the user authorizes paid usage.
