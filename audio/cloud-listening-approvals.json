@@ -252,6 +252,66 @@
       "sha256": "d3f5ed6894aca7be20677b3fedb2fea7cbc071a58b2f1e6cace73889b4ca9ef5",
       "reviewedAt": "2026-10-27",
       "approvalEvidence": "User listened to the October 27 batch and explicitly approved all ten recordings for the newest app baseline."
+    },
+    {
+      "requestKey": "38bb1b57c01941da3633299c7b64d9c97d4743f224035915886089c5c7ad51f5",
+      "sha256": "d38bfaa099129571b85e78cfe34abbdbf4a9af30db65170b65b96cfd9c7a2271",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "c7fe94f367bb8813a47d8b901735d43a05560eea259aa4e7a5e0b27aa3c22b19",
+      "sha256": "294fc0761c1f04bfe26c204c7625c19d03fec3f5203ca244c1978d9d393411b3",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "cf8c852a6c253ca79fa6daf5e3e1434a4df8c33cbf5dd266d31bd5d3e46bb2a0",
+      "sha256": "b37d3d4e4f5e7c640282dd16d7539d6398683a9c361b04fb897fc59d9c8c7785",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "37411ec0db1c2ec760d2c463bfb13cd1dbe6b801c4147c6d78731dec136022fb",
+      "sha256": "6d8edbb547552a198c2fc4ee3f6bc455ff2f6a2ea919bfb22864c5332d201bcc",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "fd8b5d9ddf269fe07e20ee2273e8dcc78d3574987e23d6904c9facf8e7eaf81f",
+      "sha256": "5909288ec415b34f26e847ddb28f2f353f0b4acd97ebf28ba2855855d3a15310",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "803fc4e1c68d45d693699d2f2fe4a9afdeef11d1939070557e83562860046d51",
+      "sha256": "ef7bae7e9ac5d33150302f28320cfe63c5c25aea73d7e2b054e7757b7aa5d4d0",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "f3eeb39ec2affedaa97da9fd158032391d424a7987adaec0ae28294dc9f6eb32",
+      "sha256": "0ad1e5f33d954ea5a3f627e7dbc6822d8e1936e7314e558b2e186a5403056d15",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "34c73433fa0caf757c914dbbf4e9ba5873d7c7ff1c609514718a8c6f817a65ec",
+      "sha256": "cf55a923ce13c6f950fb252ee948f2718430bf7ccbdc7f5c340b486b200e8400",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "b6ad50c42f04ea4f8e56e24725c7f8a8ebb4cb6744809a9a54ae5109ddc91fe0",
+      "sha256": "16bf3c2d48bd758c470de059370dcbef90cf59579589190338da05f9c8f62903",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "5e81d20a915e8eeed98b2e67834b1b0ab0b0618b63f1be267b341d593083ce66",
+      "sha256": "5f433bd0a37a867923a316c8c9fe64af98fd602362cbe6505a4a8544bc95085e",
+      "reviewedAt": "2026-11-02",
+      "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
     }
   ]
 }
