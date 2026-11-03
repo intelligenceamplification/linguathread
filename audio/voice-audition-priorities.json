@@ -1,21 +1,58 @@
 {
   "schemaVersion": 1,
   "nextFreeRequestPriorities": [
-    {"language": "vi", "accent": "Northern Vietnamese", "voice": "male", "status": "audition-required"},
-    {"language": "vi", "accent": "Southern Vietnamese", "voice": "male", "status": "audition-required"},
-    {"language": "vi", "accent": "Southern Vietnamese", "voice": "female", "status": "audition-required"}
+    {
+      "language": "vi",
+      "accent": "Northern Vietnamese",
+      "voice": "male",
+      "status": "accepted-local-candidate",
+      "acceptedAt": "2026-11-03"
+    },
+    {
+      "language": "vi",
+      "accent": "Southern Vietnamese",
+      "voice": "male",
+      "status": "accepted-local-candidate",
+      "acceptedAt": "2026-11-03"
+    },
+    {
+      "language": "vi",
+      "accent": "Southern Vietnamese",
+      "voice": "female",
+      "status": "accepted-local-candidate",
+      "acceptedAt": "2026-11-03"
+    }
   ],
-  "alreadyApproved": [{"language": "vi", "accent": "Northern Vietnamese", "voice": "female"}],
+  "alreadyApproved": [
+    {
+      "language": "vi",
+      "accent": "Northern Vietnamese",
+      "voice": "female"
+    }
+  ],
   "futureVietnameseCycle": [
-    {"accent": "Northern Vietnamese", "voice": "female"},
-    {"accent": "Southern Vietnamese", "voice": "male"},
-    {"accent": "Northern Vietnamese", "voice": "male"},
-    {"accent": "Southern Vietnamese", "voice": "female"}
+    {
+      "accent": "Northern Vietnamese",
+      "voice": "female"
+    },
+    {
+      "accent": "Southern Vietnamese",
+      "voice": "male"
+    },
+    {
+      "accent": "Northern Vietnamese",
+      "voice": "male"
+    },
+    {
+      "accent": "Southern Vietnamese",
+      "voice": "female"
+    }
   ],
   "constraints": [
     "Audition priorities are pending, not approved production profiles.",
     "Retain cycle position across odd-sized batches after all four profiles are accepted.",
     "Do not identify an unknown-region recording as Northern or Southern from a provider prompt alone.",
     "English male and female regional auditions follow the Vietnamese gaps."
-  ]
+  ],
+  "note": "November 3 local auditions filled these Vietnamese voice gaps; do not spend Gemini quota re-auditioning them unless an improvement or defect justifies it. App runtime integration is still required."
 }

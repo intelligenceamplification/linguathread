@@ -1,0 +1,20 @@
+# Audio sources and free allowances — checked November 3, 2026
+
+## Existing working source
+IAM Intelligence's reader uses Kokoro-82M, American female Sky (`af_sky`). Verified in its local `scripts/generate-narration.py`: `KPipeline`, `device='cpu'`, generated MP3 and timing manifest. This is free local model inference, not evidence of a free hosted API. Existing environment/model can inform an English audition; do not run a bulk local rebuild based on this note. Measure speed before considering it for volume. The user clarified that local generation is acceptable when it is fast enough; sluggish throughput and repeated repair are the actual problem. Compare measured time, memory and retry rates against API generation rather than excluding local tools categorically.
+
+The official Kokoro model card lists Apache-2.0 weights and American/British male/female voices; no claim that it covers all requested American regions or Vietnamese. No new Kokoro voice has been accepted for Nuevo Flow. Official model/voice references: https://huggingface.co/hexgrad/Kokoro-82M and https://huggingface.co/hexgrad/Kokoro-82M/blob/main/VOICES.md
+
+## Hosted candidates
+- Google Cloud TTS Chirp 3 HD: listed one million free characters monthly, but billing must be enabled and overages are charged. Application use of generated files is explicitly described by Google, subject to terms. Promising for an audition and bounded generation, but not a guarantee of zero costs. Requires separate service access; the current Gemini free key does not establish Cloud TTS service activation. Sources: https://cloud.google.com/text-to-speech/pricing and https://docs.cloud.google.com/text-to-speech/docs/basics . Public samples: https://docs.cloud.google.com/text-to-speech/docs/list-voices-and-types . Southern/Northern Vietnamese identity still needs listening review.
+- Azure Speech F0: 500,000 neural TTS characters monthly is a real free allowance, but Microsoft's current TTS output-use provision explicitly grants those rights to paid-tier customers. Do not recommend F0 as a verified zero-cost production source for Nuevo Flow without resolving those terms. This corrects the earlier pricing-only recommendation. Sources: https://azure.microsoft.com/en-us/pricing/details/speech/ and https://www.microsoft.com/licensing/terms/product/MicrosoftAzure/all .
+
+Do not substitute unofficial demos or undocumented consumer endpoints for a production API. No new account, paid API, billing activation, or voice substitution has been made in this investigation. Preserve existing accepted files; inspect actual latency, output quality, storage/output rights, quotas and cost controls before selecting a new provider.
+
+## Measured local auditions — November 3
+
+Eight held audition clips were generated using already installed local environments. Four VieNeu preset candidates represent Northern/Southern male/female; four Kokoro candidates represent American/British male/female. All passed the existing offline transcript/pace checks; none has user listening approval yet or replaced app audio.
+
+VieNeu: model load 2.28 seconds; approximately 0.64–0.87 seconds synthesis per 3.52–4.40 seconds audio. Kokoro: model load 0.47 seconds; approximately 0.56–0.71 seconds synthesis per 5.58–6.58 seconds audio. These are short audition measurements after Python import, not total process startup or guarantees for long/complex curriculum text. Preset Vietnamese generation avoids the repeated voice-reference enrollment work used in prior cloning jobs. Model reuse between clips matters. Each backend ran separately; no API quota was used. Three small official Kokoro voice vectors were downloaded, while the model weights were reused from IAM.
+
+Exact recordings and metadata: `outputs/local-voice-auditions-20261103.json` and its HTML listening page. Source presets/rights: https://huggingface.co/pnnbao-ump/VieNeu-TTS-v3-Turbo/blob/main/README.md and https://huggingface.co/hexgrad/Kokoro-82M . A small performance sample and automated text screening do not certify native accent, learner suitability, or eventual whole-library throughput.
