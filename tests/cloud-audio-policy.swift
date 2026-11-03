@@ -11,7 +11,22 @@ import Foundation
         let clips = library["clips"] as! [[String: Any]]
         let cloud = clips.filter { ($0["backend"] as? String ?? "").hasPrefix("gemini/") }
         let approvals = try object(CommandLine.arguments.count > 3 ? CommandLine.arguments[3] : "audio/cloud-listening-approvals.json")["clips"] as! [[String: Any]]
-        precondition(Set(cloud.map { $0["sha256"] as! String }) == Set(approvals.map { $0["sha256"] as! String }))
+        let batches = try object("audio/cloud-batch-reviews.json")["batches"] as! [[String: Any]]
+        var expected = Set(approvals.map { $0["sha256"] as! String })
+        for batch in batches {
+            let held = Set(batch["heldRequestKeys"] as! [String])
+            let samples = Set(batch["sampledRequestKeys"] as! [String])
+            for row in batch["clips"] as! [[String: Any]] where !held.contains(row["requestKey"] as! String) {
+                expected.insert(row["sha256"] as! String)
+                let clip = cloud.first { ($0["sha256"] as? String) == (row["sha256"] as? String) }!
+                if !samples.contains(row["requestKey"] as! String) {
+                    precondition(clip["reviewedAt"] == nil)
+                    precondition(clip["batchReviewedAt"] != nil)
+                    precondition(clip["qualityCheck"] as? String == "automated-text-pace-clarity")
+                }
+            }
+        }
+        precondition(Set(cloud.map { $0["sha256"] as! String }) == expected)
         for clip in clips {
             precondition(NativeAudioCatalog.accepts(clip, policies: policies, blocked: []))
             precondition(NativeAudioCatalog.accepts(clip, policies: Array(policies.reversed()), blocked: []))

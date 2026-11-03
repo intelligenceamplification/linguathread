@@ -372,3 +372,13 @@ The user wants English learning to include respectful examples of West Coast Cal
 ### Pre-build implementation — 2026-11-02
 
 The shared app now offers English, Spanish and Vietnamese for new stack choices while preserving historical profile names. Language Path provides an English writing-foundations entry for native speakers and learners and labels regional English voices as planned. The publisher supports an empty-by-default separate batch-review ledger; unsampled files retain automated evidence rather than individual listening dates. The offline launch-audio planner reports missing candidate texts and audition prerequisites without generating or changing billing. Paid execution remains disabled by the free worker cap until separately authorized with a budget.
+
+### Provider reuse and voice balance — 2026-11-03
+
+The user confirms that some pre-Gemini Spanish/Vietnamese recordings are already good enough and that Gemini is not so much better as to justify replacing them all. Preserve usable recordings across accepted providers, including local systems; do not equate a free local model with a free hosted API. Eligible staged recordings should be sampled and checked rather than automatically regenerated. Earlier whole-library Gemini-only replacement estimates are not the active target. Keep all individual defect blocks intact.
+
+Male and female voices are required across English, Spanish and Vietnamese. Vietnamese also targets equal Northern/Southern representation across future batches once the relevant voices have been auditioned. Only Spanish male/female and Vietnamese female are currently accepted in the cloud pipeline. English and additional Vietnamese profiles require auditions. Existing local sources (Chatterbox Multilingual for Spanish and VieNeu-TTS for Vietnamese) may inform future auditions; their acceptance in one language does not automatically approve a new English voice or regional accent.
+
+### Vietnamese audition priority correction — 2026-11-03
+
+The November 3 accepted batch has only Northern Vietnamese female recordings, so it does not satisfy the requested eventual balance. Reserve the next available requests for Northern male, Southern male and Southern female auditions before generating more routine Vietnamese female-only batches. The accepted Northern female voice remains in use. After all four profiles are accepted, allocate across Northern female, Southern male, Northern male, Southern female, carrying the cycle between batches. This achieves 1:1 accent and gender representation over each complete cycle without requiring four versions of each sentence. The pending audition priorities are recorded in `audio/voice-audition-priorities.json`; they are not yet automatically selected by the worker.

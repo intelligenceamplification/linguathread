@@ -59,7 +59,7 @@ def main():
     seed, policies, clips, copies = prepare()
     blocked = set(seed.get("blockedAudioSha256", []))
     blocked.update(row["sha256"] for row in read(ROOT / "audio/known-audio-defects.json")["defects"] if row["status"] == "blocked")
-    approved_at = max(clip["reviewedAt"] for clip in clips)
+    approved_at = max(clip.get("reviewedAt") or clip["batchReviewedAt"] for clip in clips)
     if args.apply:
         seed["voicePolicies"] = policies
         save(ROOT / "ios/LinguaThread/NativeAudio/manifest.json", seed)

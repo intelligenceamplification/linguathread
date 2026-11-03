@@ -1,4 +1,64 @@
 {
   "schemaVersion": 1,
-  "batches": []
+  "batches": [
+    {
+      "id": "20261103-sampled-lessons",
+      "reviewedAt": "2026-11-03",
+      "approvalEvidence": "User accepted the nine-clip batch based on suggested samples 1, 2 and 3 under the agreed sampling method.",
+      "clips": [
+        {
+          "requestKey": "1a38dc83ea7aa65e6a3426af76dea8193263ee880185721a30e6b5eb20d64a31",
+          "sha256": "ed6c8044c6d14326ad09b248f0d95b5e12d78df79def61bb7f06f46867d111f3"
+        },
+        {
+          "requestKey": "8c22d3d9ec86c593d52d252241802cadb65ede6c72f46f040c66e6fc8327952c",
+          "sha256": "a348204e9bb89a25e2f6d26d438ddfa39452ea048db7c976d07994ceb6908c2d"
+        },
+        {
+          "requestKey": "733a22aaad943d05f6f75f7e2d690a689bf1c7e2565b820f473e5642db7dea59",
+          "sha256": "2fe8132969e301f17a033a767a8443c6995f47cb44c996e63043de961cc285ec"
+        },
+        {
+          "requestKey": "952cbf97eba21b9861d68856f3e45b3fb7eca5b661a2ac3736dd9a26293c4aeb",
+          "sha256": "8e0f8f887d7b85a21b8e58d95a1af578278471b09f4e60b8e9f144e7e2a03db9"
+        },
+        {
+          "requestKey": "afc76360d03cea057e06fbf31f8f3fffb32ea85a0960b4f8ba29a8d64f22ff56",
+          "sha256": "52ef16eb23b502834a15a6488daefd785691a121a4028f17a4bc25b56b877755"
+        },
+        {
+          "requestKey": "8a154ab375330b5c6a8147cd23091a74e779a2ee96c64222b5d7e50681955890",
+          "sha256": "2762ecfb961551c8babfce690223f7082bdbb5feb69ec66f16e1257ba818a12f"
+        },
+        {
+          "requestKey": "1eeb2a25f9d7e00f8184c54061414f83da2ccc8533c9b435d659f2501ad5e69d",
+          "sha256": "5991b512bf2d8d6d9b40511ac5df308b64607540b2852ef35cfbd34e5b5abf07"
+        },
+        {
+          "requestKey": "51c0fbf92f10a268a7c19b1ad16bf58212db30b72b11e08a5a0f14ff8c371956",
+          "sha256": "9e54221662ef15461d5f300a1b042a15c43b9ad137a085dc165a3f58b8ab101c"
+        },
+        {
+          "requestKey": "b23a1e93a245f3c0de41ee9319c0c6a8f2a07595e93a0852377cbb11f825443e",
+          "sha256": "6e73c2a1839070145dfdf0e65304a145da5f34a5db5b3a9230a394905dc65f10"
+        }
+      ],
+      "sampledRequestKeys": [
+        "1a38dc83ea7aa65e6a3426af76dea8193263ee880185721a30e6b5eb20d64a31",
+        "8c22d3d9ec86c593d52d252241802cadb65ede6c72f46f040c66e6fc8327952c",
+        "733a22aaad943d05f6f75f7e2d690a689bf1c7e2565b820f473e5642db7dea59"
+      ],
+      "heldRequestKeys": [],
+      "screeningFiles": [
+        {
+          "path": "audio/generated/cloud-pipeline/20261103-es-audit.jsonl",
+          "sha256": "5c6a20d5104717641df0caf36d23c3023a01ae6c0a99c7fa29e9d13f0179984d"
+        },
+        {
+          "path": "audio/generated/cloud-pipeline/20261103-vi-audit.jsonl",
+          "sha256": "8190372b8c62d434fea6fe7e45e8d2c2160e35a7fae3f43ff56aff1546a21a0b"
+        }
+      ]
+    }
+  ]
 }

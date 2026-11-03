@@ -87,6 +87,72 @@
       "reviewedAt": "2026-10-14",
       "reviewedBy": "Desmond Wood",
       "evidence": "User heard the visible Vietnamese candidate and confirmed: Yes. it sounds authentic and clear. Exact clip acceptance; short-word candidates remain rejected."
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "text": "Aunque es más caro, dura mucho más.",
+      "sha256": "0fda49b5602b232b37c459cca4caba7852fe7f0e7430e6896655b99e3a42e4c5",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "Aunque es más caro, dura mucho más.",
+      "sha256": "9730b092cfe06b0ac85d9bcce3b869d18ab1ad910fe87fb0d79a5b034f377b3b",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "text": "Mặc dù đắt hơn, nó bền hơn nhiều.",
+      "sha256": "33522c4130e3c0927898bd996c1feba531f8ca965789cfe6f7eb67f98e991f37",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "es",
+      "voice": "male",
+      "text": "Te llamaré cuando llegue a casa.",
+      "sha256": "6d018716064d57be2089fc45afded22c59cd5802af7e5b1db07a9d1520b6ad30",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "text": "Te llamaré cuando llegue a casa.",
+      "sha256": "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079",
+      "approved": false,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "text": "Tôi sẽ gọi cho bạn khi về đến nhà.",
+      "sha256": "68f25e31bd504110d5a5461cd5c692bff7cd7b0916a32b0b599252bb570624d5",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-03",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
     }
   ]
 }

@@ -212,7 +212,7 @@ def audit(root=ROOT):
             "coverageIsNotPronunciationReview": True, "lessons": lessons}
 
 
-def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offset=0, main_sentences=False):
+def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offset=0, main_sentences=False, replace_existing=False):
     if not 1 <= limit <= 64 or offset < 0:
         raise ValueError("Plans allow 1–64 new requests per batch and a nonnegative offset.")
     config = read(root / "audio/cloud-audio-candidates.json")
@@ -238,9 +238,10 @@ def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offse
     if main_sentences:
         main_texts = {(language, row["sentence"][field]) for row in course if row["id"] in allowed for language, field in (("es", "target"), ("vi", "bridge"))}
         items = [item for item in items if (item["language"], item["text"]) in main_texts]
-        # An explicit voice upgrade reuses only the accepted provider's renditions.
+        # Only an explicitly requested voice upgrade bypasses other providers.
         # Ordinary coverage plans continue to reuse any working checked recording.
-        reusable = [row for row in reusable if row.get("backend") == provider + "/" + config["providers"][provider]["model"]]
+        if replace_existing:
+            reusable = [row for row in reusable if row.get("backend") == provider + "/" + config["providers"][provider]["model"]]
         reuse = {(row["language"], row["normalizedText"], row["voice"]): row["sha256"] for row in reusable}
     tasks = {}
     for item in items:
@@ -253,7 +254,7 @@ def make_plan(provider, benchmark=False, lesson=None, root=ROOT, limit=18, offse
             key = digest(canonical(identity).encode())
             # A working approved rendition is enough for coverage. Do not generate
             # alternate genders just to fill a matrix during this repair.
-            reusable_sha = reuse.get((item["language"], item["text"], profile["role"])) or (available[0]["sha256"] if available and not main_sentences else None)
+            reusable_sha = reuse.get((item["language"], item["text"], profile["role"])) or (available[0]["sha256"] if available and not replace_existing else None)
             tasks[key] = {"key": key, "request": identity, "displayText": item["text"], "language": profile["language"],
                           "role": profile["role"], "reuseSha256": None if benchmark else reusable_sha}
     missing = [r for r in tasks.values() if not r["reuseSha256"]]
@@ -435,6 +436,7 @@ def main():
     plan_cmd.add_argument("--main-sentences", action="store_true", help="Upgrade only whole lesson sentences with accepted cloud voices")
     plan_cmd.add_argument("--limit", type=int, default=18)
     plan_cmd.add_argument("--offset", type=int, default=0)
+    plan_cmd.add_argument("--replace-existing", action="store_true", help="Explicitly plan provider upgrades instead of preserving usable staged recordings")
     worker = commands.add_parser("run")
     worker.add_argument("plan", type=Path)
     worker.add_argument("--max-requests", type=int, default=18)
@@ -472,7 +474,7 @@ def main():
         print(canonical({"recoverableFiles": recovered, "applied": args.apply, "generatedClips": 0}))
     elif args.command == "plan":
         if args.benchmark and args.lesson: raise ValueError("Choose benchmark or lesson, not both.")
-        plan = make_plan(args.provider, args.benchmark, args.lesson, limit=args.limit, offset=args.offset, main_sentences=args.main_sentences)
+        plan = make_plan(args.provider, args.benchmark, args.lesson, limit=args.limit, offset=args.offset, main_sentences=args.main_sentences, replace_existing=args.replace_existing)
         destination = WORK / "plans" / (plan["id"] + ".json"); save(destination, plan)
         print(canonical({"plan": str(destination), "requests": plan["generationRequests"], "characters": plan["estimatedCharacters"], "nextOffset": plan["nextOffset"], "generatedClips": 0}))
     elif args.command == "run":

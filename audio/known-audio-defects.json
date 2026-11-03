@@ -100,6 +100,16 @@
       "status": "blocked",
       "requiresPronunciationReview": true,
       "requestKey": "139a58572c852697da57d2f92f2e86b9d99b3c90e981e98e0db44f4b581c84f7"
+    },
+    {
+      "language": "es",
+      "text": "Te llamaré cuando llegue a casa.",
+      "voice": "female",
+      "sha256": "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079",
+      "reason": "User rejected sample 5 in older-voice review; do not reuse.",
+      "reportedAt": "2026-11-03",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

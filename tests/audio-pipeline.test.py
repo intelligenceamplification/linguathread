@@ -179,7 +179,9 @@ class PlanningTests(unittest.TestCase):
         sample = first["tasks"][0]
         legacy = {"language": sample["language"], "voice": sample["role"], "normalizedText": sample["displayText"], "sha256": "old", "backend": "legacy"}
         with patch.object(p, "existing", return_value=({}, {}, {}, [legacy])):
-            upgraded = p.make_plan("gemini", lesson="a2-u19-2-describing-improvement-lesson", limit=10, main_sentences=True)
+            upgraded = p.make_plan("gemini", lesson="a2-u19-2-describing-improvement-lesson", limit=10, main_sentences=True, replace_existing=True)
+            preserved = p.make_plan("gemini", lesson="a2-u19-2-describing-improvement-lesson", limit=10, main_sentences=True)
+        self.assertTrue(any(task["reuseSha256"] == "old" for task in preserved["tasks"]))
         self.assertTrue(all(task["reuseSha256"] != "old" for task in upgraded["tasks"]))
         with self.assertRaises(ValueError): p.make_plan("gemini", benchmark=True, main_sentences=True)
 
