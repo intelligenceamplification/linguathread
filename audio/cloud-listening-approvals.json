@@ -312,6 +312,66 @@
       "sha256": "5f433bd0a37a867923a316c8c9fe64af98fd602362cbe6505a4a8544bc95085e",
       "reviewedAt": "2026-11-02",
       "approvalEvidence": "User listened to the November 2 batch and explicitly approved all ten recordings before publication and iPhone refresh."
+    },
+    {
+      "requestKey": "5c7746f351b9bcfbe9a16c3337f6bcdc5600cd7e7a16a8156d070a913afee0a6",
+      "sha256": "7689e386af3bb20c5401cf2135cdc1c2e2ef2c68df20940439349cce373cd2ff",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "7a39b5031ea84c18290a550389d910bff7cba0c96987e272e020bff5f93a8e00",
+      "sha256": "bf33149de34cac821ea7d0ed46a94345b66d2f92d78795a056136a1f62208b9a",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "c6f97df4dbe519dc49784a55aff6eb2d8e96113292015605b99ab64c2428729f",
+      "sha256": "c9dd32b3d0e84efab9c6de43404db187f6aa82884788a5b0f44e986b08967805",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "3176e874446dbcf3ee0fb1fa64ee90bdf36d6b316306aeb2970695cbaac8b299",
+      "sha256": "88aa60a11c450e8f7f4e983afe05952db06bde968fceb1936722c6cd50ca14f2",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "439b2732b47e9e9ca1e9fba3c161aa1721f50af0138e550419e17b4a968a0162",
+      "sha256": "916df055000bf82e0c0b38a94f6257715ccd54880969546383b78aef34ae5938",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "efbf12f59f62eb94d350443f76f019d5893ffbc3a43fee9c3c4ba416b97b4bcf",
+      "sha256": "897a969f7ea0b20de8f7be47ea39a3f5003c0ce5267142a19b942bb3c33c9b52",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "979611f2f9017ca920447e3c22ab7adc444462d2f6aa229f91a12da4f3d884a6",
+      "sha256": "4f5272e01e54399c52e6f7898a0cf0ab7f2f6999968f29209fc0210d7306fa9d",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "a513638116ad1c4bb2ee11bcf1a2893c27df1f9d854789a8191dfa9037c38d30",
+      "sha256": "3537c3bc31850292a562b757fd2a18a5279b4e20239562b064e0b90b85492891",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "e955932679dc90f07339910a4f6bb19778f4416cfae61c2047b756c76df764ca",
+      "sha256": "a593b6d43de6d4bc71c4bb8fbc657e9d0fc1ec3a6d03e098f2c5e5ccedd63919",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "a0d57b75cd0b216d79ca937575a44f38a9131e9fb9d034a6de66a946e3e51164",
+      "sha256": "f60620ed4e5eb05b25e76f04966e9076da7b0dd48e19c304b10563f8dec2c1ee",
+      "reviewedAt": "2026-11-04",
+      "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
     }
   ]
 }

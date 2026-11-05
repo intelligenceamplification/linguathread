@@ -84,6 +84,62 @@
       "backend": "gemini/gemini-3.8-flash-tts",
       "recipeSha256": "c1bde2346a072187558826ddaab898394d14a63faaa1c5acabe74b316d8da11a",
       "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "male",
+      "referenceSha256": "1a7cfe57282049e8015b5aaa6515cd1a4c8792b843530129f1697d8694feab13",
+      "backend": "VieNeu-TTS-v3-Turbo",
+      "recipeSha256": "4ede8a2fc949a300f055a0e0b58d1a028607e0ff469de04acf042a63d176a8f0",
+      "normalTempo": 0.85
+    },
+    {
+      "language": "vi",
+      "voice": "male",
+      "referenceSha256": "fc6781e6d0041e0499b65def63b2bb5da90319d9a764c714b50de6d3209c40cc",
+      "backend": "VieNeu-TTS-v3-Turbo",
+      "recipeSha256": "b3b93b47ea41b64390ba3cf025a268f9d64a7331322a31c42faed08db23114c9",
+      "normalTempo": 0.85
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "c4e5c2f76fab9add9d3aea513beb0898800f0bd044088f0e7095ede098f7b2ee",
+      "backend": "VieNeu-TTS-v3-Turbo",
+      "recipeSha256": "49806920880586687ee6bdd592db4aed488eab12bcf81f14376202f0d16c8534",
+      "normalTempo": 0.85
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "fd92f78ca4d4b505e6fec5a008e46e5f236f7e2efd6b4ec5d342092260716b15",
+      "backend": "VieNeu-TTS-v3-Turbo",
+      "recipeSha256": "d899f8194ca5ed50daf6571a1ca32b585503627160b3f5aad9e0432b0e379197",
+      "normalTempo": 0.85
+    },
+    {
+      "language": "en",
+      "voice": "female",
+      "referenceSha256": "ebb0feec6b5ccf6aaf611c030bbdc69dd38edeb3c99204443f8a57f41b7b8b26",
+      "backend": "Kokoro-82M",
+      "recipeSha256": "65d562e8e740e3d03a738e8d0c8d079cc34a7934e22f95add1cb3c5bce1cd6f3",
+      "normalTempo": 1
+    },
+    {
+      "language": "en",
+      "voice": "female",
+      "referenceSha256": "4cf76948990b4553a1704343cc08f0f561af2d31106a7bac73f5488621b36282",
+      "backend": "Kokoro-82M",
+      "recipeSha256": "d9338f46a9d899a7618336efdf79205f08c3ac04608412591682e2d4da1fcaa2",
+      "normalTempo": 1
+    },
+    {
+      "language": "en",
+      "voice": "male",
+      "referenceSha256": "54102f7c72e6be4640614d7c3943e22311eb9c1f854a1d9fbfdca05e35a1e0cb",
+      "backend": "Kokoro-82M",
+      "recipeSha256": "78f98f448cf922e26fc05120813439ccd236a4b52118d32532d30043e2d9b93d",
+      "normalTempo": 1
     }
   ],
   "releaseReady": true,
@@ -2715,15 +2771,27 @@
     }
   ],
   "blockedAudioSha256": [
+    "00b1fe12c4dee8b08e4af1df8e94b5c7bd36289f33b879ee5841f76fe5b5c3d1",
+    "02c470cde4c1c296a468c2a852dc08f350d4520dd22fc403f2703f53e2a69085",
+    "19fc0c7321862b938f7d699bfccc6e2265a0bb599329765092b7546d425d0929",
     "1f2649d7233a31b21f642d0a7ade7dbb4316302196743348973321d3d7481cc2",
     "297b3063bdd839f8727b3bef3ca3f3c054460e1e90d65eaf803a8156906ed600",
+    "39f01b32ffe5bcbeefa9bf8108bf516443be05f97620a9bfea9dcb78fd182016",
     "3a813b7b7974ba52bc959dc7a95e1af539cf37b8f5819a16444bee7ad8a524b8",
+    "5edf1a70a16b043f4a7e12aa353013a43de2af5d71a72dc6218a3c60e1468dd0",
     "67531f6b0e96ebb2fe0b2c12c3eb1d5c5e55e2b6d5cbd5ea3847985ae99ee6d7",
     "716662d7feb435e7474e475ebd620e14ce2b84f5ea17e9c1059279fc8fa43f65",
+    "7c66f52294a24c0b1cbfe6197f0d842f26bf05a8d304ed2f035027b1871201f1",
+    "8cb9c615339aeb5b257bb9ba212f5970a23cf2ddbc2b5ed3e2a61427031c9db8",
+    "9fda873f131db170a7dac48f56f5011293b87c11f87a8bca6c6560466f2f443d",
+    "a0ff5c19367e50366ac090fddb2d0b42ddc8e3ca2669932cdc440e78db9e2a7f",
     "a3407017c4f434bbb3fe5a4960aa0c9cdaedfe3ce1fabac23b90504972751783",
     "b2427c0c2f1703f27b40f9402db69085f8b1692cc0e377a2f453394533d58331",
+    "b2dfc0cace82c9792ec594c25778cbc92bc2f547cf1cfb8b499c2a20de5a5f63",
     "b813959df865ed1b6f6d6b9822870e39b8812cefaa0d42299e3660ea78eb53af",
     "cd532b67239aa356df7a0c0a0878445c8d33ece4f9fb9bdca0fd8a74efdc50e1",
-    "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079"
+    "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079",
+    "e17126d020f00d06c7f381e2855b064d7175c70714f2b6de76092c7b03e71bc4",
+    "fc7383eda9e182ed33ac801d2fd6051e863b3e4ccde663f78cbf9f4556aef85e"
   ]
 }

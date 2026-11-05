@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "queuedAt": "2026-11-04",
+  "notBefore": "2026-11-05",
+  "automaticJob": false,
+  "provider": "gemini",
+  "freeRequestsOnly": true,
+  "paidGenerationAuthorized": false,
+  "priorityItems": [
+    {
+      "language": "en",
+      "text": "I went to the market and bought fruit.",
+      "issue": "Singular fruit sounded plural across Sky takes.",
+      "requiresNewVoiceListeningApproval": true,
+      "desiredAccent": "American",
+      "status": "awaiting-next-free-quota-and-audition"
+    },
+    {
+      "language": "vi",
+      "text": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "issue": "Second tôi after nhưng mispronounced.",
+      "requiresNewVoiceListeningApproval": true,
+      "desiredAccent": "Southern",
+      "status": "awaiting-next-free-quota-and-audition"
+    }
+  ]
+}

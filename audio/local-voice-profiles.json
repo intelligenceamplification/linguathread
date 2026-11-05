@@ -95,7 +95,10 @@
       "referenceSha256": "83a7a2af5f9b364e70a323f0f673bf6994fa39af7644ebcdff1b9b62a2f4bfe0",
       "approvedAt": "2026-11-03",
       "approvalEvidence": "User found all eight voices accurate and pleasant; English accepted as-is, Vietnamese needed a modest speed reduction.",
-      "status": "accepted-for-generation-not-yet-runtime-integrated"
+      "status": "retired-user-selected-sky",
+      "generationEnabled": false,
+      "retiredAt": "2026-11-04",
+      "retirementEvidence": "User chose Sky as the only American English voice; keep British male and female."
     },
     {
       "id": "en-7",
@@ -136,5 +139,10 @@
     "vi-4",
     "vi-3"
   ],
-  "note": "Keep cycle position across batches. The adjusted Vietnamese master is Normal; the user Slow option applies 0.75x to that master. New utterances still require screening and batch review."
+  "note": "Keep cycle position across batches. The adjusted Vietnamese master is Normal; the user Slow option applies 0.75x to that master. New utterances still require screening and batch review.",
+  "englishCycle": [
+    "en-5",
+    "en-7",
+    "en-8"
+  ]
 }

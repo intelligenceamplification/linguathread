@@ -168,3 +168,22 @@ test('missing Vietnamese vocabulary uses its approved lesson sentence, preserves
     assert.equal(await approvedAudioFor('yên tĩnh hơn', 'vi', context), null);
   } finally { globalThis.window = previous; }
 });
+
+test("approved English uses the native cache while uncovered English keeps its fallback", async () => {
+  const previous = globalThis.window;
+  const oldFetch = globalThis.fetch;
+  const oldNow = Date.now;
+  const { approvedAudioFor, requiresNativeApprovedAudio } = await import("../app/audio-pack.ts");
+  const native = { id: "english", language: "en", normalizedText: "I understand.", reviewedAt: "2026-11-04", url: "linguathread-audio://pack/english.wav" };
+  try {
+    globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: { approvedAt: "2026-11-04", clips: [native] } };
+    globalThis.fetch = () => { throw new Error("Native English must not fetch a web recording"); };
+    assert.equal(await approvedAudioFor("I understand.", "en"), native);
+    assert.equal(requiresNativeApprovedAudio("en"), false);
+    Date.now = () => oldNow() + 120_000;
+    let fallbackQueried = false;
+    globalThis.fetch = async () => { fallbackQueried = true; return { ok: true, json: async () => ({ approvedAt: "2026-11-04", clips: [] }) }; };
+    assert.equal(await approvedAudioFor("An uncovered English phrase.", "en"), null);
+    assert.equal(fallbackQueried, true);
+  } finally { globalThis.window = previous; globalThis.fetch = oldFetch; Date.now = oldNow; }
+});

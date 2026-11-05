@@ -21,6 +21,7 @@ def verify(directory, inventory, registry, defects):
         spec = importlib.util.spec_from_file_location("cloud_policy", ROOT / "scripts/audio_pipeline.py")
         cloud = importlib.util.module_from_spec(spec); spec.loader.exec_module(cloud)
         policies += cloud.accepted_cloud_policies(ROOT)
+        policies += cloud.accepted_local_policies(ROOT)
     if pack.get("voicePolicies") != policies:
         raise ValueError("Native download policies do not match the approved voices.")
     authored = json.loads(inventory.read_text())

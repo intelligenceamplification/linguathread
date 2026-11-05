@@ -110,6 +110,116 @@
       "reportedAt": "2026-11-03",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "sha256": "7c66f52294a24c0b1cbfe6197f0d842f26bf05a8d304ed2f035027b1871201f1",
+      "language": "vi",
+      "text": "Đối với tôi, sự trung thực rất quan trọng.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected November 4 extra clip 3 after listening.",
+      "reportedAt": "2026-11-04"
+    },
+    {
+      "sha256": "e17126d020f00d06c7f381e2855b064d7175c70714f2b6de76092c7b03e71bc4",
+      "language": "vi",
+      "text": "Tôi cần nói chuyện với bác sĩ.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected November 4 extra clip 7 after listening.",
+      "reportedAt": "2026-11-04"
+    },
+    {
+      "sha256": "b2dfc0cace82c9792ec594c25778cbc92bc2f547cf1cfb8b499c2a20de5a5f63",
+      "language": "vi",
+      "text": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected November 4 extra clip 20 after listening.",
+      "reportedAt": "2026-11-04"
+    },
+    {
+      "sha256": "5edf1a70a16b043f4a7e12aa353013a43de2af5d71a72dc6218a3c60e1468dd0",
+      "language": "vi",
+      "text": "Đối với tôi, sự trung thực rất quan trọng.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected repair 1: fast and incoherent."
+    },
+    {
+      "sha256": "fc7383eda9e182ed33ac801d2fd6051e863b3e4ccde663f78cbf9f4556aef85e",
+      "language": "vi",
+      "text": "Tôi cần nói chuyện với bác sĩ.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected repair 2: fast and incoherent."
+    },
+    {
+      "sha256": "00b1fe12c4dee8b08e4af1df8e94b5c7bd36289f33b879ee5841f76fe5b5c3d1",
+      "language": "vi",
+      "text": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected repair 3: fast and incoherent."
+    },
+    {
+      "sha256": "9fda873f131db170a7dac48f56f5011293b87c11f87a8bca6c6560466f2f443d",
+      "language": "en",
+      "text": "I went to the market and bought fruit.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected repair 14: fruit sounded like fruits."
+    },
+    {
+      "sha256": "39f01b32ffe5bcbeefa9bf8108bf516443be05f97620a9bfea9dcb78fd182016",
+      "language": "vi",
+      "text": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "voice": "male",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected final repair 3: mispronunciation."
+    },
+    {
+      "sha256": "02c470cde4c1c296a468c2a852dc08f350d4520dd22fc403f2703f53e2a69085",
+      "language": "en",
+      "text": "I went to the market and bought fruit.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected final repair 4: fruit still sounds plural."
+    },
+    {
+      "sha256": "a0ff5c19367e50366ac090fddb2d0b42ddc8e3ca2669932cdc440e78db9e2a7f",
+      "language": "en",
+      "text": "I went to the market and bought fruit.",
+      "voice": "female",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected targeted pronunciation repair; stop local retries and audition provider alternative."
+    },
+    {
+      "sha256": "19fc0c7321862b938f7d699bfccc6e2265a0bb599329765092b7546d425d0929",
+      "language": "vi",
+      "text": "Tôi có thể hiểu, nhưng tôi cần luyện tập thêm.",
+      "voice": "male",
+      "status": "blocked",
+      "requiresPronunciationReview": true,
+      "reportedAt": "2026-11-04",
+      "reason": "User rejected targeted pronunciation repair; stop local retries and audition provider alternative."
     }
   ]
 }

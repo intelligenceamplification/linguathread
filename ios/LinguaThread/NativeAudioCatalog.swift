@@ -30,7 +30,7 @@ import CryptoKit
     }
 
     static func accepts(_ clip: [String: Any], policies: [[String: Any]], blocked: Set<String>) -> Bool {
-        guard let language = clip["language"] as? String, ["es", "vi"].contains(language),
+        guard let language = clip["language"] as? String, ["en", "es", "vi"].contains(language),
               let voice = clip["voice"] as? String,
               let policy = policies.first(where: { $0["language"] as? String == language && $0["voice"] as? String == voice && $0["referenceSha256"] as? String == clip["voiceReferenceSha256"] as? String }),
               let digest = clip["sha256"] as? String, digest.count == 64,

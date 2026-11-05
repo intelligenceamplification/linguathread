@@ -121,6 +121,23 @@ def accepted_cloud_policies(root=ROOT):
     return policies
 
 
+def accepted_local_policies(root=ROOT):
+    """Pin accepted preset identities and one-time master tempo adjustments."""
+    path = root / "audio/local-voice-profiles.json"
+    if not path.exists(): return []
+    policies = []
+    for profile in read(path)["profiles"]:
+        if not profile.get("approvedAt") or not profile.get("generationEnabled", True): continue
+        reference = root / profile["referenceFile"]
+        if digest(reference.read_bytes()) != profile["referenceSha256"]:
+            raise ValueError("Accepted local reference changed")
+        recipe = {key: profile[key] for key in ("backend", "voiceName", "normalTempo", "tempoMethod", "referenceSha256")}
+        policies.append(dict(language=profile["language"], voice=profile["gender"],
+                             referenceSha256=profile["referenceSha256"], backend=profile["backend"],
+                             recipeSha256=digest(canonical(recipe).encode()), normalTempo=profile["normalTempo"]))
+    return policies
+
+
 def permitted(row, policies, blocked):
     """Conservative preflight; publication additionally runs the real Swift gate."""
     policy = next((p for p in policies if (p.get("language"), p.get("voice"), p.get("referenceSha256")) == (row.get("language"), row.get("voice"), row.get("voiceReferenceSha256"))), None)

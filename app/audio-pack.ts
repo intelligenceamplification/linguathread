@@ -85,6 +85,12 @@ export function approvedAudioFor(text: string, language: FoundationLanguage, con
   // Context is explicit lesson material, never an arbitrary substring match.
   const choose = (pack: ApprovedAudioPack | null) => selectClip(pack, text, language)
     ?? (contextText ? selectClip(pack ? { ...pack, clips: pack.clips.filter((clip) => Boolean(clip.reviewedAt)) } : null, contextText, language) : null);
+  // English uses exact approved native recordings when available, while keeping
+  // its existing fallback for the remaining uncovered anchor/writing material.
+  if (language === "en" && typeof window !== "undefined") {
+    const nativeClip = choose((window as NativeAudioWindow).__LINGUATHREAD_NATIVE_AUDIO_PACK__ ?? null);
+    if (nativeClip) return Promise.resolve(nativeClip);
+  }
   if (requiresNativeApprovedAudio(language)) {
     // A pre-catalog wrapper cannot handle refreshLibrary or approved clip URLs.
     // Do not wait for its nonexistent response or drop into legacy/system voices.

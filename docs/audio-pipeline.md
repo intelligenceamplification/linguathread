@@ -253,3 +253,22 @@ The user clarified that some earlier recordings still sound good in actual use a
 The November 3 free daily batch targets ten missing main-sentence models over five lessons ahead of the latest synced lesson, reusing existing published coverage regardless of provider. Only the currently accepted Spanish male/female and Northern Vietnamese female recipes are available for this batch; the planned additional Vietnamese voices still require auditions.
 
 The user further clarified that both the previous voices and Gemini are good enough for teaching; maximum fidelity is not a requirement when a clip is already clear, authentic and complete. Do not impose a Gemini-only replacement campaign. New generation planning should check usable staged files as well as published coverage; move eligible staged clips through sampling and publication instead of generating duplicates. This is voice-source acceptance, not permission to clear individual defect blocks or claim unheard files were personally listened to.
+
+### November 4 hybrid production trial
+
+The user authorized a 60-recording trial: ten free-tier Gemini attempts for missing Spanish main sentences, plus 24 Vietnamese and 26 English main sentences with the accepted local profiles. This trial creates candidates, not automatic publication or listening approval.
+
+- `scripts/build-hybrid-lesson-batch.py plan` checkpoints the exact 60 distinct text selections. It excludes usable prepared/public recordings, uses the shared slash-to-pause normalizer, and preserves accepted reference hashes and profile settings.
+- Run its `vi` and `en` workers sequentially in their existing model environments. A shared nonblocking local-generation lock prevents simultaneous local synthesis. Checkpointed exact SHA-256 files are reused on restart; changed bytes fail closed.
+- Vietnamese uses six complete Northern-male/Southern-male/Northern-female/Southern-female cycles, with `atempo=0.85` applied once to raw masters. English retains accepted American/British profiles at unaltered speed.
+- Cloud generation continues through `audio_pipeline.py`, retaining the ten-attempt daily cap, including failures. The 60 target is a combined local/cloud recording count, never permission for 60 paid API calls.
+- Screen all completed files with the existing pinned recognizers. `scripts/prepare-hybrid-listening-batch.py` verifies file identities and separates representative voice samples, held recordings, and other screened candidates. Held clips are excluded from sampled batch approval unless individually resolved.
+- Candidate artifacts: `audio/generated/hybrid-20261104/`; listening page and receipt: `outputs/hybrid-audio-batch-20261104.html` and `.json`. No catalog, runtime voice admission policy, or device baseline changes occur at this stage.
+
+Measured short main-sentence local generation was subsecond per clip after model loading. This excludes startup and independent screening, and does not establish accuracy or long-sentence throughput. Voice-profile approval does not confer approval on every new utterance.
+
+#### November 4 release outcome
+
+118 distinct new texts were accepted: ten free Gemini Spanish recordings and 108 local English/Vietnamese recordings. Two additional texts remain blocked after failed local pronunciation repairs and are queued in `audio/pending-pronunciation-repairs.json` for a future free Gemini audition. No automatic job or paid request is authorized. American English now uses Sky only; British Emma and George remain active. Local generator planning skips the deferred texts to prevent repeated local repair attempts.
+
+The remote catalog contains 447 variants. Build 17 admits the seven active local profiles, supports exact cached English alongside its existing uncovered-English fallback, and preserves the same Normal/Slow player behavior. No local model is bundled into the device app. Raw rejected takes remain outside the runtime catalogs as audit evidence.
