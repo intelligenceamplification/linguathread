@@ -372,6 +372,30 @@
       "sha256": "f60620ed4e5eb05b25e76f04966e9076da7b0dd48e19c304b10563f8dec2c1ee",
       "reviewedAt": "2026-11-04",
       "approvalEvidence": "User: Surprisingly, all 60 are good. Some are more than good enough. Approval includes all six screening flags after the user reviewed the listening page."
+    },
+    {
+      "requestKey": "37c2473e8bc8c193bf118f525a110ae5cdee1954d4adfb7ebf6cde4ad96fda8a",
+      "sha256": "800fb33d16a57b8fd8c264102dc84c67b0ff313cec5852e90959ee2de4699344",
+      "reviewedAt": "2026-11-05",
+      "approvalEvidence": "User explicitly approved all 20, including the Gemini American English fruit repair and Southern Vietnamese second tôi repair."
+    },
+    {
+      "requestKey": "194294d129220acab09a479ee983207d221106e0698f3cd1611b6a6b99fdf7ed",
+      "sha256": "80ce1924a096efa9fb551301154895f58098d864469f25976728868c10ce02c9",
+      "reviewedAt": "2026-11-05",
+      "approvalEvidence": "User explicitly approved all 20, including the Gemini American English fruit repair and Southern Vietnamese second tôi repair."
+    },
+    {
+      "requestKey": "3053f192257d333a3fa56645760198bed12b1028b1e318781c42d28696f9f56e",
+      "sha256": "85b1a077691af9189b7d02ce5a6d8719a04519ad6417c926b7f0ead34fb54882",
+      "reviewedAt": "2026-11-05",
+      "approvalEvidence": "User explicitly approved both completed Spanish recordings and authorized the combined Build 18 update on the connected phone. Six unavailable provider recordings are excluded."
+    },
+    {
+      "requestKey": "ecb0634a99b3ae4d0fb85aabb07d546828e9f7acc18820c562cac359653e994c",
+      "sha256": "065bed7ab52d9554c54417ae097506db86f2c3a2b98f9a34217b741f6ae6d41b",
+      "reviewedAt": "2026-11-05",
+      "approvalEvidence": "User explicitly approved both completed Spanish recordings and authorized the combined Build 18 update on the connected phone. Six unavailable provider recordings are excluded."
     }
   ]
 }

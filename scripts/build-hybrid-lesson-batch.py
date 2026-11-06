@@ -1,44 +1,30 @@
 """Bounded resumable local lesson generation. Candidates only; never publishes."""
-import argparse, fcntl, json, os, subprocess, time
+import argparse, datetime, fcntl, json, os, subprocess, time
 from pathlib import Path
 from audio_pipeline import ROOT, WORK, canonical, digest, existing, inspect_wav, read, save, spoken
-OUT=ROOT/'audio/generated'/os.environ.get('AUDIO_LOCAL_BATCH','hybrid-20261104')
+OUT=ROOT/'audio/generated'/os.environ.get('AUDIO_LOCAL_BATCH','review-'+datetime.date.today().strftime('%Y%m%d'))
 
 def plan():
-    OUT.mkdir(parents=True,exist_ok=True)
     destination=OUT/'plan.json'
-    if destination.exists(): return read(destination)
-    _,public,_,usable=existing()
-    covered={(r['language'],r['normalizedText']) for r in usable+public['clips']}
-    deferred=ROOT/'audio/pending-pronunciation-repairs.json'
-    if deferred.exists():covered.update((r['language'],r['text']) for r in read(deferred)['priorityItems'] if r['status']=='awaiting-next-free-quota-and-audition')
-    inventory=read(ROOT/'outputs/launch-audio-inventory.json')['items']
-    profiles=read(ROOT/'audio/local-voice-profiles.json')['profiles']
-    config=read(ROOT/'audio/cloud-audio-candidates.json')['providers']['gemini']
-    tasks=[];cloud=[]
-    for language,count in [('es',10),('vi',24),('en',26)]:
-        candidates=[i for i in inventory if i['language']==language and (language,i['text']) not in covered and any(s.endswith(':sentence') for s in i['sources'])]
-        selected=candidates[:count]
-        if len(selected)!=count:raise ValueError('Insufficient distinct uncovered main sentences')
-        cycle=['vi-1','vi-2','vi-4','vi-3'] if language=='vi' else read(ROOT/'audio/local-voice-profiles.json').get('englishCycle',['en-5','en-7','en-8'])
-        for index,item in enumerate(selected):
-            if language=='es':
-                profile=[p for p in config['profiles'] if p['language']=='es' and p.get('approvedAt')][index%2]
-                identity=dict(provider='gemini',model=config['model'],voice=profile['voiceId'],locale=profile['locale'],text=spoken(item['text']),settings=profile['settings'],normalizerVersion=1)
-                cloud.append(dict(key=digest(canonical(identity).encode()),request=identity,displayText=item['text'],language='es',role=profile['role'],reuseSha256=None))
-            else:
-                profile=next(p for p in profiles if p['id']==cycle[index%len(cycle)])
-                identity=dict(language=language,spokenText=spoken(item['text']),profile=profile)
-                tasks.append(dict(id=digest(canonical(identity).encode()),language=language,sourceText=item['text'],spokenText=spoken(item['text']),profile=profile,sources=item['sources']))
-    body=dict(schemaVersion=1,kind='lesson-candidates',provider='gemini',scope='20261104-distinct-missing-main-sentences',tasks=cloud)
-    cloudplan=dict(body,id=digest(canonical(body).encode()),generationRequests=10,estimatedCharacters=sum(len(t['request']['text'])+len(t['request']['settings'].get('style','')) for t in cloud),nextOffset=None)
-    save(WORK/'plans/daily-20261104.json',cloudplan)
-    result=dict(schemaVersion=1,date='2026-11-04',localTasks=tasks,cloudPlan=str(WORK/'plans/daily-20261104.json'),published=False)
-    save(destination,result);return result
+    if destination.exists():return read(destination)
+    import importlib.util,re
+    match=re.search(r"(\d{8})",OUT.name)
+    if not match:raise ValueError('Batch directory must include YYYYMMDD')
+    stamp=match.group(1);date=f"{stamp[:4]}-{stamp[4:6]}-{stamp[6:]}"
+    spec=importlib.util.spec_from_file_location('review_planner',ROOT/'scripts/plan-review-audio-batch.py')
+    planner=importlib.util.module_from_spec(spec);spec.loader.exec_module(planner)
+    indexed=re.fullmatch(r'review-\d{8}-(\d+)',OUT.name)
+    batch_index=int(indexed.group(1)) if indexed else 1
+    planned=planner.build(date,20,batch_index)
+    if not destination.exists():save(destination,planned)
+    return planned
 
 def generate(language):
     import numpy as np, soundfile as sf
-    batch=plan(); tasks=[t for t in batch['localTasks'] if t['language']==language]
+    batch=plan()
+    cloud_count=len(read(Path(batch['cloudPlan']))['tasks']) if batch.get('cloudPlan') else 0
+    if len(batch['localTasks'])+cloud_count>20:raise ValueError('Review batch exceeds the 20-clip cap')
+    tasks=[t for t in batch['localTasks'] if t['language']==language]
     done={r['id']:r for r in (json.loads(l) for l in (OUT/'metadata.jsonl').read_text().splitlines())} if (OUT/'metadata.jsonl').exists() else {}
     start=time.monotonic()
     if language=='vi':
@@ -87,7 +73,7 @@ def generate(language):
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('action',choices=['plan','vi','en']);args=parser.parse_args()
     if args.action=='plan':
-        result=plan();print(json.dumps(dict(local=len(result['localTasks']),cloud=10,plan=str(OUT/'plan.json'))))
+        result=plan();print(json.dumps(dict(local=len(result['localTasks']),cloud=len(read(Path(result['cloudPlan']))['tasks']) if result.get('cloudPlan') else 0,plan=str(OUT/'plan.json'))))
     else:
         OUT.mkdir(parents=True,exist_ok=True)
         with (ROOT/'audio/generated/.local-generation.lock').open('w') as lock:

@@ -56,6 +56,36 @@
           "approvalEvidence": "User approved the October 25 explicitly Northern Vietnamese audition as authentic and beautiful.",
           "accentRequested": "Northern Vietnamese (Hanoi)",
           "generationEnabled": true
+        },
+        {
+          "language": "en",
+          "role": "female",
+          "locale": "en-US",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native American English female voice; calm, clear teacher delivery. Say the exact sentence once. The final word is singular fruit, pronounced /fruːt/, with no final s sound. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-05",
+          "referenceAudioSha256": "800fb33d16a57b8fd8c264102dc84c67b0ff313cec5852e90959ee2de4699344",
+          "approvalEvidence": "User accepted the exact new Gemini repair voice while approving all 20 November 5 recordings.",
+          "generationEnabled": false,
+          "scope": "accepted-exact-pronunciation-repair",
+          "accentRequested": "American"
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Southern Vietnamese (Saigon accent), female voice. Calm, clear, measured teacher delivery. Say the exact sentence once, articulating both occurrences of tôi distinctly, especially the second tôi after nhưng. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-05",
+          "referenceAudioSha256": "80ce1924a096efa9fb551301154895f58098d864469f25976728868c10ce02c9",
+          "approvalEvidence": "User accepted the exact new Gemini repair voice while approving all 20 November 5 recordings.",
+          "generationEnabled": false,
+          "scope": "accepted-exact-pronunciation-repair",
+          "accentRequested": "Southern Vietnamese (Saigon)"
         }
       ]
     },

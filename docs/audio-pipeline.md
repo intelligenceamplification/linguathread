@@ -272,3 +272,13 @@ Measured short main-sentence local generation was subsecond per clip after model
 118 distinct new texts were accepted: ten free Gemini Spanish recordings and 108 local English/Vietnamese recordings. Two additional texts remain blocked after failed local pronunciation repairs and are queued in `audio/pending-pronunciation-repairs.json` for a future free Gemini audition. No automatic job or paid request is authorized. American English now uses Sky only; British Emma and George remain active. Local generator planning skips the deferred texts to prevent repeated local repair attempts.
 
 The remote catalog contains 447 variants. Build 17 admits the seven active local profiles, supports exact cached English alongside its existing uncovered-English fallback, and preserves the same Normal/Slow player behavior. No local model is bundled into the device app. Raw rejected takes remain outside the runtime catalogs as audit evidence.
+
+### November 5 workflow and release
+
+Review batches are capped at twenty total clips and every clip receives listening review. The free Gemini quota is reserved for confirmed defects by default; an explicit user instruction may instead allocate remaining requests to missing lesson coverage. Separate indexed batches preserve immutable checkpoints, avoid duplicate pending or accepted local texts, and keep the phone untouched until requested.
+
+The user accepted fifty recordings across batches of 20, 20, and 10, then two completed Spanish recordings from an explicitly authorized eight-request coverage plan. Both unresolved pronunciation repairs (English singular fruit and the second Vietnamese tôi) were accepted in the first batch. Their new Gemini recipes are exact repair references, not automatic replacements of working voice families.
+
+Three consecutive provider HTTP 503 responses stopped the later coverage job. Four requests succeeded across the day, three failed, and three were not attempted under the conservative ten-attempt local cap. Six planned coverage texts remain unavailable; see `audio/provider-outage-20261105.json`. Failed requests were not retried automatically and no paid fallback was used.
+
+The combined release adds 52 approved recordings for a 499-variant native catalog. Build 18 pins the newly accepted English and Southern Vietnamese Gemini references while retaining Sky and the accepted British/local Vietnamese profiles. Learner data and existing audio remain intact.

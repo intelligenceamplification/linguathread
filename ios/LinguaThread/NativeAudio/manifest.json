@@ -86,6 +86,22 @@
       "normalTempo": 1
     },
     {
+      "language": "en",
+      "voice": "female",
+      "referenceSha256": "800fb33d16a57b8fd8c264102dc84c67b0ff313cec5852e90959ee2de4699344",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "29411c9c8fb8f78355b025e1ff72928adcbc88ab73b87c28a66930e9fd9a2422",
+      "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "80ce1924a096efa9fb551301154895f58098d864469f25976728868c10ce02c9",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "f090db8496c79a6733096919d140a36b9373f52b8d6205631cc22babf5b22ccf",
+      "normalTempo": 1
+    },
+    {
       "language": "vi",
       "voice": "male",
       "referenceSha256": "1a7cfe57282049e8015b5aaa6515cd1a4c8792b843530129f1697d8694feab13",

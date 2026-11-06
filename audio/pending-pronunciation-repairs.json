@@ -13,7 +13,11 @@
       "issue": "Singular fruit sounded plural across Sky takes.",
       "requiresNewVoiceListeningApproval": true,
       "desiredAccent": "American",
-      "status": "awaiting-next-free-quota-and-audition"
+      "status": "resolved",
+      "candidateRequestKey": "37c2473e8bc8c193bf118f525a110ae5cdee1954d4adfb7ebf6cde4ad96fda8a",
+      "candidateDate": "2026-11-05",
+      "resolvedAt": "2026-11-05",
+      "acceptedSha256": "800fb33d16a57b8fd8c264102dc84c67b0ff313cec5852e90959ee2de4699344"
     },
     {
       "language": "vi",
@@ -21,7 +25,11 @@
       "issue": "Second tôi after nhưng mispronounced.",
       "requiresNewVoiceListeningApproval": true,
       "desiredAccent": "Southern",
-      "status": "awaiting-next-free-quota-and-audition"
+      "status": "resolved",
+      "candidateRequestKey": "194294d129220acab09a479ee983207d221106e0698f3cd1611b6a6b99fdf7ed",
+      "candidateDate": "2026-11-05",
+      "resolvedAt": "2026-11-05",
+      "acceptedSha256": "80ce1924a096efa9fb551301154895f58098d864469f25976728868c10ce02c9"
     }
   ]
 }

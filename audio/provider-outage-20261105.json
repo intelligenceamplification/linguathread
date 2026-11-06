@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-05",
+  "provider": "gemini",
+  "failure": "HTTP 503 on three consecutive requests; stopped after a pause and an unattempted-sentence probe",
+  "dailyRequestsUsed": 7,
+  "dailyRequestsRemaining": 3,
+  "automaticRetry": false,
+  "paidFallback": false,
+  "items": [
+    {
+      "requestKey": "c9e9ea952dbd9ea8fb03b78fc5e05a96bfc4e2d94c762610c003040e7f691845",
+      "language": "es",
+      "text": "Sigue derecho y gira a la izquierda.",
+      "status": "held-provider-503",
+      "automaticRetry": false
+    },
+    {
+      "requestKey": "bab6ee345f08183e47dd6ce8ff959cbcbfc8cc9db6291edb0ec620806cfb1d15",
+      "language": "es",
+      "text": "¿Este autobús lleva al centro?",
+      "status": "held-provider-503",
+      "automaticRetry": false
+    },
+    {
+      "requestKey": "577cd1907aa9987d9bd9fd59b4434aef9ffb2beb76906830e01fb27ca87b2144",
+      "language": "es",
+      "text": "¿Puede hablar más despacio?",
+      "status": "held-provider-503",
+      "automaticRetry": false
+    },
+    {
+      "requestKey": "6774a42febc7653868e498b841d8a8b2426633cc31f90587641da237211e37f4",
+      "language": "es",
+      "text": "Cada día aprendo a expresarme mejor.",
+      "status": "unattempted-provider-outage",
+      "automaticRetry": false
+    },
+    {
+      "requestKey": "ba8a5ec3c3df768039be81ab3d39064bf1bec437bde807b4b489fb6d2bba24a4",
+      "language": "es",
+      "text": "Creo que el tiempo juntos es importante.",
+      "status": "unattempted-provider-outage",
+      "automaticRetry": false
+    },
+    {
+      "requestKey": "a6379ca2308e8941360e507cc94f3d35f07bca88e4f8cbb20e4ba2ebd52198ff",
+      "language": "es",
+      "text": "Estoy de acuerdo, pero también depende.",
+      "status": "unattempted-provider-outage",
+      "automaticRetry": false
+    }
+  ]
+}
