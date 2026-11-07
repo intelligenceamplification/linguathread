@@ -1,0 +1,425 @@
+{
+  "schemaVersion": 1,
+  "batches": [
+    {
+      "id": "20261105-held-for-20261106",
+      "generatedAt": "2026-11-05",
+      "reviewNotBefore": "2026-11-06",
+      "status": "included-in-approved-batch",
+      "automaticPublication": false,
+      "reviewPage": "outputs/audio-review-held-20261106.html",
+      "report": "outputs/audio-review-held-20261106.json",
+      "plan": "audio/generated/review-20261105-05/plan.json",
+      "clips": [
+        {
+          "requestKey": "6774a42febc7653868e498b841d8a8b2426633cc31f90587641da237211e37f4",
+          "language": "es",
+          "text": "Cada día aprendo a expresarme mejor.",
+          "sha256": "549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0.wav"
+        },
+        {
+          "requestKey": "ba8a5ec3c3df768039be81ab3d39064bf1bec437bde807b4b489fb6d2bba24a4",
+          "language": "es",
+          "text": "Creo que el tiempo juntos es importante.",
+          "sha256": "3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e.wav"
+        },
+        {
+          "requestKey": "a6379ca2308e8941360e507cc94f3d35f07bca88e4f8cbb20e4ba2ebd52198ff",
+          "language": "es",
+          "text": "Estoy de acuerdo, pero también depende.",
+          "sha256": "c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a.wav"
+        }
+      ],
+      "includedIn": "20261107-device-01"
+    },
+    {
+      "id": "20261107-device-01",
+      "approvedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261107-device.json",
+      "plan": "audio/generated/review-20261107-device/plan.json",
+      "clips": [
+        {
+          "requestKey": "6774a42febc7653868e498b841d8a8b2426633cc31f90587641da237211e37f4",
+          "language": "es",
+          "text": "Cada día aprendo a expresarme mejor.",
+          "sha256": "549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0.wav"
+        },
+        {
+          "requestKey": "ba8a5ec3c3df768039be81ab3d39064bf1bec437bde807b4b489fb6d2bba24a4",
+          "language": "es",
+          "text": "Creo que el tiempo juntos es importante.",
+          "sha256": "3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e.wav"
+        },
+        {
+          "requestKey": "a6379ca2308e8941360e507cc94f3d35f07bca88e4f8cbb20e4ba2ebd52198ff",
+          "language": "es",
+          "text": "Estoy de acuerdo, pero también depende.",
+          "sha256": "c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a.wav"
+        },
+        {
+          "requestKey": "c3080d8ee04baedc01120fa469d5f4d59a039cf1c72b6cadf8ed331e5a40f258",
+          "language": "es",
+          "text": "Para mí, la honestidad importa mucho.",
+          "sha256": "a3de8fb48a101bf5fc38d524cdeae6e05b2260262a1252540a03b516af1e8a68",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/a3de8fb48a101bf5fc38d524cdeae6e05b2260262a1252540a03b516af1e8a68.wav"
+        },
+        {
+          "requestKey": "3a8693b20daa0b3c335f457c9a003682fe0c4dd221bd2b93fd3324afba26e77f",
+          "language": "vi",
+          "text": "Ý bạn là thay đổi này ảnh hưởng đến lịch trình nhưng không ảnh hưởng đến trách nhiệm của chúng ta, đúng không?",
+          "sha256": "b6a550e6aed7beeaf449f9fc8b821732442d2e0d93fbc8b0a246090e0c62d907",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/b6a550e6aed7beeaf449f9fc8b821732442d2e0d93fbc8b0a246090e0c62d907.wav"
+        },
+        {
+          "requestKey": "1be93478d33844b1c55abca4c93fee6c66eb4edf52d02c6929161e33f1f0554a",
+          "language": "vi",
+          "text": "Ban đầu tôi nghi ngờ, nhưng sau khi thử vài lần, tôi nhận ra rằng nó có hiệu quả.",
+          "sha256": "85562046215cf68372b310e92bb0f7919b27fbef9e27255d54181b723b57e6d9",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/85562046215cf68372b310e92bb0f7919b27fbef9e27255d54181b723b57e6d9.wav"
+        },
+        {
+          "requestKey": "19841f6e624cc69901f8d534ef11973c6e0dbdf1d763a15f1eac07484161ec87",
+          "language": "vi",
+          "text": "Mặc dù hiểu những lợi ích, tôi muốn chờ đến khi chúng ta có thêm thông tin.",
+          "sha256": "2cb78d55115dbd1d9f4c2c4a2bc8522f90bef28b0878a56141950efa270db117",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/2cb78d55115dbd1d9f4c2c4a2bc8522f90bef28b0878a56141950efa270db117.wav"
+        },
+        {
+          "requestKey": "c27e97e7e72d38a8191fefa53723063f5b4bee5d485620c603a6b77fb3ad91a7",
+          "language": "vi",
+          "text": "Nếu tôi hiểu đúng, bạn cần thêm hỗ trợ; chúng ta hãy xem có thể sắp xếp thế nào.",
+          "sha256": "b90e7c6df46dedf109ba2310f8743f68cd74fa2624d5d063efcd0793ff68258f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/b90e7c6df46dedf109ba2310f8743f68cd74fa2624d5d063efcd0793ff68258f.wav"
+        },
+        {
+          "requestKey": "d8d4e665057d572e44fb695ce082c9468137dcab3f2b48ec88bbb2d720086d9e",
+          "language": "en",
+          "text": "We have been without hot water for two days.",
+          "sha256": "4ade2adb4afa0c4ab6ef61bdb5f3a33cb3574653c68d074b1845030c8639c608",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/4ade2adb4afa0c4ab6ef61bdb5f3a33cb3574653c68d074b1845030c8639c608.wav"
+        },
+        {
+          "requestKey": "ea170b7ae4aa9b8a87510b1448d265935ae52666e7e86e138f17392f3486bcf7",
+          "language": "en",
+          "text": "We need someone to inspect the heating.",
+          "sha256": "2492629194ab08befa6e01c8c0ec4b12553fda39a67573b5b5ff5e9dfbfda634",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/2492629194ab08befa6e01c8c0ec4b12553fda39a67573b5b5ff5e9dfbfda634.wav"
+        },
+        {
+          "requestKey": "39cbadf079ed61d4d7287c6970601fcc35d306cfb6c6485aeb00ff2a782442e8",
+          "language": "en",
+          "text": "I have been helping the neighborhood association for a year.",
+          "sha256": "a158e02124bbb549c3c946fb12be5fa9542d09ea630e628ead8b7c1f3fee2bd6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-device/39cbadf079ed61d4d7287c6970601fcc35d306cfb6c6485aeb00ff2a782442e8.wav"
+        },
+        {
+          "requestKey": "307299e9e45e239aecbcba947a78c74ca3392e3fbd532138022b79ef4b58be89",
+          "language": "en",
+          "text": "I recommend that you watch this film.",
+          "sha256": "b18d7fd4a3c35a01d3ebdd878ffc30184c567372cfea59fa9aed39646aa87a7c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-device/307299e9e45e239aecbcba947a78c74ca3392e3fbd532138022b79ef4b58be89.wav"
+        }
+      ],
+      "releaseBuild": 19
+    },
+    {
+      "id": "20261107-device-02",
+      "approvedAt": "2026-11-07",
+      "approvalEvidence": "User confirmed all twelve are flawless after individual listening review.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261107-02.json",
+      "plan": "audio/generated/review-20261107-02-listening/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-5528e79373a0d7ed81be",
+          "language": "es",
+          "text": "Me llamo Desmond. Mucho gusto.",
+          "sha256": "41f3df3bbd5441cc1a8f24459dd6733ee53da3fc7ac6b1179000882f97f7c064",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/41f3df3bbd5441cc1a8f24459dd6733ee53da3fc7ac6b1179000882f97f7c064.wav"
+        },
+        {
+          "requestKey": "es-8eb026e2258e692a747c",
+          "language": "es",
+          "text": "Quiero agua, por favor.",
+          "sha256": "4901b9b6360529c8ffb8399ee4ee777b88a0424157ecb3d7c10f2a24b731f470",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/4901b9b6360529c8ffb8399ee4ee777b88a0424157ecb3d7c10f2a24b731f470.wav"
+        },
+        {
+          "requestKey": "es-ee88223721a2eed95a4a",
+          "language": "es",
+          "text": "Estoy aquí. ¿Dónde está el baño?",
+          "sha256": "f5a19e1d609c6a49dff79f2879c97f747a70839ed4a92a6be1179dfb6a1a491d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/f5a19e1d609c6a49dff79f2879c97f747a70839ed4a92a6be1179dfb6a1a491d.wav"
+        },
+        {
+          "requestKey": "es-60030e328c7ea2c72741",
+          "language": "es",
+          "text": "Hoy trabajo. Después descanso en casa.",
+          "sha256": "e50dda5cee01c74aaff29bd8a69406add4d78b2b013dc49ae1100c5deb031af3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/e50dda5cee01c74aaff29bd8a69406add4d78b2b013dc49ae1100c5deb031af3.wav"
+        },
+        {
+          "requestKey": "3e22c3f4546fe07ea44f8848044ca522296464172438a993a3bfb552ca2f345d",
+          "language": "vi",
+          "text": "Khi tôi đến, họ đã bắt đầu rồi nên tôi đợi bên ngoài.",
+          "sha256": "c58b7db345bf4f5fa3dcceb808eb43ea620a75d732922f175eb813c48cd7c3c4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/3e22c3f4546fe07ea44f8848044ca522296464172438a993a3bfb552ca2f345d.wav"
+        },
+        {
+          "requestKey": "65d73daf9dd9de3d9bc5479e9e0fe53097d2d04c73ed57c10a69b1e3cf8c1b26",
+          "language": "vi",
+          "text": "Tôi nghĩ ý tưởng có thể hiệu quả nếu chúng ta thay đổi một vài điểm.",
+          "sha256": "2b100ed32fb2d0c2a151ec4a106cf74f156266d84341a50dd3d730c9c5cbdece",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/65d73daf9dd9de3d9bc5479e9e0fe53097d2d04c73ed57c10a69b1e3cf8c1b26.wav"
+        },
+        {
+          "requestKey": "9d5e373d90a4938f52dabfe33caed154cc5348b65a9de293d7448b3534e3b28f",
+          "language": "vi",
+          "text": "Tôi vui vì có thể giúp bạn, nhưng hôm nay tôi cần nghỉ ngơi.",
+          "sha256": "4c829379cae76d9e37217ccb1397f1718a38a06c98572988adbe8961cd7a116f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/9d5e373d90a4938f52dabfe33caed154cc5348b65a9de293d7448b3534e3b28f.wav"
+        },
+        {
+          "requestKey": "65649a70b5b30a5fcb342e9924b7a6b8088e8e26219333d723b5a75e61a9a334",
+          "language": "vi",
+          "text": "Tôi đã học cách diễn đạt tốt hơn vì luyện tập có chủ đích.",
+          "sha256": "ecbd4bbae51c84b933be16820a0b1397380fe037cd30c9cce46ca0fcbd963556",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/65649a70b5b30a5fcb342e9924b7a6b8088e8e26219333d723b5a75e61a9a334.wav"
+        },
+        {
+          "requestKey": "3946df652fcbd82a8f0e0f5c979cd44b54f890862643d8d265b0426a6ecfebd2",
+          "language": "en",
+          "text": "I just finished the book and I am still thinking about it.",
+          "sha256": "faf93dcf396e61a89a5f741fb66039884204837e8086bfd2c07768d0fdcd3b3a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/3946df652fcbd82a8f0e0f5c979cd44b54f890862643d8d265b0426a6ecfebd2.wav"
+        },
+        {
+          "requestKey": "59e4ad1e81628eea172bc641eca2a0a14d221848712afbaa8f3cf1f80807c3d9",
+          "language": "en",
+          "text": "What I like most is the way the story is told.",
+          "sha256": "cffd21950dba6a38bd0b783199f60104716cd7d242f8c462cd39618d9c5b5708",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/59e4ad1e81628eea172bc641eca2a0a14d221848712afbaa8f3cf1f80807c3d9.wav"
+        },
+        {
+          "requestKey": "90568e6831df9ecce14b44727c534b5b5ec1c88ef986eb053191fdbe2e3c769b",
+          "language": "en",
+          "text": "I prefer to read at home instead of going out tonight.",
+          "sha256": "307452224e9dc3796d34837c3ff612e38567dbb34195ab81abf8a386c8d26f96",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/90568e6831df9ecce14b44727c534b5b5ec1c88ef986eb053191fdbe2e3c769b.wav"
+        },
+        {
+          "requestKey": "7716880c89ef5d80303343dd674f7b8cad87c66cdcb77641afe4098120bf876d",
+          "language": "en",
+          "text": "This option is as practical as the other, but costs less.",
+          "sha256": "8bbf98524964b5bed2d5cde07cb4a91255a64d91f0b6e101a3b68050683c5fac",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-02-listening/7716880c89ef5d80303343dd674f7b8cad87c66cdcb77641afe4098120bf876d.wav"
+        }
+      ],
+      "releaseBuild": 19
+    },
+    {
+      "id": "20261107-device-03",
+      "approvedAt": "2026-11-07",
+      "approvalEvidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261107-03.json",
+      "plan": "audio/generated/review-20261107-03-listening/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-2ad472c8e86f2413ef68",
+          "language": "es",
+          "text": "Ahora estoy escuchando con atención.",
+          "sha256": "858a90c2f519f68543b84a555560141e28e6b8b787f3c0efd577975caeca1355",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/858a90c2f519f68543b84a555560141e28e6b8b787f3c0efd577975caeca1355.wav"
+        },
+        {
+          "requestKey": "es-4f0eefe65eedc896337e",
+          "language": "es",
+          "text": "Me siento cansado porque necesito descansar.",
+          "sha256": "8fd87a876ac0708205c11372abe35aa6eb74cb40a560110fbadcbb727d5af474",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/8fd87a876ac0708205c11372abe35aa6eb74cb40a560110fbadcbb727d5af474.wav"
+        },
+        {
+          "requestKey": "es-97141258dce2a72b1c63",
+          "language": "es",
+          "text": "A veces camino por la mañana.",
+          "sha256": "9142bd92038897fed20620ec46f94ed61e0ecbfb5d6035543f3426cb3ab7506a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/9142bd92038897fed20620ec46f94ed61e0ecbfb5d6035543f3426cb3ab7506a.wav"
+        },
+        {
+          "requestKey": "es-3b39b72bb2e6a0251b3b",
+          "language": "es",
+          "text": "Ahora estoy escribiendo un correo.",
+          "sha256": "7769e1afc2563422a61d3f1e5fb2c76514ae1f394c056abc5f078f713dbdd996",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/7769e1afc2563422a61d3f1e5fb2c76514ae1f394c056abc5f078f713dbdd996.wav"
+        },
+        {
+          "requestKey": "d9c2e260215b80c40070e586777da850429ae5ce3fbd73ebf12246bfbfbb70b9",
+          "language": "vi",
+          "text": "Khi tôi đến ga, tàu đã rời đi rồi, vì vậy tôi phải đổi kế hoạch.",
+          "sha256": "3b79dc06edebb78e3d4e2f581dcc0716a1876bda5816811b0309f26aa7560ce2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/d9c2e260215b80c40070e586777da850429ae5ce3fbd73ebf12246bfbfbb70b9.wav"
+        },
+        {
+          "requestKey": "c42bdd9f6a10daaeaf57994045bd8f98a7b962c74977c95fcf943e998b59c8bb",
+          "language": "vi",
+          "text": "Trong khi chúng tôi đang đi bộ ở trung tâm, trời đột nhiên bắt đầu mưa.",
+          "sha256": "c92ccd4644dbbde90e48b26087f693d189bae316b772a34cf4553b47410f3821",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/c92ccd4644dbbde90e48b26087f693d189bae316b772a34cf4553b47410f3821.wav"
+        },
+        {
+          "requestKey": "0c91caab2038da0c8c2a15825b7393ce84576986dbd8a25eedb2e2c183c75adf",
+          "language": "vi",
+          "text": "Tôi không nhận ra nơi đó vì người ta đã xây thêm vài tòa nhà mới.",
+          "sha256": "bb983a0a138e69e29ff41ca4436bdf3b8da580d08f9bcad394d642655bebd71b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/0c91caab2038da0c8c2a15825b7393ce84576986dbd8a25eedb2e2c183c75adf.wav"
+        },
+        {
+          "requestKey": "f7a7bcaec8f8ff99714f5b82cb35963940578504800cd9779dc74a1cf206f399",
+          "language": "vi",
+          "text": "Cuối cùng chúng tôi hiểu rằng sự chậm trễ đã giúp mình tránh được một vấn đề lớn hơn.",
+          "sha256": "fcd58091bd3e89041b5320851d855c85351d44e785db60712300751039749c61",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/f7a7bcaec8f8ff99714f5b82cb35963940578504800cd9779dc74a1cf206f399.wav"
+        },
+        {
+          "requestKey": "37407c9b8d7d553e548e0f1fc08f890cec8e6f8107327c7b998ebd4441c0401e",
+          "language": "en",
+          "text": "For me, the most important thing is that it be easy to use.",
+          "sha256": "7483fb5d9e2530a15e1a5543131c4633ae0dac1fcc51579cf36c926f2c819934",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/37407c9b8d7d553e548e0f1fc08f890cec8e6f8107327c7b998ebd4441c0401e.wav"
+        },
+        {
+          "requestKey": "205977c366a094e4ddfa9eff4a976603da1bc862425b05c6b6169b7a142cf5a8",
+          "language": "en",
+          "text": "Although it is more expensive, it lasts much longer.",
+          "sha256": "d4f276f16c40fd4f9f09e210542f59b3bc68e671d5d9887eabe07e9d7631cf5c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/205977c366a094e4ddfa9eff4a976603da1bc862425b05c6b6169b7a142cf5a8.wav"
+        },
+        {
+          "requestKey": "1b818bd3c8538382ece6cb24d551c6ea9a228e0632be60f43cd4fb3cdcd2f3e5",
+          "language": "en",
+          "text": "I would choose the second option if it included the service.",
+          "sha256": "0ceef404d2a248312050b6a572f785a2e196192890988ff71d5b124893fcdb03",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/1b818bd3c8538382ece6cb24d551c6ea9a228e0632be60f43cd4fb3cdcd2f3e5.wav"
+        },
+        {
+          "requestKey": "1916bb8715def0255e1e74899f499ff79e3c05cc0f3933f34f71b41cdbba5fba",
+          "language": "en",
+          "text": "I will call you when I get home.",
+          "sha256": "0ad97ccee1aa6d45ec52a773d82db2b6cf63db2917764501972edc9b9a741520",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-03-listening/1916bb8715def0255e1e74899f499ff79e3c05cc0f3933f34f71b41cdbba5fba.wav"
+        }
+      ],
+      "approvedReplacementReport": "outputs/audio-review-20261107-03-clip-06.json",
+      "releaseBuild": 19
+    },
+    {
+      "id": "20261107-device-04",
+      "approvedAt": "2026-11-07",
+      "approvalEvidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261107-04.json",
+      "plan": "audio/generated/review-20261107-04-listening/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-3a0505fe4b92af34d3d4",
+          "language": "es",
+          "text": "Antes viajaba poco, pero ahora viajo más.",
+          "sha256": "27b47d2c705f296336d444a8ec53704939b62194a4139edbba0032233542867e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/27b47d2c705f296336d444a8ec53704939b62194a4139edbba0032233542867e.wav"
+        },
+        {
+          "requestKey": "es-4cfd4c0e070a48b36194",
+          "language": "es",
+          "text": "Antes trabajaba de noche, pero ahora prefiero el día.",
+          "sha256": "365c61e705fde779ca60a315b8e5d26954f640b5158912178699194074083772",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/365c61e705fde779ca60a315b8e5d26954f640b5158912178699194074083772.wav"
+        },
+        {
+          "requestKey": "es-82a70a85ee4a35771171",
+          "language": "es",
+          "text": "Sigue derecho y gira a la izquierda.",
+          "sha256": "60e2548d7dda8b213d04a731a37ae87ca91ebe182591dd5da700865c97e7f587",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/es-male-60e2548d7dda8b213d04.m4a"
+        },
+        {
+          "requestKey": "es-b93e10f33d63139b12bd",
+          "language": "es",
+          "text": "¿Este autobús lleva al centro?",
+          "sha256": "bbcce2cf768fed4c544df828739dc80ae9d451d805197b2785286c3cf66f6962",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/es-female-bbcce2cf768fed4c544d.m4a"
+        },
+        {
+          "requestKey": "es-24703ebb29728f2df538",
+          "language": "es",
+          "text": "¿Puede hablar más despacio?",
+          "sha256": "fe224c398711fe7bca9724e0b2a3220eb4f02f97ca8d803b2b8a9e5d88970b34",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/es-male-fe224c398711fe7bca97.m4a"
+        },
+        {
+          "requestKey": "8f0c859240a353e28f406bddd469d1fbe3c3f7f1bd7e0e12c94c070db3612c7a",
+          "language": "es",
+          "text": "Necesito un momento para pensar.",
+          "sha256": "35a0609b08fd6cc818a0103232a1242dee98bcb034db7ad0712b5a22b0e8d795",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/35a0609b08fd6cc818a0103232a1242dee98bcb034db7ad0712b5a22b0e8d795.wav"
+        },
+        {
+          "requestKey": "7757bdbdfb7a551d5f6311ea20f2fd09aa1946ec3372894b7a280bbd22931b0e",
+          "language": "es",
+          "text": "Me duele la cabeza.",
+          "sha256": "179706ddb1ad9dd12aaafe6afbd5ca04b3b73816f5e812b33096613de769e753",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/179706ddb1ad9dd12aaafe6afbd5ca04b3b73816f5e812b33096613de769e753.wav"
+        },
+        {
+          "requestKey": "es-fc22ca6459975b36e675",
+          "language": "es",
+          "text": "Tengo fiebre desde ayer.",
+          "sha256": "2060a9e08d38e33e68d92ccd393c8b2685db40a37a8789f3d7a940d50a5981aa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/es-female-2060a9e08d38e33e68d9.m4a"
+        },
+        {
+          "requestKey": "cdf017dd6c70017ea83df1fc03d0c1eb5e1f1fc70b89506904e11c4e2bc3bbea",
+          "language": "en",
+          "text": "I intend to finish the project before Friday.",
+          "sha256": "4d6aaf045e5c2d0f636c10eb9a2cc1a55618d498135d892da0b66e8f06ca210f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/cdf017dd6c70017ea83df1fc03d0c1eb5e1f1fc70b89506904e11c4e2bc3bbea.wav"
+        },
+        {
+          "requestKey": "9a1b1a465dfb0acbed81b84d1a83ecfd2e8e7db7fee868541bc1bbd17601801a",
+          "language": "en",
+          "text": "If the schedule changes, I will let you know immediately.",
+          "sha256": "b7e83697041769ee9132b37c4cd6a83ecd48a56642305d15be8e816ec96f1e61",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/9a1b1a465dfb0acbed81b84d1a83ecfd2e8e7db7fee868541bc1bbd17601801a.wav"
+        },
+        {
+          "requestKey": "078b5830ca774ec986a5183b8ea4cb5560812262a145e86281086b10730132b2",
+          "language": "en",
+          "text": "We agreed to review the details tomorrow.",
+          "sha256": "ad49ce64cf1ccab4176303c3990f9cf7c2f7484db2d7433423c6fedfb6adffd3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/078b5830ca774ec986a5183b8ea4cb5560812262a145e86281086b10730132b2.wav"
+        },
+        {
+          "requestKey": "5e58822e8e8299b3e45ffe6e37e58fa4991e500092ea66fdd54f71e1a786daa3",
+          "language": "en",
+          "text": "I agree in general, although the proposal still needs some changes.",
+          "sha256": "2973db6e73161825c2cad8d81ad7424ad1b447dab2aff0f933803c702d7f76de",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261107-04-listening/5e58822e8e8299b3e45ffe6e37e58fa4991e500092ea66fdd54f71e1a786daa3.wav"
+        }
+      ],
+      "approvedReplacementReport": "outputs/audio-review-20261107-04-repairs.json",
+      "releaseBuild": 19
+    }
+  ]
+}

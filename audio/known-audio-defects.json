@@ -220,6 +220,36 @@
       "requiresPronunciationReview": true,
       "reportedAt": "2026-11-04",
       "reason": "User rejected targeted pronunciation repair; stop local retries and audition provider alternative."
+    },
+    {
+      "language": "vi",
+      "text": "Trong khi chúng tôi đang đi bộ ở trung tâm, trời đột nhiên bắt đầu mưa.",
+      "voice": "male",
+      "sha256": "e3252aefae2e2fa897a2120a0e7c9c938114fab324b6c3af6157fe0d6b26a2db",
+      "reason": "User requested Gemini replacement after listening to November 7 batch 3 clip 6.",
+      "reportedAt": "2026-11-07",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "Necesito un momento para pensar.",
+      "voice": "female",
+      "sha256": "8e81fa683c3391c5ce7aaa52db5c4cf92a14042b996a17ac4476077ec4b28f67",
+      "reason": "User requested Gemini replacement after listening to November 7 batch 4 clip 6.",
+      "reportedAt": "2026-11-07",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "Me duele la cabeza.",
+      "voice": "male",
+      "sha256": "35b371baee3ac9ce016352aa0918c770d3705ff932c61cba7f3d187f48746838",
+      "reason": "User requested Gemini replacement after listening to November 7 batch 4 clip 7.",
+      "reportedAt": "2026-11-07",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

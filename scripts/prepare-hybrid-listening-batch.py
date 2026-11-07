@@ -23,7 +23,7 @@ for task in cloud['tasks']:
     if not receipt.exists():continue
     row=read(receipt)
     if row['task']!=task or digest(canonical(task['request']).encode())!=task['key'] or row['file']!=row['sha256']+'.wav':raise ValueError('Cloud recording identity differs from its displayed text')
-    clips.append(dict(id=task['key'],language=task['language'],text=task['displayText'],voice=task['role'],profile='gemini-'+task['language']+'-'+task['role'],label=' · '.join(filter(None,['Gemini',task.get('accent'),task['role'],'new voice candidate' if task.get('voiceCandidate') else None])),file=str(WORK/row['file']),sha256=row['sha256'],voiceCandidate=task.get('voiceCandidate',False),purpose=task.get('purpose','lesson-recording')))
+    clips.append(dict(id=task['key'],language=task['language'],text=task['displayText'],voice=task['role'],profile='gemini-'+task['language']+'-'+task['role'],label=' · '.join(filter(None,['Gemini',task.get('accent'),task['role'],'new voice candidate' if task.get('voiceCandidate') else None])),file=str(WORK/row['file']),sha256=row['sha256'],voiceCandidate=task.get('voiceCandidate',False),purpose=task.get('purpose','lesson-recording'),originalClipNumber=task.get('originalClipNumber')))
 if OUT.name.startswith('review-'):
     if len(plan['localTasks'])+len(cloud['tasks'])>20:raise ValueError('Review batch exceeds 20 clips')
     clips.sort(key=lambda c:0 if c['profile'].startswith('gemini-') else 1)
@@ -63,7 +63,7 @@ for heading,subset in groups:
     parts.append('<h1>'+heading+'</h1>')
     for c in subset:
         held=c['screen']['status']!='automated-pass'
-        replacement = f"<p>Replacement for previous Vietnamese clip {c['originalClipNumber']}.</p>" if OUT.name.endswith('-repairs') and c['language']=='vi' else ''
+        replacement = f"<p>Replacement for clip {c['originalClipNumber']}.</p>" if OUT.name.endswith('-repairs') and c.get('originalClipNumber') is not None else ''
         parts.append(f'<article class="{"held" if held else ""}"><h2>{c["number"]}. {c["language"].upper()} · {e(c["label"])}</h2>{replacement}<p>{e(c["text"])}</p><audio controls preload="none" src="{e(Path(c["file"]).as_uri(),quote=True)}"></audio><p><label>Speed <select onchange="this.closest(\'article\').querySelector(\'audio\').playbackRate=Number(this.value)"><option value="1">Normal</option><option value="0.75">Slow</option></select></label></p><small>{e(c["screen"]["status"])}</small><details><summary>Screening details</summary><p>{e(c["screen"].get("transcript","Pending"))}</p><p>{e(str(c["screen"].get("flags",[])))}</p></details></article>')
 path=ROOT/('outputs/'+STEM+'.html');path.write_text(''.join(parts)+'</html>')
 print(json.dumps(dict(summary,path=str(path)),ensure_ascii=False))

@@ -2,8 +2,8 @@
   "date": "2026-11-05",
   "provider": "gemini",
   "failure": "HTTP 503 on three consecutive requests; stopped after a pause and an unattempted-sentence probe",
-  "dailyRequestsUsed": 7,
-  "dailyRequestsRemaining": 3,
+  "dailyRequestsUsed": 10,
+  "dailyRequestsRemaining": 0,
   "automaticRetry": false,
   "paidFallback": false,
   "items": [
@@ -32,22 +32,29 @@
       "requestKey": "6774a42febc7653868e498b841d8a8b2426633cc31f90587641da237211e37f4",
       "language": "es",
       "text": "Cada día aprendo a expresarme mejor.",
-      "status": "unattempted-provider-outage",
-      "automaticRetry": false
+      "status": "generated-awaiting-next-day-review",
+      "automaticRetry": false,
+      "candidateSha256": "549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0",
+      "reviewNotBefore": "2026-11-06"
     },
     {
       "requestKey": "ba8a5ec3c3df768039be81ab3d39064bf1bec437bde807b4b489fb6d2bba24a4",
       "language": "es",
       "text": "Creo que el tiempo juntos es importante.",
-      "status": "unattempted-provider-outage",
-      "automaticRetry": false
+      "status": "generated-awaiting-next-day-review",
+      "automaticRetry": false,
+      "candidateSha256": "3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e",
+      "reviewNotBefore": "2026-11-06"
     },
     {
       "requestKey": "a6379ca2308e8941360e507cc94f3d35f07bca88e4f8cbb20e4ba2ebd52198ff",
       "language": "es",
       "text": "Estoy de acuerdo, pero también depende.",
-      "status": "unattempted-provider-outage",
-      "automaticRetry": false
+      "status": "generated-awaiting-next-day-review",
+      "automaticRetry": false,
+      "candidateSha256": "c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a",
+      "reviewNotBefore": "2026-11-06"
     }
-  ]
+  ],
+  "laterRecovery": "Three previously unattempted requests completed and are held for November 6 listening review."
 }

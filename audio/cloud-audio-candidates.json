@@ -86,6 +86,66 @@
           "generationEnabled": false,
           "scope": "accepted-exact-pronunciation-repair",
           "accentRequested": "Southern Vietnamese (Saigon)"
+        },
+        {
+          "language": "vi",
+          "role": "male",
+          "locale": "vi-VN",
+          "voiceId": "Charon",
+          "settings": {
+            "style": "Native Southern Vietnamese (Saigon accent), male voice. Calm, clear, measured teacher delivery at a natural pace. Read the exact sentence once. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-07",
+          "referenceAudioSha256": "85562046215cf68372b310e92bb0f7919b27fbef9e27255d54181b723b57e6d9",
+          "approvalEvidence": "User said this batch is flawless after individual listening review.",
+          "generationEnabled": false,
+          "scope": "approved-November-7-recording-recipe",
+          "accentRequested": "Southern"
+        },
+        {
+          "language": "vi",
+          "role": "male",
+          "locale": "vi-VN",
+          "voiceId": "Charon",
+          "settings": {
+            "style": "Native Northern Vietnamese (Hanoi accent), male voice. Calm, clear, measured teacher delivery at a natural pace. Read the exact sentence once. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-07",
+          "referenceAudioSha256": "2cb78d55115dbd1d9f4c2c4a2bc8522f90bef28b0878a56141950efa270db117",
+          "approvalEvidence": "User said this batch is flawless after individual listening review.",
+          "generationEnabled": false,
+          "scope": "approved-November-7-recording-recipe",
+          "accentRequested": "Northern"
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Southern Vietnamese (Saigon accent), female voice. Calm, clear, measured teacher delivery at a natural pace. Read the exact sentence once. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-07",
+          "referenceAudioSha256": "b90e7c6df46dedf109ba2310f8743f68cd74fa2624d5d063efcd0793ff68258f",
+          "approvalEvidence": "User said this batch is flawless after individual listening review.",
+          "generationEnabled": false,
+          "scope": "approved-November-7-recording-recipe",
+          "accentRequested": "Southern"
+        },
+        {
+          "language": "en",
+          "role": "female",
+          "locale": "en-US",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native American English female voice. Calm, clear teacher delivery at a natural pace. Read the exact sentence once. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-07",
+          "referenceAudioSha256": "4ade2adb4afa0c4ab6ef61bdb5f3a33cb3574653c68d074b1845030c8639c608",
+          "approvalEvidence": "User said this batch is flawless after individual listening review.",
+          "generationEnabled": false,
+          "scope": "approved-November-7-recording-recipe",
+          "accentRequested": "American"
         }
       ]
     },

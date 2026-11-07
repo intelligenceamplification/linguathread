@@ -396,6 +396,84 @@
       "sha256": "065bed7ab52d9554c54417ae097506db86f2c3a2b98f9a34217b741f6ae6d41b",
       "reviewedAt": "2026-11-05",
       "approvalEvidence": "User explicitly approved both completed Spanish recordings and authorized the combined Build 18 update on the connected phone. Six unavailable provider recordings are excluded."
+    },
+    {
+      "requestKey": "6774a42febc7653868e498b841d8a8b2426633cc31f90587641da237211e37f4",
+      "sha256": "549bded6fd5c49293cacaeca75af8a9ac949e9d232fc7634b01d5c9c2f6accb0",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "ba8a5ec3c3df768039be81ab3d39064bf1bec437bde807b4b489fb6d2bba24a4",
+      "sha256": "3c098a66fee354105c6a40eb180c58ed7f4031d617d18f911f2ef533d230119e",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "a6379ca2308e8941360e507cc94f3d35f07bca88e4f8cbb20e4ba2ebd52198ff",
+      "sha256": "c7a6a96fcb70cdda841713f1dea453fbaeb8bd128666ef0a8b23cc000dcaac7a",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "c3080d8ee04baedc01120fa469d5f4d59a039cf1c72b6cadf8ed331e5a40f258",
+      "sha256": "a3de8fb48a101bf5fc38d524cdeae6e05b2260262a1252540a03b516af1e8a68",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "3a8693b20daa0b3c335f457c9a003682fe0c4dd221bd2b93fd3324afba26e77f",
+      "sha256": "b6a550e6aed7beeaf449f9fc8b821732442d2e0d93fbc8b0a246090e0c62d907",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "1be93478d33844b1c55abca4c93fee6c66eb4edf52d02c6929161e33f1f0554a",
+      "sha256": "85562046215cf68372b310e92bb0f7919b27fbef9e27255d54181b723b57e6d9",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "19841f6e624cc69901f8d534ef11973c6e0dbdf1d763a15f1eac07484161ec87",
+      "sha256": "2cb78d55115dbd1d9f4c2c4a2bc8522f90bef28b0878a56141950efa270db117",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "c27e97e7e72d38a8191fefa53723063f5b4bee5d485620c603a6b77fb3ad91a7",
+      "sha256": "b90e7c6df46dedf109ba2310f8743f68cd74fa2624d5d063efcd0793ff68258f",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "d8d4e665057d572e44fb695ce082c9468137dcab3f2b48ec88bbb2d720086d9e",
+      "sha256": "4ade2adb4afa0c4ab6ef61bdb5f3a33cb3574653c68d074b1845030c8639c608",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "ea170b7ae4aa9b8a87510b1448d265935ae52666e7e86e138f17392f3486bcf7",
+      "sha256": "2492629194ab08befa6e01c8c0ec4b12553fda39a67573b5b5ff5e9dfbfda634",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User said this batch is flawless after individual listening review."
+    },
+    {
+      "requestKey": "c42bdd9f6a10daaeaf57994045bd8f98a7b962c74977c95fcf943e998b59c8bb",
+      "sha256": "c92ccd4644dbbde90e48b26087f693d189bae316b772a34cf4553b47410f3821",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto."
+    },
+    {
+      "requestKey": "8f0c859240a353e28f406bddd469d1fbe3c3f7f1bd7e0e12c94c070db3612c7a",
+      "sha256": "35a0609b08fd6cc818a0103232a1242dee98bcb034db7ad0712b5a22b0e8d795",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7."
+    },
+    {
+      "requestKey": "7757bdbdfb7a551d5f6311ea20f2fd09aa1946ec3372894b7a280bbd22931b0e",
+      "sha256": "179706ddb1ad9dd12aaafe6afbd5ca04b3b73816f5e812b33096613de769e753",
+      "reviewedAt": "2026-11-07",
+      "approvalEvidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7."
     }
   ]
 }

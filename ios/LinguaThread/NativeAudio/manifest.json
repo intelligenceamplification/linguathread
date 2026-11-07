@@ -104,6 +104,38 @@
     {
       "language": "vi",
       "voice": "male",
+      "referenceSha256": "85562046215cf68372b310e92bb0f7919b27fbef9e27255d54181b723b57e6d9",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "7a59f1ec43a2a1d622efa52193a985e7dcde3f2661aef3b5e1986e8ac53d9688",
+      "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "male",
+      "referenceSha256": "2cb78d55115dbd1d9f4c2c4a2bc8522f90bef28b0878a56141950efa270db117",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "746464f8b0aaef8cf678821669424f4898e6bde44fa9d09906bb839589c7db4e",
+      "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "female",
+      "referenceSha256": "b90e7c6df46dedf109ba2310f8743f68cd74fa2624d5d063efcd0793ff68258f",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "18ce9c876d3246ef27679b2bb34b8ee2efd21ac95688ed2d1d8655f80fd9d5e1",
+      "normalTempo": 1
+    },
+    {
+      "language": "en",
+      "voice": "female",
+      "referenceSha256": "4ade2adb4afa0c4ab6ef61bdb5f3a33cb3574653c68d074b1845030c8639c608",
+      "backend": "gemini/gemini-3.8-flash-tts",
+      "recipeSha256": "04dcc42ee66d998cd3e5375f08f03e0c6051598f59c535250fbfc4ff614bfbf9",
+      "normalTempo": 1
+    },
+    {
+      "language": "vi",
+      "voice": "male",
       "referenceSha256": "1a7cfe57282049e8015b5aaa6515cd1a4c8792b843530129f1697d8694feab13",
       "backend": "VieNeu-TTS-v3-Turbo",
       "recipeSha256": "4ede8a2fc949a300f055a0e0b58d1a028607e0ff469de04acf042a63d176a8f0",
@@ -2792,6 +2824,7 @@
     "19fc0c7321862b938f7d699bfccc6e2265a0bb599329765092b7546d425d0929",
     "1f2649d7233a31b21f642d0a7ade7dbb4316302196743348973321d3d7481cc2",
     "297b3063bdd839f8727b3bef3ca3f3c054460e1e90d65eaf803a8156906ed600",
+    "35b371baee3ac9ce016352aa0918c770d3705ff932c61cba7f3d187f48746838",
     "39f01b32ffe5bcbeefa9bf8108bf516443be05f97620a9bfea9dcb78fd182016",
     "3a813b7b7974ba52bc959dc7a95e1af539cf37b8f5819a16444bee7ad8a524b8",
     "5edf1a70a16b043f4a7e12aa353013a43de2af5d71a72dc6218a3c60e1468dd0",
@@ -2799,6 +2832,7 @@
     "716662d7feb435e7474e475ebd620e14ce2b84f5ea17e9c1059279fc8fa43f65",
     "7c66f52294a24c0b1cbfe6197f0d842f26bf05a8d304ed2f035027b1871201f1",
     "8cb9c615339aeb5b257bb9ba212f5970a23cf2ddbc2b5ed3e2a61427031c9db8",
+    "8e81fa683c3391c5ce7aaa52db5c4cf92a14042b996a17ac4476077ec4b28f67",
     "9fda873f131db170a7dac48f56f5011293b87c11f87a8bca6c6560466f2f443d",
     "a0ff5c19367e50366ac090fddb2d0b42ddc8e3ca2669932cdc440e78db9e2a7f",
     "a3407017c4f434bbb3fe5a4960aa0c9cdaedfe3ce1fabac23b90504972751783",
@@ -2808,6 +2842,7 @@
     "cd532b67239aa356df7a0c0a0878445c8d33ece4f9fb9bdca0fd8a74efdc50e1",
     "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079",
     "e17126d020f00d06c7f381e2855b064d7175c70714f2b6de76092c7b03e71bc4",
+    "e3252aefae2e2fa897a2120a0e7c9c938114fab324b6c3af6157fe0d6b26a2db",
     "fc7383eda9e182ed33ac801d2fd6051e863b3e4ccde663f78cbf9f4556aef85e"
   ]
 }

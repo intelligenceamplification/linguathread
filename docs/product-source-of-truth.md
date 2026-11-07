@@ -402,3 +402,11 @@ The user now limits each generation/listening batch to **20 total clips** and wi
 The November 5 plan contains the two unresolved pronunciation repairs as Gemini auditions (American female English and Southern female Vietnamese), plus 18 new local main-sentence recordings. Both Gemini voices/styles require listening acceptance before runtime integration. No new voice replaces Sky or the accepted Vietnamese profiles automatically.
 
 The user approved the first November 5 batch of 20, including both Gemini repairs and the flagged local clip. Those two pronunciation defects are resolved with exact accepted recordings; rejected local takes stay blocked. The approved Gemini English and Southern Vietnamese repair recipes remain scoped references and do not replace working voices globally. The user requested a second separate twenty-clip batch and will connect the phone only after a significant approved accumulation. Prepare batches without requesting a phone connection or installing in the meantime.
+
+### 2026-11-07 · Gemini quota timing
+
+Reserve the free daily Gemini requests for flaws found during the building and listening session. Once the user decides to stop building for the day, use the remaining free requests for new coverage if there are no outstanding flaws. Keep the twenty-clip review limit and require listening approval before release.
+
+### 2026-11-07 · Main lessons first, then full launch playback
+
+Complete approved main-sentence recordings in English, Spanish, and Vietnamese first. Prioritize lessons missing only one of the three recordings, reuse saved exact takes when suitable, and review in batches of 12. Then audit every Listen control across the supported launch stacks, including practice, review, and writing. Reuse a reviewed recording wherever its language and spoken text match.

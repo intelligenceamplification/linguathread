@@ -153,6 +153,160 @@
       "reviewedAt": "2026-11-03",
       "reviewedBy": "Desmond Wood",
       "evidence": "User accepted all six older recordings except sample 5, which was explicitly rejected."
+    },
+    {
+      "language": "es",
+      "text": "Me llamo Desmond. Mucho gusto.",
+      "sha256": "41f3df3bbd5441cc1a8f24459dd6733ee53da3fc7ac6b1179000882f97f7c064",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User confirmed all twelve are flawless after individual listening review.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "Quiero agua, por favor.",
+      "sha256": "4901b9b6360529c8ffb8399ee4ee777b88a0424157ecb3d7c10f2a24b731f470",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User confirmed all twelve are flawless after individual listening review.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "Estoy aquí. ¿Dónde está el baño?",
+      "sha256": "f5a19e1d609c6a49dff79f2879c97f747a70839ed4a92a6be1179dfb6a1a491d",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User confirmed all twelve are flawless after individual listening review.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "Hoy trabajo. Después descanso en casa.",
+      "sha256": "e50dda5cee01c74aaff29bd8a69406add4d78b2b013dc49ae1100c5deb031af3",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User confirmed all twelve are flawless after individual listening review.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "Ahora estoy escuchando con atención.",
+      "sha256": "858a90c2f519f68543b84a555560141e28e6b8b787f3c0efd577975caeca1355",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "Me siento cansado porque necesito descansar.",
+      "sha256": "8fd87a876ac0708205c11372abe35aa6eb74cb40a560110fbadcbb727d5af474",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "A veces camino por la mañana.",
+      "sha256": "9142bd92038897fed20620ec46f94ed61e0ecbfb5d6035543f3426cb3ab7506a",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "Ahora estoy escribiendo un correo.",
+      "sha256": "7769e1afc2563422a61d3f1e5fb2c76514ae1f394c056abc5f078f713dbdd996",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the eleven original takes and separately approved the Gemini replacement for clip 6: Es perfecto.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "Antes viajaba poco, pero ahora viajo más.",
+      "sha256": "27b47d2c705f296336d444a8ec53704939b62194a4139edbba0032233542867e",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "Antes trabajaba de noche, pero ahora prefiero el día.",
+      "sha256": "365c61e705fde779ca60a315b8e5d26954f640b5158912178699194074083772",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "Sigue derecho y gira a la izquierda.",
+      "sha256": "60e2548d7dda8b213d04a731a37ae87ca91ebe182591dd5da700865c97e7f587",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "¿Este autobús lleva al centro?",
+      "sha256": "bbcce2cf768fed4c544df828739dc80ae9d451d805197b2785286c3cf66f6962",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "female"
+    },
+    {
+      "language": "es",
+      "text": "¿Puede hablar más despacio?",
+      "sha256": "fe224c398711fe7bca9724e0b2a3220eb4f02f97ca8d803b2b8a9e5d88970b34",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "male"
+    },
+    {
+      "language": "es",
+      "text": "Tengo fiebre desde ayer.",
+      "sha256": "2060a9e08d38e33e68d92ccd393c8b2685db40a37a8789f3d7a940d50a5981aa",
+      "approved": true,
+      "auditVersion": 2,
+      "reviewedAt": "2026-11-07",
+      "reviewedBy": "Desmond Wood",
+      "evidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7.",
+      "voice": "female"
     }
   ]
 }
