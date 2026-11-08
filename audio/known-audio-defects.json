@@ -250,6 +250,26 @@
       "reportedAt": "2026-11-07",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "Estudio para comunicarme mejor.",
+      "voice": "female",
+      "sha256": "4efe9bb51e7440cbd4bc8a64caf8d2ef43564dce5a3c01786d6bed47e2bd37e7",
+      "reason": "User confirmed an extra ya before Estudio in November 8 batch 1 clip 8.",
+      "reportedAt": "2026-11-08",
+      "status": "blocked",
+      "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "Me mudé de ciudad cuando tenía veinte años.",
+      "voice": "female",
+      "sha256": "6c1e5e9647cc178306c1509653f00660563232b497c98f580cf1c80a8be2c954",
+      "reason": "User requested a Gemini replacement after listening to November 8 batch 2 clip 8.",
+      "reportedAt": "2026-11-08",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

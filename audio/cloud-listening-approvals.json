@@ -474,6 +474,60 @@
       "sha256": "179706ddb1ad9dd12aaafe6afbd5ca04b3b73816f5e812b33096613de769e753",
       "reviewedAt": "2026-11-07",
       "approvalEvidence": "User approved the ten original clips and explicitly approved both Gemini replacements for clips 6 and 7."
+    },
+    {
+      "requestKey": "cc46f8c45bb9f34ed2c6863ba75531adb6e5659d343565e30426d9528d88f447",
+      "sha256": "a7255f998adfce8a2b5a8b054c7621ddd7604d76c515e5112d8ff5a1dc08bd30",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved the Gemini replacement for November 8 Batch 1 clip 8 after listening."
+    },
+    {
+      "requestKey": "2b0b9ebc8c191435838dd47259edb557ec8dbe6f77126a01437837e1ad802428",
+      "sha256": "059053971bd10f85beec76e3d727d96d61773c04997e121c6b330a43c2fe124a",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "b6c9df4faa1c83d38ffc6feabc26e5e013f654f3544fe318648c66c15baa9f0b",
+      "sha256": "018496b834014709028291607cf5b3147e86247a4f3805e1d8b1ec4f5fac2333",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "dffeb496ac5eb48b32befb8ace97a997bdd06115b27838eb90ab51561947d3d6",
+      "sha256": "e3335eef65dd01dd3ab037dd3c599a7390eb7808456b494928b68f172d1465af",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "c49dfae8f315a2531ca78b8252907905f08032b9b50a2953b83c7cbaecdf28a8",
+      "sha256": "c89e4daddbf9a2249c7f7db2b8520226e45486de52eb03c4b3f386896437c03e",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "1b694775523654e077c2941fb2b702d88e568e4a57cdfd822488483d778f4a5f",
+      "sha256": "e464f1bafc2c0e286ba8b9ba096ac5a2a0cbe9f8abbe44bb3b57009c91299e10",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "dff80d8e3fc0d441a0277af193414d177816e8628941741d7043c90b73de8415",
+      "sha256": "4cd8f70d7f8030437c6f69c26a615464d0b5c00034a7fd3f69b859f76abb7f0e",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "01eb996f5506065ffaf872354c9376068797848472a7eb60e37b3fe3041b493c",
+      "sha256": "4927a43ebeee02dd410c767eac5ae12d4b7a9c264de22c07ca24a47bc9964b82",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "3b7231c6fb4f10f707bd3fbaed72e8d7e22b1bc693aab6825ae07bd67c31afc2",
+      "sha256": "0581b61fd812421ce983f8c79e0c3ed78d178052684e3b43262108852bac759a",
+      "reviewedAt": "2026-11-08",
+      "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
     }
   ]
 }

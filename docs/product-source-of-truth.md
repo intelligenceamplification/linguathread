@@ -410,3 +410,7 @@ Reserve the free daily Gemini requests for flaws found during the building and l
 ### 2026-11-07 · Main lessons first, then full launch playback
 
 Complete approved main-sentence recordings in English, Spanish, and Vietnamese first. Prioritize lessons missing only one of the three recordings, reuse saved exact takes when suitable, and review in batches of 12. Then audit every Listen control across the supported launch stacks, including practice, review, and writing. Reuse a reviewed recording wherever its language and spoken text match.
+
+### 2026-11-08 · Ten-clip listening batches
+
+Review ten clips per batch. Close main-lesson gaps with saved takes and local generation. Reserve the ten daily free Gemini requests for flaws found in listening review, then use any remaining requests to add coverage when the user ends the session.
