@@ -528,6 +528,66 @@
       "sha256": "0581b61fd812421ce983f8c79e0c3ed78d178052684e3b43262108852bac759a",
       "reviewedAt": "2026-11-08",
       "approvalEvidence": "User approved all eight recordings on the November 8 final listening page."
+    },
+    {
+      "requestKey": "4ea1b78baa7a09a889c2c60e69d8eca37e02e4e8d81f5aa1ca2a24f4be3c9256",
+      "sha256": "515e76e8beb2e057fd16c51d54039beb90bbb3f88d48fde9177e5dcb833884f6",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User approved nine November 9 Batch 1 originals and explicitly approved the Gemini replacement for clip 2."
+    },
+    {
+      "requestKey": "51f0807acf6d5945a40b817afb47eab69714c3b2eb07891e7abb6a825bf1b9fd",
+      "sha256": "da4f4bf646ccb143b5aad2fe6e3b441830e1ebd705eb14cd44b55d4b92687d70",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "b44a95a72b6ed63931b3831ef4c88d940d8df584c998ca5e88704fcea61ff2fa",
+      "sha256": "9823336c8a52a79c0caae389bbdc83f0bcb2dcf02f985a91398da04d8fd4caf3",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "671cc08ca34ad9ea7f0d0f733d9f0cd943b05aa42e5e3ae1bbbc84b37de30727",
+      "sha256": "fa62416f43578a929ebb9ea3a72343d12f9d5b7a1560a78ee9b7ee56c6896ab0",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "c8807fb3e4fcb090b89350467c624c7217d65490cf6dec8d48c86a9db6eee37a",
+      "sha256": "e29463c681b422e7a56124f61570e558ac2fedfb0079cc63c14bf39424820afe",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "c06177bbb6c8832ba40a34e796ef6d0b01fae19c4e5509aa72ab85fa2ec0369e",
+      "sha256": "df1fb1dd9626399998dc29ee0f4be261d0d78c89c6da9dddc9718458fd205f9d",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "6594961efa80868faa2f337a7424d10bf5ef48d94dc8e43258a6a36e41589742",
+      "sha256": "f7564f9858763e2ad24c3ad6d34ef57e77a8ff0e17e9ca8e07a0be871620b22b",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "b7f428486bf6749751314fcb2a02fc8939e4e5a2c57bbc9e954bf369ac293395",
+      "sha256": "1c4f235f0b160c1c9d6888d76d84c25c448f7486f7787dd0589b5d827c5762b9",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "d63c320ce74428c538481099335bdf9c977283eeb45c6af86ed40435f54d64db",
+      "sha256": "a5a3512f7e845f36e0fb739fd158f711f9781745b64451559976da85ac074fb6",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "e0c670e3eeae5483a27b4386f69494f17e147e04cc7f7e8df4d23d38b6c8fdfc",
+      "sha256": "36649e92dc17b84d38cfe6f1f59e7ea9c2244d46f7be10508b5a0e076ec2db3e",
+      "reviewedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
     }
   ]
 }

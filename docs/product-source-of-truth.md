@@ -414,3 +414,9 @@ Complete approved main-sentence recordings in English, Spanish, and Vietnamese f
 ### 2026-11-08 · Ten-clip listening batches
 
 Review ten clips per batch. Close main-lesson gaps with saved takes and local generation. Reserve the ten daily free Gemini requests for flaws found in listening review, then use any remaining requests to add coverage when the user ends the session.
+
+### 2026-11-09 · Local Spanish voice reliability
+
+The user found the local Spanish female voice less reliable than the local male voice and rejected November 9 Batch 1 clip 2 (“Ya hemos completado la primera parte.”). Give the local female takes closer listening review and use Gemini for this exact repair. Preserve already approved recordings, including the other accepted takes in the batch.
+
+Dora (`ef_dora`, Kokoro) is the approved standard for new local Spanish female recordings. Use the approved 0.90 synthesis speed and gain-only mastering near −20.5 LUFS, with peaks capped at −1.05 dBTP. The three exact approved takes and model fingerprints are recorded in `audio/spanish-dora-recipe.json`. Screen and review new lesson takes individually before publication.

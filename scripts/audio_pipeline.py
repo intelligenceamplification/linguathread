@@ -135,6 +135,18 @@ def accepted_local_policies(root=ROOT):
         policies.append(dict(language=profile["language"], voice=profile["gender"],
                              referenceSha256=profile["referenceSha256"], backend=profile["backend"],
                              recipeSha256=digest(canonical(recipe).encode()), normalTempo=profile["normalTempo"]))
+    dora_path = root / "audio/spanish-dora-recipe.json"
+    if dora_path.exists():
+        dora = read(dora_path)
+        if not dora.get("approvedAt") or not dora.get("approvalEvidence"):
+            raise ValueError("Dora requires a listening approval")
+        for reference in dora["references"]:
+            if digest((root / reference["file"]).read_bytes()) != reference["sha256"]:
+                raise ValueError("Dora listening reference changed")
+        policies.append(dict(language="es", voice="female",
+                             referenceSha256=dora["references"][0]["sha256"],
+                             backend=dora["backend"], recipeSha256=digest(dora_path.read_bytes()),
+                             normalTempo=dora["speed"]))
     return policies
 
 

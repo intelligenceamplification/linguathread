@@ -1,0 +1,31 @@
+{
+  "model": "hexgrad/Kokoro-82M",
+  "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+  "voice": "ef_dora",
+  "voiceSha256": "d9d69b0f8a2b87a345f269d89639f89dfbd1a6c9da0c498ae36dd34afcf35530",
+  "modelSha256": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4",
+  "languageCode": "e",
+  "speed": 0.9,
+  "backend": "Kokoro-82M-es",
+  "approvedAt": "2026-11-09",
+  "approvalEvidence": "User approved the louder Dora audition as the Spanish female voice standard.",
+  "targetLUFS": -20.5,
+  "truePeakCeilingDb": -1.05,
+  "references": [
+    {
+      "text": "Ya hemos completado la primera parte.",
+      "file": "audio/references/1198702f955fd82f64fa6a096743a0d19d19a0deb20105d4e4af2958a1b07bdd.wav",
+      "sha256": "1198702f955fd82f64fa6a096743a0d19d19a0deb20105d4e4af2958a1b07bdd"
+    },
+    {
+      "text": "Sé que no fue tu intención, pero me sentí excluido de la conversación.",
+      "file": "audio/references/83461bb1edffd596fa0dc7f436b806604908d312b183c82e95b1ea70289c3a7d.wav",
+      "sha256": "83461bb1edffd596fa0dc7f436b806604908d312b183c82e95b1ea70289c3a7d"
+    },
+    {
+      "text": "Según el informe, la ciudad ha reducido el consumo de agua durante el último año.",
+      "file": "audio/references/a9887219c4d05e0b4a8c5044f4b8d7f8290d4ebf18161d7eeaad4447a013c50b.wav",
+      "sha256": "a9887219c4d05e0b4a8c5044f4b8d7f8290d4ebf18161d7eeaad4447a013c50b"
+    }
+  ]
+}

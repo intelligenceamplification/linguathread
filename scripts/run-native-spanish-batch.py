@@ -82,7 +82,8 @@ def main():
     plan.write_text(json.dumps({"items": queue}, ensure_ascii=False, indent=2) + "\n")
     ffmpeg = subprocess.check_output([str(PYTHON), "-c", "import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())"], text=True).strip()
     for attempt in range(1, 4):
-        run(f"spanish-generate-{attempt}", SPANISH_PYTHON, ["scripts/generate-native-spanish.py", "--inventory", str(plan), "--output", str(TAKES), "--limit", str(args.limit), "--attempt", str(attempt), "--ffmpeg", ffmpeg])
+        # This worker reconstructs the historical seed, whose validator pins its original voice families.
+        run(f"spanish-generate-{attempt}", SPANISH_PYTHON, ["scripts/generate-native-spanish.py", "--legacy-female", "--inventory", str(plan), "--output", str(TAKES), "--limit", str(args.limit), "--attempt", str(attempt), "--ffmpeg", ffmpeg])
         if not (TAKES / "metadata.jsonl").exists():
             raise RuntimeError("Spanish generation produced no candidates")
         audit = TAKES / "audit.jsonl"

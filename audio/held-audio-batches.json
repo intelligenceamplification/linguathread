@@ -643,6 +643,486 @@
           "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/0581b61fd812421ce983f8c79e0c3ed78d178052684e3b43262108852bac759a.wav"
         }
       ]
+    },
+    {
+      "id": "20261109-device-01",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User approved nine November 9 Batch 1 originals and explicitly approved the Gemini replacement for clip 2.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-01.json",
+      "plan": "audio/generated/review-20261109-01/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-9ce205ace293f3dac6fd",
+          "language": "es",
+          "text": "Después del viaje, entendí que necesitaba más tiempo.",
+          "sha256": "c6352a8e79cd9775b8dbb4554f625a2854bc8ec1af28c7b5dac503fd0b8d41f5",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-male-c6352a8e79cd9775b8db.m4a"
+        },
+        {
+          "requestKey": "4ea1b78baa7a09a889c2c60e69d8eca37e02e4e8d81f5aa1ca2a24f4be3c9256",
+          "language": "es",
+          "text": "Ya hemos completado la primera parte.",
+          "sha256": "515e76e8beb2e057fd16c51d54039beb90bbb3f88d48fde9177e5dcb833884f6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/515e76e8beb2e057fd16c51d54039beb90bbb3f88d48fde9177e5dcb833884f6.wav"
+        },
+        {
+          "requestKey": "es-d2b76a4b972283a61444",
+          "language": "es",
+          "text": "No pude responder antes porque estaba en una reunión.",
+          "sha256": "f548049150d0af3fe75f17815644334f4ca5d44498bd22d1a768a537cc375943",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-male-f548049150d0af3fe75f.m4a"
+        },
+        {
+          "requestKey": "es-b0a4e4f25f3312e0458b",
+          "language": "es",
+          "text": "Sé que no fue tu intención, pero me sentí excluido de la conversación.",
+          "sha256": "e6c2ac42630b1186fb19419040d8be681dfe9756321e3ede37bf4824d9b6a5d2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-female-e6c2ac42630b1186fb19.m4a"
+        },
+        {
+          "requestKey": "1d40b0bd2167060b0ff7592309671ecdabcd42417fcb03dec292873dedc96bd2",
+          "language": "en",
+          "text": "I know it was not your intention, but I felt excluded from the conversation.",
+          "sha256": "82cd8f2691b8b910be338dbb19e813114799d8e67e3035c47811f749f1d429a9",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/1d40b0bd2167060b0ff7592309671ecdabcd42417fcb03dec292873dedc96bd2.wav"
+        },
+        {
+          "requestKey": "es-267907f5e756939c6e67",
+          "language": "es",
+          "text": "La directora explicó que el plazo se había ampliado una semana.",
+          "sha256": "51666480d09277301ab807b834b2298144afcfa17fced69a0b976a8689776668",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-male-51666480d09277301ab8.m4a"
+        },
+        {
+          "requestKey": "4582b796c10c02a0b2b75f0bd25091993c1a90c0a94c45313b773d67ad332814",
+          "language": "en",
+          "text": "The director explained that the deadline had been extended by one week.",
+          "sha256": "143bd1a2aecf17ed00f3bd280af38c1534e5c9bc4da99a336f72c2b63cd0e438",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/4582b796c10c02a0b2b75f0bd25091993c1a90c0a94c45313b773d67ad332814.wav"
+        },
+        {
+          "requestKey": "es-9f02bdaae378bf8a2a96",
+          "language": "es",
+          "text": "Según el informe, la ciudad ha reducido el consumo de agua durante el último año.",
+          "sha256": "dabb1ef2f396ce08dd849c88d45ddb67dd545a3fdbcf510dbb4e78b6e025238f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-female-dabb1ef2f396ce08dd84.m4a"
+        },
+        {
+          "requestKey": "9188600c7555ff5732dcd54de5f05a848f22efeb638eacbd8c6286fa7796637a",
+          "language": "en",
+          "text": "According to the report, the city has reduced water consumption during the past year.",
+          "sha256": "8ac5f6a14f0f5861fe2d24ce1cfecf9258595b5d6f0805c3a6d901b38c8e9b0f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/9188600c7555ff5732dcd54de5f05a848f22efeb638eacbd8c6286fa7796637a.wav"
+        },
+        {
+          "requestKey": "es-4f108f5c625afa564dca",
+          "language": "es",
+          "text": "La ley fue aprobada ayer, pero su impacto todavía genera debate.",
+          "sha256": "c5512993e0fbddac77346e77721207a7629dd825b6158cff6f416c7734d7c13a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-01/es-male-c5512993e0fbddac7734.m4a"
+        }
+      ],
+      "repairReport": "outputs/audio-review-20261109-01-clip-02.json"
+    },
+    {
+      "id": "20261109-device-02",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User explicitly accepted the full November 9 Batch 2 after listening, calling it a perfect batch and confirming the total of 20.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-02.json",
+      "plan": "audio/generated/review-20261109-02/plan.json",
+      "clips": [
+        {
+          "requestKey": "7ca3a4e3ee4b4afe83017c8ad2c41b5296421401b9af5b4aee578ed80e84ba35",
+          "language": "en",
+          "text": "The law was approved yesterday, but its impact still generates debate.",
+          "sha256": "fb5d20eab22ff4aaefc4e178eedf6a6da0c70fe57c5150f428d00e7969b2d980",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/7ca3a4e3ee4b4afe83017c8ad2c41b5296421401b9af5b4aee578ed80e84ba35.wav"
+        },
+        {
+          "requestKey": "es-3dce1e341596c5c80236",
+          "language": "es",
+          "text": "Los expertos señalan que la medida podría beneficiar a las familias con menos recursos.",
+          "sha256": "c8718a92265295001bafa1722b17534f14490ccf62aa14272938979f6d23510c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/es-female-c8718a92265295001baf.wav"
+        },
+        {
+          "requestKey": "fdcfbdaeaee80b40b2df45c2353bf1092b7cc3bc7e1af707d04aa86bcda0d329",
+          "language": "en",
+          "text": "Experts point out that the measure could benefit families with fewer resources.",
+          "sha256": "253c5638c0eddeb8068666912110e2b6bef87ef2e01e22fa23022079910d952e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/fdcfbdaeaee80b40b2df45c2353bf1092b7cc3bc7e1af707d04aa86bcda0d329.wav"
+        },
+        {
+          "requestKey": "es-fd7eae7103d8db7bd864",
+          "language": "es",
+          "text": "Aún no está claro si los cambios producirán el resultado esperado.",
+          "sha256": "f3277ec8096dbf1cf16c32156fa9cce4aa07efdd3512bf48e69bfd48edea71da",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/es-male-f3277ec8096dbf1cf16c.m4a"
+        },
+        {
+          "requestKey": "9e38ac7a91a6dbe2f9d08902b8da0696bb39f7424dac20c595bf2e057deb50b4",
+          "language": "en",
+          "text": "It is not yet clear whether the changes will produce the expected result.",
+          "sha256": "a7b3147998e97e5b0f6968e466dfd5808db75a0d7bf1e9bf0e2918ae0d900099",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/9e38ac7a91a6dbe2f9d08902b8da0696bb39f7424dac20c595bf2e057deb50b4.wav"
+        },
+        {
+          "requestKey": "es-c114e55a5818a24cc2fa",
+          "language": "es",
+          "text": "Elegí un final abierto para que cada lector pudiera interpretarlo a su manera.",
+          "sha256": "8ee07ab9844263f6e6d104bccb081ac47edbaff15db2db573054dd2186959b4d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/es-female-8ee07ab9844263f6e6d1.wav"
+        },
+        {
+          "requestKey": "4406a8a86c13d01a8285177883bec51f1e3462e41f7f2209afc826f7a4e1d39a",
+          "language": "en",
+          "text": "I chose an open ending so that each reader could interpret it in their own way.",
+          "sha256": "5fdbdc22fab1db2c75ec653bc657a3b6cf575a8a5286b5ce75a83fec2a00075a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/4406a8a86c13d01a8285177883bec51f1e3462e41f7f2209afc826f7a4e1d39a.wav"
+        },
+        {
+          "requestKey": "es-b824ba56fde5962f0181",
+          "language": "es",
+          "text": "El chiste funciona porque la palabra tiene dos sentidos distintos.",
+          "sha256": "f3f76c687372375317ebcd74be29ce926e554a344be9cbf6bfe2dc0bff0cc099",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/es-male-f3f76c687372375317eb.m4a"
+        },
+        {
+          "requestKey": "226f6be3876af1fb7ad8e70c8abcd1e0f6b8ceb0c664904a5567181f30473572",
+          "language": "en",
+          "text": "The joke works because the word has two different meanings.",
+          "sha256": "6c6cbff331eb9e0dd4bc763f6a8d626401fe62920a0ebdf5662b0edd4f3bd27d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/226f6be3876af1fb7ad8e70c8abcd1e0f6b8ceb0c664904a5567181f30473572.wav"
+        },
+        {
+          "requestKey": "es-02b58d73a571c8ee1d76",
+          "language": "es",
+          "text": "Claro, porque llegar una hora tarde siempre ayuda muchísimo.",
+          "sha256": "e3111dd1d31ae463a45b0cd5124e7d029de25b05f41f0f1a16622a365e7d6f62",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-02/es-female-e3111dd1d31ae463a45b.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261109-device-03",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the full November 9 Batch 3 after listening, calling it another perfect batch.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-03.json",
+      "plan": "audio/generated/review-20261109-03/plan.json",
+      "clips": [
+        {
+          "requestKey": "ddfe6c2b92f66bebbb9c1a0797fad44a19be092078ef997d6ae6c096fc4db8fa",
+          "language": "en",
+          "text": "Of course, because arriving an hour late always helps enormously.",
+          "sha256": "23cce2e7edb4f595211ff3106d0f6153940ebf4724a766cbcfece97cdb9e5020",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/ddfe6c2b92f66bebbb9c1a0797fad44a19be092078ef997d6ae6c096fc4db8fa.wav"
+        },
+        {
+          "requestKey": "es-d4d29545c6d994fdcbca",
+          "language": "es",
+          "text": "Sin el tono de voz, el comentario podría parecer más serio de lo que era.",
+          "sha256": "9f1952b8b1bf77ac2e240b070c7b7383ece0c618dfd89baf85c5d7b775a4727f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/es-female-9f1952b8b1bf77ac2e24.wav"
+        },
+        {
+          "requestKey": "944d5c5a311178a4b677080d0361aae152c70e0704edd882b066915902988fd6",
+          "language": "en",
+          "text": "Without the tone of voice, the comment might seem more serious than it was.",
+          "sha256": "cb236acb7881284242e29ab27271b3cf90ad959dd162871d99c1b57023e3bad4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/944d5c5a311178a4b677080d0361aae152c70e0704edd882b066915902988fd6.wav"
+        },
+        {
+          "requestKey": "es-8febf706cdee610e33e5",
+          "language": "es",
+          "text": "He reorganizado mi horario para que el trabajo no ocupe todo el día.",
+          "sha256": "cc6d0393bb1867eec9d799ae938d12ec11f1653bd4c9e02a51000eb16963135f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/es-male-cc6d0393bb1867eec9d7.m4a"
+        },
+        {
+          "requestKey": "e3caa190a02cc657205b67cb409f711ae9853143400487e9242fecbf02c2ab50",
+          "language": "en",
+          "text": "I have reorganized my schedule so that work does not take up the whole day.",
+          "sha256": "73d52d302d0fdc76d6b0a648750e0088013b301869667209e6efdea6ddaa1ea3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/e3caa190a02cc657205b67cb409f711ae9853143400487e9242fecbf02c2ab50.wav"
+        },
+        {
+          "requestKey": "es-9ab5ba0d889b4885eaee",
+          "language": "es",
+          "text": "Llevo tres meses levantándome antes y ya noto la diferencia.",
+          "sha256": "0e453823611c4972dd6ff0d0fa6f3e29d1d27c0cfe668bcaa75e55419a5059a2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/es-female-0e453823611c4972dd6f.wav"
+        },
+        {
+          "requestKey": "c4da582a4a5c63c7e40ae6e4183e256f9660ecde491facc874a4c3001eca8b2f",
+          "language": "en",
+          "text": "I have been getting up earlier for three months, and I already notice the difference.",
+          "sha256": "604f4f030bfec4dc8215704e89a54c560834aa02fc13b333f1b11f3bc51fe1b1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/c4da582a4a5c63c7e40ae6e4183e256f9660ecde491facc874a4c3001eca8b2f.wav"
+        },
+        {
+          "requestKey": "es-097d7c5af8be0f397b1e",
+          "language": "es",
+          "text": "Decidí estudiar de nuevo porque quería abrirme nuevas posibilidades.",
+          "sha256": "3a3305c6109f8d7f8e756114cfe1c2bfdebff7084cc86d5437527c3c9d856dcb",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/es-male-3a3305c6109f8d7f8e75.m4a"
+        },
+        {
+          "requestKey": "509f9331634ebd83ac85e5105b6a651c1a9d7a0aa6093a5abdc7dfa65458eeb0",
+          "language": "en",
+          "text": "I decided to study again because I wanted to open up new possibilities for myself.",
+          "sha256": "2de397c9ad1bce89a7ce3dc588b45625e0ae8b62c9772c4cf55fb3fed579b06f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/509f9331634ebd83ac85e5105b6a651c1a9d7a0aa6093a5abdc7dfa65458eeb0.wav"
+        },
+        {
+          "requestKey": "es-7b5ed1abe248a4f31de4",
+          "language": "es",
+          "text": "Dicho de otro modo, la empresa necesita gastar menos sin reducir la calidad.",
+          "sha256": "9082803dab20e68a29c4a2b34644e07d811f4a8594c9a657aa2c44aec1113ad2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-03/es-female-9082803dab20e68a29c4.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261109-device-04",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User approved November 9 Batch 4 after listening, calling it another good batch.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-04.json",
+      "plan": "audio/generated/review-20261109-04/plan.json",
+      "clips": [
+        {
+          "requestKey": "032f4ded4175c65c75fc03f5a79d3c7cfa7856629d3810503c25031fe200743e",
+          "language": "en",
+          "text": "Put another way, the company needs to spend less without reducing quality.",
+          "sha256": "e62700726ba246e38670592bd97fe6d4d02ad464475d8f462fd7da1c352b2c5b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/032f4ded4175c65c75fc03f5a79d3c7cfa7856629d3810503c25031fe200743e.wav"
+        },
+        {
+          "requestKey": "es-7fb6936a1d69ca0a4492",
+          "language": "es",
+          "text": "Me pidió que te dijera que llevaras un documento de identidad.",
+          "sha256": "256a59426dfa69b0373a861885d7705fb005b9dd35044a5487d3395a44f8461b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/es-female-256a59426dfa69b0373a.wav"
+        },
+        {
+          "requestKey": "76a57f0119ca4cf9c85e176bd90c5b927416697a32bc22e8fec27a184341e390",
+          "language": "en",
+          "text": "She asked me to tell you to bring an identity document.",
+          "sha256": "85d2fa2fc024bc27411f10140c351687b46ccf6ea906ddf4e3584e1093e48899",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/76a57f0119ca4cf9c85e176bd90c5b927416697a32bc22e8fec27a184341e390.wav"
+        },
+        {
+          "requestKey": "es-9966b1b069ffb8f001bb",
+          "language": "es",
+          "text": "La mediación consiste en ayudar a dos partes a entenderse mejor.",
+          "sha256": "4fb3f8329901db893e3588df4997a8668cbbdfc15435e54881dedc2218a675cc",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/es-male-4fb3f8329901db893e35.m4a"
+        },
+        {
+          "requestKey": "a98ca87cf1378851b48903cb8b99dc00afacfd8fa1564ed4dc8d132bbb0da6a1",
+          "language": "en",
+          "text": "Mediation consists of helping two sides understand each other better.",
+          "sha256": "538dce7ba67107c8822e90ec8cc93f4c7a71a756436db7af6897256181363377",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/a98ca87cf1378851b48903cb8b99dc00afacfd8fa1564ed4dc8d132bbb0da6a1.wav"
+        },
+        {
+          "requestKey": "es-728f8ccfdc8eaf7eaabb",
+          "language": "es",
+          "text": "¿Quieres decir que el cambio afecta al horario, pero no a nuestras responsabilidades?",
+          "sha256": "b51aa3801220f51a734a3f4fe5c9f8c750238da895dda681b816fea2cf5d7a9f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/es-female-b51aa3801220f51a734a.wav"
+        },
+        {
+          "requestKey": "a3392aa27dcecfbfa55284034120c276079e49b8bd153e756dff5fc0a6cea5ac",
+          "language": "en",
+          "text": "Do you mean that the change affects the schedule, but not our responsibilities?",
+          "sha256": "dacf7c1db7c9af362b9965b0e723009e2a0d10ac26cf359dee44e935000e640c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/a3392aa27dcecfbfa55284034120c276079e49b8bd153e756dff5fc0a6cea5ac.wav"
+        },
+        {
+          "requestKey": "es-f8ea3cbb6a4e8a3cf4e2",
+          "language": "es",
+          "text": "Si te he entendido bien, necesitas más apoyo; veamos cómo podemos organizarlo.",
+          "sha256": "913b7b4c54fc3025705def4e5dadc0a400c643a7b6a25f9ef7bac4a724107fd1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/es-male-913b7b4c54fc3025705d.m4a"
+        },
+        {
+          "requestKey": "f2c03de6a0b3cd0a681678ab37dfb2b2d44f4a79089df1a52f48bc465eea3eba",
+          "language": "en",
+          "text": "If I have understood you correctly, you need more support; let us see how we can organize it.",
+          "sha256": "f65b4b50fb6bd43aa897aa277ba55d6bed54de4002c2ef6acb7db14a0f3cd2ac",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/f2c03de6a0b3cd0a681678ab37dfb2b2d44f4a79089df1a52f48bc465eea3eba.wav"
+        },
+        {
+          "requestKey": "es-9e8563eec48a187c2b41",
+          "language": "es",
+          "text": "Por eso, me parece más sensato probar la idea antes de adoptarla por completo.",
+          "sha256": "8b8f2f1f7cc83685de8f581bfa4ac88c7dbae0255ba3036ac1123ab559a551aa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-04/es-female-8b8f2f1f7cc83685de8f.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261109-device-05",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User approved November 9 Batch 5 after listening and confirmed the total of 50. User noted lower volume on the British male voice across batches.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-05.json",
+      "plan": "audio/generated/review-20261109-05/plan.json",
+      "clips": [
+        {
+          "requestKey": "9d1a6cd16e4b44d299fd2c39528c5a3843d13c9d5c030b6dabfa5d4322302c18",
+          "language": "en",
+          "text": "When I arrived, they had already started, so I waited outside.",
+          "sha256": "1fcc66b677b3afbacc7a3efe52b26223bb95028c7f14c0f6bb2e131e98d223a4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/9d1a6cd16e4b44d299fd2c39528c5a3843d13c9d5c030b6dabfa5d4322302c18.wav"
+        },
+        {
+          "requestKey": "6e245a1bb1b0f2a7850bc587d2cab1db0350d0621ab40ac8158c3488ac71219b",
+          "language": "en",
+          "text": "I think the idea can work if we make some changes.",
+          "sha256": "133f0180aea81a9297f27b401b1b8126e8a523113ce8e8c52d57854c7ceedad1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/6e245a1bb1b0f2a7850bc587d2cab1db0350d0621ab40ac8158c3488ac71219b.wav"
+        },
+        {
+          "requestKey": "3b765610c40250559cb9b40c37e43998b8947bd48b84e09dd73d8133d3bb191c",
+          "language": "en",
+          "text": "I am glad to help you, but today I need to rest.",
+          "sha256": "ed6cab14c459daa3ff761557dbfcf7a4b020528406e564b6124ce0338dbbc7aa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/3b765610c40250559cb9b40c37e43998b8947bd48b84e09dd73d8133d3bb191c.wav"
+        },
+        {
+          "requestKey": "a73b00d19712c3e1e438c902986ce9f591b6ae26dbb6a8e9935b67556ce3e5e4",
+          "language": "en",
+          "text": "I have learned to express myself better because I practice intentionally.",
+          "sha256": "3dd55717918a3a84ccf27649623b94b1ef7e8fd590fab823c9666fccccb13089",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/a73b00d19712c3e1e438c902986ce9f591b6ae26dbb6a8e9935b67556ce3e5e4.wav"
+        },
+        {
+          "requestKey": "bab70d992f21c1ac7d61b961f3a9d33991abd14beb250258c85ebe1c8ed6d821",
+          "language": "en",
+          "text": "When I arrived at the station, the train had already left, so I had to change my plan.",
+          "sha256": "53b5a48eb80619f62d518f241eb8f315df6c278c560e667dffecb4c766ec3709",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/bab70d992f21c1ac7d61b961f3a9d33991abd14beb250258c85ebe1c8ed6d821.wav"
+        },
+        {
+          "requestKey": "es-b07889553aab5b6dfa5c",
+          "language": "es",
+          "text": "Yo que tú, hablaría con ella antes de tomar una decisión.",
+          "sha256": "2f8c4097080c0eb2396780e7f415b822f3f173c2cbb3ebd8a772f4c931f43e96",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/es-female-2f8c4097080c0eb23967.wav"
+        },
+        {
+          "requestKey": "es-36f3d1c0776845a857e2",
+          "language": "es",
+          "text": "Podríamos aplazar la reunión o buscar una solución temporal.",
+          "sha256": "220b6acba124beb22acc52f01b15d6ac76ddacb10d55528e8430e91e0cf9d9da",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/es-male-220b6acba124beb22acc.m4a"
+        },
+        {
+          "requestKey": "es-9aeb861d0c9eea303fdc",
+          "language": "es",
+          "text": "Conviene guardar una copia por si el archivo se pierde.",
+          "sha256": "bed22b2ea6ad17ca9c7dd3404b1c7807844c5bedede9f64d5638bc0d308d804a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/es-female-bed22b2ea6ad17ca9c7d.wav"
+        },
+        {
+          "requestKey": "es-530ae541f2185c29a686",
+          "language": "es",
+          "text": "Me preocupa que últimamente apenas tengamos tiempo para hablar.",
+          "sha256": "c21f0e012ed7eff9847b30dfb13f371ce13cd960977ed3bfa4503354cf08ff73",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/es-male-c21f0e012ed7eff9847b.m4a"
+        },
+        {
+          "requestKey": "es-b99ccf3c40d5c6f71da8",
+          "language": "es",
+          "text": "Te agradecería que me avisaras cuando necesites estar a solas.",
+          "sha256": "366869dd7d9e55575639624c1ff5f528e4c0d1c4100ba838da807aed55a1fae4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261109-05/es-female-366869dd7d9e55575639.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261109-device-06",
+      "approvedAt": "2026-11-09",
+      "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build.",
+      "status": "approved-for-release",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261109-06.json",
+      "plan": "audio/generated/review-20261109-06/plan.json",
+      "clips": [
+        {
+          "requestKey": "51f0807acf6d5945a40b817afb47eab69714c3b2eb07891e7abb6a825bf1b9fd",
+          "language": "es",
+          "text": "Hasta ahora hemos cumplido los objetivos principales, aunque quedan dos tareas pendientes.",
+          "sha256": "da4f4bf646ccb143b5aad2fe6e3b441830e1ebd705eb14cd44b55d4b92687d70",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/da4f4bf646ccb143b5aad2fe6e3b441830e1ebd705eb14cd44b55d4b92687d70.wav"
+        },
+        {
+          "requestKey": "b44a95a72b6ed63931b3831ef4c88d940d8df584c998ca5e88704fcea61ff2fa",
+          "language": "es",
+          "text": "Propongo que revisemos los datos antes de decidir el próximo paso.",
+          "sha256": "9823336c8a52a79c0caae389bbdc83f0bcb2dcf02f985a91398da04d8fd4caf3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/9823336c8a52a79c0caae389bbdc83f0bcb2dcf02f985a91398da04d8fd4caf3.wav"
+        },
+        {
+          "requestKey": "671cc08ca34ad9ea7f0d0f733d9f0cd943b05aa42e5e3ae1bbbc84b37de30727",
+          "language": "es",
+          "text": "Se espera que cada equipo documente las decisiones importantes.",
+          "sha256": "fa62416f43578a929ebb9ea3a72343d12f9d5b7a1560a78ee9b7ee56c6896ab0",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/fa62416f43578a929ebb9ea3a72343d12f9d5b7a1560a78ee9b7ee56c6896ab0.wav"
+        },
+        {
+          "requestKey": "c8807fb3e4fcb090b89350467c624c7217d65490cf6dec8d48c86a9db6eee37a",
+          "language": "es",
+          "text": "Una costumbre que parece extraña al principio puede tener una razón histórica.",
+          "sha256": "e29463c681b422e7a56124f61570e558ac2fedfb0079cc63c14bf39424820afe",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/e29463c681b422e7a56124f61570e558ac2fedfb0079cc63c14bf39424820afe.wav"
+        },
+        {
+          "requestKey": "c06177bbb6c8832ba40a34e796ef6d0b01fae19c4e5509aa72ab85fa2ec0369e",
+          "language": "es",
+          "text": "Lo que se considera cortés depende muchas veces de la relación entre las personas.",
+          "sha256": "df1fb1dd9626399998dc29ee0f4be261d0d78c89c6da9dddc9718458fd205f9d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/df1fb1dd9626399998dc29ee0f4be261d0d78c89c6da9dddc9718458fd205f9d.wav"
+        },
+        {
+          "requestKey": "6594961efa80868faa2f337a7424d10bf5ef48d94dc8e43258a6a36e41589742",
+          "language": "es",
+          "text": "No significa falta de interés; es otra manera de mostrar respeto.",
+          "sha256": "f7564f9858763e2ad24c3ad6d34ef57e77a8ff0e17e9ca8e07a0be871620b22b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/f7564f9858763e2ad24c3ad6d34ef57e77a8ff0e17e9ca8e07a0be871620b22b.wav"
+        },
+        {
+          "requestKey": "b7f428486bf6749751314fcb2a02fc8939e4e5a2c57bbc9e954bf369ac293395",
+          "language": "es",
+          "text": "El problema no es el costo, sino que no tenemos suficiente tiempo.",
+          "sha256": "1c4f235f0b160c1c9d6888d76d84c25c448f7486f7787dd0589b5d827c5762b9",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/1c4f235f0b160c1c9d6888d76d84c25c448f7486f7787dd0589b5d827c5762b9.wav"
+        },
+        {
+          "requestKey": "d63c320ce74428c538481099335bdf9c977283eeb45c6af86ed40435f54d64db",
+          "language": "es",
+          "text": "La primera opción es más rápida, pero la segunda ofrece mejores resultados a largo plazo.",
+          "sha256": "a5a3512f7e845f36e0fb739fd158f711f9781745b64451559976da85ac074fb6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/a5a3512f7e845f36e0fb739fd158f711f9781745b64451559976da85ac074fb6.wav"
+        },
+        {
+          "requestKey": "e0c670e3eeae5483a27b4386f69494f17e147e04cc7f7e8df4d23d38b6c8fdfc",
+          "language": "es",
+          "text": "Después de considerar las alternativas, decidimos avanzar con la solución más flexible.",
+          "sha256": "36649e92dc17b84d38cfe6f1f59e7ea9c2244d46f7be10508b5a0e076ec2db3e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/36649e92dc17b84d38cfe6f1f59e7ea9c2244d46f7be10508b5a0e076ec2db3e.wav"
+        }
+      ]
     }
   ]
 }

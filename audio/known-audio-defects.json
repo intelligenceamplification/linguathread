@@ -270,6 +270,16 @@
       "reportedAt": "2026-11-08",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "language": "es",
+      "text": "Ya hemos completado la primera parte.",
+      "voice": "female",
+      "sha256": "ded99114bcfda0be679f52ae84740fe4303adc193bf88dfda80d22f4ba7c1398",
+      "reason": "User rejected November 9 Batch 1 clip 2 after listening, noted lower reliability for the local Spanish female voice, and requested a Gemini replacement.",
+      "reportedAt": "2026-11-09",
+      "status": "blocked",
+      "requiresPronunciationReview": true
     }
   ]
 }

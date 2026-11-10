@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import random
 import subprocess
+import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,6 +40,7 @@ def main():
     parser.add_argument("--ffmpeg", required=True)
     parser.add_argument("--terminal-punctuation", action="store_true", help="Bounded pronunciation repair using a complete citation utterance")
     parser.add_argument("--pronunciation-map", type=Path, help="Isolated canonical-text to speech-input repair map")
+    parser.add_argument("--legacy-female", action="store_true", help="Reproduce the pinned historical native seed recipe")
     args = parser.parse_args()
     pronunciation_map = json.loads(args.pronunciation_map.read_text()) if args.pronunciation_map else {}
     if not isinstance(pronunciation_map, dict) or any(not isinstance(k, str) or not isinstance(v, str) or not v.strip() for k, v in pronunciation_map.items()):
@@ -48,9 +50,7 @@ def main():
     recipe_path = ROOT / "audio/spanish-recipe-v1.json"
     recipe = json.loads(recipe_path.read_text())
     signature = sha(recipe_path)
-    for name, proof in recipe["modelFiles"].items():
-        if sha(CACHE / "checkpoints" / name) != proof["sha256"]:
-            raise ValueError(f"Model checkpoint changed: {name}")
+    dora_signature = sha(ROOT / "audio/spanish-dora-recipe.json")
     args.output.mkdir(parents=True, exist_ok=True)
     source_cache = args.output / "source-recordings"
     source_cache.mkdir(exist_ok=True)
@@ -66,7 +66,9 @@ def main():
             if voice["voice"] not in item.get("neededVariants", ["male", "female"]):
                 continue
             item_preparation = 3 if item["text"] in pronunciation_map else preparation
-            if (item["text"], voice["voice"], signature, args.attempt, item_preparation, pronunciation_map.get(item["text"])) not in done:
+            uses_dora = voice["voice"] == "female" and not args.legacy_female
+            selected_signature = dora_signature if uses_dora else signature
+            if (item["text"], voice["voice"], selected_signature, args.attempt, item_preparation, pronunciation_map.get(item["text"])) not in done:
                 queue.append((item, voice))
     queue = queue[:args.limit]
     if not queue:
@@ -76,6 +78,28 @@ def main():
     print("Waiting for the exclusive Spanish model memory slot", flush=True)
     fcntl.flock(model_lock, fcntl.LOCK_EX)
     print("Acquired the Spanish model memory slot", flush=True)
+    if not args.legacy_female:
+        dora = [
+            dict(item, preparation=3 if item["text"] in pronunciation_map else preparation, pronunciation=pronunciation_map.get(item["text"]))
+            for item, voice in queue if voice["voice"] == "female"
+        ]
+        if dora:
+            default_python = sys.executable if importlib.util.find_spec("kokoro") else (
+                Path.home() / "Documents/ChatGPT/IAM Intelligence Periodical Brief/work/tts-env/bin/python"
+            )
+            python = os.environ.get("NUEVO_FLOW_KOKORO_PYTHON", str(default_python))
+            job = dict(items=dora, output=str(args.output), ffmpeg=args.ffmpeg, attempt=args.attempt)
+            subprocess.run(
+                [python, "-B", str(ROOT / "scripts/generate-spanish-dora.py")],
+                input=json.dumps(job, ensure_ascii=False), text=True, check=True,
+                env=dict(os.environ, HF_HUB_OFFLINE="1"),
+            )
+        queue = [(item, voice) for item, voice in queue if voice["voice"] != "female"]
+    if not queue:
+        return
+    for name, proof in recipe["modelFiles"].items():
+        if sha(CACHE / "checkpoints" / name) != proof["sha256"]:
+            raise ValueError(f"Model checkpoint changed: {name}")
     import numpy as np
     import soundfile as sf
     import torch
@@ -89,6 +113,8 @@ def main():
     # Prepare each reference once per batch, rather than re-encoding it for every phrase.
     conditionals = {}
     for voice in recipe["voices"]:
+        if not any(queued_voice == voice for _, queued_voice in queue):
+            continue
         reference = ROOT / "public" / voice["sourceReference"]["url"].lstrip("/")
         if sha(reference) != voice["sourceReference"]["sha256"]:
             raise ValueError("Approved reference changed")

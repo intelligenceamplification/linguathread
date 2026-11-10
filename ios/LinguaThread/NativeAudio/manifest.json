@@ -188,6 +188,14 @@
       "backend": "Kokoro-82M",
       "recipeSha256": "78f98f448cf922e26fc05120813439ccd236a4b52118d32532d30043e2d9b93d",
       "normalTempo": 1
+    },
+    {
+      "language": "es",
+      "voice": "female",
+      "referenceSha256": "1198702f955fd82f64fa6a096743a0d19d19a0deb20105d4e4af2958a1b07bdd",
+      "backend": "Kokoro-82M-es",
+      "recipeSha256": "ecc3c0c21218c248abade12252b4d52dba61a3689a38e9dffa5ee0946bd76421",
+      "normalTempo": 0.9
     }
   ],
   "releaseReady": true,
@@ -2843,6 +2851,7 @@
     "b813959df865ed1b6f6d6b9822870e39b8812cefaa0d42299e3660ea78eb53af",
     "cd532b67239aa356df7a0c0a0878445c8d33ece4f9fb9bdca0fd8a74efdc50e1",
     "dda075a56c1061aa09792706a70f73321b4e4645844f1348b991e58c926ce079",
+    "ded99114bcfda0be679f52ae84740fe4303adc193bf88dfda80d22f4ba7c1398",
     "e17126d020f00d06c7f381e2855b064d7175c70714f2b6de76092c7b03e71bc4",
     "e3252aefae2e2fa897a2120a0e7c9c938114fab324b6c3af6157fe0d6b26a2db",
     "fc7383eda9e182ed33ac801d2fd6051e863b3e4ccde663f78cbf9f4556aef85e"

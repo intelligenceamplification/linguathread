@@ -30,6 +30,7 @@ def main():
     policies,clips,copies=prepare()
     seedpath=ROOT/'ios/LinguaThread/NativeAudio/manifest.json';seed=read(seedpath)
     references={p['referenceSha256'] for p in read(ROOT/'audio/local-voice-profiles.json')['profiles']}
+    references.update(policy['referenceSha256'] for policy in policies)
     combined=[p for p in seed['voicePolicies'] if p['referenceSha256'] not in references]+policies
     if args.apply:
         seed['voicePolicies']=combined
