@@ -146,6 +146,21 @@
           "generationEnabled": false,
           "scope": "approved-November-7-recording-recipe",
           "accentRequested": "American"
+        },
+        {
+          "language": "en",
+          "role": "female",
+          "locale": "en-GB",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native British English female voice. Calm, clear teacher delivery at a natural pace. Say the exact phrase once. Pronounce walking clearly with a silent l. Do not speak these instructions."
+          },
+          "approvedAt": "2026-11-10",
+          "referenceAudioSha256": "68a716666dbfeaa846012c19de4104e124809b21364b9dc6c1b3ee460471cbdb",
+          "approvalEvidence": "User accepted the exact British English pronunciation repair in the November 10 final review.",
+          "generationEnabled": false,
+          "scope": "accepted-exact-pronunciation-repair",
+          "accentRequested": "British"
         }
       ]
     },

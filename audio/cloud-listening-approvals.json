@@ -588,6 +588,54 @@
       "sha256": "36649e92dc17b84d38cfe6f1f59e7ea9c2244d46f7be10508b5a0e076ec2db3e",
       "reviewedAt": "2026-11-09",
       "approvalEvidence": "User accepted the final nine Gemini takes by confirming 59 approved recordings and requesting the next iPhone build."
+    },
+    {
+      "requestKey": "68f645e958265b35cb24ee0ca5c9bb82b784280e66334553842399cda512c246",
+      "sha256": "fbd6772cc1d6fd5b1952506a0f0f8a8af2547ffa915f61f00bbfef746fbe1293",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 4 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "ca1180d85ed1776c77bae013178c1657cead007edcb3dd21fe13ebd744f8c1ba",
+      "sha256": "74907f8f20f3c542f9b5112783605c2510926fc3a8bf0024df5d5f997c1b698a",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved nine November 10 Batch 5 originals and separately accepted the Gemini replacement for clip 10 after listening."
+    },
+    {
+      "requestKey": "9b4b1bf2ebd670a1a809f5a06f4a63da41a2bf534c15004d9cf2c338e71ac543",
+      "sha256": "37c5ef900dd967a3167133f67e3f5bc7fa14595396e402159edc31f4eac46f64",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 10 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "79061aaedafe813e720752a4c880a25898d4e3e8671cd76d5a6b33d62e0e893c",
+      "sha256": "a83e54d4ede2660fbec2a8f3ad0bbdd57465f06df5f81a885a1902b3d2101843",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 10 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "4ef81144e3177134ae843c1f4a2c24426015005a072954be699ac19bcbc3c4b1",
+      "sha256": "68a716666dbfeaa846012c19de4104e124809b21364b9dc6c1b3ee460471cbdb",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 11 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "5a3a64ce8c3e1be25deda59384ed60a9dd6442b8f1500ea384dec688890d44c3",
+      "sha256": "ebc6f3a11b15effe7e4e527919f885316eeb6eb89e39d6edc06a238f1ed7d94d",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 11 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "90e72c3b9726bcb952090b4765ca9d827fcbe0f5877dacf6ab4ebf9292bc10d6",
+      "sha256": "e85df6eec1a016a8701274a6bf5b132f5ad1cc5c61dee17dc623134977f52b63",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 16 and separately approved all its Gemini replacements after listening."
+    },
+    {
+      "requestKey": "6a8c18417f8fc6399c19fe7ba94d571773d02b9687c6ce3ea6588e72278cd066",
+      "sha256": "66f9c1d9fdad06072ba3d8eec83d2f2c434b26d134be110a48c0b049013362cf",
+      "reviewedAt": "2026-11-10",
+      "approvalEvidence": "User approved November 10 Batch 22 and separately approved all its Gemini replacements after listening."
     }
   ]
 }

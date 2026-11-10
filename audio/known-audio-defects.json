@@ -280,6 +280,96 @@
       "reportedAt": "2026-11-09",
       "status": "blocked",
       "requiresPronunciationReview": true
+    },
+    {
+      "language": "vi",
+      "text": "nhưng",
+      "voice": "female",
+      "sha256": "6af91eb031c7b50f3bd9b8886fe7bce3673f89244a44e988a9b45b0190fba2e2",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected November 10 batch 4 clip 9 after listening and requested a Gemini replacement."
+    },
+    {
+      "language": "es",
+      "text": "He aprendido",
+      "voice": "female",
+      "sha256": "54a4af4b144f39cdf620321f59a684a1d959de36f09ed282a3fd2dfd7e5050a5",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected November 10 batch 5 clip 10 after listening and requested a Gemini replacement."
+    },
+    {
+      "language": "vi",
+      "text": "nhưng",
+      "voice": "female",
+      "sha256": "0ee80d027a3a28ace2707eff0183b6228423ebf2d8c3f8cda5e4d23774bf4f26",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "User heard two repetitions of nhưng in the Gemini replacement for November 10 Batch 4 clip 9. The correct take says the word once. User deferred further regeneration until the remaining batches are reviewed."
+    },
+    {
+      "language": "vi",
+      "text": "tàu đã rời đi rồi",
+      "voice": "female",
+      "sha256": "445bc646b30cc3a9ac3d639ed2e114650c345033e14dfc9bf62c8c0194e32fd2",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 10, clip 3. User rejected the recording after listening. Gemini repair requested."
+    },
+    {
+      "language": "vi",
+      "text": "vì vậy",
+      "voice": "male",
+      "sha256": "fa14c97cb26eeb7bd54dbb00684cc3f8ac5743469f33f1182771164132b3abe5",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 10, clip 4. User rejected the recording after listening. Gemini repair requested."
+    },
+    {
+      "language": "en",
+      "text": "while we were walking",
+      "voice": "female",
+      "sha256": "9dbbc145c1f0eb84e6b03fcb46a9fb1d589a6f2b0c526d076a29d8bbfe91c7c1",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 11, clip 9. User heard a slight mispronunciation of walking. Gemini repair requested."
+    },
+    {
+      "language": "vi",
+      "text": "Trong khi chúng tôi đang đi bộ ở trung tâm",
+      "voice": "female",
+      "sha256": "efd7e5d58d26aec6bb4874499dec60a3ecf68c4f1605ee030ede5091a1dd9487",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 11, clip 10. User rejected the recording after listening. Gemini repair requested."
+    },
+    {
+      "language": "vi",
+      "text": "Dữ liệu cho thấy đầu tư ngay bây giờ sẽ ít tốn kém hơn là chờ đợi.",
+      "voice": "female",
+      "sha256": "54cae475866291ed59962dc45c51c43d9db96558aa2ac42277c42545feb4c337",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 16, clip 7. User rejected the recording after listening. Gemini repair requested."
+    },
+    {
+      "language": "vi",
+      "text": "Nói đơn giản, hệ thống ưu tiên những quyết định mang lại lợi ích sớm.",
+      "voice": "female",
+      "sha256": "26d1f2815e22b164851af354de73d39a1e8cd424047be7ae8133a8e818ef6daf",
+      "status": "blocked",
+      "reportedAt": "2026-11-10",
+      "requiresPronunciationReview": true,
+      "reason": "November 10 Batch 22, clip 4. User rejected the recording after listening. Gemini repair requested."
     }
   ]
 }
