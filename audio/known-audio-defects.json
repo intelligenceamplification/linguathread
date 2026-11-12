@@ -370,6 +370,46 @@
       "reportedAt": "2026-11-10",
       "requiresPronunciationReview": true,
       "reason": "November 10 Batch 22, clip 4. User rejected the recording after listening. Gemini repair requested."
+    },
+    {
+      "language": "vi",
+      "text": "Kính đề nghị người tham dự tắt các thiết bị của mình.",
+      "voice": "female",
+      "sha256": "b571f5cbcc56ec137a6aab2e15935bc18c8c2b297e8b5909383f5592053678d5",
+      "status": "blocked",
+      "reportedAt": "2026-11-11",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected Batch 5 clip 4 and requested a later Gemini replacement."
+    },
+    {
+      "language": "vi",
+      "text": "Bản dịch sát chữ sẽ giữ được từ ngữ nhưng làm mất sự lịch sự hàm ý.",
+      "voice": "female",
+      "sha256": "8f6cb773f5700d94b4a962ab99950c2b436f7f46631f6869f048c260c583fd34",
+      "status": "blocked",
+      "reportedAt": "2026-11-12",
+      "requiresPronunciationReview": true,
+      "reason": "User flagged Batch 1 clip 4 as too fast and requested a slower comparison before Gemini repair."
+    },
+    {
+      "language": "es",
+      "text": "Propongo que avancemos, pero con mecanismos que nos permitan corregir el rumbo si cambian las circunstancias.",
+      "voice": "male",
+      "sha256": "2b13bc9b9ead8501edee4a44026e07b2ae705d7f89388e772abfc2b9c55b7228",
+      "status": "blocked",
+      "reportedAt": "2026-11-12",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected Gemini clip 2 due to a repeated phrase; local replacement requested."
+    },
+    {
+      "language": "vi",
+      "text": "Điều cốt yếu không phải là tiến được bao xa mà là điều chúng ta từ chối hy sinh để đạt được nó.",
+      "voice": "female",
+      "sha256": "90ced72f2edfddff6b31ba01247b7f1d8046d26fe6ec6aa973b0e5e75a3a5852",
+      "status": "blocked",
+      "reportedAt": "2026-11-12",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected Gemini clip 8 due to a repeated phrase; local replacement requested."
     }
   ]
 }

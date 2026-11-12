@@ -127,7 +127,7 @@ def accepted_local_policies(root=ROOT):
     if not path.exists(): return []
     policies = []
     for profile in read(path)["profiles"]:
-        if not profile.get("approvedAt") or not profile.get("generationEnabled", True): continue
+        if not profile.get("approvedAt") or (not profile.get("generationEnabled", True) and not profile.get("preserveExistingPlayback")): continue
         reference = root / profile["referenceFile"]
         if digest(reference.read_bytes()) != profile["referenceSha256"]:
             raise ValueError("Accepted local reference changed")

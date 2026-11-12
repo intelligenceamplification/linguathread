@@ -47,7 +47,11 @@
       "referenceSha256": "c4e5c2f76fab9add9d3aea513beb0898800f0bd044088f0e7095ede098f7b2ee",
       "approvedAt": "2026-11-03",
       "approvalEvidence": "User accepted authenticity for all four regional Vietnamese candidates, then explicitly accepted all four exact pitch-preserved 0.85-tempo clips after listening.",
-      "status": "accepted-for-generation-not-yet-runtime-integrated"
+      "status": "accepted-for-generation-not-yet-runtime-integrated",
+      "generationEnabled": false,
+      "preserveExistingPlayback": true,
+      "retiredAt": "2026-11-12",
+      "retirementReason": "User retired the Southern female voice for future generation after noting pace problems."
     },
     {
       "id": "vi-4",
@@ -136,8 +140,7 @@
   "vietnameseCycle": [
     "vi-1",
     "vi-2",
-    "vi-4",
-    "vi-3"
+    "vi-4"
   ],
   "note": "Keep cycle position across batches. The adjusted Vietnamese master is Normal; the user Slow option applies 0.75x to that master. New utterances still require screening and batch review.",
   "englishCycle": [

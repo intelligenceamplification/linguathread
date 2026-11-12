@@ -161,6 +161,21 @@
           "generationEnabled": false,
           "scope": "accepted-exact-pronunciation-repair",
           "accentRequested": "British"
+        },
+        {
+          "language": "vi",
+          "role": "female",
+          "locale": "vi-VN",
+          "voiceId": "Kore",
+          "settings": {
+            "style": "Native Northern Vietnamese (Hanoi accent); calm, clear, deliberate teacher delivery at a natural pace. Use Northern Vietnamese pronunciation consistently. Say the text once."
+          },
+          "approvedAt": "2026-11-12",
+          "referenceAudioSha256": "94419b183b39d8650c2c1538e498edf01adb5a63787e8cd0b1de576d3814bffb",
+          "approvalEvidence": "User approved this exact Northern Vietnamese pronunciation repair on November 12.",
+          "generationEnabled": false,
+          "scope": "accepted-exact-pronunciation-repair",
+          "accentRequested": "Northern Vietnamese"
         }
       ]
     },
