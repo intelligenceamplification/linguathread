@@ -189,6 +189,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [placementUnit, setPlacementUnit] = useState<{ level: string; unit: number } | null>(null);
   const [sessionHydrated, setSessionHydrated] = useState(false);
   const xrayTriggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDetailsElement>(null);
   const lessonStageRef = useRef<HTMLElement>(null);
   const attemptStartedAtRef = useRef(0);
   const learningSessionIdRef = useRef("");
@@ -356,6 +357,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   }, []);
 
   function openDestination(next: AppDestination) {
+    if (menuRef.current) menuRef.current.open = false;
     setDestination(next);
     setXrayOpen(next === "xray");
     setPlacementUnit(null);
@@ -662,12 +664,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <button className="quiet-action today-action" aria-current={destination === "lesson" ? "page" : undefined} onClick={() => openDestination("lesson")}>Daily Learning Path</button>
           <button className="quiet-action" aria-current={destination === "review" ? "page" : undefined} onClick={() => openDestination("review")}>Review</button>
           <button className="quiet-action" aria-current={destination === "path" ? "page" : undefined} onClick={() => openDestination("path")}>Language Path</button>
-          <details className="app-menu"><summary>☰ &nbsp; Menu</summary><div className="app-menu-panel">
+        </nav>
+        <details ref={menuRef} className="app-menu"><summary>☰ &nbsp; Menu</summary><div className="app-menu-panel">
             {literacyLanguages[0] && <button onClick={() => openDestination("writing")}>Writing System</button>}
             <button ref={xrayTriggerRef} onClick={() => openDestination("xray")}>Expression X-Ray</button>
-            <fieldset><legend>Appearance</legend>{(["system", "light", "dark"] as const).map(choice => <label key={choice}><input type="radio" name="appearance" checked={appearance === choice} onChange={() => chooseAppearance(choice)} /> {choice[0].toUpperCase() + choice.slice(1)}</label>)}</fieldset>
-          </div></details>
-        </nav>
+            <fieldset><legend>Appearance</legend>{(["system", "light", "dark"] as const).map(choice => <label key={choice}><input type="radio" name="appearance" aria-label={choice[0].toUpperCase() + choice.slice(1)} checked={appearance === choice} onChange={() => chooseAppearance(choice)} /> {choice[0].toUpperCase() + choice.slice(1)}</label>)}</fieldset>
+        </div></details>
       </header>
 
       {destination === "lesson" && !dailyPractice && stage !== "complete" && (

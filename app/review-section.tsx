@@ -2,9 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { LessonDefinition } from "./curriculum";
-import { normalizeReviewAnswer, reviewPhraseTiles, reviewDirection } from "./review-language";
+import { normalizeReviewAnswer, reviewWordBank, reviewDirection } from "./review-language";
 import { edgeEvidenceKey, reviewQueue, reviewTasks, type LearnerModel, type ReviewItem, type ReviewTask } from "./learning-engine";
-import { AnswerField } from "./answer-field";
 import ListenButton from "./listen-button";
 import ReviewPhraseBuilder from "./review-phrase-builder";
 import { speechLanguage } from "./speech";
@@ -18,9 +17,9 @@ type ReviewResult = { task: ReviewTask; outcome: "independent" | "reconstructed"
 
 function taskTitle(task: ReviewTask) {
   if (task.id.startsWith("stack-")) return `Connect the meaning in ${task.edge.toLanguage}`;
-  if (task.edge.fromModality === "audio") return "Listen for meaning";
+  if (task.edge.fromModality === "audio") return "Listen and build";
   if (task.edge.retrievalType === "reconstruction") return "Rebuild the structure";
-  return task.edge.toModality === "meaning" ? "Recall the meaning" : `Recall a sentence in ${task.edge.toLanguage}`;
+  return task.edge.toModality === "meaning" ? "Build the meaning" : `Build a sentence in ${task.edge.toLanguage}`;
 }
 
 function ReviewPlan({ tasks }: { tasks: ReviewTask[] }) {
@@ -82,7 +81,7 @@ export default function ReviewSection({ course, model, languages, completedIds, 
     </section> : <div className="review-empty"><h2>Nothing to strengthen right now.</h2><p>When a response needs another try, it will appear here after a short pause.</p></div>)}
     {mode === "Flashcards" && <section className="review-recommendation" aria-label="Flashcards"><p className="eyebrow">Ready to revisit</p><h2>Recall, reveal, reconnect.</h2><p className="review-note">Bring familiar words and expressions to mind.</p>{dueCards.length ? <><p>{dueCards.length} cards ready · up to 6 per set</p><button className="primary-action" onClick={() => { const planned = planFlashcards(dueCards, 6); const saved = { ids: planned.map(card => card.id), session: crypto.randomUUID(), position: 0, revealed: false }; localStorage.setItem("nuevo-flow.review.cards.v1", JSON.stringify(saved)); setSavedCards(saved); setCards(planned); }}>Start review →</button></> : <div className="review-empty"><h2>No cards due.</h2><p>Encountered material becomes available after a short pause.</p></div>}</section>}
     {mode === "Listening" && <ListeningTopics course={course} model={model} languages={languages} completedIds={completedIds} finished={finished} onStart={start} />}
-    <section className="review-alternatives"><h2>Other ways to review</h2>{(["Strengthen", "Flashcards", "Listening"] as const).filter(label => label !== mode).map(label => <button key={label} onClick={() => setMode(label)}><span><strong>{label}</strong><small>{label === "Flashcards" ? "Bring familiar words to mind" : label === "Listening" ? "Hear a phrase. Recall its meaning." : "Give a difficult skill another try"}</small></span><span aria-hidden="true">›</span></button>)}</section>
+    <section className="review-alternatives"><h2>Other ways to review</h2>{(["Strengthen", "Flashcards", "Listening"] as const).filter(label => label !== mode).map(label => <button key={label} onClick={() => setMode(label)}><span><strong>{label}</strong><small>{label === "Flashcards" ? "Bring familiar words to mind" : label === "Listening" ? "Hear a phrase. Build what you hear." : "Give a difficult skill another try"}</small></span><span aria-hidden="true">›</span></button>)}</section>
     <button className="text-action review-return" onClick={onContinue}>Continue Daily Learning Path →</button>
   </div>;
 }
@@ -108,7 +107,7 @@ function ListeningTopics({ course, model, languages, completedIds, finished, onS
     })).then(items => { if (!cancelled) setAvailable(items.filter((item): item is ReviewItem => item !== null)); });
     return () => { cancelled = true; };
   }, [course, model, completedIds, languages, finished]);
-  return <section aria-label="Listening"><h2 className="review-heading">Recognize meaning by ear.</h2><p className="review-note">Listen before seeing the words. Each language has its own listening record; reading and flashcard ratings do not count as listening success.</p>
+  return <section aria-label="Listening"><h2 className="review-heading">Listen, then build.</h2><p className="review-note">Hear the phrase before seeing its words, then build what you heard. Each language has its own listening record.</p>
     {available === null ? <p role="status">Checking reviewed listening models…</p> : available.length ? <div className="review-groups">{available.map(item => <ReviewTopic key={`${item.lesson.id}:${item.evidence.language}`} item={item} languages={languages} onStart={() => onStart(item)} />)}</div> : <div className="review-empty"><h2>No listening review ready.</h2><p>Only due material with an available, reviewed recording appears here. Newly practised listening gets time to settle before returning.</p></div>}
   </section>;
 }
@@ -161,7 +160,6 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
   onAttempt: (task: ReviewTask, correct: boolean, supported: boolean, latency: number, eventId: string) => void;
   onReveal: () => void; onClose: () => void; onNext: () => void;
 }) {
-  const [answer, setAnswer] = useState("");
   const [status, setStatus] = useState<"idle" | "retry" | "correct" | "revealed">("idle");
   const [heard, setHeard] = useState(false);
   const [reviewedAudio, setReviewedAudio] = useState(false);
@@ -171,9 +169,6 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
   const [failures, setFailures] = useState(0);
   const [hinted, setHinted] = useState(false);
   const [targetHeard, setTargetHeard] = useState(false);
-  const [wordBankSeen, setWordBankSeen] = useState(task.edge.retrievalType === "reconstruction");
-  const [build, setBuild] = useState(task.edge.retrievalType === "reconstruction");
-  const [listeningBuild, setListeningBuild] = useState(false);
   const [selected, setSelected] = useState<number[]>([]);
   const [history, setHistory] = useState<number[][]>([]);
   const [restored, setRestored] = useState(false);
@@ -184,20 +179,21 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
     queueMicrotask(() => {
     if (cancelled) return;
     try { const saved = JSON.parse(localStorage.getItem(storageKey) || "null");
-      if (saved) { setAttempted(Boolean(saved.attempted)); setFailures(Number(saved.failures) || 0); setHinted(Boolean(saved.hinted)); setTargetHeard(Boolean(saved.targetHeard)); setWordBankSeen(Boolean(saved.wordBankSeen) || task.edge.retrievalType === "reconstruction"); setAnswer(typeof saved.answer === "string" ? saved.answer : ""); setSelected(Array.isArray(saved.selected) ? saved.selected : []); setBuild(Boolean(saved.build)); setListeningBuild(Boolean(saved.listeningBuild)); setStatus(saved.status === "correct" || saved.status === "revealed" || saved.status === "retry" ? saved.status : "idle"); setHeard(Boolean(saved.heard)); setReviewedAudio(Boolean(saved.reviewedAudio)); setTextFallback(Boolean(saved.textFallback)); setIndependent(Boolean(saved.independent)); }
+      if (saved) { setAttempted(Boolean(saved.attempted)); setFailures(Number(saved.failures) || 0); setHinted(Boolean(saved.hinted)); setTargetHeard(Boolean(saved.targetHeard)); setSelected(saved.build && (task.edge.fromModality !== "audio" || saved.listeningBuild || saved.textFallback) && Array.isArray(saved.selected) ? saved.selected : []); setStatus(saved.status === "correct" || saved.status === "revealed" || saved.status === "retry" ? saved.status : "idle"); setHeard(Boolean(saved.heard)); setReviewedAudio(Boolean(saved.reviewedAudio)); setTextFallback(Boolean(saved.textFallback)); setIndependent(Boolean(saved.independent)); }
     } catch { /* Ignore an unreadable draft. */ }
     setRestored(true);
     });
     return () => { cancelled = true; };
-  }, [storageKey, task.edge.retrievalType]);
-  useEffect(() => { if (restored) try { localStorage.setItem(storageKey, JSON.stringify({ attempted, failures, hinted, targetHeard, wordBankSeen, answer, selected, build, listeningBuild, status, heard, reviewedAudio, textFallback, independent })); } catch { /* Keep the current practice usable. */ } }, [storageKey, restored, attempted, failures, hinted, targetHeard, wordBankSeen, answer, selected, build, listeningBuild, status, heard, reviewedAudio, textFallback, independent]);
+  }, [storageKey, task.edge.fromModality]);
+  useEffect(() => { if (restored) try { localStorage.setItem(storageKey, JSON.stringify({ attempted, failures, hinted, targetHeard, selected, status, heard, reviewedAudio, textFallback, independent, build: true, listeningBuild: task.edge.fromModality === "audio" && !textFallback })); } catch { /* Keep the current practice usable. */ } }, [storageKey, restored, attempted, failures, hinted, targetHeard, selected, status, heard, reviewedAudio, textFallback, independent, task.edge.fromModality]);
   function saveNow(patch: Record<string, unknown>) {
     try { const saved = JSON.parse(localStorage.getItem(storageKey) || "{}"); localStorage.setItem(storageKey, JSON.stringify({ ...saved, ...patch })); } catch { /* Current practice remains usable. */ }
   }
+  const listeningBuild = task.edge.fromModality === "audio" && !textFallback;
   const tileText = listeningBuild ? task.prompt : task.answer;
   const tileLanguage = listeningBuild ? task.edge.fromLanguage : task.edge.toLanguage;
-  const tiles = reviewPhraseTiles(item.lesson, tileLanguage, tileText);
-  const response = build ? selected.map(index => tiles[index]).join(" ") : answer;
+  const tiles = reviewWordBank(item.lesson, tileLanguage, tileText, listeningBuild ? [] : task.accepted);
+  const response = selected.map(index => tiles[index]).join(" ");
   function changeTiles(next: number[]) { setHistory(previous => [...previous, selected]); setSelected(next); setStatus("idle"); }
 
   const started = useRef(0);
@@ -207,10 +203,12 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
   function check() {
     if (!restored || !response.trim() || locked || (listening && !heard)) return;
     const correct = (listeningBuild ? [task.prompt] : task.accepted).some(value => normalizeReviewAnswer(value, tileLanguage) === normalizeReviewAnswer(response, tileLanguage));
-    const effectiveTask = { ...task, edge: { ...task.edge, ...(textFallback ? { fromModality: "written" as const } : {}), ...(build ? { retrievalType: "reconstruction" as const } : {}), ...(listeningBuild ? { toLanguage: task.edge.fromLanguage, toModality: "written" as const } : {}) } };
-    const supported = supportedByEarlierReveal || attempted || hinted || targetHeard || (!build && wordBankSeen) || (listening && !reviewedAudio) || textFallback;
+    const effectiveTask = { ...task, edge: { ...task.edge, ...(textFallback ? { fromModality: "written" as const } : {}), retrievalType: "reconstruction" as const, ...(listeningBuild ? { toLanguage: task.edge.fromLanguage, toModality: "written" as const } : {}) } };
+    const supported = supportedByEarlierReveal || attempted || hinted || targetHeard || (listening && !reviewedAudio) || textFallback;
     setIndependent(!supported);
-    saveNow({ attempted: true, failures: correct ? failures : failures + 1, status: correct ? "correct" : "retry", independent: !supported, answer, selected, build, listeningBuild, wordBankSeen, hinted, targetHeard, heard, reviewedAudio, textFallback });
+    saveNow({ attempted: true, failures: correct ? failures : failures + 1, status: correct ? "correct" : "retry", independent: !supported, selected, build: true, listeningBuild, hinted, targetHeard, heard, reviewedAudio, textFallback });
+    // Capture latency in the Check button event.
+    // eslint-disable-next-line react-hooks/purity
     onAttempt(effectiveTask, correct, supported, Math.max(0, Date.now() - started.current), `${session}:task:${position}:attempt:${failures + 1}`);
     setAttempted(true); if (!correct) setFailures(value => value + 1); setStatus(correct ? "correct" : "retry");
   }
@@ -220,8 +218,8 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
       <p className="review-step-label">{item.lesson.title} <span>{position} of {tasks.length}</span></p>
       <progress className="review-progress" value={position - 1} max={tasks.length} aria-label="Review steps completed" />
     </header>
-    <p className="translation-direction">{build ? "Guided practice" : `${task.edge.fromLanguage} → ${task.edge.toLanguage}${listening ? " · Listening" : ""}`}</p>
-    <h1 className="exercise-title">{listening ? (listeningBuild ? "Build what you heard." : "What does the speaker mean?") : task.edge.toModality === "meaning" ? "Recall the meaning." : build ? "Build the phrase." : `Write in ${task.edge.toLanguage}.`}</h1>
+    <p className="translation-direction">{listening ? "Listening practice" : "Guided practice"}</p>
+    <h1 className="exercise-title">{listening ? "Build what you heard." : task.edge.toModality === "meaning" ? "Build the meaning." : "Build the phrase."}</h1>
     {!listening && <p className="review-prompt">{task.prompt.replace(/^Translate:\s*/i, "")}</p>}
     {position > 1 && <p className="review-note">Same meaning, another language. This is guided stacking practice.</p>}
     {listening && <>
@@ -229,19 +227,15 @@ function ReviewResponse({ session, item, task, position, tasks, supportedByEarli
         onComplete={reviewed => { setHeard(true); setReviewedAudio(Boolean(reviewed)); }} onError={() => setAudioError(true)} />
       {audioError && <button className="text-action" onClick={() => setTextFallback(true)}>Audio unavailable · practise with text instead</button>}
     </>}
-    {listening && heard && !locked && <button className="text-action" onClick={() => { setListeningBuild(!listeningBuild); setBuild(!listeningBuild); if (!listeningBuild) { setWordBankSeen(true); saveNow({ wordBankSeen: true }); } setSelected([]); setAnswer(""); }}>{listeningBuild ? "Recall the meaning instead" : "Build the phrase you heard"}</button>}
     {!listening && task.edge.toModality === "written" && speechLanguage(task.edge.toLanguage) && <ListenButton text={task.answer} language={speechLanguage(task.edge.toLanguage)!} approvedOnly onPlayback={() => { saveNow({ targetHeard: true }); setTargetHeard(true); }} onError={() => setAudioError(true)} />}
     {!listening && audioError && <p className="review-note" role="status">Recording unavailable. Retry Listen or continue with text practice.</p>}
-    {!build && <p className="instruction">{listening ? `Listen first, then write the meaning in ${task.edge.toLanguage}.` : `Write the ${task.edge.toLanguage} response from memory.`}</p>}
-    {build ? <ReviewPhraseBuilder direction={reviewDirection(tileLanguage)} words={tiles} selected={selected} disabled={locked || (listening && !heard)} onChange={changeTiles} canUndo={history.length > 0} onUndo={() => { setSelected(history[history.length - 1]); setHistory(history.slice(0, -1)); setStatus("idle"); }} /> : <AnswerField value={answer} onChange={value => { setAnswer(value); if (!locked) setStatus("idle"); }} onEnter={check}
-      label={`${task.edge.toLanguage} review answer`} placeholder={`Write in ${task.edge.toLanguage}`} disabled={locked} lang={speechLanguage(task.edge.toLanguage) || "en"} />}
-    {!listening && task.edge.toModality === "written" && !locked && <button className="text-action" onClick={() => { if (!build) { setWordBankSeen(true); saveNow({ wordBankSeen: true }); } setBuild(!build); setSelected([]); setAnswer(""); }}>{build ? "Write my own response" : "Use word tiles"}</button>}
-    {!locked && <button className="primary-action" disabled={!restored || !response.trim() || (listening && !heard)} onClick={check}>{build ? "Check phrase" : "Check response"}</button>}
+    <ReviewPhraseBuilder direction={reviewDirection(tileLanguage)} words={tiles} selected={selected} disabled={locked || (listening && !heard)} onChange={changeTiles} canUndo={history.length > 0} onUndo={() => { setSelected(history[history.length - 1]); setHistory(history.slice(0, -1)); setStatus("idle"); }} />
+    {!locked && <button className="primary-action" disabled={!restored || !response.trim() || (listening && !heard)} onClick={check}>Check phrase</button>}
     {status === "retry" && <p role="status">{failures >= 2 ? "Consider showing the answer, or try again." : "Not quite. Try again or open a hint."}</p>}
     {!locked && <div className="review-assistance">{failures > 0 && <button className="text-action" onClick={() => { saveNow({ hinted: true }); setHinted(true); }}>Hint</button>}<button className="text-action" onClick={() => { saveNow({ status: "revealed", attempted: true }); setStatus("revealed"); onReveal(); }}>Show answer</button></div>}
     {hinted && !locked && <p className="review-note">{task.hint || (task.edge.toLanguage === "Vietnamese" ? item.lesson.bridgeMastery.hint : item.lesson.transform.hint)}</p>}
     {locked && <div className="feedback" role="status"><div>
-      <p>{status === "correct" ? (independent ? (build ? "Correct · reconstructed independently." : "Correct · recalled independently.") : "Correct with support. Check it from memory again later.") : "Model revealed · no independent success recorded."}</p>
+      <p>{status === "correct" ? (independent ? "Correct · reconstructed independently." : "Correct with support. Check it from memory again later.") : "Model revealed · no independent success recorded."}</p>
       {listening && <p>{task.prompt}</p>}
       {/* Showing a checked answer can support later tasks in this short round. */}
       {status === "revealed" && <p>{listeningBuild ? task.prompt : task.answer}</p>}

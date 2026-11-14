@@ -438,3 +438,7 @@ Reuse approved recordings and voice policies; do not regenerate or replace audio
 ### 2026-11-14 · Build 25 English scope clarification
 
 For the Build 25 Review redesign and personal iPhone evaluation, English remains the existing native-language meaning anchor. English as a language to learn, and deeper English refinement for native speakers, belong to later builds alongside other language expansion; neither is a Build 25 requirement. Preserve existing English content and learner records. Build 25 must retain the completed Build 24 main-lesson audio and approved voices. The user subsequently authorized releasing the shared Review experience on the web and installing Build 25 on the connected iPhone for evaluation, with further refinement afterward.
+
+### 2026-11-14 · Review interaction and menu correction
+
+Review sentence responses use tappable or clickable pill-shaped word or phrase choices rather than a typing field. Learners can remove or rearrange choices and use Undo or Clear; authored alternatives and repeated words remain available. Listening presents the recording before its word choices and records reconstruction accurately. Preserve unfinished arrangements and assistance through reload. The compact header menu stays within the screen, uses a legible translucent treatment in light and dark appearances, and retains accessible appearance settings and secondary navigation. Apply these corrections across the shared web experience and the installed iPhone app, preserving approved recordings and learning records.

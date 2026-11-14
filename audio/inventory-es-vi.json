@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-14T16:45:17.600Z",
+  "generatedAt": "2026-11-14T17:10:29.597Z",
   "sourceLessonCount": 288,
   "publishedRevision": 8,
   "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
@@ -21,8 +21,8 @@
     "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
     "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
     "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
-    "app/page.tsx": "fa2a6cebab9be6ecf427c66f304c695e462b2cfe4411362c504567f0af2764e6",
-    "app/review-section.tsx": "7ca2e71d0e0188957f0a247e86339e1463e49f21211a48672fff493d7b4fc54e",
+    "app/page.tsx": "b4be1c2b1ad419f41dbcbf4b60587abdbe36308dcc03dea3ea84e7a6733dc4e6",
+    "app/review-section.tsx": "40312db3dfb7c145b6bf27e984e8942051699603a1a7d904302cf337e61d77be",
     "app/flashcard-round.tsx": "ea61fcaed8e4bc4361bb08a338ca375d5ed0e5cb5992164bde697d8feefc6078",
     "app/reinforcement.ts": "01825615b5b022f9bf2deccf59dd2a4efb0e0684ccb40b63998c0e9b1735f9d6",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",

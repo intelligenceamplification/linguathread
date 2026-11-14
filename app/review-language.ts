@@ -14,3 +14,25 @@ export function reviewPhraseTiles(lesson: LessonDefinition, language: string, an
   if (visible?.length && normalizeReviewAnswer(visible.map(unit => `${unit.text}${unit.after || " "}`).join(""), language) === normalizeReviewAnswer(answer, language)) return visible.map(unit => unit.text);
   return answer.trim().split(/\s+/u);
 }
+
+/** Include the words needed by authored alternatives without collapsing repeated words. */
+export function reviewWordBank(lesson: LessonDefinition, language: string, answer: string, alternatives: string[]): string[] {
+  const bank = reviewPhraseTiles(lesson, language, answer);
+  const counts = (words: string[]) => words.reduce((result, word) => {
+    const key = normalizeReviewAnswer(word, language);
+    result.set(key, (result.get(key) || 0) + 1);
+    return result;
+  }, new Map<string, number>());
+  for (const alternative of alternatives) {
+    const words = reviewPhraseTiles(lesson, language, alternative);
+    const available = counts(bank);
+    const needed = new Map<string, number>();
+    for (const word of words) {
+      const key = normalizeReviewAnswer(word, language);
+      const count = (needed.get(key) || 0) + 1;
+      needed.set(key, count);
+      if (count > (available.get(key) || 0)) bank.push(word);
+    }
+  }
+  return bank;
+}
