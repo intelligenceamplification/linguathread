@@ -4668,6 +4668,1150 @@
         }
       ],
       "repairReport": "outputs/audio-review-20261112-repairs.json"
+    },
+    {
+      "id": "20261113-device-01",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all recordings in this batch after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-01.json",
+      "plan": "audio/generated/review-20261113-01/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-a96be92dec87efbe4b19",
+          "language": "es",
+          "text": "La situación me inquieta, aunque no diría que me alarma.",
+          "sha256": "a98f9f24f5be23cdba18f406bd101ae8fc81ae40e7a9e19b056cbb2b7eab6de4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/es-male-a98f9f24f5be23cdba18.m4a"
+        },
+        {
+          "requestKey": "es-c138b186ab7a0ad5261c",
+          "language": "es",
+          "text": "La explicación es posible, pero todavía no resulta plenamente plausible.",
+          "sha256": "8ac1d88b87c1768b892bf0ca6dd0db2e7a3df0372f6c2a4fa7173b6cd362fa29",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/es-female-8ac1d88b87c1768b892b.wav"
+        },
+        {
+          "requestKey": "es-9f97469b2eaea136d1da",
+          "language": "es",
+          "text": "Lo considero desacertado, no tanto por el resultado como por el criterio empleado.",
+          "sha256": "38c36b8ac34f8e68d77cf9cb59469f27ad3dcf2bb7b425c24f8ab275c4d5a91c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/es-male-38c36b8ac34f8e68d77c.m4a"
+        },
+        {
+          "requestKey": "28f2916205420d55af82210b0c4307b9331da74b2ac0777b3c5b9d9804cee5fe",
+          "language": "vi",
+          "text": "Chúng ta không đòi sự chắc chắn; chúng ta đòi tính nghiêm cẩn. Không yêu cầu đồng thuận tuyệt đối; yêu cầu sự trung thực.",
+          "sha256": "f5d3190989617d17a32b394838f540ff489b27e140fd3b0e92f9a0c42fa320ec",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/28f2916205420d55af82210b0c4307b9331da74b2ac0777b3c5b9d9804cee5fe.wav"
+        },
+        {
+          "requestKey": "78ae80ebd3237163b5925c456f848ae1c1c39ccb91f5254d6c37e833ae5df734",
+          "language": "vi",
+          "text": "Kết quả còn cách xa lý tưởng, nói một cách nhẹ nhàng.",
+          "sha256": "432bfc6dcc33dd34435b8cf746cda42cdf9d24cdd4bf347d6cc32eede5e14569",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/78ae80ebd3237163b5925c456f848ae1c1c39ccb91f5254d6c37e833ae5df734.wav"
+        },
+        {
+          "requestKey": "48fdd5bd6a07933a271f438b4371dda69323ce17ee30d606d551f5ac0294944f",
+          "language": "vi",
+          "text": "Các nguồn không hoàn toàn mâu thuẫn; chúng mô tả những thời điểm khác nhau của cùng một quá trình.",
+          "sha256": "33623bb2587fd0df611f60d04a22943b277b53ccf6297ba55c4f37afdf8763fa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/48fdd5bd6a07933a271f438b4371dda69323ce17ee30d606d551f5ac0294944f.wav"
+        },
+        {
+          "requestKey": "f888da520d076a6ec5eafeaa48e97eb58d0d47d5cc8a1ccc9adb270545b02cfa",
+          "language": "vi",
+          "text": "Một khuôn khổ nói về nghĩa vụ; khuôn khổ kia diễn đạt cùng mối quan hệ bằng sự thuộc về và bổn phận tương hỗ.",
+          "sha256": "981f51cf33cfebdc7b36310a25b39a35427a3ae79fb66df311096297f5a2147a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/f888da520d076a6ec5eafeaa48e97eb58d0d47d5cc8a1ccc9adb270545b02cfa.wav"
+        },
+        {
+          "requestKey": "6c3f83b5b3407d23f6dd2d0c971a7775ed23d35fe78058f0103cc10bc652aa38",
+          "language": "en",
+          "text": "The criticism identifies a real risk; that is precisely why we included an independent review.",
+          "sha256": "b2c9a3ff0aac96ea665090114d33f5bfbc6bfba44270963356142199f404e049",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/6c3f83b5b3407d23f6dd2d0c971a7775ed23d35fe78058f0103cc10bc652aa38.wav"
+        },
+        {
+          "requestKey": "8dd4d1cd2f21ba1da895c9273c0bb2993b77cb19d30e0f26abcd781852ba045e",
+          "language": "en",
+          "text": "After months of doubt, she decided to take the plunge and present her project.",
+          "sha256": "89bf1bdada4d19419d55d36b281925384195d705bdf4ae7f80c62f0c4b41f6f4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/8dd4d1cd2f21ba1da895c9273c0bb2993b77cb19d30e0f26abcd781852ba045e.wav"
+        },
+        {
+          "requestKey": "e6b926988e98d4d06ed254f4d25d225b4fe6f3295a87bfd46db919b7364c746f",
+          "language": "en",
+          "text": "The expression sounds natural among friends but would be too informal in a report.",
+          "sha256": "7c9ffc2b9de9c679d5c1b57c7453b8381476e05be04c88168f0a17ca5c7e72bb",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-01/e6b926988e98d4d06ed254f4d25d225b4fe6f3295a87bfd46db919b7364c746f.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261113-device-02",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all recordings in this batch after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-02.json",
+      "plan": "audio/generated/review-20261113-02/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-0e8ca7e6642c00217c1d",
+          "language": "es",
+          "text": "En suma, el problema consiste en que exigimos resultados inmediatos a procesos que requieren tiempo.",
+          "sha256": "d98dcaf817184ee706a43c5db1797542dad7d3880a033c8a84db4594c6beea45",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/es-female-d98dcaf817184ee706a4.wav"
+        },
+        {
+          "requestKey": "es-67ca46dc041e374d5386",
+          "language": "es",
+          "text": "Dicho con mayor precisión, la confianza no desapareció de golpe, sino que se fue erosionando.",
+          "sha256": "a63edd5a9a21953522c276245cb0128f31d86eec3bc5962280f3e8c3627cdf2b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/es-male-a63edd5a9a21953522c2.m4a"
+        },
+        {
+          "requestKey": "es-a5b933f9dca2985cfeac",
+          "language": "es",
+          "text": "Lo que antes se describía como un fracaso hoy se interpreta como aprendizaje.",
+          "sha256": "c15fd0dfeb573f280eab8ac1d7a1da779e1a0b3cad5dc0df7a1b2cf69ab5a907",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/es-female-c15fd0dfeb573f280eab.wav"
+        },
+        {
+          "requestKey": "6081a9801a5f2647c59582abb9c110928a832ab63e28c2cd80d398a6fa5ac800",
+          "language": "vi",
+          "text": "Lời chứng mang lại trải nghiệm không thể quy giản thành số liệu, dù không thay thế phân tích tổng thể.",
+          "sha256": "762c851434ba0701cb2bc522320e5727a9f0f9cf1d5a3e32ccbb049573d4bf8b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/6081a9801a5f2647c59582abb9c110928a832ab63e28c2cd80d398a6fa5ac800.wav"
+        },
+        {
+          "requestKey": "2f7e643ab1fb7a76ae19f68d501a63e337833be305b9a5fc9250e7d104c96d5d",
+          "language": "vi",
+          "text": "Nghịch lý bề ngoài biến mất nếu phân biệt kiểm soát tức thời với ảnh hưởng lâu dài.",
+          "sha256": "51212bdda65cf489f9035367cbccaa78e89a328d896cf3c1fdf814f45bf43465",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/2f7e643ab1fb7a76ae19f68d501a63e337833be305b9a5fc9250e7d104c96d5d.wav"
+        },
+        {
+          "requestKey": "da54f6b4740ab33ba18aca3d7c06cccc5969ceddf05625cc8f2600ca4e62ee00",
+          "language": "vi",
+          "text": "Thay vì sửa anh ấy trước nhóm, cô ấy tìm cách chỉ ra lỗi mà không làm anh ấy mất mặt.",
+          "sha256": "ff9e3de48969f2a13b9db04183cdaec16ce408d9e82a3089bb21d2a8f542322e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/da54f6b4740ab33ba18aca3d7c06cccc5969ceddf05625cc8f2600ca4e62ee00.wav"
+        },
+        {
+          "requestKey": "d0bbeae2eb5f4c11eb1a8e74988c738e5c97632e6e8d7e79bce78a6dfa24d6a0",
+          "language": "vi",
+          "text": "Cách xưng hô vừa tôn trọng mà không xa cách, điều khó tái hiện bằng một từ duy nhất.",
+          "sha256": "0b66b0c46cf6d82ab50a1e55a88cbd8028cf2489025f939f4a9281600cd7ab46",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/d0bbeae2eb5f4c11eb1a8e74988c738e5c97632e6e8d7e79bce78a6dfa24d6a0.wav"
+        },
+        {
+          "requestKey": "84618f1463fe47e8814ead3124ef226c173973838e6f5b920fa0752fb1b9ffe7",
+          "language": "en",
+          "text": "It is used frequently in this region, while elsewhere it may sound old-fashioned.",
+          "sha256": "3290f1f87def7e8b5b709260e56a96b307dcf36a504d436865ab09384ce0e187",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/84618f1463fe47e8814ead3124ef226c173973838e6f5b920fa0752fb1b9ffe7.wav"
+        },
+        {
+          "requestKey": "91a2e885d01d9da12ad87748902618cb384d09107ec094b4de42fb3d46c3e534",
+          "language": "en",
+          "text": "The metaphor clarifies the idea because it organizes the relationship, not simply because it sounds elegant.",
+          "sha256": "a640b8e0bc5c285383e01ff6a25994b8c7d16058ec866efb667649f2b3e0c8fa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/91a2e885d01d9da12ad87748902618cb384d09107ec094b4de42fb3d46c3e534.wav"
+        },
+        {
+          "requestKey": "22143a2f574051d8c81faa113d1c2ab564ee170156eaff4b08ced0a6847c1af8",
+          "language": "en",
+          "text": "Although no one stated it openly, the change in tone indicated that the agreement was in danger.",
+          "sha256": "7d7c01760a0613792806a8568709a5ce77e9516e1450771e893574502509681a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-02/22143a2f574051d8c81faa113d1c2ab564ee170156eaff4b08ced0a6847c1af8.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261113-device-03",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all recordings in this batch after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-03.json",
+      "plan": "audio/generated/review-20261113-03/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-85344161901c88f413a6",
+          "language": "es",
+          "text": "Podría resumirlo como una negativa, pero eso borraría la delicadeza con que puso el límite.",
+          "sha256": "57293864481826622323942988cf7facb2865c6b5f2316e88dfd9e644fc9cc26",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/es-male-57293864481826622323.m4a"
+        },
+        {
+          "requestKey": "es-52f02e5cbb04cb46c466",
+          "language": "es",
+          "text": "Tras varias tentativas fallidas, por fin dieron con la clave del problema.",
+          "sha256": "95aed96fc5d48a7ecd741bac5cfe55b6fd95620cef6ff5002e58b6fefdb8fbd8",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/es-female-95aed96fc5d48a7ecd74.wav"
+        },
+        {
+          "requestKey": "es-384601e6fd2cb192c565",
+          "language": "es",
+          "text": "La decisión suscitó dudas razonables, pero no desató la crisis que algunos habían previsto.",
+          "sha256": "ef39b739b6b03f6765b1ce80cf56606dca16bec0bebdddde16fe1e7420034c4a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/es-male-ef39b739b6b03f6765b1.m4a"
+        },
+        {
+          "requestKey": "7879b7a569d84b321c50736e92c74ea601143e537aa8d4b9077b45687a484fc0",
+          "language": "vi",
+          "text": "Có thể về cơ bản bạn đúng; điểm tôi không đồng ý là cách đưa nó vào thực tế.",
+          "sha256": "1c43537f3680fd0870864226e5bd7c6becbe193ddf04be1bc6f3e99f7a60dc41",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/7879b7a569d84b321c50736e92c74ea601143e537aa8d4b9077b45687a484fc0.wav"
+        },
+        {
+          "requestKey": "43e7cc16db10f26063f3210a2ceb46e4963da972a1f3851d8b1f37dc7c710855",
+          "language": "vi",
+          "text": "Câu đùa làm dịu căng thẳng vì nhắm vào tình huống chứ không vào phẩm giá của ai.",
+          "sha256": "8179c18f599d863ed834b995414b96be4fbeb7ec0e35755509e9e673e8e6ef7d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/43e7cc16db10f26063f3210a2ceb46e4963da972a1f3851d8b1f37dc7c710855.wav"
+        },
+        {
+          "requestKey": "df6c18cf8440770ca9a9e91d5c21555e36bbebfcbe505e77b8d8d98fc24ddcf6",
+          "language": "vi",
+          "text": "Khả năng phục hồi của hệ thống được hiểu là khả năng tiếp tục hoạt động dù có lỗi cục bộ.",
+          "sha256": "eee4051ec354b7afde05d52faa3b9413bdbdd52953281da57fa4f9da04f40faa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/df6c18cf8440770ca9a9e91d5c21555e36bbebfcbe505e77b8d8d98fc24ddcf6.wav"
+        },
+        {
+          "requestKey": "c92a7c6a320d92e21f00147ec31d07cd76b58565288cd784085156c86181418d",
+          "language": "vi",
+          "text": "Theo thuật ngữ pháp lý, ý định có ý nghĩa nhưng không nhất thiết loại bỏ trách nhiệm.",
+          "sha256": "5cdaa15cb25e89ab0e685fc3f4530f3425558bfb7d006195218a1244c2c8517c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/c92a7c6a320d92e21f00147ec31d07cd76b58565288cd784085156c86181418d.wav"
+        },
+        {
+          "requestKey": "ae084981009dfd5632011931de808f702a39c781796d8298f7aebc69dffa93ef",
+          "language": "en",
+          "text": "I propose that we proceed, but with mechanisms that allow us to adjust course if circumstances change.",
+          "sha256": "b0ff863de96e2104eb674ef5743ff2f07b46b09a9e9d850c2b7c2fece8621a45",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/ae084981009dfd5632011931de808f702a39c781796d8298f7aebc69dffa93ef.wav"
+        },
+        {
+          "requestKey": "de779b8d1423bf35bc07338d21235712e3b700cb5f7a4f39adc97f8badedf6b3",
+          "language": "en",
+          "text": "The disagreement lies not in the facts, but in the value each side assigns to them.",
+          "sha256": "e94286a07288542e654c16ebc897385e3c10fe2230831526d87ee93f6748cce9",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/de779b8d1423bf35bc07338d21235712e3b700cb5f7a4f39adc97f8badedf6b3.wav"
+        },
+        {
+          "requestKey": "470cf113c323ea9ad893346f58fba2d534f35b011a559586955719ed44012074",
+          "language": "en",
+          "text": "I can express complex ideas flexibly, although I continue refining my voice in new contexts.",
+          "sha256": "8a4794a2c575f233ce6d75b67a8ed31099231f2f733ac0be7cfcf41462268de2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-03/470cf113c323ea9ad893346f58fba2d534f35b011a559586955719ed44012074.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261113-device-04",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all recordings in this batch after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-04.json",
+      "plan": "audio/generated/review-20261113-04/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-b9f8717c0db8de6e7fdc",
+          "language": "es",
+          "text": "La frase encaja en una conversación distendida, pero sonaría afectada en un intercambio cotidiano.",
+          "sha256": "2146fe4c3a6e6ddc87fb0564ab07d33ec5874a9a6a5b14db74c8bcdfa5c62701",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/es-female-2146fe4c3a6e6ddc87fb.wav"
+        },
+        {
+          "requestKey": "es-20de556ad1488129679e",
+          "language": "es",
+          "text": "Aunque la locución se entiende ampliamente, su uso activo está muy ligado a ciertas regiones.",
+          "sha256": "360b969df29e5f58b1073a76ea49162a36bb3f99a20734a6055393709d4577df",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/es-male-360b969df29e5f58b107.m4a"
+        },
+        {
+          "requestKey": "es-2ce6ca6246c28a1058b2",
+          "language": "es",
+          "text": "No pedimos certezas; pedimos rigor. No exigimos unanimidad; exigimos honestidad.",
+          "sha256": "074fbbf88a3ae21e2cd47b9677abc690acdaa3f16dce469b7357de2380114b38",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/es-female-074fbbf88a3ae21e2cd4.wav"
+        },
+        {
+          "requestKey": "a1b4b8bc85d752b1de24b824ac3ac872a68cc4e06b2e93cf4449bd91ed24cc01",
+          "language": "vi",
+          "text": "Với người không chuyên, có thể mô tả nó như một bộ lọc tách tín hiệu khỏi nhiễu.",
+          "sha256": "8c4b30acbae259928c07d754dcd1cd5b15b5fd7cdc6cd4fd512c15a68d64dba0",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/a1b4b8bc85d752b1de24b824ac3ac872a68cc4e06b2e93cf4449bd91ed24cc01.wav"
+        },
+        {
+          "requestKey": "e8255898f9f3e93017fc730b0fce93f8ac265e9e5434ca64f406e3063de51de1",
+          "language": "vi",
+          "text": "Bản tóm tắt điều hành ưu tiên quyết định; phụ lục giữ lại chi tiết cần thiết để kiểm tra.",
+          "sha256": "441a4f099e7130d042cfa7be689827ee5ac6b7a0f2b4ce29f2bfe9eb348d8624",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/e8255898f9f3e93017fc730b0fce93f8ac265e9e5434ca64f406e3063de51de1.wav"
+        },
+        {
+          "requestKey": "227465abc126ed19a7359d037bfbc8106680cf93d6ce9ada2c567c28bcdb6046",
+          "language": "vi",
+          "text": "Trước khi chấp nhận kết luận, nên xem mô hình có giả định chính điều nó muốn chứng minh hay không.",
+          "sha256": "414e82e535f5c1a4bad124abb96edd218df2406af82eefafba1388f3fcc184b5",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/227465abc126ed19a7359d037bfbc8106680cf93d6ce9ada2c567c28bcdb6046.wav"
+        },
+        {
+          "requestKey": "cc86b091ce134b458c0bed1b7513c74be5c66af821bb8bf3ea2a6e23c1d1b18e",
+          "language": "vi",
+          "text": "Xét theo sự phân biệt đó, tôi sẽ diễn đạt lại phản đối: vấn đề nằm ở phạm vi chứ không phải tính hợp lệ.",
+          "sha256": "8c471865489ee9b1ed865005a84ec6eacd966c46eb7f53b3f3dbfd0a47b2b98d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/cc86b091ce134b458c0bed1b7513c74be5c66af821bb8bf3ea2a6e23c1d1b18e.wav"
+        },
+        {
+          "requestKey": "100bbe881f45139bb18339df4e3ee289fec7078625c840e73a4ebf23838c4eff",
+          "language": "en",
+          "text": "It is not that he refused; rather, he seemed reluctant to commit.",
+          "sha256": "04dd9404ec9941b7c42402a435960ed61ae1f97779feff457c93a96bdad96dda",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/100bbe881f45139bb18339df4e3ee289fec7078625c840e73a4ebf23838c4eff.wav"
+        },
+        {
+          "requestKey": "c016db008dd8318482dd3e8b25c3b5976807a91ff1a9c0edef1fa3cea15679df",
+          "language": "en",
+          "text": "The situation concerns me, though I would not say it alarms me.",
+          "sha256": "11269151e17661dc0e48694c61eea8dead306f26c39599572b4af3b1ec3eb5b0",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/c016db008dd8318482dd3e8b25c3b5976807a91ff1a9c0edef1fa3cea15679df.wav"
+        },
+        {
+          "requestKey": "5577d63985685650dfb1714568d36855fd33d53499fc02e35e46b0a6c4fbff70",
+          "language": "en",
+          "text": "The explanation is possible, but it is not yet fully plausible.",
+          "sha256": "c88f6d3935ed55c539c31a4f11b0a21d63514bea50c3f66bea22e4415e4b9065",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-04/5577d63985685650dfb1714568d36855fd33d53499fc02e35e46b0a6c4fbff70.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261113-device-05",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved the nine original clips and the Gemini replacement for clip 3 after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-05.json",
+      "plan": "audio/generated/review-20261113-05/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-1098e174aa1c0738df28",
+          "language": "es",
+          "text": "Escuchó, dudó, volvió sobre sus pasos y, solo entonces, respondió.",
+          "sha256": "596a751bf70ff784b839523f82fd5ee9a339899296cc496d50ca32bdf570b6f8",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/es-male-596a751bf70ff784b839.m4a"
+        },
+        {
+          "requestKey": "es-e37e1ddd01a9abded240",
+          "language": "es",
+          "text": "Lo esencial no es cuánto avanzamos, sino qué nos negamos a sacrificar para hacerlo.",
+          "sha256": "06e00276c85c60d5fd0e452fc369142bb437b34f06cbb2d9d81284c647f949c1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/es-female-06e00276c85c60d5fd0e.wav"
+        },
+        {
+          "requestKey": "99335621aac94a3e0dfb986dc557f513c20c9f3c07bf8039dd56cede4c10f660",
+          "language": "es",
+          "text": "El resultado dista bastante de ser ideal, por decirlo con moderación.",
+          "sha256": "c8cc7a0857fca275025d2b182fa7d7181bf26ebe9b3eee1dd734f8da921a08f8",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/c8cc7a0857fca275025d2b182fa7d7181bf26ebe9b3eee1dd734f8da921a08f8.wav"
+        },
+        {
+          "requestKey": "d852a511392dd2b6b9335eb5b4d8dad80340ef875501b22779e47939a931d02b",
+          "language": "vi",
+          "text": "Chúng ta đang giả định sở thích không đổi, hay mô hình cho phép chúng phát triển?",
+          "sha256": "a23d01477a95db874dab8c32a96c72bb3de877278950cfa4655e7f3c0f76356c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/d852a511392dd2b6b9335eb5b4d8dad80340ef875501b22779e47939a931d02b.wav"
+        },
+        {
+          "requestKey": "297267c9ac573baca0f498cb6ad19842803b4261f0874857140bf47db8623121",
+          "language": "vi",
+          "text": "Lời giải thích phù hợp ở bình diện mô tả, nhưng khuyến nghị chuẩn tắc vẫn cần được biện minh.",
+          "sha256": "7a1e397cb47c6a24da175ef7169df4cce52c393bddeb7feea04f12ff7b5d5521",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/297267c9ac573baca0f498cb6ad19842803b4261f0874857140bf47db8623121.wav"
+        },
+        {
+          "requestKey": "e0adf1bede8391a40ce0af94cb8c1d1ada4518b54990394935d20bb28b74810a",
+          "language": "vi",
+          "text": "Cái hay nằm ở chỗ 'banco' đồng thời gợi tiền bạc và chỗ ngồi.",
+          "sha256": "ccacfc406848ba512d21e42a92c9c1b75af7fd34b692f945292f5f504b99ff47",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/e0adf1bede8391a40ce0af94cb8c1d1ada4518b54990394935d20bb28b74810a.wav"
+        },
+        {
+          "requestKey": "bd673d0c8f1b7fbfc1d5c588843bcf3c08c8518c325b32bab0ffae4ea7870037",
+          "language": "vi",
+          "text": "Hiệu ứng không thể dịch sát chữ vì phụ thuộc vào hai từ có âm gần giống nhau.",
+          "sha256": "f81e012a3dc35f77ae4a2b43176daa1a40f84e85f897094f753df1d920d43cd2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/bd673d0c8f1b7fbfc1d5c588843bcf3c08c8518c325b32bab0ffae4ea7870037.wav"
+        },
+        {
+          "requestKey": "a6404a80d98a2388ee6c588bb008473fa5ff451e4d68d50944028f24922365e1",
+          "language": "en",
+          "text": "I consider it misguided, less because of the result than because of the criterion used.",
+          "sha256": "da38fa87cee5d370670ba7148817864ffbc8d93aa44d73f1fe9d342a66558cec",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/a6404a80d98a2388ee6c588bb008473fa5ff451e4d68d50944028f24922365e1.wav"
+        },
+        {
+          "requestKey": "4fc45c420777fcb99e7eebccda2d92404bda2414bb226328803659bbc4d7cb1e",
+          "language": "en",
+          "text": "In short, the problem is that we demand immediate results from processes that require time.",
+          "sha256": "5e2fa2c7d1521c5a296c236bc6b2b3b6b04da232dec1a75daa508e2e9e7a234f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/4fc45c420777fcb99e7eebccda2d92404bda2414bb226328803659bbc4d7cb1e.wav"
+        },
+        {
+          "requestKey": "07b6dffd92c6449ace4f628731fbdf78b483e2fe908347c51c51e3077b2c840b",
+          "language": "en",
+          "text": "More precisely, trust did not disappear at once; it gradually eroded.",
+          "sha256": "6a2d2768e080ec431542845c3a40286929a77eb5b7ce1ed29d8953062bc0d51e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-05/07b6dffd92c6449ace4f628731fbdf78b483e2fe908347c51c51e3077b2c840b.wav"
+        }
+      ],
+      "repairReport": "outputs/audio-review-20261113-gemini.json"
+    },
+    {
+      "id": "20261113-device-06",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all recordings in this batch after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-06.json",
+      "plan": "audio/generated/review-20261113-06/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-7104155a24359a76af48",
+          "language": "es",
+          "text": "Las fuentes no se contradicen por completo: describen momentos distintos del mismo proceso.",
+          "sha256": "fb635ea2736fe8d27fa68947bf2ed3469375e33f3f85e3a002c54843816da0a2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-06/es-female-fb635ea2736fe8d27fa6.wav"
+        },
+        {
+          "requestKey": "es-35b7178a15505ad56f1e",
+          "language": "es",
+          "text": "Un marco habla de obligación; el otro expresa la misma relación en términos de pertenencia y deber mutuo.",
+          "sha256": "397f7c06eb7bebed22e3f0f549dd4249c4d47733d5f0a6f28c06760f34c6e81f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261113-06/es-male-397f7c06eb7bebed22e3.m4a"
+        }
+      ]
+    },
+    {
+      "id": "20261113-gemini-coverage",
+      "approvedAt": "2026-11-13",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261113-gemini.json",
+      "plan": "audio/generated/cloud-pipeline/plans/repair-plus-nine-20261113.json",
+      "clips": [
+        {
+          "requestKey": "e35f75aba59830c90e9bbae5ad5d3645220f8c708aefd651a36addb4cce2eaa9",
+          "language": "es",
+          "text": "El testimonio aporta una experiencia irreductible a las estadísticas, aunque no sustituye el análisis general.",
+          "sha256": "9a1c0d967844a9540f7116b3ad6f3dbf2a656f2f8845d1e59b5f536dc95f8887",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/9a1c0d967844a9540f7116b3ad6f3dbf2a656f2f8845d1e59b5f536dc95f8887.wav"
+        },
+        {
+          "requestKey": "854d2c9b4e6b87df747fcb524e1a67e165a3d21c5ad680f2f22ed781678e782c",
+          "language": "es",
+          "text": "La aparente paradoja desaparece si distinguimos entre control inmediato e influencia a largo plazo.",
+          "sha256": "b6a1dee92466f432cb4f035494586baacd0f3294d8fde322fd220b68c944336e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/b6a1dee92466f432cb4f035494586baacd0f3294d8fde322fd220b68c944336e.wav"
+        },
+        {
+          "requestKey": "b64229ef85f6526b2b69e7e5ddecbf9294bf8bbfcadc54fce4e5b94dcdd945ef",
+          "language": "es",
+          "text": "En vez de corregirlo delante del grupo, buscó una forma de señalar el error sin exponerlo.",
+          "sha256": "e5f9f9bd414fe34d90d8c251eac149e7ea772b1b32f1aab96a13e683bc111b91",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/e5f9f9bd414fe34d90d8c251eac149e7ea772b1b32f1aab96a13e683bc111b91.wav"
+        },
+        {
+          "requestKey": "735aebc58328381e4cea024132926e91921b51aa7d33995a0014ac438be2565b",
+          "language": "es",
+          "text": "El tratamiento es respetuoso sin resultar distante, algo difícil de reproducir con una sola palabra.",
+          "sha256": "cd8de3e3ab44536397bf43bc7427a39e2ce046a499d486a17c4db84502e1f6fd",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/cd8de3e3ab44536397bf43bc7427a39e2ce046a499d486a17c4db84502e1f6fd.wav"
+        },
+        {
+          "requestKey": "572aee0274d6c336f07a3a2d97a9e5d3eed6a36afc6412c417b9c788a4bce120",
+          "language": "es",
+          "text": "Puede que tengas razón en el fondo; donde discrepo es en la manera de llevarlo a la práctica.",
+          "sha256": "c84fcc6041ea652e827eb8438c9faafd617d156c783c15a2975c23b74ca1fdfd",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/c84fcc6041ea652e827eb8438c9faafd617d156c783c15a2975c23b74ca1fdfd.wav"
+        },
+        {
+          "requestKey": "400fd1d8d3b5a904492a441dc0e430436ad982887df87eda855e6b49a938907c",
+          "language": "vi",
+          "text": "Khoảng dừng trước từ cuối khiến người nghe hình thành một kỳ vọng sai.",
+          "sha256": "04dc0dd099ef5ac097775af42c038d1878ebb96b01396a511696907d0fedf659",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/04dc0dd099ef5ac097775af42c038d1878ebb96b01396a511696907d0fedf659.wav"
+        },
+        {
+          "requestKey": "f0ea46ac4b422d943f855568a8e002a335fbb0969bd67f950f64c08aa88c7fa3",
+          "language": "vi",
+          "text": "Thay vì sao chép lối chơi chữ, bản dịch tái tạo một bất ngờ tương đương trong ngôn ngữ kia.",
+          "sha256": "096351abbfaf340371d443da1a5c19dac44d742e3d41ea0782e6c68217091b91",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/096351abbfaf340371d443da1a5c19dac44d742e3d41ea0782e6c68217091b91.wav"
+        },
+        {
+          "requestKey": "d2c7dccdb3bca07fe472304c6683c2cf2dfb7dbce908ba1c844401b9043b8ded",
+          "language": "vi",
+          "text": "Câu nói gợi lại một sự kiện lịch sử, biến nhận xét thường ngày thành lời cảnh báo chính trị.",
+          "sha256": "fa8c588c13aa8c9ab8ccd766a4ac2ec9d2107df1c21f6324b087f1a061d72ded",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/fa8c588c13aa8c9ab8ccd766a4ac2ec9d2107df1c21f6324b087f1a061d72ded.wav"
+        },
+        {
+          "requestKey": "901b6c96a10d8f6c94ca6551f4a0bf2b830abfb0870b5a2fd3276831450b99ba",
+          "language": "vi",
+          "text": "Với người địa phương, dạng từ thu nhỏ biểu thị sự gần gũi; ngoài vùng có thể nghe trịch thượng.",
+          "sha256": "6202e864319b772bf163029f7727d7839b63b51dea5c0703c8e1d6938229ace7",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/6202e864319b772bf163029f7727d7839b63b51dea5c0703c8e1d6938229ace7.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-01",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all ten recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-01.json",
+      "plan": "audio/generated/review-20261114-01/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-c6dcb6d99cc89a314559",
+          "language": "es",
+          "text": "La broma alivió la tensión porque se dirigía a la situación, no a la dignidad de nadie.",
+          "sha256": "01fc1ece60905f764ea3d52e8d9ab5cc80d71346adae450a99e5c49bf2951feb",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/es-male-01fc1ece60905f764ea3.m4a"
+        },
+        {
+          "requestKey": "es-e6da97b7034363ed1ebf",
+          "language": "es",
+          "text": "Por resiliencia del sistema entendemos su capacidad de seguir funcionando pese a fallos parciales.",
+          "sha256": "a04fc123b0ce6b715b9be5ef7f308083fedbdae8a760a42d7b1a1b3211ecd4bf",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/es-female-a04fc123b0ce6b715b9b.wav"
+        },
+        {
+          "requestKey": "es-2a5a86a1d7237dfc9966",
+          "language": "es",
+          "text": "En términos jurídicos, la intención importa, pero no elimina necesariamente la responsabilidad.",
+          "sha256": "e21318dfa8ddd171a67a0f3605fc8c9049550fd0f367bf9e18fceb433c067a6d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/es-male-e21318dfa8ddd171a67a.m4a"
+        },
+        {
+          "requestKey": "b659be41a87976f31f209d7ed5cf7ea96db8709bdc0e31c6f44346ef5b61f80a",
+          "language": "vi",
+          "text": "Việc chọn đại từ đặt người nói vào quan hệ tuổi tác, tôn trọng và thân mật.",
+          "sha256": "1ed452fd92f267d575de2f5bef980af055caaa54a9bacfe77d36333db8f621b8",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/b659be41a87976f31f209d7ed5cf7ea96db8709bdc0e31c6f44346ef5b61f80a.wav"
+        },
+        {
+          "requestKey": "fdbbbfb70437288b2db64fe83c0388f98a94a6f76954e362ce36667a1bb5256e",
+          "language": "vi",
+          "text": "Điều bị lược bỏ không phải không quan trọng; nó được coi là hiểu chung và vì thế củng cố cảm giác thuộc về.",
+          "sha256": "b7858bafcbd0efde95ae0473753362769daec88560ac70f52c7224fb4eaa6af2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/fdbbbfb70437288b2db64fe83c0388f98a94a6f76954e362ce36667a1bb5256e.wav"
+        },
+        {
+          "requestKey": "10f2fb688b2670e4a34dfde1c3e11ead842878235dcb73fcf4353fcb60e52abb",
+          "language": "vi",
+          "text": "Tôi không cho rằng mình có lời cuối cùng; nhưng muốn nói rõ mình đang nói từ vị trí nào.",
+          "sha256": "25fc9113f2ae72f78f0a08ffeeacffd4becfbe85334447eb7cb374cf35942bef",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/10f2fb688b2670e4a34dfde1c3e11ead842878235dcb73fcf4353fcb60e52abb.wav"
+        },
+        {
+          "requestKey": "07faec5efc30cb1f310ff87b219eef8173449ecca611d24d67e22788613d5cec",
+          "language": "vi",
+          "text": "Đôi khi chỉ cần một câu hỏi chân thành, một khoảng lặng, và sự sẵn lòng không tự vệ ngay.",
+          "sha256": "6d887ab8e2e84a5be3117fcff05c0116055b225475fd1518b01db9b3a850004f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/07faec5efc30cb1f310ff87b219eef8173449ecca611d24d67e22788613d5cec.wav"
+        },
+        {
+          "requestKey": "813cb43761fe0ceac6781f1f9e8e4ded45fa32f160908b466cb59a9a0c64f99e",
+          "language": "en",
+          "text": "What used to be described as failure is now interpreted as learning.",
+          "sha256": "268c250c3d1880f62b597819377ce96902aa706c1dba83c1f6b7963dd50e0591",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/813cb43761fe0ceac6781f1f9e8e4ded45fa32f160908b466cb59a9a0c64f99e.wav"
+        },
+        {
+          "requestKey": "90b92150024ae535e89135ee8e24d6925eba0ce7a11af844e8e16f8403e6724f",
+          "language": "en",
+          "text": "I could summarize it as a refusal, but that would erase the delicacy with which she set the boundary.",
+          "sha256": "af1b0526c6143f641b974d078ce30f0b0321353f436b637df019a0caf842e9da",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/90b92150024ae535e89135ee8e24d6925eba0ce7a11af844e8e16f8403e6724f.wav"
+        },
+        {
+          "requestKey": "273fb096bdcc9a6be67b68b93affdffcbd656616e66b7a67ae887a57926d6074",
+          "language": "en",
+          "text": "After several failed attempts, they finally hit upon the key to the problem.",
+          "sha256": "81606e4b77609c4273b6168be162bf4ae81efa67c17f28ca16d391f135a965db",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-01/273fb096bdcc9a6be67b68b93affdffcbd656616e66b7a67ae887a57926d6074.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-02",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all ten recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-02.json",
+      "plan": "audio/generated/review-20261114-02/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-962c876e8771834c5813",
+          "language": "es",
+          "text": "Para una persona no especialista, puede describirse como un filtro que separa señal y ruido.",
+          "sha256": "905ce0c1bc84808dfbd4d8716e2a6035483ba80eab8c3a4e192452f79269b4c7",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/es-female-905ce0c1bc84808dfbd4.wav"
+        },
+        {
+          "requestKey": "es-3ec7dd831b20bbebb5a0",
+          "language": "es",
+          "text": "El resumen ejecutivo prioriza la decisión; el anexo conserva el detalle que permite auditarla.",
+          "sha256": "43cc5334abd16e6eb0f6f9f54db3678fe5ea3a4aed492dcbb2e978fa7c2644b1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/es-male-43cc5334abd16e6eb0f6.m4a"
+        },
+        {
+          "requestKey": "es-52fb70376f1c82672053",
+          "language": "es",
+          "text": "Antes de aceptar la conclusión, convendría examinar si el modelo presupone aquello que pretende demostrar.",
+          "sha256": "5acf2baa1d5c2373158d45b3c90a78f9cc8fd38f30e504bbfefc842bfa68229d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/es-female-5acf2baa1d5c2373158d.wav"
+        },
+        {
+          "requestKey": "421e88a5255d33bb7f517bb50e426ee8bd31130cbe4b3e07d245d3ffa252390c",
+          "language": "vi",
+          "text": "Quan điểm của tôi xuất phát từ một niềm tin đơn giản: không hiệu quả nào bù đắp được sự mất mát tính người.",
+          "sha256": "fd90db0621cf1845eed3ff73cdacb1ff9930ead4a04b42c332c6831e30b2061b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/421e88a5255d33bb7f517bb50e426ee8bd31130cbe4b3e07d245d3ffa252390c.wav"
+        },
+        {
+          "requestKey": "7e47bebdcfa5de6349c434f63519d2b9c470ca072cf42b22e81043444e992a8b",
+          "language": "vi",
+          "text": "Câu văn tao nhã nhưng không phải của tôi; tôi viết lại cho đến khi nhận ra chính mình trong đó.",
+          "sha256": "056f3bc62e6976ebe28ee8ff29f30f580bb96851b93b55fcb05439a2b2cf46ee",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/7e47bebdcfa5de6349c434f63519d2b9c470ca072cf42b22e81043444e992a8b.wav"
+        },
+        {
+          "requestKey": "9d1b9ff2058f7a887b82e57190eb5b35a587c4e690415f045d6ba5f1b0df0fde",
+          "language": "vi",
+          "text": "Phản đối này đáng được xem xét, dù nó liên quan đến việc áp dụng nguyên tắc chứ không phải bản thân nguyên tắc.",
+          "sha256": "2121119845b258ae141e446221bca59eefc6da749744225c846abadf77487cc1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/9d1b9ff2058f7a887b82e57190eb5b35a587c4e690415f045d6ba5f1b0df0fde.wav"
+        },
+        {
+          "requestKey": "f61f7a3b4a54a7d39fab044640cfbbdeb5dfb32eac6bae3d95f11268927202be",
+          "language": "vi",
+          "text": "Nói không dùng thuật ngữ chuyên môn: hệ thống học từ quá khứ nhưng cũng thừa hưởng thiên kiến của nó.",
+          "sha256": "9c8278099eb7050d93ba7aecdce42fcc5bb4713903261f51366e5974755f67ed",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/f61f7a3b4a54a7d39fab044640cfbbdeb5dfb32eac6bae3d95f11268927202be.wav"
+        },
+        {
+          "requestKey": "9898bb46ad5a4bb90b9d5318e794ff3aee105c645fd47d0e18a49dbb13178421",
+          "language": "en",
+          "text": "The decision raised reasonable doubts but did not unleash the crisis some had predicted.",
+          "sha256": "727fbaef4c8e483a94aec0f48eea06f4116a8d9ab1006ad4810e8b85e6f99cd5",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/9898bb46ad5a4bb90b9d5318e794ff3aee105c645fd47d0e18a49dbb13178421.wav"
+        },
+        {
+          "requestKey": "750ab9ea2b98dd7bafbaaa49901e73afc39c7c5194983b03c7ed7652954b9e34",
+          "language": "en",
+          "text": "The phrase fits a relaxed conversation but would sound mannered in an everyday exchange.",
+          "sha256": "95326f0faf2c6c12182c93584a8ec9a3bf891790f4ef5cf5736edda577c8593e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/750ab9ea2b98dd7bafbaaa49901e73afc39c7c5194983b03c7ed7652954b9e34.wav"
+        },
+        {
+          "requestKey": "f273e3257085e82cc9c36e76b37f8d4f069d4c4d0a235ce40996180959f1e6f2",
+          "language": "en",
+          "text": "Although the expression is widely understood, its active use is closely tied to certain regions.",
+          "sha256": "de1ff18d2d9ce05350d9fa5dd09351e693dc4e670936d57efa47f438bc6fd176",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-02/f273e3257085e82cc9c36e76b37f8d4f069d4c4d0a235ce40996180959f1e6f2.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-03",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all ten recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-03.json",
+      "plan": "audio/generated/review-20261114-03/plan.json",
+      "clips": [
+        {
+          "requestKey": "e346515790232a9d5aa40615bd19d65d93ca59a65db3424c49682fb133fd8dbf",
+          "language": "en",
+          "text": "We do not ask for certainty; we ask for rigor. We do not demand unanimity; we demand honesty.",
+          "sha256": "65bac648cda911ef64d7ee082ecedbf2e419ec929bf5e1d870de23c41a993faf",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/e346515790232a9d5aa40615bd19d65d93ca59a65db3424c49682fb133fd8dbf.wav"
+        },
+        {
+          "requestKey": "4fe5ced04709e3d1c2f1689886ab445c8a677aa8d19916482862a02b264fb345",
+          "language": "en",
+          "text": "She listened, hesitated, retraced her steps, and only then answered.",
+          "sha256": "fd50aaedaf1ec4bf6ff8f9330b0b61676c845b5c22520c575b3afb9743ba1a95",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/4fe5ced04709e3d1c2f1689886ab445c8a677aa8d19916482862a02b264fb345.wav"
+        },
+        {
+          "requestKey": "fa987ece26093df5a7e003049a0a18b225783db3b771d86760ebc3553646c1ee",
+          "language": "en",
+          "text": "What matters is not how far we advance, but what we refuse to sacrifice in doing so.",
+          "sha256": "7901acd2b1fe5634398c82dffb5a56fa670e6decc595b6010ce591e83794357c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/fa987ece26093df5a7e003049a0a18b225783db3b771d86760ebc3553646c1ee.wav"
+        },
+        {
+          "requestKey": "03681d3abce65ee1e44dc2b0cdbb088d2ddd3f98627d0d0c070769da11b4e717",
+          "language": "en",
+          "text": "The result is quite far from ideal, to put it mildly.",
+          "sha256": "0d1c7dc51bf1db00fd2f63da25ab2e57a4fa12d9234145909cbb5bd392a21ce6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/03681d3abce65ee1e44dc2b0cdbb088d2ddd3f98627d0d0c070769da11b4e717.wav"
+        },
+        {
+          "requestKey": "650677fe425afa35ec8d959da34997904c06ababc3c362d667f17fd003837466",
+          "language": "en",
+          "text": "The sources do not entirely contradict one another; they describe different moments in the same process.",
+          "sha256": "8979a27402ec4e7fd9aa2ff08674db8a9eec93937b990b70698627e908d4f92a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/650677fe425afa35ec8d959da34997904c06ababc3c362d667f17fd003837466.wav"
+        },
+        {
+          "requestKey": "901ae3b92f00939edc5a48bc51f2594345e9d0358cbfdea9017ea71df9c0a618",
+          "language": "en",
+          "text": "One framework speaks of obligation; the other expresses the same relationship through belonging and mutual duty.",
+          "sha256": "644a4432848c32506eb201bfd5478ae47b54481c9aade194b6d768deac33ea4b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/901ae3b92f00939edc5a48bc51f2594345e9d0358cbfdea9017ea71df9c0a618.wav"
+        },
+        {
+          "requestKey": "5ff70c846547128e19e76c4c9308f85886776ca014a12117551f48e074f96cc6",
+          "language": "en",
+          "text": "The testimony contributes an experience irreducible to statistics, though it does not replace general analysis.",
+          "sha256": "8a480fdbf804ec10b205f16192b715ca3fe979febab7d8368aa76e5b25496a4b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/5ff70c846547128e19e76c4c9308f85886776ca014a12117551f48e074f96cc6.wav"
+        },
+        {
+          "requestKey": "51b1e3d0f7799d8ac2d52707ecefa75ded0bddfbd7dab71b8c8a080d9ca96d42",
+          "language": "en",
+          "text": "The apparent paradox disappears if we distinguish immediate control from long-term influence.",
+          "sha256": "3f42f1f78248dfbe1883a679f284f23baf56d46d231025815202a685f9f57a7f",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/51b1e3d0f7799d8ac2d52707ecefa75ded0bddfbd7dab71b8c8a080d9ca96d42.wav"
+        },
+        {
+          "requestKey": "ac1ea3dc08295ebad29bdd0ddc8435b962d4b485e9179af2daded2d32cf2d6b6",
+          "language": "en",
+          "text": "Rather than correct him before the group, she found a way to point out the error without exposing him.",
+          "sha256": "49f0bcbbe8988a03aa364a3ae8119d6fdd7439232c8cbac3dae53a7552fc9a73",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/ac1ea3dc08295ebad29bdd0ddc8435b962d4b485e9179af2daded2d32cf2d6b6.wav"
+        },
+        {
+          "requestKey": "f32d0c04b8030e979447e539c89d1c0a86e772917be3d3530ba00871b5a48cc9",
+          "language": "en",
+          "text": "The form of address is respectful without sounding distant, something difficult to reproduce with a single word.",
+          "sha256": "4dea5530cd5f260402aee19ed992f877afe858657a78baad7896926ce98206da",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-03/f32d0c04b8030e979447e539c89d1c0a86e772917be3d3530ba00871b5a48cc9.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-04",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all ten recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-04.json",
+      "plan": "audio/generated/review-20261114-04/plan.json",
+      "clips": [
+        {
+          "requestKey": "b24208a03a3eeed3bd48f7cbff32846b57263db0fe4f67acf92dccada47087f4",
+          "language": "en",
+          "text": "You may be right in principle; where I disagree is in how to put it into practice.",
+          "sha256": "bb650661e033a4f1792bea40d2fa444ea2e0fed652dec3e7be89a84ee7fe78aa",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/b24208a03a3eeed3bd48f7cbff32846b57263db0fe4f67acf92dccada47087f4.wav"
+        },
+        {
+          "requestKey": "a70b9587b27fc3ec9a72ce7d87378384a753a34b783a28c66edca6c0ff45259a",
+          "language": "en",
+          "text": "The joke eased the tension because it targeted the situation, not anyone's dignity.",
+          "sha256": "22c55994f48df8e1d2393694dd61be928cbdf67006b13f7f421a93a9fbfc3289",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/a70b9587b27fc3ec9a72ce7d87378384a753a34b783a28c66edca6c0ff45259a.wav"
+        },
+        {
+          "requestKey": "fdca173082dde7b9fc7e9f9d902c0848469e0e1f74f55bdbf64269c70dfcece1",
+          "language": "en",
+          "text": "By system resilience we mean its capacity to keep functioning despite partial failures.",
+          "sha256": "b46d9a5849034ea318baac87dc91cc036017d8bd526aa7f7b8d006fb2697c53e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/fdca173082dde7b9fc7e9f9d902c0848469e0e1f74f55bdbf64269c70dfcece1.wav"
+        },
+        {
+          "requestKey": "c60b792895a996f5f29e4efc1fc9e9aeeb2bdf9f6820454d216e39d3c0c44a48",
+          "language": "en",
+          "text": "In legal terms, intention matters but does not necessarily eliminate liability.",
+          "sha256": "a484c4c677ca7a1532cec8717923ffc7bd72bc1a04ab37ad5dbcb4a85ccd5d0e",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/c60b792895a996f5f29e4efc1fc9e9aeeb2bdf9f6820454d216e39d3c0c44a48.wav"
+        },
+        {
+          "requestKey": "51d1d960413d9c32ee926fa9b3680492696f5b3c3093633fd794daa6c847f90d",
+          "language": "en",
+          "text": "For a non-specialist, it can be described as a filter separating signal from noise.",
+          "sha256": "71d200d29ab092bda873759ec3757495a0a234ed53617124b5043463a5d6ace3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/51d1d960413d9c32ee926fa9b3680492696f5b3c3093633fd794daa6c847f90d.wav"
+        },
+        {
+          "requestKey": "7a66a87c62ef9933c9a9d6eef25a0352a8eda7af3451b08106f99275342878f9",
+          "language": "en",
+          "text": "The executive summary prioritizes the decision; the appendix preserves the detail needed to audit it.",
+          "sha256": "933748e3017fc265a489f99c17c35613571ccd59f96f84132a792863d575b25a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/7a66a87c62ef9933c9a9d6eef25a0352a8eda7af3451b08106f99275342878f9.wav"
+        },
+        {
+          "requestKey": "d263e37f8f3aecdcd7075799ddcf7358e3941ff03b01e249fea78e8a6f1b5cfb",
+          "language": "en",
+          "text": "Before accepting the conclusion, we should examine whether the model assumes what it seeks to prove.",
+          "sha256": "7397de71a6bb830b59f27e8c29ae5c39c325e3fa9fabcb03505fada1643c14bd",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/d263e37f8f3aecdcd7075799ddcf7358e3941ff03b01e249fea78e8a6f1b5cfb.wav"
+        },
+        {
+          "requestKey": "3d631951f6cea88323c53fe25b917b333a66afa3e5ccfaf6619d6ddd4dc91781",
+          "language": "en",
+          "text": "In light of that distinction, I would reformulate my objection: the problem concerns scope, not validity.",
+          "sha256": "61acfe7cc7afb02ff40e3ab4743b8014f1bdc34e245eaf3e0df72602d4c6a4a6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/3d631951f6cea88323c53fe25b917b333a66afa3e5ccfaf6619d6ddd4dc91781.wav"
+        },
+        {
+          "requestKey": "0c7c78b9b824db3c64d3731e4426ad9e4c4c1f15b6572abc62228d1eecc7631d",
+          "language": "en",
+          "text": "Are we assuming preferences remain stable, or does the model allow them to evolve?",
+          "sha256": "261383e27a0cd1670bea1fb82348cf531edfad650f1b87e9cba25146b2d98185",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/0c7c78b9b824db3c64d3731e4426ad9e4c4c1f15b6572abc62228d1eecc7631d.wav"
+        },
+        {
+          "requestKey": "005676c889ee8c769f0c0c6848abc177c8eef104e982423350ba2ba02ccc1686",
+          "language": "en",
+          "text": "The explanation works descriptively, but the normative recommendation still needs justification.",
+          "sha256": "3ef5d934cd45fbc932b493710c67f55a0cd411f7d439a30a836014f69cb1fedf",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-04/005676c889ee8c769f0c0c6848abc177c8eef104e982423350ba2ba02ccc1686.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-05",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved Batch 5 after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-05.json",
+      "plan": "audio/generated/review-20261114-05/plan.json",
+      "clips": [
+        {
+          "requestKey": "8e8a779f5930af6e974d9cfc2f5ebaef9ad3dbca78ef7a3aa35acedeac832fab",
+          "language": "en",
+          "text": "The humor lies in 'banco' activating both money and sitting at once.",
+          "sha256": "2c51479fba188daf2eeae582bf273cafc257480a1e6b4f60f5df73c6b782a1c1",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/8e8a779f5930af6e974d9cfc2f5ebaef9ad3dbca78ef7a3aa35acedeac832fab.wav"
+        },
+        {
+          "requestKey": "9e911f124b8d2fe678ac8de16b114c371043f30640ed66a2e2ad7bef3b6c53fc",
+          "language": "en",
+          "text": "The effect cannot be translated literally because it depends on two words that sound almost alike.",
+          "sha256": "5a17f6bbbdfa96d9be9ebf4024f0b206a57299cef26ed0e7fae9b72238770c3c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/9e911f124b8d2fe678ac8de16b114c371043f30640ed66a2e2ad7bef3b6c53fc.wav"
+        },
+        {
+          "requestKey": "132cb9210a6bcd8f0798ee07790b7b44dd5bb192655d945badaa90ce453e3ccb",
+          "language": "en",
+          "text": "The pause before the final word makes the listener build the wrong expectation.",
+          "sha256": "9fa9256ae0d9b6df842f7f9afbad6cfce7e5d5bcb5d2c069da41c799fd1d9364",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/132cb9210a6bcd8f0798ee07790b7b44dd5bb192655d945badaa90ce453e3ccb.wav"
+        },
+        {
+          "requestKey": "b31ec0df0e34d1ef63d7b4488fde6850dacd6b56a5b309a0415366101c74e0c5",
+          "language": "en",
+          "text": "Instead of copying the wordplay, the version recreates an equivalent surprise in the other language.",
+          "sha256": "c256899d760a668f34137fa79979fc71460c476ee47382584fc3a4eb0f021e16",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/b31ec0df0e34d1ef63d7b4488fde6850dacd6b56a5b309a0415366101c74e0c5.wav"
+        },
+        {
+          "requestKey": "d35aeb3050d7ea8e2a42bdb2d7ccbce25ecd1b9230051a21acdc34a7457f2079",
+          "language": "en",
+          "text": "The phrase evokes a historical episode that turns an everyday observation into a political warning.",
+          "sha256": "0e5253811e3a9bfa9c3908a0c94853904efd27e444e71af3dc0246e973938cac",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/d35aeb3050d7ea8e2a42bdb2d7ccbce25ecd1b9230051a21acdc34a7457f2079.wav"
+        },
+        {
+          "requestKey": "4c532fa5d2902584d90b0c71e8b06f1c711f85db56a743424345f83928baff61",
+          "language": "en",
+          "text": "For a local speaker, the diminutive expresses closeness; outside the region it might seem condescending.",
+          "sha256": "7838730d9764cae75e4a85f788e41a767427fa975c7c065e32efa76f0dbb3a50",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/4c532fa5d2902584d90b0c71e8b06f1c711f85db56a743424345f83928baff61.wav"
+        },
+        {
+          "requestKey": "bb23f72a7cac46d9a604e46959321faad1205247981c96158a1dfe8c5d957147",
+          "language": "en",
+          "text": "The pronoun choice positions the speakers within a relationship of age, respect, and familiarity.",
+          "sha256": "264fc3e5c19e4e58822845a68fa58beb83aa5346bee553a6e21f0075801eae21",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/bb23f72a7cac46d9a604e46959321faad1205247981c96158a1dfe8c5d957147.wav"
+        },
+        {
+          "requestKey": "8931efd7e5e25f7612255df5cee88b8ecc84be9aa78722b7b02385b123e37f1d",
+          "language": "en",
+          "text": "What is omitted is not irrelevant; it is treated as shared and thereby reinforces belonging.",
+          "sha256": "d01f0c35ac33008757e4abc80b92587f6bbddb0bb6c80cebc6a662c310adecf7",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/8931efd7e5e25f7612255df5cee88b8ecc84be9aa78722b7b02385b123e37f1d.wav"
+        },
+        {
+          "requestKey": "83cbc0258810b929a809406285c5190c051f36064e5e93b5a98b7e638a3a9c36",
+          "language": "en",
+          "text": "I do not claim the final word; I do want to make clear where I speak from.",
+          "sha256": "5966f2a2baaea1d94cb83efb82068367f75a16efd5c30bc2a5f6955ba91ba841",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/83cbc0258810b929a809406285c5190c051f36064e5e93b5a98b7e638a3a9c36.wav"
+        },
+        {
+          "requestKey": "347a748dccc573e9299d9bcfa23a0893b3e4c8e126b13d778ebcaf6cc8ab1d58",
+          "language": "en",
+          "text": "Sometimes an honest question, a pause, and a willingness not to defend oneself immediately are enough.",
+          "sha256": "6b477bf05535a195cf9837b838c851e81e2783a7e7b29d79b025febd11648b15",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-05/347a748dccc573e9299d9bcfa23a0893b3e4c8e126b13d778ebcaf6cc8ab1d58.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-06",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved the nine local clips and the Gemini replacement for clip 7 after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-06.json",
+      "plan": "audio/generated/review-20261114-06/plan.json",
+      "clips": [
+        {
+          "requestKey": "df3cfc2b9d5684da4c2aa25b2b36de810e0c186435da72127ba4bde40ad81635",
+          "language": "en",
+          "text": "My position grows from a simple conviction: no efficiency compensates for a loss of humanity.",
+          "sha256": "67db1b54507c99f32bdaba7a60a8a6e525b830989f6fcdd9bb774f53b3e0fffe",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/df3cfc2b9d5684da4c2aa25b2b36de810e0c186435da72127ba4bde40ad81635.wav"
+        },
+        {
+          "requestKey": "500ad813c905c74ae77f70c2e83b1aca7689b4bb4cfbea339e8659e917ddbd4d",
+          "language": "en",
+          "text": "The sentence was elegant, but it was not mine; I rewrote it until I recognized myself in it.",
+          "sha256": "210c135a2b48f7d69e71af9e2c5ede6efa066d29b8254be5d442e10975c09d2d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/500ad813c905c74ae77f70c2e83b1aca7689b4bb4cfbea339e8659e917ddbd4d.wav"
+        },
+        {
+          "requestKey": "4cb9b528214fb378c5d747f298f70fe92ece32302df063a59315c5accb7d47e7",
+          "language": "en",
+          "text": "The objection deserves consideration, though it concerns application of the principle rather than the principle itself.",
+          "sha256": "6d89a39da5c9a814e137fca4c9aebe0f1b0e3dff00739f5a60e8e48c53c3bd19",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/4cb9b528214fb378c5d747f298f70fe92ece32302df063a59315c5accb7d47e7.wav"
+        },
+        {
+          "requestKey": "6c75b92b11577bb9f9e0a20ca5df876a455a8b4e6bae37e69038c59c89e2ef34",
+          "language": "en",
+          "text": "Without technical language: the system learns from the past, but it also inherits its biases.",
+          "sha256": "2e35ae5f475aff906847a6d95b12cf5d67dd655e7fcafabd7bddddd16ee8a435",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/6c75b92b11577bb9f9e0a20ca5df876a455a8b4e6bae37e69038c59c89e2ef34.wav"
+        },
+        {
+          "requestKey": "46870fe2202f7f388a72431a0a52258e8d88e862b3fa7c9481970a8815b05d00",
+          "language": "en",
+          "text": "The response is grammatically flawless but socially awkward in such a close relationship.",
+          "sha256": "c30785b01ea86810f98222e6641f77b6173462fad36d68ca52b7ecfb141bea97",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/46870fe2202f7f388a72431a0a52258e8d88e862b3fa7c9481970a8815b05d00.wav"
+        },
+        {
+          "requestKey": "59ce92159f1cd7f207aa8fcdcf77ddafa2e03c72de9bca2de2ad88c6be3aefe8",
+          "language": "en",
+          "text": "Fluency is not an endpoint, but the capacity to keep learning without losing one's own voice.",
+          "sha256": "5371de7878916f97e67fb22cd8bd6fedf0e533c035b6b0dc9bb392cce37965e4",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/59ce92159f1cd7f207aa8fcdcf77ddafa2e03c72de9bca2de2ad88c6be3aefe8.wav"
+        },
+        {
+          "requestKey": "1f31d897ded9c4dcf8ea78d1bc93e0e6a0f10c8cf30f81ee7d91fcea401afc75",
+          "language": "es",
+          "text": "A la vista de esa distinción, reformularía mi objeción: el problema es de alcance, no de validez.",
+          "sha256": "25b1f2b1174b25c8da3f9a71d3ea651da338d3cd3ebae935370f4c5bbbbc69b9",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/25b1f2b1174b25c8da3f9a71d3ea651da338d3cd3ebae935370f4c5bbbbc69b9.wav"
+        },
+        {
+          "requestKey": "es-a6dba1d7277ca8d83502",
+          "language": "es",
+          "text": "¿Estamos suponiendo que las preferencias permanecen estables, o el modelo permite que evolucionen?",
+          "sha256": "fd3a5f69f19a9909f940b6a3da729bb9e343b32cdc07299f6b1bed96bf87d76b",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/es-female-fd3a5f69f19a9909f940.wav"
+        },
+        {
+          "requestKey": "es-c1c51dd66b9ce0f1b827",
+          "language": "es",
+          "text": "La explicación funciona en el plano descriptivo, pero aún falta justificar la recomendación normativa.",
+          "sha256": "6f3d7b53b6dd473474008fa886a7cbbbeac66020b44c88ad287531111edbb91d",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/es-male-6f3d7b53b6dd47347400.m4a"
+        },
+        {
+          "requestKey": "es-6f2e35e3a34fb91aee09",
+          "language": "es",
+          "text": "La gracia reside en que 'banco' activa a la vez la imagen del dinero y la de sentarse.",
+          "sha256": "84fcc25f52e997543ac129b5e81931eada973a1eef3a2a9c2f05897032560d01",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-06/es-female-84fcc25f52e997543ac1.wav"
+        }
+      ],
+      "repairReport": "outputs/audio-review-20261114-gemini.json"
+    },
+    {
+      "id": "20261114-final-local",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved both final local recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-final-local.json",
+      "plan": "audio/generated/review-20261114-final-local/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-3f56b0d0b8d5361e05f6",
+          "language": "es",
+          "text": "La frase era elegante, pero no era mía; la reescribí hasta reconocerme en ella.",
+          "sha256": "2f5379bcc97113f4f461e236c12a67037422b4d90a8fd6d5d98f2804f5b24547",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-final-local/es-female-2f5379bcc97113f4f461.wav"
+        },
+        {
+          "requestKey": "1cb6af8f9521384a872de85189eba27015f5abe1ccc427d835f4cdc08bdaba25",
+          "language": "vi",
+          "text": "Sự lưu loát không phải điểm kết thúc mà là khả năng tiếp tục học mà không đánh mất giọng nói riêng.",
+          "sha256": "b26377fc82e311b00f36fd90f2fd4892a57202a2c9fb865b0889c74ce5403dd8",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-final-local/1cb6af8f9521384a872de85189eba27015f5abe1ccc427d835f4cdc08bdaba25.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-device-07",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved the seven final local clips after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-07.json",
+      "plan": "audio/generated/review-20261114-07/plan.json",
+      "clips": [
+        {
+          "requestKey": "es-6f208b55734b19616609",
+          "language": "es",
+          "text": "El efecto no se traduce literalmente porque depende de dos palabras que casi suenan igual.",
+          "sha256": "c10e84e1245d19fffcade915f3ee2696d305b00113c4b18d87a78b44d2c56f2c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-female-c10e84e1245d19fffcad.wav"
+        },
+        {
+          "requestKey": "es-91df45e611b368938900",
+          "language": "es",
+          "text": "La pausa antes de la última palabra obliga al oyente a construir una expectativa equivocada.",
+          "sha256": "66a796f9a49067c3ffee9b87f6eed48f854b62260123ec50261c9b95e7e302c7",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-male-66a796f9a49067c3ffee.m4a"
+        },
+        {
+          "requestKey": "es-ae3622a32cd712c2233d",
+          "language": "es",
+          "text": "En vez de copiar el juego verbal, la versión recrea una sorpresa equivalente en la otra lengua.",
+          "sha256": "be1e16778ac7ac053c5d9683f0c74d7500d3016c5e0880812584cb4150349887",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-female-be1e16778ac7ac053c5d.wav"
+        },
+        {
+          "requestKey": "es-e4265c02277c8ca29f3b",
+          "language": "es",
+          "text": "La frase evoca un episodio histórico que convierte una observación cotidiana en una advertencia política.",
+          "sha256": "9dfccf0f9c464c8e07826d49ac02164fc2cdda5be9c2aa684daa24307e39b62c",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-male-9dfccf0f9c464c8e0782.m4a"
+        },
+        {
+          "requestKey": "es-b3a01472ca4c52f79f58",
+          "language": "es",
+          "text": "Para un hablante local, el diminutivo expresa cercanía; fuera de la región podría parecer condescendiente.",
+          "sha256": "f9205defa325cdf35d508d3001cbba9e92629eba8914bf7f976fd12a4dadc3e3",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-female-f9205defa325cdf35d50.wav"
+        },
+        {
+          "requestKey": "es-16ae5c56dd29192a902d",
+          "language": "es",
+          "text": "La elección del pronombre sitúa a los interlocutores dentro de una relación de edad, respeto y familiaridad.",
+          "sha256": "fdfa065c3997fec43f2f8da03de997e0c05ec49f21ceb98fa7b668a50540f95a",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-male-fdfa065c3997fec43f2f.m4a"
+        },
+        {
+          "requestKey": "es-07b01c429e5daa1b9c86",
+          "language": "es",
+          "text": "Lo que se omite no es irrelevante: se da por compartido y, por eso mismo, refuerza la pertenencia.",
+          "sha256": "bef3e59081ba11a40fb33e37f7e0e1f0f863982f33345eddeda1f512d61ff6df",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/review-20261114-07/es-female-bef3e59081ba11a40fb3.wav"
+        }
+      ]
+    },
+    {
+      "id": "20261114-gemini-coverage",
+      "approvedAt": "2026-11-14",
+      "status": "approved-for-release",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening.",
+      "automaticPublication": false,
+      "report": "outputs/audio-review-20261114-gemini.json",
+      "plan": "audio/generated/cloud-pipeline/plans/final-main-sentences-20261114.json",
+      "clips": [
+        {
+          "requestKey": "6446222a33f0fe956b4a7d7d2ddd9bb33892016ccf52f65165cdffecab057d98",
+          "language": "es",
+          "text": "No pretendo tener la última palabra; sí quiero dejar claro desde dónde hablo.",
+          "sha256": "d631abd9323c1461cc5be541792833826f29a98cb7106e3b93b5412b00dfadba",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/d631abd9323c1461cc5be541792833826f29a98cb7106e3b93b5412b00dfadba.wav"
+        },
+        {
+          "requestKey": "dea12599ac3ddf99cb3232f3c360c09da00066d58c28827e04cd9e7e20f7d510",
+          "language": "es",
+          "text": "A veces basta una pregunta honesta, una pausa, la disposición a no defenderse enseguida.",
+          "sha256": "14b8236eeacaea0d993cbec2ba85c03a1f84515240f961763479473ffc59e115",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/14b8236eeacaea0d993cbec2ba85c03a1f84515240f961763479473ffc59e115.wav"
+        },
+        {
+          "requestKey": "d63cc3371471042856c4ca2e1aef522636fc1b02da468ccdb0e12bfe11056ac3",
+          "language": "es",
+          "text": "Mi posición nace de una convicción sencilla: ninguna eficiencia compensa la pérdida de humanidad.",
+          "sha256": "f52349d4d97cfd1f857049263c2aa8ec651b6bff8114f8f27fe37a89bb03e1f6",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/f52349d4d97cfd1f857049263c2aa8ec651b6bff8114f8f27fe37a89bb03e1f6.wav"
+        },
+        {
+          "requestKey": "f00dd2da63548212bc46f460a09583b6d8674c0f12f2877377729298c26b02e0",
+          "language": "es",
+          "text": "La objeción es atendible, aunque afecta a la aplicación del principio y no al principio mismo.",
+          "sha256": "fb604e3aae1f49ee5cadfa07492f3e6c2030b36157a13d4c109de9ce8f0697f2",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/fb604e3aae1f49ee5cadfa07492f3e6c2030b36157a13d4c109de9ce8f0697f2.wav"
+        },
+        {
+          "requestKey": "09dc1cefa8fab0d3d94d7f3ae8dbcfcb244dbfc052fecdc4ac7bcb75778e60a0",
+          "language": "es",
+          "text": "Si lo expreso sin tecnicismos: el sistema aprende del pasado, pero también hereda sus sesgos.",
+          "sha256": "baa88d319d34d3847e979298b3099a576e9b10f11e2bafba95a46a162f8169ee",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/baa88d319d34d3847e979298b3099a576e9b10f11e2bafba95a46a162f8169ee.wav"
+        },
+        {
+          "requestKey": "a2a7a6878fef4fdf4e3dba35e6e8c48ae85286d86767356181ff101c2146be37",
+          "language": "es",
+          "text": "La respuesta es gramaticalmente impecable, pero socialmente torpe en una relación tan cercana.",
+          "sha256": "e719b805175129ed27c791d882f718df0f33d81be688f2fd415cdd4439fd6c24",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/e719b805175129ed27c791d882f718df0f33d81be688f2fd415cdd4439fd6c24.wav"
+        },
+        {
+          "requestKey": "1d68a8c753a0d9f22dab3bd0d7ab6582f3aad07504279f890b788d1f6103b566",
+          "language": "vi",
+          "text": "Câu trả lời hoàn hảo về ngữ pháp nhưng vụng về về mặt xã hội trong một mối quan hệ thân thiết như vậy.",
+          "sha256": "5a4f2b1b13dc8490e57d2f3414ff5b3ed0a7ded130df0fd11df4c18cb22147df",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/5a4f2b1b13dc8490e57d2f3414ff5b3ed0a7ded130df0fd11df4c18cb22147df.wav"
+        },
+        {
+          "requestKey": "c0db51c55f30d48eafa6d78199f014b3b64e99528202a2b3995c7ac72726383a",
+          "language": "es",
+          "text": "La fluidez no es un punto final, sino la capacidad de seguir aprendiendo sin perder la propia voz.",
+          "sha256": "e0c968a271ff968c83d0012c63b931d777c4198291a9c4179f2c8bb872f27c74",
+          "file": "/Users/desmondwood/Documents/Codex/2026-06-13/polyflow/site/audio/generated/cloud-pipeline/e0c968a271ff968c83d0012c63b931d777c4198291a9c4179f2c8bb872f27c74.wav"
+        }
+      ]
     }
   ]
 }

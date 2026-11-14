@@ -410,6 +410,26 @@
       "reportedAt": "2026-11-12",
       "requiresPronunciationReview": true,
       "reason": "User rejected Gemini clip 8 due to a repeated phrase; local replacement requested."
+    },
+    {
+      "language": "es",
+      "text": "El resultado dista bastante de ser ideal, por decirlo con moderación.",
+      "voice": "male",
+      "sha256": "d36c29df7e8517a53d25031fbc86c396f6ba80b4e300442ab223a57dab631d58",
+      "status": "blocked",
+      "reportedAt": "2026-11-13",
+      "requiresPronunciationReview": true,
+      "reason": "User rejected Batch 5 clip 3 after listening and requested a Gemini replacement."
+    },
+    {
+      "language": "es",
+      "text": "A la vista de esa distinción, reformularía mi objeción: el problema es de alcance, no de validez.",
+      "voice": "male",
+      "sha256": "df1b4ca4fea4faa0007585dd95c2b970be76a3e120de5706a55dc6b82c92975a",
+      "status": "blocked",
+      "reportedAt": "2026-11-14",
+      "requiresPronunciationReview": true,
+      "reason": "User found Batch 6 clip 7 unclear and requested Gemini replacement."
     }
   ]
 }

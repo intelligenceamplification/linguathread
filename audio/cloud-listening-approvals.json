@@ -732,6 +732,120 @@
       "sha256": "83dd276efa77c4ef5c45c41a1fdef58526b96f309775cbe2dd433fb844af65b7",
       "reviewedAt": "2026-11-12",
       "approvalEvidence": "User approved six original Gemini recordings and both locally generated replacements after listening."
+    },
+    {
+      "requestKey": "99335621aac94a3e0dfb986dc557f513c20c9f3c07bf8039dd56cede4c10f660",
+      "sha256": "c8cc7a0857fca275025d2b182fa7d7181bf26ebe9b3eee1dd734f8da921a08f8",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved the nine original clips and the Gemini replacement for clip 3 after listening."
+    },
+    {
+      "requestKey": "e35f75aba59830c90e9bbae5ad5d3645220f8c708aefd651a36addb4cce2eaa9",
+      "sha256": "9a1c0d967844a9540f7116b3ad6f3dbf2a656f2f8845d1e59b5f536dc95f8887",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "854d2c9b4e6b87df747fcb524e1a67e165a3d21c5ad680f2f22ed781678e782c",
+      "sha256": "b6a1dee92466f432cb4f035494586baacd0f3294d8fde322fd220b68c944336e",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "b64229ef85f6526b2b69e7e5ddecbf9294bf8bbfcadc54fce4e5b94dcdd945ef",
+      "sha256": "e5f9f9bd414fe34d90d8c251eac149e7ea772b1b32f1aab96a13e683bc111b91",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "735aebc58328381e4cea024132926e91921b51aa7d33995a0014ac438be2565b",
+      "sha256": "cd8de3e3ab44536397bf43bc7427a39e2ce046a499d486a17c4db84502e1f6fd",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "572aee0274d6c336f07a3a2d97a9e5d3eed6a36afc6412c417b9c788a4bce120",
+      "sha256": "c84fcc6041ea652e827eb8438c9faafd617d156c783c15a2975c23b74ca1fdfd",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "400fd1d8d3b5a904492a441dc0e430436ad982887df87eda855e6b49a938907c",
+      "sha256": "04dc0dd099ef5ac097775af42c038d1878ebb96b01396a511696907d0fedf659",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "f0ea46ac4b422d943f855568a8e002a335fbb0969bd67f950f64c08aa88c7fa3",
+      "sha256": "096351abbfaf340371d443da1a5c19dac44d742e3d41ea0782e6c68217091b91",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "d2c7dccdb3bca07fe472304c6683c2cf2dfb7dbce908ba1c844401b9043b8ded",
+      "sha256": "fa8c588c13aa8c9ab8ccd766a4ac2ec9d2107df1c21f6324b087f1a061d72ded",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "901b6c96a10d8f6c94ca6551f4a0bf2b830abfb0870b5a2fd3276831450b99ba",
+      "sha256": "6202e864319b772bf163029f7727d7839b63b51dea5c0703c8e1d6938229ace7",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all nine new Gemini recordings after listening."
+    },
+    {
+      "requestKey": "1f31d897ded9c4dcf8ea78d1bc93e0e6a0f10c8cf30f81ee7d91fcea401afc75",
+      "sha256": "25b1f2b1174b25c8da3f9a71d3ea651da338d3cd3ebae935370f4c5bbbbc69b9",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved the nine local clips and the Gemini replacement for clip 7 after listening."
+    },
+    {
+      "requestKey": "6446222a33f0fe956b4a7d7d2ddd9bb33892016ccf52f65165cdffecab057d98",
+      "sha256": "d631abd9323c1461cc5be541792833826f29a98cb7106e3b93b5412b00dfadba",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "dea12599ac3ddf99cb3232f3c360c09da00066d58c28827e04cd9e7e20f7d510",
+      "sha256": "14b8236eeacaea0d993cbec2ba85c03a1f84515240f961763479473ffc59e115",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "d63cc3371471042856c4ca2e1aef522636fc1b02da468ccdb0e12bfe11056ac3",
+      "sha256": "f52349d4d97cfd1f857049263c2aa8ec651b6bff8114f8f27fe37a89bb03e1f6",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "f00dd2da63548212bc46f460a09583b6d8674c0f12f2877377729298c26b02e0",
+      "sha256": "fb604e3aae1f49ee5cadfa07492f3e6c2030b36157a13d4c109de9ce8f0697f2",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "09dc1cefa8fab0d3d94d7f3ae8dbcfcb244dbfc052fecdc4ac7bcb75778e60a0",
+      "sha256": "baa88d319d34d3847e979298b3099a576e9b10f11e2bafba95a46a162f8169ee",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "a2a7a6878fef4fdf4e3dba35e6e8c48ae85286d86767356181ff101c2146be37",
+      "sha256": "e719b805175129ed27c791d882f718df0f33d81be688f2fd415cdd4439fd6c24",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "1d68a8c753a0d9f22dab3bd0d7ab6582f3aad07504279f890b788d1f6103b566",
+      "sha256": "5a4f2b1b13dc8490e57d2f3414ff5b3ed0a7ded130df0fd11df4c18cb22147df",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
+    },
+    {
+      "requestKey": "c0db51c55f30d48eafa6d78199f014b3b64e99528202a2b3995c7ac72726383a",
+      "sha256": "e0c968a271ff968c83d0012c63b931d777c4198291a9c4179f2c8bb872f27c74",
+      "reviewedAt": "2026-11-14",
+      "approvalEvidence": "User approved all eight additional Gemini recordings after listening."
     }
   ]
 }
