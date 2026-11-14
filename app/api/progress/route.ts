@@ -2,6 +2,7 @@ import { and, asc, eq, lte, sql } from "drizzle-orm";
 import { getDb } from "../../../db";
 import { answerAttempts, lessonProgress, objectiveMastery } from "../../../db/schema";
 import { isSameOriginMutation, learnerForRequest } from "../../learner-session";
+import { reviewProgressStatement } from "../../review-progress-sql";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ export async function POST(request: Request) {
   if (!learner) return Response.json({ error: "Unauthenticated installation" }, { status: 401 });
 
   const body = await request.json() as {
-    type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string;
+    type?: "attempt" | "complete"; lessonId?: string; skill?: string; kind?: string; eventId?: string;
     language?: string; correct?: boolean; accelerated?: boolean;
     objectiveId?: string; supported?: boolean; reviewDelayDays?: number;
     edgeKey?: string; fromLanguage?: string; toLanguage?: string;
@@ -55,6 +56,18 @@ export async function POST(request: Request) {
     // these dimensions into indexed columns without losing the edge identity.
     const evidenceDimension = body.edgeKey || language;
     const evidenceId = `${learner}:${body.objectiveId || body.lessonId}:${evidenceDimension.toLocaleLowerCase()}`;
+    if (body.eventId && body.kind === "review-revealed") {
+      if (body.eventId.length > 180 || !/^[a-zA-Z0-9:_-]+$/.test(body.eventId)) return Response.json({ error: "Invalid event identity" }, { status: 400 });
+      await db.insert(answerAttempts).values({ id: `${learner}:review:${body.eventId}`, learnerId: learner, lessonId: body.lessonId, skill: body.skill, kind: body.kind, language, correct: false, createdAt: now }).onConflictDoNothing();
+      return Response.json({ saved: true });
+    }
+    // A review event is inserted and applied in one database statement. The event
+    // identity is scoped to the learner, so retries cannot increment mastery twice.
+    if (body.eventId && (body.kind === "targeted-review" || body.kind === "flashcard-self-rating")) {
+      if (body.eventId.length > 180 || !/^[a-zA-Z0-9:_-]+$/.test(body.eventId)) return Response.json({ error: "Invalid event identity" }, { status: 400 });
+      await db.execute(reviewProgressStatement({ learner, eventId: body.eventId, lessonId: body.lessonId, objectiveId: body.objectiveId || body.lessonId, skill: body.skill, kind: body.kind, language, evidenceDimension, correct: Boolean(body.correct), supported: Boolean(body.supported), reviewDelayDays: body.reviewDelayDays, now }));
+      return Response.json({ saved: true });
+    }
     if (body.kind === "flashcard-self-rating") body.supported = true;
     const gain = body.correct ? (body.supported ? 7 : 18) : -8;
     const [existingEvidence] = await db.select({ score: objectiveMastery.score }).from(objectiveMastery)

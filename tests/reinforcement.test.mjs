@@ -89,3 +89,26 @@ test('retired exact sentence cards stay retired until an independent deficiency'
   model = engine.recordEvidence(model, 'a', 'Spanish', false, false, new Date('2026-10-26T12:00:00Z'), production, 1200, 'production', 'failed-later');
   assert.ok(flashcardQueue([lesson], model, ['a'], ['Spanish'], now).some(c => c.kind === 'Expression'));
 });
+
+test('a repeated flashcard rating event does not adjust the schedule twice', () => {
+  const card = flashcardCatalog([lesson], history(), ['a'], ['Spanish'])[0];
+  const first = recordFlashcardRating(history(), card, true, 'round', 100, now, 'card-event');
+  const retry = recordFlashcardRating(first.model, card, true, 'round', 100, now, 'card-event');
+  assert.equal(retry.reviewDelayDays, 0);
+  assert.equal(JSON.stringify(retry.model), JSON.stringify(first.model));
+});
+
+test('authored English cards and listening use their own directions, not the anchor alone', () => {
+  assert.equal(flashcardCatalog([lesson], history(), ['a'], ['English']).length, 0);
+  const written = { fromLanguage: 'Spanish', toLanguage: 'English', fromModality: 'written', toModality: 'written', retrievalType: 'production' };
+  const audio = { fromLanguage: 'English', toLanguage: 'Spanish', fromModality: 'audio', toModality: 'meaning', retrievalType: 'recognition' };
+  const authored = { ...lesson, reviewExercises: [
+    { id: 'en-write', language: 'English', prompt: 'Soy de Indiana.', answer: 'I am from Indiana.', accepted: ['I am from Indiana.'], edge: written },
+    { id: 'en-listen', language: 'English', prompt: 'I am from Indiana.', answer: 'Soy de Indiana.', accepted: ['Soy de Indiana.'], edge: audio },
+  ] };
+  const cards = flashcardCatalog([authored], history(), ['a'], ['English']);
+  assert.equal(cards.length, 1);
+  assert.equal(cards[0].promptLanguage, 'Spanish');
+  assert.equal(cards[0].language, 'English');
+  assert.ok(listeningReviewQueue([authored], history(), ['a'], ['English'], now).some(item => item.evidence.edge.fromLanguage === 'English'));
+});

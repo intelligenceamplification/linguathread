@@ -29,7 +29,7 @@ const hasSpeechSupport = () => Boolean(nativeHandler()) || ("speechSynthesis" in
 const noServerSpeechSupport = () => false;
 const nativeAudioVersion = () => (window as Window & { __LINGUATHREAD_NATIVE_AUDIO_VERSION__?: number }).__LINGUATHREAD_NATIVE_AUDIO_VERSION__ ?? 0;
 
-export default function ListenButton({ text: requestedText, language, contextText, onUse, onPlayback, onComplete, onError, compact = false }: { text: string; language: FoundationLanguage; contextText?: string; onUse?: () => void; onPlayback?: () => void; onComplete?: (reviewed?: boolean) => void; onError?: () => void; compact?: boolean }) {
+export default function ListenButton({ text: requestedText, language, contextText, onUse, onPlayback, onComplete, onError, compact = false, approvedOnly = false }: { text: string; language: FoundationLanguage; contextText?: string; onUse?: () => void; onPlayback?: () => void; onComplete?: (reviewed?: boolean) => void; onError?: () => void; compact?: boolean; approvedOnly?: boolean }) {
  const text = requiresNativeApprovedAudio(language) ? instructionalAudioText(requestedText, language) : requestedText;
  const [contextModel, setContextModel] = useState<{ key: string; text: string } | null>(null);
  const displayText = contextModel?.key === `${language}\u0000${text}` ? contextModel.text : text;
@@ -139,7 +139,7 @@ export default function ListenButton({ text: requestedText, language, contextTex
    try { await audio.play(); } catch { if (generation !== requestGeneration.current) return; setPreparingKey(null); setSpeaking(false); failure.current?.(); }
    return;
   }
-  if (requiresNativeApprovedAudio(language)) {
+  if (approvedOnly || requiresNativeApprovedAudio(language)) {
     setPreparingKey(null);
     setUnavailable(true);
     failure.current?.();

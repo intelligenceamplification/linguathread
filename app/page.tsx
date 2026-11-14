@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { curriculum, LessonDefinition, normalizeAnswer, sentenceAnatomyForLesson } from "./curriculum";
 import { InteractiveSentence } from "./sentence-anatomy";
@@ -143,6 +143,17 @@ export default function Home() {
   </>;
 }
 
+type Appearance = "system" | "light" | "dark";
+const appearanceEvent = "nuevo-flow:appearance";
+function readAppearance(): Appearance {
+  try { const saved = localStorage.getItem("nuevo-flow.appearance"); return saved === "light" || saved === "dark" ? saved : "system"; } catch { return "system"; }
+}
+function subscribeAppearance(notify: () => void) {
+  window.addEventListener(appearanceEvent, notify); window.addEventListener("storage", notify);
+  return () => { window.removeEventListener(appearanceEvent, notify); window.removeEventListener("storage", notify); };
+}
+const systemAppearance = (): Appearance => "system";
+
 function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEditLanguages: () => void }) {
   const [stage, setStage] = useState<Stage>("listening");
   const [wordIndex, setWordIndex] = useState(0);
@@ -165,6 +176,14 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [dailyPractice, setDailyPractice] = useState<DailyCards | null>(null);
   const [dailyRoundCards, setDailyRoundCards] = useState<Flashcard[]>([]);
   const [destination, setDestination] = useState<AppDestination>("lesson");
+  const appearance = useSyncExternalStore(subscribeAppearance, readAppearance, systemAppearance);
+  useEffect(() => { document.documentElement.dataset.appearance = appearance; }, [appearance]);
+  function chooseAppearance(choice: Appearance) {
+    try { window.localStorage.setItem("nuevo-flow.appearance", choice); } catch { /* The current page still updates. */ }
+    document.documentElement.dataset.appearance = choice;
+    window.dispatchEvent(new Event(appearanceEvent));
+  }
+
   const [xrayOpen, setXrayOpen] = useState(false);
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const [placementUnit, setPlacementUnit] = useState<{ level: string; unit: number } | null>(null);
@@ -325,7 +344,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const currentWord = lesson.vocabulary[wordIndex];
   const outsidePractice = outsidePracticeFor(lesson.level, lesson.unit);
   const reverseExercises = createReverseRecallExercises(lesson, bridgeEnabled);
-  const literacyLanguages = selectedLearningLanguages
+  const literacyLanguages = [...new Set([...selectedLearningLanguages, ...(profile.native === "English" ? ["English" as const] : [])])]
     .map((language) => ({ name: language, id: speechLanguage(language) }))
     .filter((item): item is { name: LanguageName; id: FoundationLanguage } => item.id !== null);
   const courseUnits = course.reduce<Array<{ key: string; level: string; unit: number; title: string; lessons: LessonDefinition[] }>>((units, item) => {
@@ -394,11 +413,12 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     supported = false,
     sessionId = learningSessionIdRef.current || (learningSessionIdRef.current = crypto.randomUUID()),
     measuredLatencyMs?: number,
+    eventId?: string,
   ) {
     const learningLanguage = language;
     const latencyMs = measuredLatencyMs ?? Math.max(0, Date.now() - attemptStartedAtRef.current);
     attemptStartedAtRef.current = Date.now();
-    setLearnerModel((current) => {
+    const updateEvidence = (current: LearnerModel) => {
       const next = recordEvidence(
         current,
         evidenceLesson.objectiveId || evidenceLesson.id,
@@ -410,15 +430,22 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         latencyMs,
         errorType,
         sessionId,
+        eventId,
       );
       window.localStorage.setItem(learnerModelKey, JSON.stringify(next));
       return next;
-    });
+    };
+    if (eventId) {
+      let current = learnerModel;
+      try { current = normalizeLearnerModel(JSON.parse(window.localStorage.getItem(learnerModelKey) || "null")); } catch { /* Use the in-memory model. */ }
+      setLearnerModel(updateEvidence(current));
+    } else setLearnerModel(updateEvidence);
     fetch("/api/progress", {
       method: "POST",
       headers: jsonHeaders,
       body: JSON.stringify({
         type: "attempt",
+        eventId,
         lessonId: evidenceLesson.id,
         objectiveId: evidenceLesson.objectiveId || evidenceLesson.id,
         skill: evidenceLesson.skill,
@@ -532,12 +559,15 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
     window.localStorage.removeItem(dailyCardsKey);
   }
 
-  function recordCardRating(card: Flashcard, known: boolean, session: string, latency: number) {
-    const result = recordFlashcardRating(learnerModel, card, known, session, latency);
+  function recordCardRating(card: Flashcard, known: boolean, session: string, latency: number, eventId?: string) {
+    let current = learnerModel;
+    if (eventId) try { current = normalizeLearnerModel(JSON.parse(window.localStorage.getItem(learnerModelKey) || "null")); } catch { /* Use the in-memory model. */ }
+    const result = recordFlashcardRating(current, card, known, session, latency, new Date(), eventId);
+    if (!result.reviewDelayDays) return;
     setLearnerModel(result.model);
     window.localStorage.setItem(learnerModelKey, JSON.stringify(result.model));
     fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({
-      type: "attempt", lessonId: card.lesson.id, objectiveId: card.objectiveId, skill: card.lesson.skill,
+      type: "attempt", eventId, lessonId: card.lesson.id, objectiveId: card.objectiveId, skill: card.lesson.skill,
       kind: "flashcard-self-rating", language: card.language, correct: known, supported: true, latencyMs: latency,
       reviewDelayDays: result.reviewDelayDays,
       edgeKey: [card.edge.fromLanguage, card.edge.toLanguage, card.edge.fromModality, card.edge.toModality, card.edge.retrievalType].join(":"),
@@ -621,7 +651,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   if (!sessionHydrated) return <main className="app-shell" aria-busy="true"><header className="topline"><BrandLogo /></header><section className="lesson-stage"><p role="status">Restoring your lesson…</p></section></main>;
 
   return (
-    <main className={`app-shell stage-${stage}`}>
+    <main className={`app-shell stage-${stage} destination-${destination}`}>
       <header className="topline">
         <button className="wordmark" onClick={() => openDestination("lesson")} aria-label="Open current lesson"><BrandLogo /></button>
         <div className="lesson-context">
@@ -632,8 +662,11 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
           <button className="quiet-action today-action" aria-current={destination === "lesson" ? "page" : undefined} onClick={() => openDestination("lesson")}>Daily Learning Path</button>
           <button className="quiet-action" aria-current={destination === "review" ? "page" : undefined} onClick={() => openDestination("review")}>Review</button>
           <button className="quiet-action" aria-current={destination === "path" ? "page" : undefined} onClick={() => openDestination("path")}>Language Path</button>
-          {literacyLanguages[0] && <button className="quiet-action writing-action" aria-current={destination === "writing" ? "page" : undefined} onClick={() => openDestination("writing")}>Writing System</button>}
-          <button ref={xrayTriggerRef} className="quiet-action xray-action" aria-current={destination === "xray" ? "page" : undefined} onClick={() => openDestination("xray")}>Expression X-Ray</button>
+          <details className="app-menu"><summary>☰ &nbsp; Menu</summary><div className="app-menu-panel">
+            {literacyLanguages[0] && <button onClick={() => openDestination("writing")}>Writing System</button>}
+            <button ref={xrayTriggerRef} onClick={() => openDestination("xray")}>Expression X-Ray</button>
+            <fieldset><legend>Appearance</legend>{(["system", "light", "dark"] as const).map(choice => <label key={choice}><input type="radio" name="appearance" checked={appearance === choice} onChange={() => chooseAppearance(choice)} /> {choice[0].toUpperCase() + choice.slice(1)}</label>)}</fieldset>
+          </div></details>
         </nav>
       </header>
 
@@ -644,9 +677,18 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
       )}
 
       <section ref={lessonStageRef} className="lesson-stage" aria-live="polite">
-        {destination === "review" ? <ReviewSection key={selectedLearningLanguages.join(":")} course={course} model={learnerModel} languages={selectedLearningLanguages}
+        {destination === "review" ? <ReviewSection key={selectedLearningLanguages.join(":")} course={course} model={learnerModel} languages={[...new Set([...selectedLearningLanguages, ...(profile.native === "English" ? ["English"] : [])])]}
           completedIds={completedIds} onCardRating={recordCardRating}
-          onAttempt={(item, task, correct, supported, session, latency) => recordAttempt("targeted-review", correct, task.language, item.lesson, task.edge, correct ? undefined : task.edge.fromModality === "audio" ? "listening" : task.edge.toModality === "written" ? "production" : "lexical", supported, session, latency)}
+          onRevealed={(item, task, eventId) => {
+            let current = learnerModel;
+            try { current = normalizeLearnerModel(JSON.parse(window.localStorage.getItem(learnerModelKey) || "null")); } catch { /* Use the in-memory model. */ }
+            if (!current.reviewEvents?.some(event => event.id === eventId)) {
+              const next = { ...current, reviewEvents: [...(current.reviewEvents || []), { id: eventId, objectiveId: item.lesson.objectiveId || item.lesson.id, outcome: "revealed" as const, at: new Date().toISOString() }] };
+              window.localStorage.setItem(learnerModelKey, JSON.stringify(next)); setLearnerModel(next);
+            }
+            fetch("/api/progress", { method: "POST", headers: jsonHeaders, body: JSON.stringify({ type: "attempt", eventId, lessonId: item.lesson.id, objectiveId: item.lesson.objectiveId || item.lesson.id, skill: item.lesson.skill, kind: "review-revealed", language: task.language }), keepalive: true }).catch(() => undefined);
+          }}
+          onAttempt={(item, task, correct, supported, session, latency, eventId) => recordAttempt("targeted-review", correct, task.language, item.lesson, task.edge, correct ? undefined : task.edge.fromModality === "audio" ? "listening" : task.edge.toModality === "written" ? "production" : "lexical", supported, session, latency, eventId)}
           onContinue={() => { if (stage === "complete") continueLearning(); openDestination("lesson"); }} /> : destination === "writing" && scriptLanguage ? <div className="focus-content"><ScriptCourseView key={scriptLanguage} language={scriptLanguage} languages={literacyLanguages} currentLesson={lesson} onLanguage={setScriptLanguage} onClose={() => openDestination("lesson")} onEvidence={recordScriptEvidence} /></div> : destination === "path" ? (
           placementUnit ? (() => {
             const unit = courseUnits.find((item) => item.level === placementUnit.level && item.unit === placementUnit.unit)!;

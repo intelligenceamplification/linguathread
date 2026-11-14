@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-02T19:04:08.936Z",
+  "generatedAt": "2026-11-14T16:45:17.600Z",
   "sourceLessonCount": 288,
   "publishedRevision": 8,
   "publishedCurriculumSha256": "290f5e5ab347933752cf3f88d0c8041e405803685077905a7709b6a1ecf9d506",
   "sourceHashes": {
-    "app/curriculum.ts": "d2daa015dece390c2b54428dcad4f05a85ec66ffb785e531ee7c53a815147047",
+    "app/curriculum.ts": "b02c5659bbd10dbca2e3b7367354ef51fa316a209f3899b0fe383b5eddb0c9a3",
     "app/interactive-sentence.ts": "c831dd63f9a32702065937ccc7e9765db7e718c45d9854b8b0abc7f967858fe6",
     "app/answer-assessment.ts": "728f9aa4948cab93657136f6259fe5e0b008affa2b72df357a6e1e1c59de33fb",
     "app/lesson-audio-corrections.ts": "d9ad6701f67a1a57ba9bc015fb5f8a95f97f1a5c4449958e9823379e5ecae3a2",
@@ -21,10 +21,10 @@
     "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
     "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
     "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
-    "app/page.tsx": "15bc7947bdaab3c60cdebd45d7bfe7b07084b1c299a41f44f62c7d806d2fb269",
-    "app/review-section.tsx": "0443a25d0f2bc746678fea83d8e037c5cb82c6b4a10ecdd655f0cb80d92bb3b5",
-    "app/flashcard-round.tsx": "cf675fe8ba0d6d759eab73f58498b39ef3133d26e8dcea890ec4c483b4fb6daf",
-    "app/reinforcement.ts": "bc8c4bf3a07c8fed271fe19f4644deadd418e68d85515072d45c67ea3f9eb17f",
+    "app/page.tsx": "fa2a6cebab9be6ecf427c66f304c695e462b2cfe4411362c504567f0af2764e6",
+    "app/review-section.tsx": "7ca2e71d0e0188957f0a247e86339e1463e49f21211a48672fff493d7b4fc54e",
+    "app/flashcard-round.tsx": "ea61fcaed8e4bc4361bb08a338ca375d5ed0e5cb5992164bde697d8feefc6078",
+    "app/reinforcement.ts": "01825615b5b022f9bf2deccf59dd2a4efb0e0684ccb40b63998c0e9b1735f9d6",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
     "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
     "app/writing-system/view.tsx": "d2c0416580c798b610c48352ed84a3c98a04e5336cba7b7463870ae3151444eb",
@@ -1172,6 +1172,6 @@
     "includeWritingFoundations": false,
     "unitCount": 2
   },
-  "fullInventorySha256": "0889e078e7dc9d495b1929d6714729f46d95a15402280bbf300be4fa5035770e",
+  "fullInventorySha256": "013e7e97224b7de35695c467bdc44a44a0e7afc6b71c4bbd7c610eb4dd1e147f",
   "scopePolicySha256": "0b857c26fef58e112a7d1cc2e7d7d4e64692d4d9c9e70170f3bed0b6ad2d6acf"
 }

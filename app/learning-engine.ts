@@ -22,6 +22,7 @@ export type SkillEvidence = {
   supportedSuccesses: number;
   independentReviewDays?: string[];
   independentSessionIds?: string[];
+  reviewEventIds?: string[];
   legacyQualified?: boolean;
   score: number;
   lastPracticedAt: string;
@@ -48,6 +49,7 @@ export type LearnerModel = {
   sessionsCompleted: number;
   evidence: Record<string, SkillEvidence>;
   languages: Record<string, LanguageProgress>;
+  reviewEvents?: Array<{ id: string; objectiveId: string; outcome: "revealed"; at: string }>;
 };
 
 export const emptyLearnerModel = (): LearnerModel => ({
@@ -65,6 +67,7 @@ export function normalizeLearnerModel(value: unknown): LearnerModel {
     sessionsCompleted: Number.isFinite(candidate.sessionsCompleted) ? Math.max(0, Number(candidate.sessionsCompleted)) : 0,
     evidence: candidate.evidence && typeof candidate.evidence === "object" ? candidate.evidence : {},
     languages: candidate.languages && typeof candidate.languages === "object" ? candidate.languages : {},
+    reviewEvents: Array.isArray(candidate.reviewEvents) ? candidate.reviewEvents.filter(event => event && typeof event.id === "string" && typeof event.objectiveId === "string" && event.outcome === "revealed" && typeof event.at === "string") : [],
   };
 }
 
@@ -137,9 +140,11 @@ export function recordEvidence(
   latencyMs?: number,
   errorType?: SkillEvidence["errorType"],
   sessionId?: string,
+  eventId?: string,
 ): LearnerModel {
   const key = edge ? edgeEvidenceKey(objectiveId, edge) : evidenceKey(objectiveId, language);
   const previous = model.evidence[key];
+  if (eventId && previous?.reviewEventIds?.includes(eventId)) return model;
   const independentSuccesses = (previous?.independentSuccesses || 0) + (correct && !supported ? 1 : 0);
   const supportedSuccesses = (previous?.supportedSuccesses || 0) + (correct && supported ? 1 : 0);
   const day = now.toISOString().slice(0, 10);
@@ -167,6 +172,7 @@ export function recordEvidence(
         supportedSuccesses,
         independentReviewDays,
         independentSessionIds,
+        reviewEventIds: eventId ? [...(previous?.reviewEventIds || []), eventId] : previous?.reviewEventIds,
         legacyQualified,
         score,
         lastPracticedAt: now.toISOString(),
@@ -276,14 +282,16 @@ export function selectNextLesson(
 }
 
 export type ReviewItem = { lesson: LessonDefinition; evidence: SkillEvidence; reason: "Needs strengthening" | "Due for recall" };
-export type ReviewTask = { id: string; prompt: string; answer: string; accepted: string[]; language: string; edge: RetrievalEdge };
+export type ReviewTask = { id: string; prompt: string; answer: string; accepted: string[]; language: string; edge: RetrievalEdge; hint?: string };
 
 /** Focused review is specific to an attempted skill; daily reinforcement shares these records. */
 export function reviewQueue(course: LessonDefinition[], model: LearnerModel, activeLanguages: string[], now = new Date()): ReviewItem[] {
   const active = new Set(activeLanguages.map(language => language.toLocaleLowerCase()));
   const items = course.flatMap(lesson => evidenceForObjective(model, lesson.objectiveId || lesson.id).flatMap(evidence => {
     const edge = evidence.edge;
-    if (!edge || !["Spanish", "Vietnamese"].includes(evidence.language) || !active.has(evidence.language.toLocaleLowerCase()) || isEvidenceRetired(evidence)) return [];
+    if (!edge || !["English", "Spanish", "Vietnamese"].includes(evidence.language) || !active.has(evidence.language.toLocaleLowerCase()) || isEvidenceRetired(evidence)) return [];
+    const authored = lesson.reviewExercises?.some(exercise => exercise.language === evidence.language && edgeEvidenceKey("", exercise.edge) === edgeEvidenceKey("", edge));
+    if (evidence.language === "English" && !authored) return [];
     if (edge.retrievalType === "transfer" && !active.has(edge.fromLanguage.toLocaleLowerCase())) return [];
     const written = edge.toModality === "written" && ["production", "reconstruction", "transfer"].includes(edge.retrievalType);
     const meaning = edge.toModality === "meaning" && ["written", "audio"].includes(edge.fromModality);
@@ -305,6 +313,8 @@ export function reviewTasks(item: ReviewItem, activeLanguages: string[]): Review
   const { lesson, evidence } = item;
   const edge = evidence.edge!;
   const language = evidence.language;
+  const authored = lesson.reviewExercises?.find(exercise => exercise.language === language && edgeEvidenceKey("", exercise.edge) === edgeEvidenceKey("", edge));
+  if (authored) return [{ id: authored.id, prompt: authored.prompt, answer: authored.answer, accepted: authored.accepted, hint: authored.hint, language, edge }];
   let focus: ReviewTask;
   if (edge.retrievalType === "transfer") {
     const answer = edge.toLanguage === "Vietnamese" ? lesson.sentence.bridge : lesson.sentence.target;

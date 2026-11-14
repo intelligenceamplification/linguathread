@@ -15,7 +15,14 @@ export type GrammarLayer = {
   explanation: string;
 };
 
+export type AuthoredReviewExercise = {
+  id: string; language: string; prompt: string; answer: string; accepted: string[]; hint?: string;
+  edge: { fromLanguage: string; toLanguage: string; fromModality: "meaning" | "written" | "audio"; toModality: "meaning" | "written"; retrievalType: "recognition" | "reconstruction" | "production" | "transfer" | "reverse" };
+};
+
 export type LessonDefinition = {
+  /** Explicitly authored exercises; a translation anchor alone is not one. */
+  reviewExercises?: AuthoredReviewExercise[];
   id: string;
   objectiveId?: string;
   prerequisites?: string[];
@@ -296,11 +303,13 @@ export type CompactLesson = {
   focus: string; pattern: string; bridgePattern: string;
   anatomy?: InteractiveSentenceModel;
   xray?: Record<string, { units: Record<string, AuthoredXRayEntry>; preferredPhrases?: string[] }>;
+  reviewExercises?: AuthoredReviewExercise[];
 };
 
 export function expandLesson(item: CompactLesson): LessonDefinition {
   return {
     id: item.id,
+    reviewExercises: item.reviewExercises,
     objectiveId: item.objectiveId,
     prerequisites: item.prerequisites,
     level: "A1",

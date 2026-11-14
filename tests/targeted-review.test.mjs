@@ -82,3 +82,21 @@ test("standalone Vietnamese review carries its authored translation meaning", ()
   const item = reviewQueue([contextual], model, ["Spanish", "Vietnamese"], now)[0];
   assert.equal(reviewTasks(item, ["Spanish", "Vietnamese"])[0].prompt, contextual.bridgeMastery.instruction);
 });
+
+test("a retried review event does not add duplicate local evidence", () => {
+  const first = recordEvidence(emptyLearnerModel(), lesson.id, "Spanish", true, false, now, production, 1200, undefined, "review-session", "review-event-1");
+  const second = recordEvidence(first, lesson.id, "Spanish", true, false, now, production, 1200, undefined, "review-session", "review-event-1");
+  assert.deepEqual(second, first);
+  const third = recordEvidence(second, lesson.id, "Spanish", true, false, now, production, 1200, undefined, "review-session", "review-event-2");
+  assert.equal(Object.values(third.evidence)[0].attempts, 2);
+});
+
+test('English is eligible only when the precise review exercise is authored', () => {
+  const edge = { fromLanguage: 'Spanish', toLanguage: 'English', fromModality: 'written', toModality: 'written', retrievalType: 'production' };
+  const model = attempt(emptyLearnerModel(), 'English', false, edge);
+  assert.equal(reviewQueue([lesson], model, ['English'], now).length, 0);
+  const authored = { ...lesson, reviewExercises: [{ id: 'english-authored', language: 'English', prompt: 'El tiempo juntos es importante.', answer: 'Time together is important.', accepted: ['Time together is important.'], hint: 'Start with the subject.', edge }] };
+  const item = reviewQueue([authored], model, ['English'], now)[0];
+  assert.equal(reviewTasks(item, ['English'])[0].id, 'english-authored');
+  assert.equal(reviewTasks(item, ['English'])[0].hint, 'Start with the subject.');
+});

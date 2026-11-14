@@ -69,6 +69,10 @@ function validateCompactLesson(value: unknown, level: CEFRLevel, requireXRay: bo
   if (!lessonId.startsWith(`${level.toLocaleLowerCase()}-`) && !lessonId.startsWith("es-u")) {
     throw new Error(`Lesson ${lessonId} does not match pack level ${level}.`);
   }
+  if (lesson.reviewExercises !== undefined) {
+    if (!Array.isArray(lesson.reviewExercises) || !lesson.reviewExercises.every(exercise => exercise && text(exercise.id) && text(exercise.language) && text(exercise.prompt) && text(exercise.answer) && Array.isArray(exercise.accepted) && exercise.accepted.length > 0 && exercise.accepted.every(text) && exercise.edge && text(exercise.edge.fromLanguage) && text(exercise.edge.toLanguage) && ["meaning", "written", "audio"].includes(exercise.edge.fromModality) && ["meaning", "written"].includes(exercise.edge.toModality) && ["recognition", "reconstruction", "production", "transfer", "reverse"].includes(exercise.edge.retrievalType) && (exercise.hint === undefined || text(exercise.hint)))) throw new Error(`Lesson ${lessonId} has an invalid authored review exercise.`);
+    if (new Set(lesson.reviewExercises.map(exercise => exercise.id)).size !== lesson.reviewExercises.length) throw new Error(`Lesson ${lessonId} has duplicate review exercise ids.`);
+  }
   if (requireXRay && lesson.xray === undefined) throw new Error(`Lesson ${lessonId} needs reviewed X-Ray content before publication.`);
   if (lesson.xray !== undefined) validateXRay(lesson.xray, lessonId);
   return lesson as CompactLesson;

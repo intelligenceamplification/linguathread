@@ -2,9 +2,9 @@ import type { LessonDefinition } from "./curriculum";
 import { edgeEvidenceKey, evidenceForObjective, isEvidenceRetired, recordEvidence, type LearnerModel, type RetrievalEdge, type ReviewItem, type SkillEvidence } from "./learning-engine";
 
 export type Flashcard = {
-  id: string; objectiveId: string; lesson: LessonDefinition; language: "Spanish" | "Vietnamese";
+  id: string; objectiveId: string; lesson: LessonDefinition; language: string; promptLanguage: string;
   kind: "Expression" | "Vocabulary" | "Pattern"; prompt: string; answer: string;
-  stack: { language: "Spanish" | "Vietnamese"; text: string }[];
+  stack: { language: string; text: string }[];
   explanation?: string; evidence?: SkillEvidence; edge: RetrievalEdge; reason: "Strengthen" | "Due" | "Explore recall";
 };
 export type FlashcardEvidence = SkillEvidence & { selfRatingStreak?: number };
@@ -31,7 +31,7 @@ export function flashcardCatalog(course: LessonDefinition[], model: LearnerModel
         const patternTurn = Boolean(evidence && evidence.supportedSuccesses % 2 === 1);
         if (kind === "Pattern" && !patternTurn) continue;
         if (kind === "Expression" && patternTurn) continue;
-        cards.push({ id, objectiveId: id, lesson, language, kind, prompt, answer, explanation, edge, evidence,
+        cards.push({ id, objectiveId: id, lesson, language, promptLanguage: "English", kind, prompt, answer, explanation, edge, evidence,
           stack: ([{ language: "Spanish", text: spanish }, { language: "Vietnamese", text: vietnamese }] as Flashcard["stack"]).filter(row => active.has(row.language)),
           reason: failed(evidence) || history.some(failed) ? "Strengthen" : evidence ? "Due" : "Explore recall" });
       }
@@ -39,6 +39,13 @@ export function flashcardCatalog(course: LessonDefinition[], model: LearnerModel
     add("Expression", lesson.sentence.anchor, lesson.sentence.target, lesson.sentence.bridge);
     add("Pattern", `${lesson.grammar.focus}\n${lesson.sentence.anchor}`, lesson.sentence.target, lesson.sentence.bridge, lesson.grammar.insight);
     for (const word of lesson.vocabulary) add("Vocabulary", word.english, word.word, word.vietnamese, word.note);
+    for (const exercise of lesson.reviewExercises || []) {
+      if (!["English", "Spanish", "Vietnamese"].includes(exercise.language) || !active.has(exercise.language) || exercise.edge.toModality !== "written" || exercise.edge.fromModality === "audio") continue;
+      const id = `${objective(lesson)}::authored-card:${exercise.id}`;
+      const edge: RetrievalEdge = { ...exercise.edge, retrievalType: "recognition" };
+      const evidence = model.evidence[edgeEvidenceKey(id, edge)];
+      cards.push({ id, objectiveId: id, lesson, language: exercise.language, promptLanguage: exercise.edge.fromLanguage, kind: "Expression", prompt: exercise.prompt, answer: exercise.answer, explanation: exercise.hint, stack: [], edge, evidence, reason: failed(evidence) || history.some(failed) ? "Strengthen" : evidence ? "Due" : "Explore recall" });
+    }
     return cards;
   });
 }
@@ -62,12 +69,13 @@ export function flashcardQueue(course: LessonDefinition[], model: LearnerModel, 
 }
 
 /** Self-report after reveal is supported practice, never an independent test. */
-export function recordFlashcardRating(model: LearnerModel, card: Flashcard, known: boolean, sessionId: string, latencyMs: number, now = new Date()) {
+export function recordFlashcardRating(model: LearnerModel, card: Flashcard, known: boolean, sessionId: string, latencyMs: number, now = new Date(), eventId?: string) {
   const key = edgeEvidenceKey(card.objectiveId, card.edge);
   const previous = model.evidence[key] as FlashcardEvidence | undefined;
+  if (eventId && previous?.reviewEventIds?.includes(eventId)) return { model, reviewDelayDays: 0 };
   const streak = known ? (previous?.selfRatingStreak || 0) + 1 : 0;
   const days = known ? [1, 3, 7, 14, 30][Math.min(streak - 1, 4)] : 1;
-  const next = recordEvidence(model, card.objectiveId, card.language, known, true, now, card.edge, latencyMs, known ? undefined : "lexical", sessionId);
+  const next = recordEvidence(model, card.objectiveId, card.language, known, true, now, card.edge, latencyMs, known ? undefined : "lexical", sessionId, eventId);
   next.evidence[key] = { ...next.evidence[key], selfRatingStreak: streak, nextReviewAt: new Date(now.getTime() + days * 86_400_000).toISOString() } as FlashcardEvidence;
   return { model: next, reviewDelayDays: days };
 }
@@ -84,6 +92,18 @@ export function listeningReviewQueue(course: LessonDefinition[], model: LearnerM
       const existing = model.evidence[edgeEvidenceKey(objective(lesson), edge)];
       if (existing && (isEvidenceRetired(existing) || Date.parse(existing.nextReviewAt) > now.getTime())) continue;
       const last = existing ? Date.parse(existing.lastPracticedAt) : Math.max(0, ...history.filter(e => e.edge?.fromModality !== "audio" || e.language === language).map(e => Date.parse(e.lastPracticedAt)));
+      if (now.getTime() - last < cooldown) continue;
+      const evidence: SkillEvidence = existing || { objectiveId: objective(lesson), language, attempts: 0, independentSuccesses: 0, supportedSuccesses: 0, score: 0, lastPracticedAt: new Date(last).toISOString(), nextReviewAt: now.toISOString(), edge };
+      items.push({ lesson, evidence, reason: failed(evidence) ? "Needs strengthening" : "Due for recall" });
+    }
+    for (const exercise of lesson.reviewExercises || []) {
+      const language = exercise.language;
+      if (!["English", "Spanish", "Vietnamese"].includes(language) || !languages.includes(language) || exercise.edge.fromModality !== "audio") continue;
+      const edge = exercise.edge;
+      if (items.some(item => item.lesson.id === lesson.id && item.evidence.edge && edgeEvidenceKey(objective(lesson), item.evidence.edge) === edgeEvidenceKey(objective(lesson), edge))) continue;
+      const existing = model.evidence[edgeEvidenceKey(objective(lesson), edge)];
+      if (existing && (isEvidenceRetired(existing) || Date.parse(existing.nextReviewAt) > now.getTime())) continue;
+      const last = existing ? Date.parse(existing.lastPracticedAt) : Math.max(0, ...history.map(e => Date.parse(e.lastPracticedAt)));
       if (now.getTime() - last < cooldown) continue;
       const evidence: SkillEvidence = existing || { objectiveId: objective(lesson), language, attempts: 0, independentSuccesses: 0, supportedSuccesses: 0, score: 0, lastPracticedAt: new Date(last).toISOString(), nextReviewAt: now.toISOString(), edge };
       items.push({ lesson, evidence, reason: failed(evidence) ? "Needs strengthening" : "Due for recall" });
