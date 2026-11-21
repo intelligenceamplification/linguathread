@@ -8507,7 +8507,11 @@
       "requestKey": "8a154ab375330b5c6a8147cd23091a74e779a2ee96c64222b5d7e50681955890",
       "batchReviewId": "20261103-sampled-lessons",
       "batchReviewedAt": "2026-11-03",
-      "auditModel": "small"
+      "auditModel": "small",
+      "sampledBatchApproval": {
+        "batchId": "20261103-sampled-lessons",
+        "approvedAt": "2026-11-03"
+      }
     },
     {
       "id": "cloud-1eeb2a25f9d7e00f8184",
@@ -8530,7 +8534,11 @@
       "requestKey": "1eeb2a25f9d7e00f8184c54061414f83da2ccc8533c9b435d659f2501ad5e69d",
       "batchReviewId": "20261103-sampled-lessons",
       "batchReviewedAt": "2026-11-03",
-      "auditModel": "vinai/PhoWhisper-small@a86b604c346caf7148c37512eafe783a16420adb:transformers-fp32-no-timestamps-v1"
+      "auditModel": "vinai/PhoWhisper-small@a86b604c346caf7148c37512eafe783a16420adb:transformers-fp32-no-timestamps-v1",
+      "sampledBatchApproval": {
+        "batchId": "20261103-sampled-lessons",
+        "approvedAt": "2026-11-03"
+      }
     },
     {
       "id": "cloud-51c0fbf92f10a268a7c1",
@@ -8553,7 +8561,11 @@
       "requestKey": "51c0fbf92f10a268a7c19b1ad16bf58212db30b72b11e08a5a0f14ff8c371956",
       "batchReviewId": "20261103-sampled-lessons",
       "batchReviewedAt": "2026-11-03",
-      "auditModel": "small"
+      "auditModel": "small",
+      "sampledBatchApproval": {
+        "batchId": "20261103-sampled-lessons",
+        "approvedAt": "2026-11-03"
+      }
     },
     {
       "id": "cloud-b23a1e93a245f3c0de41",
@@ -8576,7 +8588,11 @@
       "requestKey": "b23a1e93a245f3c0de41ee9319c0c6a8f2a07595e93a0852377cbb11f825443e",
       "batchReviewId": "20261103-sampled-lessons",
       "batchReviewedAt": "2026-11-03",
-      "auditModel": "small"
+      "auditModel": "small",
+      "sampledBatchApproval": {
+        "batchId": "20261103-sampled-lessons",
+        "approvedAt": "2026-11-03"
+      }
     },
     {
       "id": "cloud-5c7746f351b9bcfbe9a1",

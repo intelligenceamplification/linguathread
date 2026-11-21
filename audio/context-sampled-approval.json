@@ -2,13 +2,41 @@
   "batchId": "20261103-sampled-lessons",
   "approvedAt": "2026-11-03",
   "method": "user-approved-sampled-batch",
-  "evidence": "User approved nine recordings after listening to samples 1, 2, and 3; this recording was accepted with the batch, not individually heard. Original receipts and screening checks verified.",
+  "evidence": "User approved nine recordings after listening to samples 1, 2, and 3. These recordings were accepted with the batch and were not individually heard. Original receipts and screening checks verified.",
   "clips": [
     {
       "language": "es",
       "text": "Creo que el transporte público debería mejorar porque muchas personas dependen de él.",
       "sha256": "52ef16eb23b502834a15a6488daefd785691a121a4028f17a4bc25b56b877755",
       "requestKey": "afc76360d03cea057e06fbf31f8f3fffb32ea85a0960b4f8ba29a8d64f22ff56",
+      "individuallyHeard": false
+    },
+    {
+      "language": "es",
+      "text": "Estoy de acuerdo en general, aunque la propuesta todavía necesita algunos cambios.",
+      "sha256": "2762ecfb961551c8babfce690223f7082bdbb5feb69ec66f16e1257ba818a12f",
+      "requestKey": "8a154ab375330b5c6a8147cd23091a74e779a2ee96c64222b5d7e50681955890",
+      "individuallyHeard": false
+    },
+    {
+      "language": "vi",
+      "text": "Nhìn chung tôi đồng ý, mặc dù đề xuất vẫn cần một vài thay đổi.",
+      "sha256": "5991b512bf2d8d6d9b40511ac5df308b64607540b2852ef35cfbd34e5b5abf07",
+      "requestKey": "1eeb2a25f9d7e00f8184c54061414f83da2ccc8533c9b435d659f2501ad5e69d",
+      "individuallyHeard": false
+    },
+    {
+      "language": "es",
+      "text": "Por un lado, la medida reduce costos; por otro, puede crear nuevas dificultades.",
+      "sha256": "9e54221662ef15461d5f300a1b042a15c43b9ad137a085dc165a3f58b8ab101c",
+      "requestKey": "51c0fbf92f10a268a7c19b1ad16bf58212db30b72b11e08a5a0f14ff8c371956",
+      "individuallyHeard": false
+    },
+    {
+      "language": "es",
+      "text": "Si seguimos así, es probable que terminemos antes de lo previsto.",
+      "sha256": "6e73c2a1839070145dfdf0e65304a145da5f34a5db5b3a9230a394905dc65f10",
+      "requestKey": "b23a1e93a245f3c0de41ee9319c0c6a8f2a07595e93a0852377cbb11f825443e",
       "individuallyHeard": false
     }
   ]
