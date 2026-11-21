@@ -187,3 +187,36 @@ test("approved English uses the native cache while uncovered English keeps its f
     assert.equal(fallbackQueried, true);
   } finally { globalThis.window = previous; globalThis.fetch = oldFetch; Date.now = oldNow; }
 });
+
+test('a specifically batch-approved sentence may supply clearly contextual phrase audio without claiming individual review', async () => {
+  const { approvedAudioFor } = await import('../app/audio-pack.ts');
+  const { readFile } = await import('node:fs/promises');
+  const pack = JSON.parse(await readFile(new URL('../public/audio/native/library.json', import.meta.url), 'utf8'));
+  const before = globalThis.window;
+  const phrase = 'el transporte público debería mejorar';
+  const sentence = 'Creo que el transporte público debería mejorar porque muchas personas dependen de él.';
+  const approved = pack.clips.find(c => c.sha256 === '52ef16eb23b502834a15a6488daefd785691a121a4028f17a4bc25b56b877755');
+  assert.ok(approved);
+  assert.equal(approved.reviewedAt, undefined);
+  assert.deepEqual(approved.sampledBatchApproval, { batchId: '20261103-sampled-lessons', approvedAt: '2026-11-03' });
+  try {
+    globalThis.window = { __LINGUATHREAD_NATIVE_AUDIO_PACK__: pack };
+    const fallback = await approvedAudioFor(phrase, 'es', sentence);
+    assert.equal(fallback?.sha256, approved.sha256);
+    assert.equal(fallback.reviewedAt, undefined);
+    assert.equal((await approvedAudioFor('muchas personas dependen de él', 'es', sentence))?.sha256, approved.sha256);
+    assert.equal(await approvedAudioFor('unrelated words', 'es', sentence), null);
+    assert.equal(await approvedAudioFor('transporte público deber', 'es', sentence), null);
+    assert.equal(await approvedAudioFor('transporte público debería mejorar', 'es', 'Otra oración.'), null);
+    const evidence = approved.sampledBatchApproval;
+    approved.sampledBatchApproval = { batchId: '', approvedAt: '2026-11-03' };
+    assert.equal(await approvedAudioFor(phrase, 'es', sentence), null);
+    approved.sampledBatchApproval = evidence;
+    const exact = { ...approved, id: 'exact-approved-test', text: phrase, normalizedText: phrase, sha256: 'exact-approved-test', reviewedAt: '2026-11-20' };
+    pack.clips.push(exact);
+    assert.equal((await approvedAudioFor(phrase, 'es', sentence))?.id, exact.id);
+    pack.clips.pop();
+    pack.blockedAudioSha256 = [...(pack.blockedAudioSha256 || []), approved.sha256];
+    assert.equal(await approvedAudioFor(phrase, 'es', sentence), null);
+  } finally { globalThis.window = before; }
+});

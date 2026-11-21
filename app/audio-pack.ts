@@ -8,6 +8,7 @@ export type ApprovedAudioClip = {
   url: string;
   sha256: string;
   reviewedAt?: string;
+  sampledBatchApproval?: { batchId: string; approvedAt: string };
   voice?: "male" | "female";
   preferred?: boolean;
 };
@@ -81,10 +82,31 @@ export function normalizeAudioText(text: string) {
   return text.normalize("NFC").trim().replace(/\s+/g, " ");
 }
 
+// A sampled batch supports an explicitly labelled sentence model only when it
+// actually contains the requested phrase, not an unrelated lesson sentence.
+function containsWholePhrase(text: string, phrase: string) {
+  const context = normalizeAudioText(text).toLocaleLowerCase();
+  const wanted = normalizeAudioText(phrase).toLocaleLowerCase();
+  if (!wanted || !/[\p{L}\p{N}]/u.test(wanted)) return false;
+  const isWord = (value: string | undefined) => Boolean(value && /[\p{L}\p{M}\p{N}]/u.test(value));
+  for (let from = 0; from <= context.length - wanted.length;) {
+    const position = context.indexOf(wanted, from);
+    if (position < 0) return false;
+    const left = Array.from(context.slice(0, position)).at(-1);
+    const right = Array.from(context.slice(position + wanted.length))[0];
+    if (!isWord(left) && !isWord(right)) return true;
+    from = position + 1;
+  }
+  return false;
+}
+
 export function approvedAudioFor(text: string, language: FoundationLanguage, contextText?: string) {
   // Context is explicit lesson material, never an arbitrary substring match.
+  const allowSampledContext = Boolean(contextText && containsWholePhrase(contextText, text));
   const choose = (pack: ApprovedAudioPack | null) => selectClip(pack, text, language)
-    ?? (contextText ? selectClip(pack ? { ...pack, clips: pack.clips.filter((clip) => Boolean(clip.reviewedAt)) } : null, contextText, language) : null);
+    ?? (contextText ? selectClip(pack ? { ...pack, clips: pack.clips.filter((clip) => Boolean(clip.reviewedAt) || (
+      allowSampledContext && Boolean(clip.sampledBatchApproval?.batchId && clip.sampledBatchApproval.approvedAt)
+    )) } : null, contextText, language) : null);
   // English uses exact approved native recordings when available, while keeping
   // its existing fallback for the remaining uncovered anchor/writing material.
   if (language === "en" && typeof window !== "undefined") {

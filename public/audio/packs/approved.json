@@ -8480,7 +8480,11 @@
       "requestKey": "afc76360d03cea057e06fbf31f8f3fffb32ea85a0960b4f8ba29a8d64f22ff56",
       "batchReviewId": "20261103-sampled-lessons",
       "batchReviewedAt": "2026-11-03",
-      "auditModel": "small"
+      "auditModel": "small",
+      "sampledBatchApproval": {
+        "batchId": "20261103-sampled-lessons",
+        "approvedAt": "2026-11-03"
+      }
     },
     {
       "id": "cloud-8a154ab375330b5c6a81",

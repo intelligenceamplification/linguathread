@@ -6,6 +6,14 @@ Build 7 retains the approved multilingual design and dark appearance, with the l
 
 This document governs product, curriculum, and platform decisions across the web master, iOS, macOS, Android, and future clients. When implementations differ, resolve them toward these principles rather than allowing each platform to become a separate product.
 
+## Personal learning laboratory — 2026-11-21
+
+Nuevo Flow is Desmond’s personal AI-native language-learning laboratory, built around Language Stacking, and a living proof of concept for I.AM (Intelligence Amplification Mastery). Prioritize daily Spanish and Vietnamese practice with English as the meaning anchor. Preserve the shared lesson engine, authored curriculum, adaptive review, explanations, approved recordings, and learning continuity.
+
+Earlier commercial-launch coverage targets and language expansion plans are historical. Keep broader distribution optional and revisit it if demand emerges. Prioritize the lessons in use. Reuse exact approved recordings first, then offer clearly labelled sentence context where appropriate. Prepare small listening batches for gaps that matter in practice. Evaluate new synthesis providers on pronunciation, latency, and cost before changing the delivery architecture.
+
+For relevant releases, check lesson resume, playback on the web and iPhone when available, and the I.AM short lesson and app link. Keep contextual models distinct from standalone recordings and independent listening evidence.
+
 ## Dedicated review and forward progression — 2026-10-21
 
 The user accepted all three Gemini representative recordings (Spanish male Charon,
