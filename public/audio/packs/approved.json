@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "packVersion": "approved-hybrid-20261114",
+  "packVersion": "approved-hybrid-20261121-nearby-parity",
   "model": "OpenBMB/VoxCPM2",
   "approvedAt": "2026-11-14",
   "clips": [
@@ -30689,6 +30689,60 @@
       "backend": "gemini/gemini-3.8-flash-tts",
       "recipeSha256": "b396ba156c7f1143019e687ab0f34041728d87f711a6aca3317e34229c849788",
       "normalTempo": 1
+    },
+    {
+      "auditModel": "small",
+      "auditVersion": 2,
+      "backend": "Chatterbox-Multilingual-es-es",
+      "id": "es-1f5c2a6311d275587297",
+      "language": "es",
+      "normalTempo": 0.85,
+      "normalizedText": "antes de",
+      "paceCorrectionFactor": 1,
+      "qualityCheck": "automated-text-pace-clarity",
+      "recipeSha256": "a41b3f890c21c5bc2e6647d4866b97e18a7653bc44b3957b2026febd6ebc308e",
+      "sha256": "d3ac93635d87dbeb087d31d437470c4db2ba1fb30878b5a81201f6427ec9c001",
+      "text": "antes de",
+      "url": "/audio/native/assets/d3ac93635d87dbeb087d31d437470c4db2ba1fb30878b5a81201f6427ec9c001.wav",
+      "voice": "male",
+      "voiceApprovalBasis": "reference-hash",
+      "voiceReferenceSha256": "dcd0fbac7bcdf066ddf55e8879189b8b546a2c2f205febcfae1772cf3a927875"
+    },
+    {
+      "auditModel": "small",
+      "auditVersion": 2,
+      "backend": "Chatterbox-Multilingual-es-es",
+      "id": "es-d15ad0026158ffb63a03",
+      "language": "es",
+      "normalTempo": 0.7,
+      "normalizedText": "antes de",
+      "paceCorrectionFactor": 1,
+      "qualityCheck": "automated-text-pace-clarity",
+      "recipeSha256": "a41b3f890c21c5bc2e6647d4866b97e18a7653bc44b3957b2026febd6ebc308e",
+      "sha256": "3ee1c68a6969f718556d53c073d7d8e022d3d4f2d715cb5752942240efa87910",
+      "text": "antes de",
+      "url": "/audio/native/assets/3ee1c68a6969f718556d53c073d7d8e022d3d4f2d715cb5752942240efa87910.wav",
+      "voice": "female",
+      "voiceApprovalBasis": "reference-hash",
+      "voiceReferenceSha256": "3f93ec4315fc6cbc97ce2aa45435e61f2e6659c42ced2024daf573fc9448dbb8"
+    },
+    {
+      "auditModel": "vinai/PhoWhisper-small@a86b604c346caf7148c37512eafe783a16420adb:transformers-fp32-no-timestamps-v1",
+      "auditVersion": 2,
+      "backend": "VieNeu-TTS-v3-Turbo",
+      "id": "vieneu-7fd596e483b017c79b2d",
+      "language": "vi",
+      "normalTempo": 1,
+      "normalizedText": "trước khi",
+      "paceCorrectionFactor": 1,
+      "qualityCheck": "automated-text-pace-clarity",
+      "recipeSha256": null,
+      "sha256": "04a358df65f9e61d05602b8103b89184e6018d9579e012390313b5761791017b",
+      "text": "trước khi",
+      "url": "/audio/native/assets/04a358df65f9e61d05602b8103b89184e6018d9579e012390313b5761791017b.wav",
+      "voice": "female",
+      "voiceApprovalBasis": "reference-hash",
+      "voiceReferenceSha256": "ffe7c562b3c4c744f4bffe76e9e594dbc83a11c9132390f86136818fbc2e8c1b"
     }
   ],
   "blockedAudioSha256": [
