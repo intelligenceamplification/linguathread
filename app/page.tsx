@@ -188,7 +188,6 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   const [scriptLanguage, setScriptLanguage] = useState<FoundationLanguage | null>(null);
   const [placementUnit, setPlacementUnit] = useState<{ level: string; unit: number } | null>(null);
   const [sessionHydrated, setSessionHydrated] = useState(false);
-  const xrayTriggerRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDetailsElement>(null);
   const lessonStageRef = useRef<HTMLElement>(null);
   const attemptStartedAtRef = useRef(0);
@@ -628,7 +627,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
   function closeXRay() {
     setXrayOpen(false);
     setDestination("lesson");
-    requestAnimationFrame(() => xrayTriggerRef.current?.focus());
+    requestAnimationFrame(() => menuRef.current?.querySelector("summary")?.focus());
   }
 
   function completeUnitPlacement(unitLessons: LessonDefinition[], passed: boolean) {
@@ -667,7 +666,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         </nav>
         <details ref={menuRef} className="app-menu"><summary>☰ &nbsp; Menu</summary><div className="app-menu-panel">
             {literacyLanguages[0] && <button onClick={() => openDestination("writing")}>Writing System</button>}
-            <button ref={xrayTriggerRef} onClick={() => openDestination("xray")}>Expression X-Ray</button>
+            <button onClick={() => openDestination("xray")}>Expression X-Ray</button>
             <fieldset><legend>Appearance</legend>{(["system", "light", "dark"] as const).map(choice => <label key={choice}><input type="radio" name="appearance" aria-label={choice[0].toUpperCase() + choice.slice(1)} checked={appearance === choice} onChange={() => chooseAppearance(choice)} /> {choice[0].toUpperCase() + choice.slice(1)}</label>)}</fieldset>
         </div></details>
       </header>
@@ -868,7 +867,7 @@ function Lesson({ profile, onEditLanguages }: { profile: LanguageProfile; onEdit
         </LivePractice>}
       </section>
 
-      {xrayOpen && <UniversalXRay key={lesson.id} lesson={lesson} showBridge={bridgeEnabled} onClose={closeXRay} />}
+      {xrayOpen && <UniversalXRay key={lesson.id} lesson={lesson} showBridge={bridgeEnabled} model={lesson.anatomy} initialLanguage={productionLanguage} onClose={closeXRay} />}
 
       <footer className="lesson-footer">
         <span>{stage === "complete" ? `${completedIds.length} of ${course.length} published lessons mapped` : `Spanish course · English meaning anchor · ${selectedLearningLanguages.length} selected language${selectedLearningLanguages.length === 1 ? "" : "s"}`}</span>

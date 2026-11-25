@@ -19,14 +19,15 @@
     "app/writing-system/inventories.ts": "e3cb38bd834781e0df36871d4a56dc1a0072f973a2aed33985d41a6868373f6c",
     "app/writing-system/audio-models.ts": "570684677b2dbd7d9f6125efb99b16360fa305f433c9d7f333c68f532bcd1ec2",
     "app/multilingual-foundation.ts": "2cbb15e00bae675ba3ebf24e31aa0c4d7fbc393f058836fe28a6bbe519fdaf1e",
-    "app/lesson-tools.ts": "7bc7e3612a99b03d32bcd987277ee23aa65d480623b7b2416c0f429880e34239",
+    "app/lesson-tools.ts": "4aff051d9636091847d22e776bc26916a46a14f969e01c199d66eee3b305b758",
     "app/instructional-audio-models.ts": "600ac9661bf127319e91d6f73868014bffba3ec67c37851ed4fbca81a4cb9f30",
-    "app/page.tsx": "b4be1c2b1ad419f41dbcbf4b60587abdbe36308dcc03dea3ea84e7a6733dc4e6",
+    "app/page.tsx": "eb73781b59c5858da16ed321807c95d626337f98b271bf6791152fd5bdb1eb3c",
     "app/review-section.tsx": "40312db3dfb7c145b6bf27e984e8942051699603a1a7d904302cf337e61d77be",
     "app/flashcard-round.tsx": "ea61fcaed8e4bc4361bb08a338ca375d5ed0e5cb5992164bde697d8feefc6078",
     "app/reinforcement.ts": "01825615b5b022f9bf2deccf59dd2a4efb0e0684ccb40b63998c0e9b1735f9d6",
     "app/daily-lesson.tsx": "fa325a8818e085edba24512235cdadffd12227bf66b1d554b15a90b3d538d17a",
-    "app/sentence-anatomy.tsx": "ae151b4f238a09b21efb635211346a2a27b7ddef017bd7745990ad1d19a59db9",
+    "app/sentence-anatomy.tsx": "1995a4f61e9dbdde1cc404c036c7665428fc5ba1f3197bb7be7b08bed87c58ac",
+    "app/universal-xray.tsx": "771fed67559de85cbbecf56f5926f125b4f454d38692601f74176b929d965f62",
     "app/writing-system/view.tsx": "d2c0416580c798b610c48352ed84a3c98a04e5336cba7b7463870ae3151444eb",
     "app/multilingual-preview/readiness.tsx": "1da67a52f2ffc8318a6d70e26d7cc4d7928b1aa988182855ad8cd070937a5790",
     "app/multilingual-preview/script-course-view.tsx": "9203cd6f50b7a3109e6ba1d044565fb26a80fbb5fb330406a1b4cca4680ea64d",
@@ -1172,6 +1173,6 @@
     "includeWritingFoundations": false,
     "unitCount": 2
   },
-  "fullInventorySha256": "99224ec1477866fa1880da1a5d7e57605a59450a5df3e1d0d8376557183c7ef9",
+  "fullInventorySha256": "6a35d01dd40e09f16bac4d660350f9040a7f44ca5bacdca0ac656ffce0508c57",
   "scopePolicySha256": "0b857c26fef58e112a7d1cc2e7d7d4e64692d4d9c9e70170f3bed0b6ad2d6acf"
 }

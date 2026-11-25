@@ -189,7 +189,7 @@ const vietnameseLexicon: Record<string, VietnameseLexicalEntry> = {
 // the explicit scope selector when a learner wants the narrower analysis.
 const vietnamesePreferredPhraseSelections = new Set(["cái này", "bao nhiêu", "nghỉ ngơi", "được gặp", "bên cạnh", "đơn giản", "bây giờ", "đi bộ", "vào buổi sáng", "có thể", "diễn đạt"]);
 
-const languageSentence = (lesson: LessonForTools, language: TranslationLanguage) => language === "Spanish"
+export const languageSentence = (lesson: LessonForTools, language: TranslationLanguage) => language === "Spanish"
   ? lesson.sentence.target
   : language === "Vietnamese"
     ? lesson.sentence.bridge
@@ -197,7 +197,7 @@ const languageSentence = (lesson: LessonForTools, language: TranslationLanguage)
       ? lesson.sentence.anchor
       : lesson.sentence.translations?.[language] || "";
 
-const languageValue = (word: LessonForTools["vocabulary"][number], language: TranslationLanguage) => language === "Spanish"
+export const languageValue = (word: LessonForTools["vocabulary"][number], language: TranslationLanguage) => language === "Spanish"
   ? word.word
   : language === "Vietnamese"
     ? word.vietnamese
@@ -205,7 +205,7 @@ const languageValue = (word: LessonForTools["vocabulary"][number], language: Tra
       ? word.english
       : word.translations?.[language] || word.english;
 
-function grammarFor(lesson: LessonForTools, language: TranslationLanguage) {
+export function grammarFor(lesson: LessonForTools, language: TranslationLanguage) {
   if (language === "Spanish") return lesson.grammar.target;
   if (language === "Vietnamese") return lesson.grammar.bridge;
   if (language === "English") return lesson.grammar.anchor;
@@ -231,16 +231,24 @@ function normalizeSpanish(value: string) {
   return strip(value).normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase("es").replace(/\s+/g, " ");
 }
 
+function authoredXRayEntry(lesson: LessonForTools, language: string, form: string) {
+  const units = lesson.xray?.[language]?.units;
+  return units?.[normalizeVietnamese(form)] ?? (language === "Vietnamese" ? undefined : units?.[normalizeSpanish(form)]);
+}
+
 function phraseFor(lesson: LessonForTools, language: TranslationLanguage) {
   const words = lesson.vocabulary.slice(0, 2).map((word) => languageValue(word, language));
   return words.join(" ");
 }
 
+export const xrayWordMatches = (value: string) => Array.from(value.matchAll(/[\p{L}\p{N}]+(?:[’'][\p{L}\p{N}]+)*/gu));
+
 export function xrayScopes(lesson: LessonForTools, language: TranslationLanguage): XRayScope[] {
   const sentence = languageSentence(lesson, language);
   if (!sentence) return [];
-  const words = Array.from(sentence.matchAll(/[\p{L}]+(?:[’'][\p{L}]+)?/gu)).map((match) => match[0]);
+  const words = xrayWordMatches(sentence).map((match) => match[0]);
   const phraseScopes: XRayScope[] = [];
+  const normalize = language === "Vietnamese" ? normalizeVietnamese : normalizeSpanish;
   const authoredPhrase = language === "Spanish" ? lesson.grammar.focus : grammarFor(lesson, language).pattern;
 
   // Phrase scopes are authored linguistic units, not every mathematically
@@ -248,19 +256,22 @@ export function xrayScopes(lesson: LessonForTools, language: TranslationLanguage
   // as if they carried a stable grammatical meaning.
   for (const item of lesson.vocabulary) {
     const phrase = languageValue(item, language);
-    const phraseTokens = Array.from(phrase.matchAll(/[\p{L}]+(?:[’'][\p{L}]+)?/gu)).map((match) => match[0]);
+    const phraseTokens = xrayWordMatches(phrase).map((match) => match[0]);
     if (phraseTokens.length < 2) continue;
-    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalizeSpanish(words[wordIndex + tokenIndex] || "") === normalizeSpanish(token)));
+    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalize(words[wordIndex + tokenIndex] || "") === normalize(token)));
     if (start >= 0) phraseScopes.push({ id: `${language}-vocabulary-phrase-${start}-${start + phraseTokens.length}`, kind: "phrase", language, text: words.slice(start, start + phraseTokens.length).join(" "), tokenStart: start, tokenEnd: start + phraseTokens.length });
   }
-  const reviewedPhraseKeys = language === "Vietnamese" ? Object.keys(vietnameseLexicon) : language === "Spanish" ? Object.keys(spanishLexicon) : Object.keys(lesson.xray?.[language]?.units || {});
+  const reviewedPhraseKeys = [
+    ...Object.keys(language === "Vietnamese" ? vietnameseLexicon : language === "Spanish" ? spanishLexicon : {}),
+    ...Object.keys(lesson.xray?.[language]?.units || {}),
+  ];
   for (const phrase of reviewedPhraseKeys.filter((item) => item.includes(" "))) {
     const phraseTokens = phrase.split(" ");
-    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalizeSpanish(words[wordIndex + tokenIndex] || "") === normalizeSpanish(token)));
+    const start = words.findIndex((_, wordIndex) => phraseTokens.every((token, tokenIndex) => normalize(words[wordIndex + tokenIndex] || "") === normalize(token)));
     if (start >= 0) phraseScopes.push({ id: `${language}-reviewed-phrase-${start}-${start + phraseTokens.length}`, kind: "phrase", language, text: words.slice(start, start + phraseTokens.length).join(" "), tokenStart: start, tokenEnd: start + phraseTokens.length });
   }
 
-  const authoredTokens = Array.from(authoredPhrase.matchAll(/[\p{L}]+(?:[’'][\p{L}]+)?/gu)).map((match) => match[0]);
+  const authoredTokens = xrayWordMatches(authoredPhrase).map((match) => match[0]);
   const authoredStart = authoredTokens.length > 1
     ? words.findIndex((_, start) => authoredTokens.every((token, index) => words[start + index]?.toLocaleLowerCase(language === "Vietnamese" ? "vi" : "es") === token.toLocaleLowerCase(language === "Vietnamese" ? "vi" : "es")))
     : -1;
@@ -288,14 +299,14 @@ function isAuthoredPhrase(lesson: LessonForTools, scope: XRayScope) {
   const normalized = strip(scope.text).toLocaleLowerCase();
   if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
   if (scope.language === "Spanish" && normalizeSpanish(scope.text) === normalizeSpanish(lesson.grammar.focus)) return true;
-  if (lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)]) return true;
+  if (authoredXRayEntry(lesson, scope.language, scope.text)) return true;
   return lesson.vocabulary.some((word) => strip(languageValue(word, scope.language)).toLocaleLowerCase() === normalized);
 }
 
 function hasStandaloneMeaning(lesson: LessonForTools, scope: XRayScope) {
   if (scope.kind !== "word") return false;
   if (scope.language === "Vietnamese" && vietnameseLexicon[normalizeVietnamese(scope.text)]) return true;
-  if (lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)]) return true;
+  if (authoredXRayEntry(lesson, scope.language, scope.text)) return true;
   const normalized = strip(scope.text).toLocaleLowerCase();
   return lesson.vocabulary.some((word) => {
     const value = strip(languageValue(word, scope.language));
@@ -310,9 +321,11 @@ export function resolveXRayTokenScope(lesson: LessonForTools, language: Translat
   const meaningfulPhrases = scopes
     .filter((scope) => scope.kind === "phrase" && scope.tokenStart <= tokenIndex && scope.tokenEnd > tokenIndex && isAuthoredPhrase(lesson, scope))
     .sort((a, b) => (a.tokenEnd - a.tokenStart) - (b.tokenEnd - b.tokenStart));
-  const preferredPhrase = language === "Vietnamese"
-    ? meaningfulPhrases.find((scope) => vietnamesePreferredPhraseSelections.has(normalizeVietnamese(scope.text)))
-    : meaningfulPhrases.find((scope) => lesson.xray?.[language]?.preferredPhrases?.some((phrase) => normalizeSpanish(phrase) === normalizeSpanish(scope.text)));
+  const normalize = language === "Vietnamese" ? normalizeVietnamese : normalizeSpanish;
+  const preferredPhrase = meaningfulPhrases.find((scope) =>
+    lesson.xray?.[language]?.preferredPhrases?.some((phrase) => normalize(phrase) === normalize(scope.text)) ||
+    (language === "Vietnamese" && vietnamesePreferredPhraseSelections.has(normalize(scope.text))));
+
   if (preferredPhrase) return preferredPhrase;
   if (hasStandaloneMeaning(lesson, word)) return word;
   return meaningfulPhrases[0] || word;
@@ -487,7 +500,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
   if (scope.language === "Spanish" && scope.kind === "word" && strip(scope.text).toLocaleLowerCase("es") === "voy") return voyAnalysis;
 
   const matchingWord = lesson.vocabulary.find((word) => {
-    const values = [word.word, word.english, word.vietnamese, ...Object.values(word.translations || {})].map((value) => strip(value).toLocaleLowerCase());
+    const values = languageValue(word, scope.language).split("/").map((value) => strip(value).toLocaleLowerCase());
     return values.includes(strip(scope.text).toLocaleLowerCase());
   });
   const languageName = scope.language.toLocaleLowerCase();
@@ -499,7 +512,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
   const normalizedScope = normalizeVietnamese(scope.text);
   const lexicalEntry = scope.language === "Vietnamese" ? vietnameseLexicon[normalizedScope] : undefined;
   const spanishEntry = scope.language === "Spanish" ? spanishLexicon[normalizeSpanish(scope.text)] : undefined;
-  const additionalEntry = lesson.xray?.[scope.language]?.units[normalizeSpanish(scope.text)];
+  const additionalEntry = authoredXRayEntry(lesson, scope.language, scope.text);
 
   if (scope.kind === "sentence") {
     return {
@@ -519,7 +532,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
     };
   }
 
-  if (scope.language === "Spanish" && spanishEntry) {
+  if (scope.language === "Spanish" && spanishEntry && !additionalEntry) {
     return {
       title: scope.text,
       scope: scope.kind,
@@ -537,7 +550,7 @@ export function analyzeXRayScope(lesson: LessonForTools, scope: XRayScope): XRay
     };
   }
 
-  if (scope.language === "Spanish" && scope.kind === "word" && matchingWord) return spanishVocabularyAnalysis(lesson, scope, matchingWord);
+  if (scope.language === "Spanish" && scope.kind === "word" && matchingWord && !additionalEntry) return spanishVocabularyAnalysis(lesson, scope, matchingWord);
 
   if (additionalEntry) {
     return {

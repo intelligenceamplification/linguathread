@@ -444,10 +444,11 @@ test("configures the retired PolyFlow host as permanent root and nested redirect
   assert.ok(redirects.every((item) => item.permanent === true));
 });
 
-test("keeps universal X-Ray quiet until lesson-specific structure is authored", async () => {
-  const [component, data] = await Promise.all([read("../app/sentence-anatomy.tsx"), read("../app/interactive-sentence.ts")]);
-  assert.match(component, /const xrayLabels = realization/);
-  assert.match(component, /mode === "xray" && xrayLabels\.length > 0/);
+test("shows X-Ray roles through text labels and progressive disclosure", async () => {
+  const [component, data] = await Promise.all([read("../app/universal-xray.tsx"), read("../app/interactive-sentence.ts")]);
+  assert.match(component, /data-role=\{unit.role\}/);
+  assert.match(component, /<span>\{unit.label\}<\/span>/);
+  assert.match(component, /<summary>Inspect a word or phrase<\/summary>/);
   assert.doesNotMatch(data, /Target element|Anchor element|Bridge element|Sentence element/);
 });
 
@@ -545,15 +546,16 @@ test("resolves the Vietnamese price question into meaningful X-Ray units", async
   assert.match(howMuch.morphology, /meaning belongs to the phrase/);
 });
 
-test("uses the canonical X-Ray engine inside every displayed sentence language", async () => {
-  const [component, page] = await Promise.all([read("../app/sentence-anatomy.tsx"), read("../app/page.tsx")]);
+test("opens the same X-Ray workspace from navigation and sentence anatomy", async () => {
+  const [anatomy, page, workspace] = await Promise.all([
+    read("../app/sentence-anatomy.tsx"), read("../app/page.tsx"), read("../app/universal-xray.tsx"),
+  ]);
   assert.match(page, /<InteractiveSentence[^>]*lesson=\{lesson\}/);
-  assert.match(component, /xrayScopes\(lesson, activeToolLanguage\)/);
-  assert.match(component, /resolveXRayTokenScope\(lesson, activeToolLanguage, word\.tokenStart\)/);
-  assert.match(component, /analyzeXRayScope\(lesson, scope\)/);
-  assert.match(component, /Complete sentence breakdown/);
-  assert.match(component, /xraySentenceBreakdown\(lesson, scope\.language\)/);
-  assert.doesNotMatch(component, /mode === "xray"[\s\S]{0,500}selectUnit\(unit/);
+  assert.match(page, /<UniversalXRay[^>]*lesson=\{lesson\}/);
+  assert.match(anatomy, /mode === "xray" \? <XRayWorkspace/);
+  assert.match(workspace, /<XRayWorkspace \{\.\.\.props\}/);
+  assert.match(workspace, /buildXRayAnalysis\(lesson, active, languages, model\)/);
+  assert.match(workspace, /analyzeXRayScope\(lesson, scope\)/);
 });
 
 test("authors every part of the Spanish clock sentence without generic X-Ray filler", async () => {
@@ -716,10 +718,10 @@ test("uses the approved primary navigation language", async () => {
   assert.match(daily, /Return to self-directed learning/);
   assert.match(xray, /aria-label="Expression X-Ray"/);
   assert.match(xray, /Close Expression X-Ray/);
-  assert.match(xray, /Choose a word, phrase, or the complete sentence/);
-  assert.match(xray, /xray-sentence/);
-  assert.match(xray, /Compare and transform/);
-  assert.match(xray, /aria-modal/);
+  assert.match(xray, /aria-label="Full expression"/);
+  assert.match(xray, /dialog.showModal\(\)/);
+  assert.match(xray, /One meaning across languages/);
+  assert.match(xray, /Reveal model answer/);
 });
 
 test("uses one destination state and offers evidence-based unit placement", async () => {
